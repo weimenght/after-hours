@@ -1,0 +1,15 @@
+{
+  "name": "Cook for Someone",
+  "short_name": "Cook for Someone",
+  "description": "Family recipes from Popo's recipe box at Next Door. Pick one, cook it for someone, or leave your own.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14101e",
+  "theme_color": "#14101e",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
