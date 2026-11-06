@@ -1,0 +1,15 @@
+{
+  "name": "Window Radio",
+  "short_name": "Window Radio",
+  "description": "Lo-fi from your window: the day, the hour, the sky and your mood write the tape. Made on this device, nothing sent.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7e8da",
+  "theme_color": "#f7e8da",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
