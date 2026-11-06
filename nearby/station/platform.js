@@ -557,6 +557,128 @@
     cx.restore();
   }
 
+  /* ---------- what the kiosk sells: real food from where you got off (the stop's own speciality first, then the country's,
+     then the kind of country for the made-up stops). n: the name, d: one line, ic: how it's drawn on the counter. ---------- */
+  var GOODS = {
+    croissant: { ic: "crescent", c: "#d8a048", n: ["Croissant", "牛角包", "牛角麵包", "Cruasán", "Croissant"], d: ["Still warm from the bakery round the corner.", "刚从街角面包店送来，还是热的。", "剛從街角麵包店送來，還是熱的。", "Aún caliente, de la panadería de la esquina.", "Encara calent, del forn de la cantonada."] },
+    madeleine: { ic: "shell", c: "#e0b058", n: ["Madeleines", "玛德琳蛋糕", "瑪德蓮蛋糕", "Magdalenas", "Magdalenes"], d: ["Shell-shaped, six to a paper bag.", "贝壳形状，一纸袋六个。", "貝殼形狀，一紙袋六個。", "Con forma de concha, seis en una bolsa de papel.", "En forma de petxina, sis en una bossa de paper."] },
+    jambon: { ic: "baguette", c: "#d8a048", n: ["Jambon-beurre", "火腿黄油法棍", "火腿奶油法棍", "Bocadillo jambon-beurre", "Entrepà jambon-beurre"], d: ["Ham and butter in a baguette. That's all, and it's enough.", "法棍夹火腿和黄油，就这些，也够了。", "法棍夾火腿和奶油，就這些，也夠了。", "Jamón y mantequilla en baguette. Nada más, y basta.", "Pernil i mantega en una baguette. Res més, i ja n'hi ha prou."] },
+    kouign: { ic: "bun", c: "#c88a3a", n: ["Kouign-amann", "布列塔尼黄油酥", "布列塔尼奶油酥", "Kouign-amann", "Kouign-amann"], d: ["Brittany's butter cake, caramel at the edges.", "布列塔尼的黄油酥饼，边上一圈焦糖。", "布列塔尼的奶油酥餅，邊上一圈焦糖。", "El pastel de mantequilla de Bretaña, caramelizado por los bordes.", "El pastís de mantega de Bretanya, caramel·litzat a les vores."] },
+    calisson: { ic: "diamond", c: "#f0e6c8", n: ["Calissons", "普罗旺斯杏仁糖", "普羅旺斯杏仁糖", "Calissons", "Calissons"], d: ["Almond and candied melon, from Aix down the road.", "杏仁加蜜饯甜瓜，产自不远的艾克斯。", "杏仁加蜜餞甜瓜，產自不遠的艾克斯。", "Almendra y melón confitado, de Aix, aquí al lado.", "Ametlla i meló confitat, d'Ais, aquí al costat."] },
+    savoie: { ic: "cake", c: "#e8c878", n: ["Gâteau de Savoie", "萨瓦蛋糕", "薩瓦蛋糕", "Bizcocho de Saboya", "Pa de pessic de Savoia"], d: ["A sponge as light as the air up here.", "像山上的空气一样轻的海绵蛋糕。", "像山上的空氣一樣輕的海綿蛋糕。", "Un bizcocho tan ligero como el aire de aquí arriba.", "Un pa de pessic tan lleuger com l'aire d'aquí dalt."] },
+    brezel: { ic: "pretzel", c: "#8a4a22", n: ["Brezel", "德式碱水结", "德式鹼水結", "Pretzel", "Brezel"], d: ["Coarse salt, a crackly crust, soft inside.", "粗盐，外皮脆，里面软。", "粗鹽，外皮脆，裡面軟。", "Sal gorda, corteza crujiente, blando por dentro.", "Sal grossa, crosta cruixent, tou per dins."] },
+    franz: { ic: "bun", c: "#b0702e", n: ["Franzbrötchen", "汉堡肉桂卷", "漢堡肉桂捲", "Franzbrötchen", "Franzbrötchen"], d: ["Hamburg's cinnamon pastry, pressed flat.", "汉堡的肉桂酥，压得扁扁的。", "漢堡的肉桂酥，壓得扁扁的。", "La pasta de canela de Hamburgo, aplastada.", "La pasta de canyella d'Hamburg, aixafada."] },
+    kuss: { ic: "bar", c: "#5e341e", n: ["Studentenkuss", "学生之吻巧克力", "學生之吻巧克力", "Beso del estudiante", "Petó de l'estudiant"], d: ["A chocolate Heidelberg's students once gave instead of a kiss.", "从前海德堡的学生用它代替一个吻。", "從前海德堡的學生用它代替一個吻。", "Un bombón que los estudiantes de Heidelberg regalaban en lugar de un beso.", "Un bombó que els estudiants de Heidelberg regalaven en lloc d'un petó."] },
+    leberkas: { ic: "bun", c: "#c88a5a", n: ["Leberkässemmel", "巴伐利亚肉饼面包", "巴伐利亞肉餅麵包", "Bocadillo de Leberkäse", "Entrepà de Leberkäse"], d: ["A thick slice of Bavarian meatloaf in a roll, with sweet mustard.", "一厚片巴伐利亚肉饼夹面包，配甜芥末。", "一厚片巴伐利亞肉餅夾麵包，配甜芥末。", "Una loncha gruesa de pastel de carne bávaro en un panecillo, con mostaza dulce.", "Una llesca gruixuda de pastís de carn bavarès en un panet, amb mostassa dolça."] },
+    kirsch: { ic: "cake", c: "#3a2018", n: ["Black Forest gateau", "黑森林蛋糕", "黑森林蛋糕", "Tarta Selva Negra", "Pastís de la Selva Negra"], d: ["From the forest outside: cherries, cream and a drop of kirsch.", "就来自窗外的森林：樱桃、奶油和一滴樱桃酒。", "就來自窗外的森林：櫻桃、鮮奶油和一滴櫻桃酒。", "Del bosque de ahí fuera: cerezas, nata y una gota de kirsch.", "Del bosc d'aquí fora: cireres, nata i una gota de kirsch."] },
+    choc: { ic: "bar", c: "#6a3a1e", n: ["Swiss milk chocolate", "瑞士牛奶巧克力", "瑞士牛奶巧克力", "Chocolate suizo con leche", "Xocolata suïssa amb llet"], d: ["A bar for the walk up.", "上山路上吃的一板。", "上山路上吃的一板。", "Una tableta para la subida.", "Una rajola per a la pujada."] },
+    nusstorte: { ic: "tart", c: "#b07038", n: ["Engadine nut tart", "恩加丁核桃派", "恩加丁核桃派", "Tarta de nueces de Engadina", "Pastís de nous de l'Engadina"], d: ["Caramel and walnuts in shortcrust; it keeps for weeks on a hike.", "酥皮里裹着焦糖核桃，带去爬山能放好几个星期。", "酥皮裡裹著焦糖核桃，帶去爬山能放好幾個星期。", "Caramelo y nueces en masa quebrada; aguanta semanas en la mochila.", "Caramel i nous en pasta trencada; aguanta setmanes a la motxilla."] },
+    meringue: { ic: "meringue", c: "#f4efe2", n: ["Meringue with cream", "奶油蛋白霜", "奶油蛋白霜", "Merengue con nata", "Merenga amb nata"], d: ["They say it was first made in Meiringen, over the hill.", "据说它最早出自山那边的迈林根。", "據說它最早出自山那邊的邁林根。", "Dicen que nació en Meiringen, al otro lado de la colina.", "Diuen que va néixer a Meiringen, a l'altra banda del turó."] },
+    roggen: { ic: "loaf", c: "#5a3a22", n: ["Valais rye bread", "瓦莱黑麦面包", "瓦萊黑麥麵包", "Pan de centeno del Valais", "Pa de sègol del Valais"], d: ["Dark and dense; it saw the villages through the winters.", "又黑又实，陪山村熬过一个个冬天。", "又黑又實，陪山村熬過一個個冬天。", "Oscuro y denso; sacó adelante a los pueblos en invierno.", "Fosc i dens; va fer passar l'hivern als pobles."] },
+    cornetto: { ic: "crescent", c: "#d89a48", n: ["Cornetto", "意式可颂", "意式可頌", "Cornetto", "Cornetto"], d: ["With an espresso, standing at the counter like everyone else.", "配一杯浓缩，和大家一样站在柜台边吃。", "配一杯濃縮，和大家一樣站在櫃檯邊吃。", "Con un espresso, de pie en la barra como todos.", "Amb un espresso, dret a la barra com tothom."] },
+    schiacciata: { ic: "loaf", c: "#d8b070", n: ["Schiacciata", "佛罗伦萨扁面包", "佛羅倫斯扁麵包", "Schiacciata", "Schiacciata"], d: ["Florence's olive-oil flatbread, salted and split for a filling.", "佛罗伦萨的橄榄油扁面包，撒盐，剖开夹馅。", "佛羅倫斯的橄欖油扁麵包，撒鹽，剖開夾餡。", "El pan plano de Florencia, con aceite y sal, abierto para rellenar.", "El pa pla de Florència, amb oli i sal, obert per farcir."] },
+    focaccia: { ic: "loaf", c: "#e0b860", n: ["Ligurian focaccia", "利古里亚佛卡夏", "利古里亞佛卡夏", "Focaccia ligur", "Focaccia lígur"], d: ["Oily, salty, dimpled; eaten on the harbour wall.", "油润、咸香、满是小坑，坐在港口的堤上吃。", "油潤、鹹香、滿是小坑，坐在港口的堤上吃。", "Aceitosa, salada, con hoyuelos; se come en el muelle.", "Olier, salada, amb clotets; es menja al moll."] },
+    churros: { ic: "churro", c: "#c88a3a", n: ["Churros", "西班牙油条", "西班牙油條", "Churros", "Xurros"], d: ["Dip them in thick hot chocolate.", "蘸着浓浓的热巧克力吃。", "蘸著濃濃的熱巧克力吃。", "Para mojar en chocolate espeso.", "Per sucar en xocolata espessa."] },
+    jamon: { ic: "baguette", c: "#c8603a", n: ["Ham bocadillo", "西班牙火腿三明治", "西班牙火腿三明治", "Bocadillo de jamón", "Entrepà de pernil"], d: ["Jamón in a crusty roll, nothing else.", "脆皮面包夹火腿，别的都不加。", "脆皮麵包夾火腿，別的都不加。", "Jamón en pan crujiente, sin nada más.", "Pernil en pa cruixent, sense res més."] },
+    calamares: { ic: "baguette", c: "#e8c870", n: ["Squid sandwich", "鱿鱼圈三明治", "魷魚圈三明治", "Bocadillo de calamares", "Entrepà de calamars"], d: ["Madrid's own, a long way from any sea.", "马德里人的最爱，虽然离海很远。", "馬德里人的最愛，雖然離海很遠。", "El de Madrid, lejos de cualquier mar.", "El de Madrid, lluny de qualsevol mar."] },
+    yemas: { ic: "dots", c: "#f2b830", n: ["Yemas del Tajo", "隆达蛋黄甜点", "隆達蛋黃甜點", "Yemas del Tajo", "Yemes del Tajo"], d: ["Egg-yolk sweets named after the gorge under the bridge.", "以桥下峡谷命名的蛋黄甜点。", "以橋下峽谷命名的蛋黃甜點。", "Dulces de yema con el nombre del tajo bajo el puente.", "Dolços de rovell amb el nom del tajo sota el pont."] },
+    patomaquet: { ic: "toast", c: "#d8503a", n: ["Bread with tomato", "番茄面包", "番茄麵包", "Pan con tomate", "Pa amb tomàquet"], d: ["Rubbed with tomato, a drizzle of oil, a pinch of salt.", "面包抹番茄，淋点橄榄油，撒一撮盐。", "麵包抹番茄，淋點橄欖油，撒一撮鹽。", "Restregado con tomate, un hilo de aceite y sal.", "Fregat amb tomàquet, un raig d'oli i sal."] },
+    crema: { ic: "tart", c: "#e8b840", n: ["Crema catalana", "加泰罗尼亚焦糖奶冻", "加泰隆尼亞焦糖奶凍", "Crema catalana", "Crema catalana"], d: ["Burnt sugar on top, cinnamon underneath.", "上面一层焦糖，下面带点肉桂香。", "上面一層焦糖，下面帶點肉桂香。", "Azúcar quemado arriba, canela debajo.", "Sucre cremat a dalt, canyella a sota."] },
+    xuixo: { ic: "churro", c: "#e0a848", n: ["Xuixo", "赫罗纳奶油卷", "赫羅納奶油捲", "Xuixo", "Xuixo"], d: ["Girona's fried pastry, filled with crema and rolled in sugar.", "赫罗纳的炸酥卷，灌满奶油，裹一层糖。", "赫羅納的炸酥捲，灌滿奶油，裹一層糖。", "El dulce frito de Girona, relleno de crema y rebozado en azúcar.", "El dolç fregit de Girona, farcit de crema i arrebossat amb sucre."] },
+    scone: { ic: "bun", c: "#d8a858", n: ["Scone with jam", "果酱司康饼", "果醬司康餅", "Scone con mermelada", "Scone amb melmelada"], d: ["Cream first or jam first? Nobody agrees.", "先抹奶油还是先抹果酱？谁也说服不了谁。", "先抹奶油還是先抹果醬？誰也說服不了誰。", "¿Primero la nata o la mermelada? Nadie se pone de acuerdo.", "Primer la nata o la melmelada? Ningú no s'hi posa d'acord."] },
+    sausage: { ic: "pasty", c: "#c8883a", n: ["Sausage roll", "香肠卷", "香腸捲", "Rollito de salchicha", "Rotllet de salsitxa"], d: ["Flaky, hot, a little greasy. A platform classic.", "酥、烫、有点油，站台上的老味道。", "酥、燙、有點油，月台上的老味道。", "Hojaldre, caliente, algo grasiento. Un clásico de andén.", "Fullat, calent, una mica greixós. Un clàssic d'andana."] },
+    pasty: { ic: "pasty", c: "#c8883a", n: ["Cornish pasty", "康沃尔馅饼", "康瓦爾餡餅", "Empanada de Cornualles", "Empanada de Cornualla"], d: ["Miners took them down the shafts and held them by the crimp.", "以前矿工带下矿井，捏着边上的褶吃。", "以前礦工帶下礦井，捏著邊上的褶吃。", "Los mineros las bajaban a la mina y las cogían por el repulgo.", "Els miners les baixaven a la mina i les agafaven pel plec."] },
+    shortbread: { ic: "biscuit", c: "#e8c880", n: ["Shortbread", "苏格兰黄油酥饼", "蘇格蘭牛油酥餅", "Shortbread", "Shortbread"], d: ["All butter, in a tartan tin.", "全是黄油，装在格子呢铁盒里。", "全是牛油，裝在格子呢鐵盒裡。", "Pura mantequilla, en una lata de cuadros escoceses.", "Pura mantega, en una llauna de quadres escocesos."] },
+    tablet: { ic: "dots", c: "#ecd6a8", n: ["Scottish tablet", "苏格兰奶油糖", "蘇格蘭奶油糖", "Tablet escocés", "Tablet escocès"], d: ["Sugar, butter and condensed milk; harder and grainier than fudge.", "糖、黄油和炼乳，比软糖更硬更沙。", "糖、牛油和煉奶，比軟糖更硬更沙。", "Azúcar, mantequilla y leche condensada; más duro y arenoso que el fudge.", "Sucre, mantega i llet condensada; més dur i sorrenc que el fudge."] },
+    mint: { ic: "bar", c: "#f2f0ea", n: ["Kendal Mint Cake", "肯德尔薄荷糖", "肯德爾薄荷糖", "Kendal Mint Cake", "Kendal Mint Cake"], d: ["Made just up the road in Kendal; it went up Everest in 1953.", "就产自不远的肯德尔，1953 年被带上了珠峰。", "就產自不遠的肯德爾，1953 年被帶上了珠峰。", "Se hace en Kendal, aquí al lado; subió al Everest en 1953.", "Es fa a Kendal, aquí al costat; va pujar a l'Everest el 1953."] },
+    welshcake: { ic: "biscuit", c: "#d8a058", n: ["Welsh cakes", "威尔士小煎饼", "威爾斯小煎餅", "Pastelitos galeses", "Pastissets gal·lesos"], d: ["Cooked on a bakestone and sugared while still warm.", "在铁板上烙好，趁热撒糖。", "在鐵板上烙好，趁熱撒糖。", "Hechos en la plancha y espolvoreados de azúcar aún calientes.", "Fets a la planxa i ensucrats encara calents."] },
+    barabrith: { ic: "loaf", c: "#7a4a2a", n: ["Bara brith", "威尔士果干面包", "威爾斯果乾麵包", "Bara brith", "Bara brith"], d: ["'Speckled bread': the fruit soaks overnight in tea.", "“斑点面包”：果干先在茶里泡一夜。", "「斑點麵包」：果乾先在茶裡泡一夜。", "«Pan moteado»: la fruta se remoja toda la noche en té.", "«Pa clapejat»: la fruita es remulla tota la nit en te."] },
+    bagel: { ic: "ring", c: "#c8904a", n: ["Bagel", "贝果", "貝果", "Bagel", "Bagel"], d: ["With cream cheese, wrapped in paper.", "抹奶油奶酪，用纸包着。", "抹奶油乳酪，用紙包著。", "Con queso crema, envuelto en papel.", "Amb formatge cremós, embolicat en paper."] },
+    pie: { ic: "tart", c: "#c8883a", n: ["A slice of apple pie", "一块苹果派", "一塊蘋果派", "Una porción de tarta de manzana", "Un tros de pastís de poma"], d: ["Warm, from the diner down the street.", "热乎的，来自街那头的小餐馆。", "熱呼呼的，來自街那頭的小餐館。", "Caliente, del diner de la calle de abajo.", "Calent, del diner del carrer de baix."] },
+    bw: { ic: "bw", c: "#f4efe2", n: ["Black-and-white cookie", "黑白饼干", "黑白餅乾", "Galleta blanca y negra", "Galeta blanca i negra"], d: ["Half vanilla, half chocolate icing. New York's own.", "一半香草糖霜，一半巧克力，纽约特产。", "一半香草糖霜，一半巧克力，紐約特產。", "Mitad vainilla, mitad chocolate. De Nueva York.", "Meitat vainilla, meitat xocolata. De Nova York."] },
+    huckle: { ic: "tart", c: "#5a2a6a", n: ["Huckleberry pie", "越橘派", "越橘派", "Tarta de arándano huckleberry", "Pastís de nabius huckleberry"], d: ["Wild berries the bears like too, picked in August.", "熊也爱吃的野生浆果，八月采摘。", "熊也愛吃的野生漿果，八月採摘。", "Bayas silvestres que también gustan a los osos; se cogen en agosto.", "Baies silvestres que també agraden als óssos; es cullen a l'agost."] },
+    taco: { ic: "taco", c: "#e8c870", n: ["Fish taco", "鱼肉塔可", "魚肉塔可", "Taco de pescado", "Taco de peix"], d: ["Grilled fish, cabbage and lime, a short walk from the pier.", "烤鱼、卷心菜和青柠，离码头几步路。", "烤魚、高麗菜和青檸，離碼頭幾步路。", "Pescado a la plancha, col y lima, a un paseo del muelle.", "Peix a la planxa, col i llima, a un pas del moll."] },
+    bao: { ic: "bunw", c: "#f4efe2", n: ["Steamed bun", "包子", "包子", "Bollo al vapor", "Panet al vapor"], d: ["Straight from the bamboo steamer, too hot to hold.", "刚出笼，烫得拿不住。", "剛出籠，燙得拿不住。", "Recién salido de la vaporera, quema en la mano.", "Acabat de sortir del vapor, crema a la mà."] },
+    teaegg: { ic: "egg", c: "#8a5a34", n: ["Tea egg", "茶叶蛋", "茶葉蛋", "Huevo de té", "Ou de te"], d: ["Simmered all day in tea and soy, cracked like marble.", "在茶和酱油里煮了一整天，壳上的裂纹像大理石。", "在茶和醬油裡煮了一整天，殼上的裂紋像大理石。", "Hervido todo el día en té y soja, con grietas como de mármol.", "Bullit tot el dia en te i soja, amb esquerdes com de marbre."] },
+    tanghulu: { ic: "skewer", c: "#d8302a", n: ["Tanghulu", "糖葫芦", "糖葫蘆", "Tanghulu", "Tanghulu"], d: ["Hawthorn berries on a stick in a shell of hard sugar.", "一串山楂，裹着一层脆脆的糖衣。", "一串山楂，裹著一層脆脆的糖衣。", "Bayas de espino en un palo, con una capa de azúcar crujiente.", "Baies d'arç en un pal, amb una capa de sucre cruixent."] },
+    jianbing: { ic: "crepe", c: "#e8c870", n: ["Jianbing", "煎饼果子", "煎餅果子", "Jianbing", "Jianbing"], d: ["Egg, sauce and a crisp cracker in a crêpe, folded while you watch.", "摊上鸡蛋、刷上酱、包上薄脆，当着你的面折好。", "攤上雞蛋、刷上醬、包上薄脆，當著你的面折好。", "Huevo, salsa y una galleta crujiente en una crepe, doblada delante de ti.", "Ou, salsa i una galeta cruixent dins una crep, plegada davant teu."] },
+    mifen: { ic: "bowl", c: "#f4efe2", n: ["Guilin rice noodles", "桂林米粉", "桂林米粉", "Fideos de arroz de Guilin", "Fideus d'arròs de Guilin"], d: ["Fresh rice noodles, savoury brine, peanuts, a little crackling.", "鲜米粉，卤水，花生，一点脆皮。", "鮮米粉，滷水，花生，一點脆皮。", "Fideos de arroz frescos, salmuera, cacahuetes y un poco de chicharrón.", "Fideus d'arròs frescos, salmorra, cacauets i una mica de cansalada cruixent."] },
+    mooncake: { ic: "mooncake", c: "#e0b878", n: ["Suzhou mooncake", "苏式月饼", "蘇式月餅", "Pastel de luna de Suzhou", "Pastís de lluna de Suzhou"], d: ["Flaky layers, not the dense kind.", "层层起酥，不是实心的那种。", "層層起酥，不是實心的那種。", "De hojaldre, no de los compactos.", "De fullat, no dels compactes."] },
+    xianbing: { ic: "biscuit", c: "#e8c890", n: ["Xiamen bean pastry", "厦门馅饼", "廈門餡餅", "Pastel de judía de Xiamen", "Pastís de mongeta de Xiamen"], d: ["Mung bean in a thin flaky crust; people take boxes home as gifts.", "薄薄的酥皮包绿豆馅，人们成盒带回家送人。", "薄薄的酥皮包綠豆餡，人們成盒帶回家送人。", "Judía mungo en hojaldre fino; la gente se lleva cajas de regalo.", "Mongeta mung en fullat fi; la gent se n'endú capses per regalar."] },
+    hongchang: { ic: "sausage", c: "#9a2a22", n: ["Harbin red sausage", "哈尔滨红肠", "哈爾濱紅腸", "Salchicha roja de Harbin", "Salsitxa vermella de Harbin"], d: ["Smoked and garlicky; it came with Russian railway workers a century ago.", "烟熏，蒜香，一百年前随俄国铁路工人传来。", "煙燻，蒜香，一百年前隨俄國鐵路工人傳來。", "Ahumada y con ajo; llegó con los ferroviarios rusos hace un siglo.", "Fumada i amb all; va arribar amb els ferroviaris russos fa un segle."] },
+    apricot: { ic: "dots", c: "#e8a038", n: ["Dried apricots", "李广杏干", "李廣杏乾", "Albaricoques secos", "Albercocs secs"], d: ["From the oasis orchards: sweet, a little sour.", "绿洲果园里的杏，甜里带一点酸。", "綠洲果園裡的杏，甜裡帶一點酸。", "De los huertos del oasis: dulces, algo ácidos.", "Dels horts de l'oasi: dolços, una mica àcids."] },
+    eggtart: { ic: "tart", c: "#f2c840", n: ["Egg tart", "蛋挞", "蛋撻", "Tartaleta de huevo", "Tarteta d'ou"], d: ["Still trembling in the middle.", "中间还在微微颤。", "中間還在微微顫。", "Todavía tiembla en el centro.", "Encara tremola pel mig."] },
+    polo: { ic: "bun", c: "#e8b050", n: ["Pineapple bun", "菠萝包", "菠蘿包", "Bollo de piña", "Brioix de pinya"], d: ["No pineapple: the top just cracks like one. Best with a slab of butter.", "里面没有菠萝，只是表皮裂得像。夹一大块黄油最好。", "裡面沒有菠蘿，只是表皮裂得像。夾一大塊牛油最好。", "No lleva piña: la costra se agrieta como una. Mejor con un trozo de mantequilla.", "No porta pinya: la crosta s'esquerda com una. Millor amb un tros de mantega."] },
+    gaidaanjai: { ic: "waffle", c: "#e8b848", n: ["Egg waffle", "鸡蛋仔", "雞蛋仔", "Gofre de huevo", "Gofra d'ou"], d: ["Bubbles you tear off one at a time.", "一个一个泡泡撕着吃。", "一個一個泡泡撕著吃。", "Burbujas que se arrancan de una en una.", "Bombolles que s'arrenquen d'una en una."] },
+    ekiben: { ic: "bento", c: "#8a3a2a", n: ["Ekiben", "铁路便当", "鐵路便當", "Ekiben", "Ekiben"], d: ["A boxed lunch made for this line, to eat by the window.", "为这条线做的便当，靠窗吃。", "為這條線做的便當，靠窗吃。", "Un almuerzo en caja hecho para esta línea, para comer junto a la ventana.", "Un dinar en capsa fet per a aquesta línia, per menjar a la finestra."] },
+    onigiri: { ic: "onigiri", c: "#f4f4f0", n: ["Onigiri", "饭团", "飯糰", "Onigiri", "Onigiri"], d: ["Salmon or pickled plum; the seaweed stays crisp in its wrapper.", "三文鱼或梅干，海苔隔着包装纸还是脆的。", "鮭魚或梅乾，海苔隔著包裝紙還是脆的。", "De salmón o ciruela; el alga sigue crujiente en su envoltorio.", "De salmó o pruna; l'alga es manté cruixent dins l'embolcall."] },
+    yatsuhashi: { ic: "tri", c: "#e8d8c0", n: ["Yatsuhashi", "八桥饼", "八橋餅", "Yatsuhashi", "Yatsuhashi"], d: ["Cinnamon rice-flour sweets, folded over red bean.", "肉桂味的米皮，折起来包着红豆馅。", "肉桂味的米皮，折起來包著紅豆餡。", "Dulces de harina de arroz con canela, doblados sobre judía roja.", "Dolços de farina d'arròs amb canyella, plegats sobre mongeta vermella."] },
+    manju: { ic: "bun", c: "#a8703a", n: ["Onsen manjū", "温泉馒头", "溫泉饅頭", "Manjū de las termas", "Manjū de les termes"], d: ["Steamed over the hot springs: brown sugar outside, red bean inside.", "在温泉的蒸汽上蒸好，外面黑糖，里面红豆。", "在溫泉的蒸汽上蒸好，外面黑糖，裡面紅豆。", "Al vapor de las termas: azúcar moreno fuera, judía roja dentro.", "Al vapor de les termes: sucre morè a fora, mongeta vermella a dins."] },
+    dove: { ic: "dove", c: "#e8b860", n: ["Dove biscuits", "鸽子饼干", "鴿子餅乾", "Galletas de paloma", "Galetes de colom"], d: ["Butter biscuits shaped like the doves at Hachimangū.", "形状像鹤冈八幡宫鸽子的黄油饼干。", "形狀像鶴岡八幡宮鴿子的奶油餅乾。", "Galletas de mantequilla con forma de las palomas del santuario Hachimangū.", "Galetes de mantega en forma dels coloms del santuari Hachimangū."] },
+    softserve: { ic: "cone", c: "#f4efe2", n: ["Hokkaido milk soft-serve", "北海道牛奶冰淇淋", "北海道牛奶霜淇淋", "Helado de leche de Hokkaido", "Gelat de llet de Hokkaido"], d: ["Even in the snow, people queue for it.", "就算下着雪，也有人排队。", "就算下著雪，也有人排隊。", "Incluso con nieve, la gente hace cola.", "Fins i tot amb neu, la gent fa cua."] },
+    squid: { ic: "skewer2", c: "#d8a060", n: ["Grilled squid", "烤鱿鱼", "烤魷魚", "Calamar a la plancha", "Calamar a la planxa"], d: ["Glazed with soy, from a stall by the harbour.", "刷了酱油，来自港口边的小摊。", "刷了醬油，來自港口邊的小攤。", "Glaseado con soja, de un puesto del puerto.", "Glacejat amb soja, d'una parada del port."] },
+    honey: { ic: "jar", c: "#e8a830", n: ["Local honey", "本地蜂蜜", "本地蜂蜜", "Miel de aquí", "Mel d'aquí"], d: ["From the hives along the line; there's an honesty box.", "来自铁路边的蜂箱，旁边有个自助投钱箱。", "來自鐵路邊的蜂箱，旁邊有個自助投錢箱。", "De las colmenas junto a la vía; hay una caja de confianza.", "De les arnes del costat de la via; hi ha una caixa de confiança."] },
+    dates: { ic: "dots", c: "#6a3a1e", n: ["Dates", "椰枣", "椰棗", "Dátiles", "Dàtils"], d: ["Sticky and sweet; the oldest trail food there is.", "黏黏的、甜甜的，最古老的干粮。", "黏黏的、甜甜的，最古老的乾糧。", "Pegajosos y dulces; la comida de camino más antigua.", "Enganxosos i dolços; el menjar de camí més antic."] },
+    chestnut: { ic: "dots", c: "#6a3a1e", n: ["Roasted chestnuts", "糖炒栗子", "糖炒栗子", "Castañas asadas", "Castanyes torrades"], d: ["Warm in a paper cone.", "装在纸袋里，热乎乎的。", "裝在紙袋裡，熱呼呼的。", "Calientes, en un cucurucho de papel.", "Calentes, en un cucurutxo de paper."] },
+    ayu: { ic: "fish", c: "#9aa0a8", n: ["Grilled sweetfish", "盐烤香鱼", "鹽烤香魚", "Pez dulce a la brasa", "Peix dolç a la brasa"], d: ["Salted on a skewer, from the river that feeds the lake.", "串在竹签上撒盐烤，来自注入湖里的那条河。", "串在竹籤上撒鹽烤，來自注入湖裡的那條河。", "Con sal en una brocheta, del río que llena el lago.", "Amb sal en una broqueta, del riu que omple el llac."] },
+    imo: { ic: "potato", c: "#8a3a5a", n: ["Roasted sweet potato", "烤红薯", "烤地瓜", "Boniato asado", "Moniato rostit"], d: ["From a stone oven, wrapped in newspaper, warm in both hands.", "石头炉子里烤出来，裹着报纸，捧在手里暖暖的。", "石頭爐子裡烤出來，裹著報紙，捧在手裡暖暖的。", "De un horno de piedras, envuelto en papel de periódico, caliente en las manos.", "D'un forn de pedres, embolicat amb paper de diari, calent a les mans."] }
+  };
+  var G_STOP = { "Paris Gare de Lyon": ["jambon"], "Saint-Malo": ["kouign"], "Arles": ["calisson"], "Annecy": ["savoie"], "Hamburg Hbf": ["franz"], "Heidelberg": ["kuss"], "Garmisch-Partenkirchen": ["leberkas"], "Titisee": ["kirsch"],
+    "Grindelwald": ["meringue"], "Zermatt": ["roggen"], "Firenze S.M.N.": ["schiacciata"], "Vernazza": ["focaccia"], "Madrid Atocha": ["calamares"], "Ronda": ["yemas"], "Girona": ["xuixo"],
+    "Penzance": ["pasty"], "Edinburgh Waverley": ["shortbread"], "Aviemore": ["tablet", "shortbread"], "Windermere": ["mint"], "Grand Central": ["bw"], "Glacier Park": ["huckle"], "Santa Barbara": ["taco"],
+    "北京南": ["tanghulu"], "Gulou Hutong": ["tanghulu", "jianbing"], "桂林": ["mifen"], "苏州": ["mooncake"], "厦门": ["xianbing"], "哈尔滨": ["hongchang"], "敦煌": ["apricot"],
+    "京都": ["yatsuhashi"], "箱根湯本": ["manju"], "鎌倉": ["dove"], "美瑛": ["softserve"], "大埔墟": ["gaidaanjai"] };
+  var G_LAND = { fr: ["croissant", "madeleine"], de: ["brezel"], ch: ["choc", "nusstorte"], it: ["cornetto"], es: ["churros", "jamon"], ca: ["patomaquet", "crema"], uk: ["scone", "sausage"], cy: ["welshcake", "barabrith"],
+    us: ["bagel", "pie"], cn: ["bao", "teaegg"], hk: ["eggtart", "polo"], jp: ["ekiben", "onigiri"] };
+  var G_KIND = { metropolis: ["onigiri", "ekiben"], alpine: ["choc", "imo"], coastal: ["squid"], countryside: ["honey"], desert: ["dates"], forest: ["chestnut"], lake: ["ayu"], snow: ["imo"], hutong: ["tanghulu", "jianbing"] };
+  function goodsOf(st) {
+    if (!st) return []; var out = [], add = function (a) { (a || []).forEach(function (k) { if (GOODS[k] && out.indexOf(k) < 0) out.push(k); }); };
+    add(G_STOP[st.name]); add(G_LAND[st.tongue]); add(G_LAND[st.look]); add(G_KIND[st.biome]); add(["chestnut"]);
+    return out.slice(0, 3).map(function (k) { var o = GOODS[k]; return { k: k, ic: o.ic, c: o.c, n: o.n, d: o.d }; });
+  }
+  /* each good as a few pixels (about 8 wide), its base at (x, y) */
+  function good(g, ic, c, x, y) {
+    var D = dk(c, 0.22), L = lt(c, 0.25), r = function (cc, a, b, w, h) { g.r(cc, x + a, y + b, w, h); };
+    switch (ic) {
+      case "crescent": r(c, -3, -3, 6, 2); r(c, -4, -2, 2, 2); r(c, 2, -2, 2, 2); r(D, -1, -3, 1, 2); r(D, 1, -3, 1, 2); r(L, -2, -3, 1, 1); break;
+      case "shell": r(c, -3, -3, 6, 3); r(D, -2, -3, 1, 3); r(D, 0, -3, 1, 3); r(D, 2, -3, 1, 3); r(L, -3, -3, 6, 1); break;
+      case "baguette": r(c, -5, -2, 10, 2); r(D, -3, -2, 1, 1); r(D, 0, -2, 1, 1); r(D, 3, -2, 1, 1); r("#e8a0a0", -4, 0, 8, 1); r("#f2e8c0", -4, -1, 8, 1); break;
+      case "bun": case "bunw": g.e(c, x, y - 1.6, 3.4, 2); r(L, -1, -3, 2, 1); if (ic === "bunw") r(D, -0.5, -4, 1, 1); break;
+      case "diamond": g.p(c, [x - 4, y - 1, x, y - 3, x + 4, y - 1, x, y + 1]); r(L, -1, -2, 2, 1); break;
+      case "cake": r(c, -3, -5, 6, 5); r(L, -3, -5, 6, 1); r(D, -3, -3, 6, 1); r("#c8302a", 0, -6, 1, 1); break;
+      case "tart": g.e(dk(c, 0.3), x, y - 1, 3.6, 1.7); g.e(c, x, y - 1.4, 2.6, 1); r(L, -1, -2, 1, 1); break;
+      case "pretzel": r(c, -3, -4, 2, 3); r(c, 1, -4, 2, 3); r(c, -2, -5, 4, 1); r(c, -1, -2, 2, 1); r(c, -3, -1, 2, 1); r(c, 1, -1, 2, 1); r("#f4f4f0", -2, -4, 1, 1); r("#f4f4f0", 2, -3, 1, 1); break;
+      case "bar": r(c, -4, -3, 8, 3); r(L, -4, -3, 8, 1); r(D, -1, -3, 1, 3); r(D, 2, -3, 1, 3); r("#e8e4dc", -4, -3, 2, 3); break;
+      case "loaf": g.e(c, x, y - 1.6, 4.2, 2); r(D, -2, -3, 1, 1); r(D, 0, -3, 1, 1); r(D, 2, -3, 1, 1); break;
+      case "meringue": g.e(c, x, y - 1.8, 3, 2.2); r("#ffffff", -1, -4, 1, 1); r("#e8dcc0", -3, -1, 6, 1); break;
+      case "churro": r(c, -4, -3, 8, 1); r(D, -4, -2, 8, 1); r(c, -4, -1, 8, 1); r("#ffffff", -2, -3, 1, 1); r("#ffffff", 2, -3, 1, 1); break;
+      case "toast": r("#d8b070", -3, -1, 6, 1); r(c, -3, -2, 6, 1); r(L, -2, -2, 1, 1); break;
+      case "dots": r(c, -3, -2, 2, 2); r(c, 0, -2, 2, 2); r(c, 2, -3, 2, 2); r(c, -1, -4, 2, 2); r(L, 0, -2, 1, 1); break;
+      case "pasty": g.e(c, x, y, 4, 3, Math.PI, 0); for (var i = -3; i <= 3; i += 2) r(D, i, -3, 1, 1); break;
+      case "biscuit": g.e(c, x, y - 1.4, 3.2, 1.5); r(D, -1, -2, 1, 1); r(D, 1, -1, 1, 1); break;
+      case "ring": g.e(c, x, y - 1.6, 3.4, 2); g.e(dk(c, 0.45), x, y - 1.8, 1, 0.7); break;
+      case "bw": g.e("#f4efe2", x, y - 1.6, 3.4, 2); r("#3a2018", 0, -3, 3, 3); break;
+      case "taco": g.e(c, x, y, 3.6, 3, Math.PI, 0); r("#6aa84a", -2, -3, 4, 1); r("#f4efe2", -1, -2, 2, 1); break;
+      case "egg": g.e(c, x, y - 2, 2, 2.6); r(D, -1, -3, 1, 1); r(D, 0, -2, 1, 1); break;
+      case "skewer": r("#c8a06a", 0, -8, 1, 8); g.e(c, x + 0.5, y - 7, 1.6, 1.6); g.e(c, x + 0.5, y - 5, 1.6, 1.6); g.e(c, x + 0.5, y - 3, 1.6, 1.6); r("#ffd8d0", -1, -8, 1, 1); break;
+      case "skewer2": r("#c8a06a", 0, -8, 1, 8); r(c, -2, -7, 5, 4); r(D, -2, -5, 5, 1); break;
+      case "crepe": r(c, -3, -3, 6, 3); r(D, -3, -1, 6, 1); r("#6aa84a", 2, -4, 1, 1); break;
+      case "bowl": g.e("#e8e4dc", x, y - 2, 3.6, 2.2, 0, Math.PI); r(c, -3, -2, 6, 1); r("#c8302a", 1, -3, 1, 1); break;
+      case "mooncake": g.e(c, x, y - 1.6, 3.2, 2); r(D, -1, -2, 2, 1); r("#c8302a", 0, -3, 1, 1); break;
+      case "sausage": r(c, -4, -2, 8, 2); r(dk(c, 0.3), -4, -1, 8, 1); r(L, -3, -2, 4, 1); break;
+      case "waffle": for (var a = -3; a <= 3; a += 2) for (var b2 = -3; b2 <= -1; b2 += 2) r(a % 4 ? c : D, a, b2, 2, 2); break;
+      case "bento": r(c, -4, -3, 8, 3); r("#e8d8b0", -4, -3, 8, 1); r("#c8302a", -1, -3, 1, 3); break;
+      case "onigiri": g.p("#f4f4f0", [x - 3, y, x, y - 4, x + 3, y]); r("#1a2a1a", -2, -1, 4, 1); break;
+      case "tri": g.p(c, [x - 3, y, x, y - 3, x + 3, y]); r("#5a2a2a", -1, -1, 2, 1); break;
+      case "dove": r(c, -3, -2, 5, 2); r(c, 1, -3, 2, 1); r(D, 2, -3, 1, 1); r(D, -3, -1, 1, 1); break;
+      case "cone": g.p("#d8a058", [x - 1.5, y - 3, x + 1.5, y - 3, x, y + 1]); g.e(c, x, y - 4, 2, 2); r("#ffffff", -1, -6, 1, 1); break;
+      case "jar": r(c, -2, -4, 5, 4); r(L, -1, -3, 1, 2); r("#e8e4dc", -2, -5, 5, 1); r("#c8302a", -2, -6, 5, 1); break;
+      case "fish": r("#c8a06a", -5, -2, 10, 1); r(c, -3, -3, 6, 2); r(c, 3, -4, 1, 1); r(c, 3, -1, 1, 1); r("#1a1a1a", -2, -3, 1, 1); break;
+      case "potato": g.e(c, x, y - 1.6, 3.6, 1.8); r("#e8a040", 2, -2, 1, 1); r("#e8e0c8", -4, -1, 3, 1); break;
+      default: r(c, -2, -3, 4, 3);
+    }
+  }
+
   /* ---------- the scene: everything for one stop ---------- */
   function scene(st, o) {
     var E = envOf(st, o), sty = styleOf(st), key = VIEW[st.name] || "", R0 = seed(st.name + "|" + E.season);
@@ -892,9 +1014,10 @@
     var keeper = folk(seed(st.name + "keeper"), E, { age: "adult", noCase: 1 }); keeper.cas = keeper.pack = keeper.bag = keeper.hold = keeper.umb = keeper.skis = keeper.board = keeper.rod = keeper.brief = null; keeper.outer = null; keeper.hat = sty === "hutong" ? null : keeper.hat;
     function kiosk(g, cx, x, oy, t) {
       var b = 147, i;
-      if (sty === "jp") { var vc = "#e8e4dc"; g.r(vc, x - 14, b - 40, 28, 40); g.r("#c8302a", x - 14, b - 40, 28, 4); g.L(E.lit ? "#f4fbff" : E.tone("#dfe8ee", 0), x - 11, b - 34, 22, 18); for (i = 0; i < 10; i++) g.r(["#8a5a34", "#e8c84a", "#5ab86a", "#e85a4a", "#4a8ae8"][i % 5], x - 10 + (i % 5) * 4, b - 32 + ((i / 5) | 0) * 8, 3, 5); g.r("#2a2a2e", x - 8, b - 12, 16, 4); g.r("#c8302a", x + 8, b - 22, 3, 4); return; }
+      var GD = goodsOf(st);
       var roof, wall, aw, sign = null;
-      if (sty === "shed") { wall = "#2d3a45"; aw = ["#c8302a", "#f4efe2"]; sign = "CAFÉ"; }
+      if (sty === "jp") { wall = "#e8e2d4"; aw = null; roof = "#4a5058"; sign = "売店"; }
+      else if (sty === "shed") { wall = "#2d3a45"; aw = ["#c8302a", "#f4efe2"]; sign = "CAFÉ"; }
       else if (sty === "uk") { wall = "#2e5a3a"; aw = [ink, "#efe8d4"]; sign = "TEA"; }
       else if (sty === "modern") { wall = "#e8ecef"; aw = ["#2a6ab8", "#2a6ab8"]; }
       else if (sty === "chalet") { wall = "#6a4428"; aw = null; roof = E.snowy ? "#f2f5f8" : "#4a3828"; }
@@ -904,14 +1027,15 @@
       else { wall = "#7a5a3a"; aw = null; roof = "#5a4a3a"; }
       g.r(wall, x - 24, b - 42, 48, 42); g.r(dk(wall, 0.15), x + 22, b - 42, 2, 42);
       g.r("#2a1d14", x - 18, b - 36, 36, 18); g.L(E.lit ? "#ffd98a" : E.tone("#f1e2c2", 0), x - 17, b - 35, 34, 16);
-      g.r("#7a5a3a", x - 13, b - 31, 26, 1); for (i = 0; i < 5; i++) g.r(["#f4efe2", "#8a5a34", "#c8452e", "#2c6e8a", "#e8c84a"][i], x - 12 + i * 5, b - 34, 3, 3);
+      g.r("#7a5a3a", x - 16, b - 30, 32, 1); for (i = 0; i < 4; i++) { var gd = GD[i % GD.length]; if (gd) good(g, gd.ic, gd.c, x - 12 + i * 8, b - 30); }
       stamp(cx, keeper, x + 2, oy + b - 10, { face: 1 });
       g.r(dk(wall, 0.2), x - 24, b - 19, 48, 3); g.r(wall, x - 24, b - 16, 48, 16); g.r(dk(wall, 0.25), x - 20, b - 12, 40, 1);
-      g.r("#f4efe2", x - 15, b - 23, 4, 4); g.r("#8a5a34", x - 15, b - 23, 4, 1);
+      GD.forEach(function (gd, j) { good(g, gd.ic, gd.c, x - 14 + j * 10 + (j === 2 ? 4 : 0), b - 19); });
+      if (sty === "jp") for (i = 0; i < 6; i++) { g.r("#2a3a6a", x - 22 + i * 7.5, b - 42, 7, 7); g.r(lt("#2a3a6a", 0.12), x - 22 + i * 7.5, b - 42, 7, 1); }
       if (sty === "hutong" || sty === "jiangnan") { g.e("#c8b88a", x + 13, b - 22, 5, 2); g.r("#c8b88a", x + 8, b - 25, 10, 3); g.e("#d8c89a", x + 13, b - 26, 5, 1.5); for (var s = 0; s < 3; s++) { var a = ((t * 0.4 + s / 3) % 1); g.cx.fillStyle = "rgba(240,240,244," + (0.4 * (1 - a)) + ")"; g.cx.beginPath(); g.cx.arc(x + 13 + Math.sin(a * 5 + s) * 2, oy + b - 28 - a * 14, 1 + a * 2, 0, 7); g.cx.fill(); } }
       if (aw) { for (i = 0; i < 8; i++) g.r(aw[i % aw.length], x - 26 + i * 6.5, b - 48, 6.5, 6); for (i = 0; i < 8; i++) g.p(aw[i % aw.length], [x - 26 + i * 6.5, b - 42, x - 26 + i * 6.5 + 3.25, b - 40, x - 26 + i * 6.5 + 6.5, b - 42]); }
       else { g.p(roof, [x - 30, b - 42, x - 20, b - 54, x + 20, b - 54, x + 30, b - 42]); if (sty === "hutong" || sty === "jiangnan") { g.r(roof, x - 32, b - 44, 3, 2); g.r(roof, x + 29, b - 44, 3, 2); g.e(E.lit ? "#ff5a3a" : "#c8302a", x - 20, b - 36, 3, 4); g.e(E.lit ? "#ff5a3a" : "#c8302a", x + 20, b - 36, 3, 4); } }
-      if (sign) { g.r("#1a1a1e", x - 12, b - 56, 24, 8); g.t("#f4efe2", sign, x, b - 50, "8px VT323, monospace"); }
+      if (sign) { g.r("#1a1a1e", x - 12, b - 56, 24, 8); g.t("#f4efe2", sign, x, b - 50, "8px VT323, 'Hiragino Sans', 'Noto Sans CJK JP', sans-serif"); }
       if (E.lit) { g.cx.fillStyle = "rgba(255,210,140,.10)"; g.cx.beginPath(); g.cx.ellipse(x, oy + b + 4, 34, 5, 0, 0, 7); g.cx.fill(); }
     }
 
@@ -1003,6 +1127,7 @@
           var sitting = !!P.sit, fr = P.vx ? (((P.step / 5) | 0) % 4) : 0;
           stamp(cx, me, x, oy + p.y, { frame: fr, face: P.face, sit: sitting, open: !covered(P.x) });
           if (drink && drink.c && !sitting && !me.umb) { cx.fillStyle = E.tone(drink.c, 0.05); cx.fillRect(Math.round(x + (P.face > 0 ? 4 : -6)), Math.round(oy + p.y - 14), 2, 3); }
+          if (P.snack && !sitting) good(api(cx, E, 0.05, 0), P.snack.ic, P.snack.c, Math.round(x + (P.face > 0 ? 6 : -6)), Math.round(oy + p.y - 11));
           if (P.heart && Date.now() - P.heart < 1600) { var hy = oy + 126 - (Date.now() - P.heart) / 60; cx.fillStyle = "#ff8fa0"; cx.font = "8px VT323, monospace"; cx.fillText("♥", x + 6, hy); }
           return;
         }
@@ -1045,5 +1170,5 @@
     var f = folk(seed("me" + s), E, { age: "adult", noCase: 1 }); f.cas = f.brief = f.skis = f.board = f.rod = f.cane = null; f.hold = null; f.bag = f.bag || null;
     return f;
   }
-  window.FBPlat = { scene: scene, me: me, styleOf: styleOf, VIEW: VIEW, person: person, folk: folk };
+  window.FBPlat = { goods: goodsOf, good: function (cx, ic, c, x, y) { good(api(cx, { tone: function (q) { return q; } }, 0, 0), ic, c, x, y); }, scene: scene, me: me, styleOf: styleOf, VIEW: VIEW, person: person, folk: folk };
 })();

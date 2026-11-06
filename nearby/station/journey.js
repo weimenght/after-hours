@@ -47,6 +47,11 @@
     kiosk: ["Kiosk", "小卖部", "小賣部", "Quiosco", "Quiosc"],
     kioskLead: ["Something for the next train.", "带一杯上下一班车。", "帶一杯上下一班車。", "Algo para el próximo tren.", "Alguna cosa per al pròxim tren."],
     here: ["from here", "本地", "本地", "de aquí", "d'aquí"],
+    drinksHere: ["To drink", "喝的", "喝的", "Para beber", "Per beure"],
+    madeHere: ["Made here", "本地小吃", "本地小吃", "De aquí", "D'aquí"],
+    takeOne: ["Take one", "来一个", "來一個", "Me llevo uno", "Me n'emporto un"],
+    findNear: ["Find one near you", "在你附近找找", "在你附近找找", "Busca uno cerca de ti", "Busca'n un a prop teu"],
+    inHand: ["In your hand for the next train.", "拿在手里，带上下一班车。", "拿在手裡，帶上下一班車。", "En la mano, para el próximo tren.", "A la mà, per al pròxim tren."],
     close: ["Close", "关闭", "關閉", "Cerrar", "Tanca"],
     next: ["Next · {s}", "下一站 · {s}", "下一站 · {s}", "Próxima · {s}", "Propera · {s}"],
     stop: ["Stop here", "这站停", "這站停", "Para aquí", "Para aquí"],
@@ -142,9 +147,30 @@
   function trolley(atKiosk) {
     var st = state.station, loc = atKiosk ? localOf(st) : null, list = TROLLEY.slice();
     if (loc) { list = list.filter(function (k) { return k !== loc; }); list.unshift(loc); }
+    if (atKiosk) { var asia = /jasmine|milktea|matcha/.test(loc || "") || /cn|hk|jp/.test(st.look || "") || st.biome === "hutong"; list = [loc, asia ? (loc === "jasmine" ? "milktea" : "jasmine") : "lemonade", "water"].filter(function (k, i, a) { return k && DR[k] && a.indexOf(k) === i; }); }   /* a kiosk keeps what people there drink */
     var rows = list.map(function (k) { var D = DR[k]; return '<button type="button" class="jn-dr" data-k="' + k + '"><span class="jn-dc">' + cupSvg({ k: k, lv: 0.85, t0: 0 }) + '</span><span>' + esc(w2(D.n)) + (k === loc ? ' <em>' + w("here") + "</em>" : "") + "</span></button>"; }).join("");
-    var s = sheet('<small class="cb-stn">' + (atKiosk ? esc(st.name) + " · " + w("kiosk") : w("trolley")) + '</small><p class="jn-lead">' + (atKiosk ? w("kioskLead") : w("trolleyLead")) + '</p><div class="jn-drs">' + rows + '</div><div class="row"><button type="button" data-x>' + w("close") + "</button></div>");
-    s.addEventListener("click", function (e) { var b = e.target.closest(".jn-dr"); if (!b) return; pour(b.dataset.k); s.remove(); if (P.on) P.say("☕"); });
+    var GD = atKiosk && window.FBPlat ? FBPlat.goods(st) : [], food = "";
+    if (GD.length) food = '<small class="jn-sub">' + w("madeHere") + '</small><div class="jn-gds">' + GD.map(function (gd, j) {
+      return '<div class="jn-gd"><img class="jn-gi" alt="" src="' + goodPic(gd) + '"><div><b>' + esc(w2(gd.n)) + '</b><span>' + esc(w2(gd.d)) + '</span><p><button type="button" data-g="' + j + '">' + w("takeOne") + '</button><a href="' + esc(mapsQ(w2(gd.n))) + '" target="_blank" rel="noopener">🗺 ' + w("findNear") + "</a></p></div></div>"; }).join("") + "</div>";
+    var s = sheet('<small class="cb-stn">' + (atKiosk ? esc(st.name) + " · " + w("kiosk") : w("trolley")) + '</small><p class="jn-lead">' + (atKiosk ? w("kioskLead") : w("trolleyLead")) + "</p>" + food + (food ? '<small class="jn-sub">' + w("drinksHere") + "</small>" : "") + '<div class="jn-drs">' + rows + '</div><div class="row"><button type="button" data-x>' + w("close") + "</button></div>");
+    s.addEventListener("click", function (e) {
+      var g2 = e.target.closest("[data-g]"); if (g2) { P.snack = GD[+g2.dataset.g]; s.remove(); try { FBCabin.toast(w2(P.snack.n) + " · " + w("inHand")); } catch (x) {} return; }
+      var b = e.target.closest(".jn-dr"); if (!b) return; pour(b.dataset.k); s.remove(); if (P.on) P.say("☕"); });
+  }
+  /* a good drawn big for the kiosk's card, and a search for one in the visitor's own maps app */
+  var GPIC = {};
+  function goodPic(gd) {
+    if (GPIC[gd.k]) return GPIC[gd.k];
+    var c = document.createElement("canvas"); c.width = 16; c.height = 12; var x = c.getContext("2d");
+    try { FBPlat.good(x, gd.ic, gd.c, 8, 10); } catch (e) {}
+    var big = document.createElement("canvas"); big.width = 64; big.height = 48; var y = big.getContext("2d"); y.imageSmoothingEnabled = false; y.drawImage(c, 0, 0, 64, 48);
+    return (GPIC[gd.k] = big.toDataURL());
+  }
+  function mapsQ(q) {
+    var ua = navigator.userAgent || "", e = encodeURIComponent(q);
+    if (/iPhone|iPad|Macintosh/.test(ua) && "ontouchend" in document || /iPhone|iPad/.test(ua)) return "https://maps.apple.com/?q=" + e;
+    if (/Android/.test(ua)) return "geo:0,0?q=" + e;
+    return "https://www.openstreetmap.org/search?query=" + e;
   }
   function records() {
     var cur = state.trackIndex;
@@ -560,6 +586,10 @@
     "@media (prefers-color-scheme:dark){.jn-icard{background:#1f1915;color:#f2e8d8}.jn-irow button{border-color:#f2e8d8}.jn-irow button.pri{background:#f2e8d8;color:#1f1915}.jn-dots i{background:rgba(242,232,216,.25)}.jn-dots i.on{background:#f2e8d8}.jn-chip.on{background:#f2e8d8!important;color:#1f1915!important;border-color:#f2e8d8!important}.jn-chip,.jn-wide{border-color:rgba(242,232,216,.3)!important}}" +
     ".jn-sheet{z-index:120}.jn-lead{margin:0 0 12px;opacity:.75;text-align:center}" +
     ".jn-drs,.jn-recs{display:grid;gap:6px;max-height:52vh;overflow:auto}" +
+    ".jn-sub{display:block;margin:14px 0 6px;font:600 11px/1 system-ui;letter-spacing:.08em;text-transform:uppercase;opacity:.65}.jn-gds{display:grid;gap:8px}.jn-sheet .jn-lead+.jn-sub{margin-top:4px}" +
+    ".jn-gd{display:flex;gap:12px;align-items:flex-start;padding:8px 10px;border-radius:14px;border:1.5px solid rgba(42,26,16,.18)}.jn-gi{width:48px;height:36px;flex:none;image-rendering:pixelated;background:#3a2a20;border-radius:10px;padding:2px 0}" +
+    ".jn-gd b{display:block;font:600 15px/1.25 system-ui,-apple-system,sans-serif}.jn-gd span{display:block;font:400 13.5px/1.35 system-ui,-apple-system,sans-serif;opacity:.8;margin-top:2px}" +
+    ".jn-gd p{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:8px 0 0}.jn-gd p button{min-height:36px!important;padding:4px 14px!important;border-radius:999px!important;font:600 13px system-ui!important}.jn-gd p a{font:500 13px system-ui;color:inherit;opacity:.85}" +
     ".jn-dr,.jn-rec{display:flex!important;align-items:center;gap:12px;width:100%;min-height:48px!important;padding:6px 14px!important;border-radius:14px!important;text-align:left;border:1.5px solid rgba(42,26,16,.18)!important;font:500 15px/1.25 system-ui,-apple-system,sans-serif!important}" +
     ".jn-dr:hover,.jn-rec:hover,.jn-dr:focus-visible,.jn-rec:focus-visible{border-color:currentColor!important;outline:none}" +
     ".jn-dc{width:34px;height:34px;flex:none;background:#3a2a20;border-radius:10px;display:grid;place-items:center}.jn-dc svg{width:30px;height:30px}.jn-dr em{font:600 11px system-ui;font-style:normal;padding:1px 7px;border-radius:999px;background:#f5c27a;color:#2a1a10;margin-left:4px}" +
