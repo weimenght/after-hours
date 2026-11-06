@@ -47,8 +47,14 @@
   .days .chip[data-d="0"], .days .chip[data-d="1"] { grid-column:span 5; }
   .days .chip { font-size:22px; padding:7px 0; }
   html:lang(zh) .days .chip, html:lang(zh-Hant) .days .chip { font-size:16px; }
-  .times .other, .times input { grid-column:span 2; }
-  .times input { font-family:var(--hand); font-weight:600; font-size:31px; text-align:center; padding:6px 10px; }
+  .times .other, .times .pickt { grid-column:span 2; }
+  /* our own hour and minute choosers: the phone's time field draws empty and flat in some browsers */
+  .pickt { display:flex; align-items:center; justify-content:center; gap:10px; }
+  .pickt[hidden] { display:none; }
+  .pickt span { font-family:var(--hand); font-weight:600; font-size:34px; }
+  .pickt select { -webkit-appearance:none; appearance:none; font-family:var(--hand); font-weight:600; font-size:31px; line-height:1.2; color:#3b2a20; background:var(--sun); border:2.5px solid var(--ink); border-radius:255px 14px 225px 14px/14px 225px 14px 255px; padding:8px 18px; min-width:104px; text-align:center; text-align-last:center; cursor:pointer; }
+  .pickt select:focus-visible { outline:3px solid rgba(231,181,74,.6); outline-offset:2px; }
+  .pickt option { color:var(--ink); background:var(--field); }
   html:lang(zh) .times .other, html:lang(zh-Hant) .times .other { font-size:20px; }
   .chip:disabled { opacity:.35; box-shadow:none; cursor:default; }
   .chip, .btn, input { font:inherit; color:var(--ink); background:var(--field); border:2.5px solid var(--ink); border-radius:255px 14px 225px 14px/14px 225px 14px 255px; }
@@ -235,7 +241,7 @@ var V = {
 home: function () { return '<section class="screen">' + CORNER() +
   '<div><h1>' + esc(T(W.app)) + '</h1><p class="lede">' + esc(T(W.lede)) + '</p></div>' +
   '<div><label id="dayL">' + esc(T(W.pickDay)) + '</label><div class="days" role="group" aria-labelledby="dayL">' + [0, 1, 2, 3, 4, 5, 6].map(function (o) { return '<button type="button" class="chip day" aria-pressed="false" data-d="' + o + '">' + esc(dayName(o)) + '</button>'; }).join("") + '</div></div>' +
-  '<div><label id="whenL">' + esc(T(W.pickTime)) + '</label><div class="times" role="group" aria-labelledby="whenL">' + TIMES.map(function (x) { return '<button type="button" class="chip tm" aria-pressed="false" data-t="' + x + '">' + x + '</button>'; }).join("") + '<button type="button" class="chip other" id="otherBtn" aria-pressed="false">' + esc(T(W.otherTime)) + '</button><input type="time" id="tmIn" step="300" hidden aria-label="' + esc(T(W.pickTime)) + '"></div></div>' +
+  '<div><label id="whenL">' + esc(T(W.pickTime)) + '</label><div class="times" role="group" aria-labelledby="whenL">' + TIMES.map(function (x) { return '<button type="button" class="chip tm" aria-pressed="false" data-t="' + x + '">' + x + '</button>'; }).join("") + '<button type="button" class="chip other" id="otherBtn" aria-pressed="false">' + esc(T(W.otherTime)) + '</button><div class="pickt" id="tmIn" hidden><select id="tmH" aria-label="' + esc(T(W.pickTime)) + '"></select><span aria-hidden="true">:</span><select id="tmM" aria-label="' + esc(T(W.pickTime)) + '"></select></div></div></div>' +
   '<div><label for="corner">' + esc(T(W.whereLabel)) + '</label><input id="corner" maxlength="60" autocomplete="off" placeholder="' + esc(T(W.wherePh)) + '"></div>' +
   '<div><label for="name">' + esc(T(W.nameLabel)) + '</label><input id="name" maxlength="30" autocomplete="given-name" placeholder="' + esc(T(W.namePh)) + '" value="' + esc(get(NAMEKEY) || "") + '"></div>' +
   '<p class="note err" id="err" aria-live="polite"></p>' +
@@ -288,8 +294,15 @@ var B = {
     }
     Array.prototype.forEach.call(days, function (b) { b.onclick = function () { day = +b.getAttribute("data-d"); paint(); }; });
     Array.prototype.forEach.call(tms, function (b) { b.onclick = function () { pick = b.getAttribute("data-t"); custom = false; paint(); }; });
-    other.onclick = function () { custom = true; pick = null; paint(); inp.focus(); try { inp.showPicker(); } catch (e) {} };
-    inp.onchange = inp.oninput = function () { var v = inp.value; if (!v) { pick = null; return paint(); } var p = v.split(":"); pick = (+p[0]) + ":" + p[1]; paint(); };
+    var hS = $("tmH"), mS = $("tmM"), i2 = function (n) { return (n < 10 ? "0" : "") + n; };
+    for (var h = 0; h < 24; h++) hS.add(new Option(String(h), String(h)));
+    for (var m = 0; m < 60; m += 5) mS.add(new Option(i2(m), i2(m)));
+    function fromSel() { pick = hS.value + ":" + mS.value; paint(); }
+    hS.onchange = mS.onchange = fromSel;
+    other.onclick = function () {
+      /* start an hour from now on the hour, so there is always a time showing */
+      custom = true; hS.value = String((new Date().getHours() + 1) % 24); mS.value = "00"; fromSel(); hS.focus();
+    };
     paint();
     on("make", function () { var c = $("corner").value.trim(), n = $("name").value.trim();
       if (pick && !ok(day, pick)) { paint(); err("pastTime"); return; }
