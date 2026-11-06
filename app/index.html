@@ -60,9 +60,10 @@ html.framed .home{padding-top:58px}
 .quote{display:block;width:100%;text-align:left;margin:10px 0 0;padding:0}
 .quote q{display:block;quotes:"\201C" "\201D";font:italic 400 21px/1.22 var(--serif)}
 .quote q i{font-style:normal;color:var(--dim)}
-.quote small{display:block;margin-top:5px;font:11px/1 var(--mono);color:var(--lamp);letter-spacing:.04em}
+.qrow{display:flex;align-items:baseline;gap:12px;margin-top:5px;min-width:0}
+.qrow small{font:11px/1 var(--mono);color:var(--lamp);letter-spacing:.04em;white-space:nowrap}
 .quote:active{opacity:.7}
-.qapp{display:none;margin-top:6px;font:600 12px/1 var(--sans);color:var(--lamp)}
+.qapp{display:none;font:600 12px/1 var(--sans);color:var(--lamp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .qapp.on{display:inline-block}
 .banner{position:absolute;left:10px;right:10px;top:calc(8px + env(safe-area-inset-top));z-index:85;display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:18px;background:rgba(46,38,64,.94);border:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transform:translateY(-140%);transition:transform .45s cubic-bezier(.2,.85,.25,1);text-align:left}
 html.framed .banner{top:12px}
@@ -253,6 +254,54 @@ html.framed .hb{height:30px}
 .lock .d{margin-top:6px;font:12px/1 var(--mono);color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
 .lock h2{margin:44px 0 30px;font:400 32px/1.15 var(--serif);max-width:12em}
 .lock svg{width:46px;height:46px;margin-bottom:22px;opacity:.9}
+/* small phones (the owner, Nov 7: "a lot of overlaps"): a compact card, smaller dock, and the icons fit what's left (fit()) */
+.now li a span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-height:760px){
+  .now{padding:10px 12px;border-radius:20px}
+  .quote{margin-top:7px}
+  .quote q{font-size:18px;line-height:1.18;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  .now ul{margin-top:8px;padding-top:7px}
+  .now li{font-size:15px}
+  .grid{padding:6px 0 4px}
+  .tile{gap:3px}
+  .tile b{font-size:11px}
+  .dock{padding:8px 12px;border-radius:24px}
+  .dock .ico{--ic:50px}
+}
+@media (max-height:620px){
+  .top{height:calc(38px + env(safe-area-inset-top))}
+  .home{padding-top:calc(40px + env(safe-area-inset-top))}
+  .now h2{font-size:9.5px}
+  .down{padding:6px 9px;font-size:11px}
+  .quote{margin-top:5px}
+  .quote q{font-size:16px}
+  .now li.sug{display:none}
+  .now ul:not(:has(li:not(.sug))){display:none}
+  .tile b{font-size:10px}
+  .dock{margin-bottom:calc(6px + env(safe-area-inset-bottom));padding:6px 10px}
+  .dock .ico{--ic:44px}
+}
+.keyp{min-height:0;overflow:hidden}
+@media (max-height:720px){
+  .keyp input{font-size:27px;min-height:38px}
+  .keys{grid-template-columns:repeat(3,60px);gap:9px 22px;margin:8px 0}
+  .keys button{width:60px;height:60px;font-size:25px}
+  .dial{width:60px;height:60px}
+  .dial svg{width:26px;height:26px}
+  .keyp .note{margin-top:8px;font-size:11px}
+}
+@media (max-height:620px){
+  .bar{padding-top:calc(40px + env(safe-area-inset-top))}
+  .bar h3{font-size:28px}
+  .keys{grid-template-columns:repeat(3,52px);gap:7px 22px;margin:6px 0}
+  .keys button{width:52px;height:52px;font-size:22px}
+  .keys button small{font-size:7.5px}
+  .dial{width:52px;height:52px}
+  .keyp .note{margin-top:6px;font-size:10.5px}
+  .call{padding-top:calc(56px + env(safe-area-inset-top))}
+  .call .av{width:100px;height:100px}
+}
+@media (max-width:340px){ .tile b{font-size:10px} .down{font-size:10.5px;padding:6px 8px} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -269,7 +318,7 @@ html.framed .hb{height:30px}
   </div>
 
   <main class="home" id="home">
-   <section class="now" aria-live="polite"><div class="now-h"><h2 id="nowH"></h2><button class="down" id="out" type="button"></button></div><button class="quote" id="quote" type="button"></button><a class="qapp" id="qapp" href="/"></a><ul id="nowL"></ul></section>
+   <section class="now" aria-live="polite"><div class="now-h"><h2 id="nowH"></h2><button class="down" id="out" type="button"></button></div><button class="quote" id="quote" type="button"></button><div class="qrow"><small id="qby"></small><a class="qapp" id="qapp" href="/"></a></div><ul id="nowL"></ul></section>
    <nav class="grid" id="grid" aria-label="after-hours"></nav>
    <nav class="dock" id="dock"></nav>
   </main>
@@ -483,14 +532,14 @@ html.framed .hb{height:30px}
   var QD = deck(), qi = QD.first;
   function quote() {
     var q = QD.list[qi], b = $("quote"), a = $("qapp");
-    b.innerHTML = "<q>" + esc(w(q.w)).replace(/\*([^*]+)\*/g, "<i>$1</i>") + "</q><small>— " + esc(w(WHO[q.k].n)) + "</small>"; b.setAttribute("aria-label", w("qMore")); b.title = w("qMore");
+    b.innerHTML = "<q>" + esc(w(q.w)).replace(/\*([^*]+)\*/g, "<i>$1</i>") + "</q>"; $("qby").textContent = "— " + w(WHO[q.k].n); b.setAttribute("aria-label", w("qMore")); b.title = w("qMore");
     var p = q.app && PK[q.app]; a.classList.toggle("on", !!p); if (p) { a.href = p[4]; a.textContent = pname(q.app) + " ›"; }
   }
-  $("quote").onclick = function () { qi = (qi + 1) % QD.list.length; quote(); };
+  $("quote").onclick = function () { qi = (qi + 1) % QD.list.length; quote(); fit(); };
   function now() {
     var t = traces(), ul = $("nowL"); $("nowH").textContent = w("h_" + part()); ul.innerHTML = "";
-    if (!t.length) { var s = W["s_" + part()]; t = [{ t: w("s_" + part()), href: s && s[5] || "", m: s && s[6] ? pname(s[6]) : "" }]; }
-    t.forEach(function (x) { ul.appendChild(el("li", "", x.href ? '<a href="' + esc(x.href) + '"><span>' + esc(x.t) + "</span><small>" + esc(x.m || "") + " ›</small></a>" : "<span>" + esc(x.t) + "</span>")); });
+    if (!t.length) { var s = W["s_" + part()]; t = [{ t: w("s_" + part()), href: s && s[5] || "", m: s && s[6] ? pname(s[6]) : "", sug: 1 }]; }
+    t.forEach(function (x) { ul.appendChild(el("li", x.sug ? "sug" : "", x.href ? '<a href="' + esc(x.href) + '"><span>' + esc(x.t) + "</span><small>" + esc(x.m || "") + " ›</small></a>" : "<span>" + esc(x.t) + "</span>")); });
     return t;
   }
   var ICONS = {   // the dock and Settings, drawn here (warm, the suite's colours; nobody's trademark)
@@ -516,7 +565,11 @@ html.framed .hb{height:30px}
     var wide = innerWidth > 560 && innerHeight > 600;
     document.documentElement.classList.toggle("framed", wide);
     var ph = $("phone"); ph.style.transform = wide ? "scale(" + Math.min(1, (innerHeight - 64) / 868, (innerWidth - 40) / 414).toFixed(3) + ")" : "";
-    var gr = $("grid"); if (gr.clientHeight) { var rowH = gr.clientHeight / 4, ic = Math.max(38, Math.min(62, rowH - 32, (gr.clientWidth / 4) - 20)); $("screen").style.setProperty("--ic", ic.toFixed(0) + "px"); }
+    var gr = $("grid"); if (gr.clientHeight) {
+      var lab = gr.querySelector(".tile b"), lh = lab ? lab.offsetHeight + 6 : 22, cs = getComputedStyle(gr), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      var rowH = (gr.clientHeight - pad) / 4, ic = Math.max(30, Math.min(62, rowH - lh - 4, (gr.clientWidth / 4) - 20));
+      $("screen").style.setProperty("--ic", Math.floor(ic) + "px");
+    }
   }
   function clock() { var d = new Date(); if (H0 != null) d.setHours(H0);   // ?h= moves the clock too
  $("clock").textContent = hm(d).replace(/^0(\d:)/, "$1"); if ($("lock").classList.contains("on")) { $("lockT").textContent = hm(d); $("lockD").textContent = d.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" }); } }
@@ -841,6 +894,8 @@ html.framed .hb{height:30px}
   $("lang").onclick = function () { setLang((li() + 1) % L.length); };
   window.addEventListener("fbl:lang", paint); window.addEventListener("fbllang", paint);
   window.addEventListener("resize", fit);
+  if (window.ResizeObserver) new ResizeObserver(function () { fit(); }).observe(document.querySelector(".now"));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   document.addEventListener("visibilitychange", function () { if (!document.hidden && !$("lock").classList.contains("on")) paint(); });
   setInterval(clock, 15000);
   paint(); requestAnimationFrame(fit);
