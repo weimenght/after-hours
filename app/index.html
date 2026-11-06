@@ -13,150 +13,676 @@
 <meta name="apple-mobile-web-app-title" content="after-hours"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="/fonts/fonts.css">
 <style>
-:root{--ink:#120F18;--ink2:#1B1624;--paper:#ECE6DA;--dim:#9C93A8;--lamp:#F2A33A;--line:rgba(236,230,218,.12);--sky1:#120F18;--sky2:#1E1830}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--ink);color:var(--paper)}
-body{font:16px/1.5 'Plus Jakarta Sans',system-ui,sans-serif;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* after-hours.work/app/: one phone, one screen (the owner, Nov 6). On a phone it IS the screen; on anything wider it stands
+   in the middle as a phone. Home: the line, the hour's card, the fifteen works and Settings; the dock: Phone, Messages, Mail, Camera. */
+:root{--ink:#120F18;--ink2:#1B1624;--ink3:#251E31;--paper:#ECE6DA;--dim:#9C93A8;--lamp:#F2A33A;--line:rgba(236,230,218,.12);--ic:58px;--serif:'Instrument Serif',Georgia,serif;--sans:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;--mono:'Space Mono',ui-monospace,monospace}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#0B090F;color:var(--paper);overflow:hidden}
+body{font:15px/1.45 var(--sans);-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center}
 a{color:inherit;text-decoration:none}
-.sky{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,var(--sky2),var(--sky1) 60%);transition:background 1.5s}
-.sky i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.5;animation:tw 4s ease-in-out infinite}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:2px;border-radius:8px}
+.room{position:fixed;inset:0;background:radial-gradient(60% 50% at 50% 40%,#21192E,#0B090F 75%);z-index:-1}
+.room p{position:absolute;left:0;right:0;bottom:10px;text-align:center;margin:0;font:12px/1.4 var(--mono);color:var(--dim);letter-spacing:.03em;padding:0 16px}
+/* the phone: on a real phone it fills the screen */
+.phone{position:relative;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:var(--ink)}
+.screen{position:absolute;inset:0;overflow:hidden;isolation:isolate}
+html.framed .phone{width:390px;height:844px;flex:none;border-radius:56px;background:#050407;padding:12px;box-shadow:0 0 0 2px #2E2738,0 0 0 9px #0E0B12,0 40px 90px -20px rgba(0,0,0,.8),0 0 120px -30px rgba(242,163,58,.25);transform-origin:center}
+html.framed .screen{inset:12px;border-radius:44px}
+html.framed .phone::before,html.framed .phone::after{content:"";position:absolute;width:4px;border-radius:2px;background:#2E2738;left:-11px}
+html.framed .phone::before{top:150px;height:60px;box-shadow:0 80px 0 #2E2738}
+html.framed .phone::after{left:auto;right:-11px;top:200px;height:90px}
+.island{display:none}
+html.framed .island{display:block;position:absolute;top:11px;left:50%;width:110px;height:32px;margin-left:-55px;border-radius:20px;background:#000;z-index:60}
+/* wallpaper: the sky follows the hour, stars after dark, a row of lit windows along the bottom */
+.sky{position:absolute;inset:0;z-index:-1;transition:background 1.2s}
+.sky i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.55;animation:tw 4s ease-in-out infinite}
 @keyframes tw{50%{opacity:.12}}
-html.day .sky i{display:none}
-.wrap{max-width:980px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom))}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;height:52px}
-.mark{display:inline-flex;align-items:center;gap:.45em;font:italic 22px/1 'Instrument Serif',Georgia,serif}
-.mark svg{width:22px;height:22px}
-.lang{font:600 12px/1 'Space Mono',monospace;letter-spacing:.06em;color:var(--paper);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 12px;cursor:pointer;min-height:36px}
-.lang:focus-visible,.tile:focus-visible,.btn:focus-visible,.now a:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
-.hero{padding:34px 0 8px}
-h1{font:400 clamp(38px,9.4vw,68px)/1.02 'Instrument Serif',Georgia,serif;margin:0;letter-spacing:-.01em;max-width:13em}
-h1 em{color:var(--lamp);font-style:italic}
-.sub{margin:16px 0 0;font:12px/1.5 'Space Mono',monospace;letter-spacing:.04em;color:var(--dim)}
+.day .sky i{display:none}
+.skyline{position:absolute;left:0;right:0;bottom:0;height:150px;z-index:-1;opacity:.9;pointer-events:none}
+/* top row */
+.top{position:absolute;top:0;left:0;right:0;height:calc(44px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 18px 0;display:flex;align-items:center;justify-content:space-between;z-index:50;font:600 14px/1 var(--sans);pointer-events:none}
+.top>*{pointer-events:auto}
+html.framed .top{height:54px;padding:6px 28px 0}
+.clock{display:none;font-variant-numeric:tabular-nums}
+html.framed .clock{display:block}
+.mark{display:inline-flex;align-items:center;gap:.4em;font:italic 400 19px/1 var(--serif)}
+.mark svg{width:18px;height:18px}
+html.framed .mark{display:none}
+.chip{font:700 11px/1 var(--mono);letter-spacing:.05em;border:1px solid var(--line);border-radius:999px;padding:7px 10px;min-height:30px;background:rgba(18,15,24,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+/* home */
+.home{position:absolute;inset:0;display:flex;flex-direction:column;padding:calc(48px + env(safe-area-inset-top)) 16px 0;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,filter .35s}
+html.framed .home{padding-top:58px}
+.home.away{transform:scale(.92);opacity:.25;filter:blur(2px)}
+.hero h1{font:400 clamp(25px,7.4vw,30px)/1.04 var(--serif);margin:4px 2px 0;letter-spacing:-.01em}
+.hero h1 em,.lock h2 em{color:var(--lamp);font-style:italic}
+.sub{margin:7px 2px 0;font:11px/1.4 var(--mono);color:var(--dim);letter-spacing:.02em}
 .sub a{border-bottom:1px solid var(--line)}
-.now{margin:34px 0 8px;padding:18px 18px 16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,rgba(242,163,58,.10),rgba(242,163,58,0) 60%),var(--ink2)}
-.now h2{margin:0 0 8px;font:12px/1 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--lamp)}
-.now ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.now li{font:400 21px/1.3 'Instrument Serif',Georgia,serif}
-.now li a{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
-.now li a span:last-child{font:12px/1 'Space Mono',monospace;color:var(--dim);white-space:nowrap}
-.kick{margin:40px 0 14px;font:12px/1 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media (min-width:640px){.grid{grid-template-columns:repeat(4,1fr)}}
-@media (min-width:900px){.grid{grid-template-columns:repeat(5,1fr)}}
-.tile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 8px 14px;border-radius:16px;background:var(--ink2);border:1px solid var(--line);transition:transform .25s,background .4s,box-shadow .6s,opacity .6s}
-.tile::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(80% 60% at 50% 30%,var(--g),transparent 70%);opacity:.22;transition:opacity .6s;pointer-events:none}
-.tile:hover{transform:translateY(-2px)}.tile:hover::before{opacity:.4}
-.tile.lit::before{opacity:.55}.tile.lit{box-shadow:0 0 0 1px color-mix(in srgb,var(--g) 50%,transparent),0 10px 30px -12px var(--g)}
-.tile img{width:58px;height:58px;border-radius:14px;display:block;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.35)}
-.tile b{display:block;margin-top:10px;font:600 13.5px/1.2 'Plus Jakarta Sans',system-ui,sans-serif;position:relative}
-.tile small{display:block;margin-top:5px;font:12px/1.35 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--dim);position:relative}
-@media (max-width:420px){.tile small{display:none}.tile{padding:14px 4px 12px}.tile img{width:54px;height:54px}}
-.tile.lit b::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lamp);margin-left:6px;vertical-align:middle}
-.down{margin:44px 0 10px;text-align:center}
-.btn{font:600 15px/1 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:var(--lamp);border:0;border-radius:999px;padding:14px 22px;cursor:pointer;min-height:48px}
-.btn.ghost{background:transparent;color:var(--paper);border:1px solid var(--line)}
-.bye{font:400 clamp(30px,7vw,46px)/1.1 'Instrument Serif',Georgia,serif;margin:22px 0 18px;min-height:1.1em}
-.bye em{color:var(--lamp)}
-html.out .tile{opacity:.18;transform:none;box-shadow:none}html.out .tile::before{opacity:0}
-html.out .now,html.out .hero,html.out .kick{opacity:.25;transition:opacity 1.2s}
-.foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim)}
+.now{margin:12px 0 0;padding:12px 14px;border-radius:22px;background:linear-gradient(160deg,rgba(242,163,58,.14),rgba(242,163,58,0) 60%),rgba(27,22,36,.72);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.now-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.now h2{margin:0;font:700 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--lamp)}
+.down{font:600 11.5px/1 var(--sans);padding:7px 10px;border-radius:999px;background:var(--lamp);color:var(--ink);white-space:nowrap}
+.now ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px}
+.now li{font:400 18px/1.22 var(--serif)}
+.now li a{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.now li small{font:11px/1 var(--mono);color:var(--dim);white-space:nowrap}
+.grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:0 4px;padding:10px 0 6px;align-content:center}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;border-radius:16px;transition:transform .2s}
+.tile:active{transform:scale(.92)}
+.ico{position:relative;width:var(--ic);height:var(--ic);border-radius:calc(var(--ic) * .25);overflow:hidden;background:var(--ink3);box-shadow:0 6px 16px -6px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06)}
+.ico img,.ico svg{width:100%;height:100%;display:block}
+.tile.lit .ico{box-shadow:0 0 0 2px var(--g),0 8px 26px -6px var(--g)}
+.tile.lit .ico::after{content:"";position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--lamp);box-shadow:0 0 6px var(--lamp)}
+.tile b{font:500 11.5px/1.15 var(--sans);max-width:100%;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.dock{margin:0 -4px calc(10px + env(safe-area-inset-bottom));padding:12px 14px;display:flex;justify-content:space-around;border-radius:30px;background:rgba(37,30,49,.62);border:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+html.framed .dock{margin-bottom:22px}
+.dock .ico{--ic:58px}
+.dock .tile b{display:none}
+/* the apps: full-screen sheets over home */
+.app{position:absolute;inset:0;z-index:40;background:var(--ink);display:flex;flex-direction:column;transform:translateY(102%);transition:transform .38s cubic-bezier(.2,.85,.25,1);visibility:hidden}
+.app.open{transform:none;visibility:visible}
+.bar{flex:none;padding:calc(48px + env(safe-area-inset-top)) 18px 8px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;background:var(--ink);position:relative;z-index:2}
+html.framed .bar{padding-top:58px}
+.bar h3{margin:0;font:400 34px/1 var(--serif);letter-spacing:-.01em}
+.bar .bk{font:600 15px/1 var(--sans);color:var(--lamp);padding:6px 0;min-height:36px;display:inline-flex;align-items:center;gap:4px}
+.bar .sp{flex:1}
+.body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 0 14px}
+.hb{flex:none;height:calc(26px + env(safe-area-inset-bottom));display:flex;align-items:flex-start;justify-content:center;padding-top:9px;cursor:pointer}
+.hb::before{content:"";width:134px;height:5px;border-radius:3px;background:rgba(236,230,218,.55)}
+html.framed .hb{height:30px}
+.view{display:none;flex-direction:column;flex:1;min-height:0}
+.view.on{display:flex}
+.sec{margin:16px 18px 6px;font:700 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.list{margin:0 12px;border-radius:18px;background:var(--ink2);border:1px solid var(--line);overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:11px 14px;width:100%;text-align:left;border-top:1px solid var(--line);min-height:56px}
+.row:first-child{border-top:0}
+.row .tx{flex:1;min-width:0}
+.row .tx b{display:block;font:600 15px/1.25 var(--sans)}
+.row .tx small{display:block;font:13px/1.3 var(--sans);color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .rt{font:11px/1 var(--mono);color:var(--dim);white-space:nowrap;align-self:flex-start;padding-top:3px}
+.row .chev{color:var(--dim);font-size:18px}
+.av{flex:none;width:42px;height:42px;border-radius:50%;overflow:hidden;background:var(--ink3);display:grid;place-items:center}
+.av canvas,.av svg{width:100%;height:100%;image-rendering:pixelated;display:block}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:1px;background:#7FC98A}
+.dot.z{background:#6B6478}
+.tabs{flex:none;display:flex;border-top:1px solid var(--line);background:var(--ink)}
+.tabs button{flex:1;padding:9px 0 3px;font:600 11px/1.2 var(--sans);color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabs button svg{width:22px;height:22px}
+.tabs button[aria-selected=true]{color:var(--lamp)}
+/* contact card */
+.card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px 18px 4px}
+.card .av{width:104px;height:104px}
+.card h4{margin:12px 0 2px;font:400 32px/1 var(--serif)}
+.card p{margin:4px 0 0;color:var(--dim);font-size:14px}
+.acts{display:flex;justify-content:center;gap:10px;margin:16px 12px 6px;flex-wrap:wrap}
+.act{flex:1;max-width:84px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px 8px;border-radius:14px;background:var(--ink2);border:1px solid var(--line);font:600 11.5px/1 var(--sans);color:var(--lamp)}
+.act svg{width:22px;height:22px}
+.act[disabled]{opacity:.35}
+/* the call */
+.call{position:absolute;inset:0;z-index:70;background:radial-gradient(70% 50% at 50% 30%,#2E2340,#0E0B14);display:none;flex-direction:column;align-items:center;padding:calc(90px + env(safe-area-inset-top)) 26px calc(40px + env(safe-area-inset-bottom));text-align:center}
+.call.on{display:flex}
+.call .av{width:120px;height:120px;box-shadow:0 0 0 6px rgba(242,163,58,.12)}
+.call.ring .av{animation:ring 1.2s ease-in-out infinite}
+@keyframes ring{50%{box-shadow:0 0 0 16px rgba(242,163,58,.04)}}
+.call h4{margin:18px 0 4px;font:400 34px/1 var(--serif)}
+.call .st{font:12px/1 var(--mono);color:var(--dim);letter-spacing:.06em}
+.call q{display:block;margin:28px 0 0;font:400 22px/1.3 var(--serif);quotes:none;min-height:4em}
+.call .end{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:14px}
+.hang{width:70px;height:70px;border-radius:50%;background:#D9534A;display:grid;place-items:center}
+.hang svg{width:30px;height:30px}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:999px;background:var(--lamp);color:var(--ink);font:600 15px/1 var(--sans);min-height:46px}
+.pill.ghost{background:transparent;color:var(--paper);border:1px solid var(--line)}
+/* keypad */
+.keyp{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 20px}
+.keyp input{width:100%;text-align:center;font:400 34px/1.2 var(--sans);letter-spacing:.04em;background:none;border:0;color:var(--paper);outline:none;min-height:46px}
+.keyp input::placeholder{font:400 19px/1.3 var(--serif);color:var(--dim);letter-spacing:0}
+.keys{display:grid;grid-template-columns:repeat(3,72px);gap:12px 22px;margin:12px 0}
+.keys button{width:72px;height:72px;border-radius:50%;background:var(--ink3);font:400 30px/1 var(--sans);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.keys button small{font:700 8.5px/1 var(--sans);letter-spacing:.14em;color:var(--dim);margin-top:2px;min-height:8px}
+.dial{width:72px;height:72px;border-radius:50%;background:#4FA466;display:grid;place-items:center}
+.dial svg{width:30px;height:30px}
+.keyp .note{margin:12px 0 0;font:12px/1.4 var(--mono);color:var(--dim);text-align:center}
+/* messages */
+.thread{flex:1;min-height:0;overflow-y:auto;padding:8px 12px 12px;display:flex;flex-direction:column;gap:6px}
+.when{align-self:center;font:11px/1 var(--mono);color:var(--dim);margin:8px 0 4px}
+.bub{max-width:80%;align-self:flex-start;padding:9px 13px;border-radius:20px 20px 20px 6px;background:var(--ink3);font:15px/1.4 var(--sans);animation:pop .3s both}
+.bub.me{align-self:flex-end;border-radius:20px 20px 6px 20px;background:var(--lamp);color:var(--ink)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.bub i{color:var(--dim)}
+.achip{display:inline-flex;align-items:center;gap:7px;margin:6px 4px 2px 0;padding:5px 11px 5px 5px;border-radius:999px;background:rgba(236,230,218,.08);border:1px solid var(--line);font:600 13px/1 var(--sans);color:var(--paper);vertical-align:middle}
+.achip img{width:22px;height:22px;border-radius:6px}
+.reply{flex:none;display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid var(--line)}
+.reply input{flex:1;min-width:0;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--ink2);color:var(--paper);font:15px/1.2 var(--sans);outline:none}
+.reply input::placeholder{color:var(--dim)}
+.reply button{width:36px;height:36px;border-radius:50%;background:var(--lamp);display:grid;place-items:center;color:var(--ink)}
+.reply button svg{width:18px;height:18px}
+/* mail */
+.mail h4{margin:4px 18px 12px;font:400 27px/1.12 var(--serif)}
+.from{display:flex;gap:10px;align-items:center;margin:0 18px 14px}
+.from .av{width:38px;height:38px}
+.from b{display:block;font:600 14.5px/1.2 var(--sans)}
+.from small{display:block;font:12px/1.2 var(--mono);color:var(--dim)}
+.mail .txt{margin:0 18px;padding-top:14px;border-top:1px solid var(--line)}
+.mail .txt p{margin:0 0 12px;font:16px/1.55 var(--sans)}
+.mail .cta{display:flex;margin:18px 18px 8px}
+.mail .cta a{width:100%}
+.mail .cta img{width:26px;height:26px;border-radius:7px}
+.mail .uns{margin:18px 18px 0;font:12px/1.4 var(--mono);color:var(--dim);text-align:center}
+.row .ap{flex:none;width:9px;height:9px;border-radius:50%;background:var(--lamp);align-self:flex-start;margin-top:6px}
+/* camera */
+.cam{background:#000}
+.cam .bar{background:#000}
+.vf{position:relative;margin:4px 12px 0;border-radius:18px;overflow:hidden;flex:1;min-height:0;background:#111;display:grid;place-items:center}
+.vf canvas{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;display:block}
+.vf .grid3{position:absolute;inset:0;background:linear-gradient(90deg,transparent 33.2%,rgba(255,255,255,.18) 33.3%,transparent 33.5%,transparent 66.5%,rgba(255,255,255,.18) 66.6%,transparent 66.8%),linear-gradient(transparent 33.2%,rgba(255,255,255,.18) 33.3%,transparent 33.5%,transparent 66.5%,rgba(255,255,255,.18) 66.6%,transparent 66.8%);pointer-events:none}
+.vf .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.vf .flash.go{animation:fl .45s}
+@keyframes fl{0%{opacity:.95}100%{opacity:0}}
+.shut{flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 28px 6px}
+.thumb{width:48px;height:48px;border-radius:10px;overflow:hidden;background:#222;border:2px solid rgba(255,255,255,.3)}
+.thumb canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.shutter{width:72px;height:72px;border-radius:50%;border:4px solid #fff;display:grid;place-items:center}
+.shutter::after{content:"";width:58px;height:58px;border-radius:50%;background:#fff;transition:transform .12s}
+.shutter:active::after{transform:scale(.88)}
+.flip{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center}
+.flip svg{width:24px;height:24px}
+.cam .note{flex:none;margin:6px 24px 0;font:12px/1.4 var(--mono);color:var(--dim);text-align:center}
+.roll{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px}
+.roll button{aspect-ratio:3/4;overflow:hidden;background:#111}
+.roll canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.photo{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:0 12px}
+.photo canvas{width:100%;max-height:72%;aspect-ratio:3/4;object-fit:contain;image-rendering:pixelated;border-radius:10px;background:#111}
+.photo p{margin:14px 6px 0;font:italic 400 22px/1.25 var(--serif);text-align:center}
+.photo small{display:block;margin-top:6px;font:11px/1 var(--mono);color:var(--dim);text-align:center}
+.pnav{display:flex;justify-content:space-between;padding:10px 6px 0}
+.pnav button{font:600 28px/1 var(--sans);color:var(--lamp);padding:6px 14px}
+/* settings */
+.set .row{min-height:52px}
+.set .row .tx small{white-space:normal}
+.set input[type=text]{width:46%;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--ink3);color:var(--paper);font:15px/1.2 var(--sans);outline:none;text-align:right}
+.tog{position:relative;flex:none;width:50px;height:30px;border-radius:999px;background:#3A3346;transition:background .2s}
+.tog::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.tog[aria-checked=true]{background:#4FA466}
+.tog[aria-checked=true]::after{transform:translateX(20px)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px}
+.seg button{padding:8px 12px;border-radius:999px;border:1px solid var(--line);font:600 13px/1 var(--sans)}
+.seg button[aria-pressed=true]{background:var(--lamp);color:var(--ink);border-color:var(--lamp)}
+.set .red{color:#F07A6E;font-weight:600}
+.set .lnk{color:var(--lamp);font-weight:600}
+.set .about{margin:4px 18px;font:15px/1.5 var(--sans);color:var(--dim)}
+.set .about em{font:italic 400 18px/1 var(--serif);color:var(--paper)}
+.foot{margin:16px 12px 0;color:var(--dim);font-size:12.5px}
+.sheet{position:absolute;left:10px;right:10px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:80;padding:18px;border-radius:22px;background:#2A2236;border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.6);display:none}
+.sheet.on{display:block;animation:pop .25s both}
+.sheet p{margin:0 0 14px;font:15px/1.45 var(--sans)}
+.sheet .btns{display:flex;gap:8px}
+.sheet .btns button{flex:1}
+.toast{position:absolute;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;padding:10px 16px;border-radius:999px;background:#2E2640;border:1px solid var(--line);font:600 13.5px/1.2 var(--sans);white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.on{opacity:1}
+/* Put the phone down: the screen goes dark */
+.lock{position:absolute;inset:0;z-index:95;background:#07060A;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;opacity:0;visibility:hidden;transition:opacity 1.1s,visibility 1.1s}
+.lock.on{opacity:1;visibility:visible}
+.lock .t{font:300 72px/1 var(--sans);letter-spacing:-.02em;color:rgba(236,230,218,.82);font-variant-numeric:tabular-nums}
+.lock .d{margin-top:6px;font:12px/1 var(--mono);color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+.lock h2{margin:44px 0 30px;font:400 32px/1.15 var(--serif);max-width:12em}
+.lock svg{width:46px;height:46px;margin-bottom:22px;opacity:.9}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<div class="sky" aria-hidden="true" id="sky"></div>
-<div class="wrap">
-  <header>
-    <a class="mark" href="/" aria-label="after-hours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg>after-hours</a>
-    <button class="lang" id="lang" type="button" data-fb-shell aria-label="Language">EN</button>
-  </header>
-  <main>
-    <section class="hero"><h1 id="line"></h1><p class="sub" id="sub"></p></section>
-    <section class="now" id="now" aria-live="polite"><h2 id="nowH"></h2><ul id="nowL"></ul></section>
-    <p class="kick" id="kick"></p>
-    <nav class="grid" id="grid" aria-labelledby="kick"></nav>
-    <section class="down"><p class="bye" id="bye" aria-live="polite"></p><button class="btn" id="out" type="button"></button></section>
+<div class="room" aria-hidden="true"><p id="wide"></p></div>
+<div class="phone" id="phone">
+ <div class="island" aria-hidden="true"></div>
+ <div class="screen" id="screen">
+  <div class="sky" id="sky" aria-hidden="true"></div>
+  <svg class="skyline" id="skyline" viewBox="0 0 390 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+  <div class="top">
+   <span class="clock" id="clock"></span>
+   <a class="mark" href="/" aria-label="after-hours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg>after-hours</a>
+   <button class="chip" id="lang" type="button" data-fb-shell aria-label="Language">EN</button>
+  </div>
+
+  <main class="home" id="home">
+   <section class="hero"><h1 id="line"></h1><p class="sub" id="sub"></p></section>
+   <section class="now" aria-live="polite"><div class="now-h"><h2 id="nowH"></h2><button class="down" id="out" type="button"></button></div><ul id="nowL"></ul></section>
+   <nav class="grid" id="grid" aria-label="after-hours"></nav>
+   <nav class="dock" id="dock"></nav>
   </main>
-  <footer class="foot" id="foot"></footer>
+
+  <!-- Phone -->
+  <section class="app" id="a-phone" aria-hidden="true">
+   <div class="view on" data-v="list"><div class="bar"><h3 data-w="pContacts"></h3></div><div class="body" id="contacts"></div></div>
+   <div class="view" data-v="card"><div class="bar"><button class="bk" data-back="list">‹ <span data-w="pContacts"></span></button></div><div class="body" id="card"></div></div>
+   <div class="view" data-v="keys"><div class="bar"><h3 data-w="pKeypad"></h3></div><div class="keyp"><input id="num" type="tel" inputmode="tel" autocomplete="off"><div class="keys" id="keys"></div><a class="dial" id="dial" href="tel:" aria-label="call"><svg viewBox="0 0 24 24" fill="#fff"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></a><p class="note" data-w="pKeyNote"></p></div></div>
+   <div class="tabs" role="tablist"><button role="tab" data-tab="list" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span data-w="pContacts"></span></button><button role="tab" data-tab="keys" aria-selected="false"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="6" cy="11" r="2"/><circle cx="12" cy="11" r="2"/><circle cx="18" cy="11" r="2"/><circle cx="6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="18" cy="17" r="2"/><circle cx="12" cy="22" r="1.6"/></svg><span data-w="pKeypad"></span></button></div>
+   <div class="hb" data-home></div>
+  </section>
+
+  <!-- Messages -->
+  <section class="app" id="a-msg" aria-hidden="true">
+   <div class="view on" data-v="list"><div class="bar"><h3 data-w="aMsg"></h3></div><div class="body" id="threads"></div></div>
+   <div class="view" data-v="thread"><div class="bar"><button class="bk" data-back="list">‹ <span data-w="aMsg"></span></button><span class="sp"></span><span id="thWho" style="display:flex;align-items:center;gap:8px;font:600 15px var(--sans)"></span></div><div class="thread" id="thread"></div>
+    <form class="reply" id="reply"><input id="say" autocomplete="off"><button type="submit" aria-label="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form></div>
+   <div class="hb" data-home></div>
+  </section>
+
+  <!-- Mail -->
+  <section class="app" id="a-mail" aria-hidden="true">
+   <div class="view on" data-v="list"><div class="bar"><h3 data-w="eInbox"></h3></div><div class="body"><div class="list" id="inbox" style="margin-top:6px"></div></div></div>
+   <div class="view mail" data-v="read"><div class="bar"><button class="bk" data-back="list">‹ <span data-w="eInbox"></span></button></div><div class="body" id="letter"></div></div>
+   <div class="hb" data-home></div>
+  </section>
+
+  <!-- Camera -->
+  <section class="app cam" id="a-cam" aria-hidden="true">
+   <div class="view on" data-v="vf"><div class="bar"><h3 data-w="kPhoto"></h3></div><div class="vf"><canvas id="vf" width="120" height="160"></canvas><div class="grid3"></div><div class="flash" id="flash"></div></div>
+    <div class="shut"><button class="thumb" id="thumb" aria-label="roll"><canvas width="120" height="160"></canvas></button><button class="shutter" id="shutter" aria-label="photo"></button><button class="flip" id="flip" aria-label="another"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg></button></div><p class="note" data-w="kReal"></p></div>
+   <div class="view" data-v="roll"><div class="bar"><button class="bk" data-back="vf">‹ <span data-w="kPhoto"></span></button><span class="sp"></span><b data-w="kRoll" style="font:600 15px var(--sans)"></b></div><div class="body"><div class="roll" id="roll"></div></div></div>
+   <div class="view" data-v="one"><div class="bar"><button class="bk" data-back="roll">‹ <span data-w="kRoll"></span></button></div><div class="photo"><canvas id="big" width="120" height="160"></canvas><p id="cap"></p><small id="capd"></small><div class="pnav"><button id="prev" aria-label="previous">‹</button><button id="next" aria-label="next">›</button></div></div></div>
+   <div class="hb" data-home></div>
+  </section>
+
+  <!-- Settings -->
+  <section class="app set" id="a-set" aria-hidden="true">
+   <div class="view on" data-v="list"><div class="bar"><h3 data-w="aSet"></h3></div><div class="body" id="settings"></div></div>
+   <div class="hb" data-home></div>
+  </section>
+
+  <div class="call" id="call" role="dialog" aria-modal="true"></div>
+  <div class="sheet" id="sheet" role="dialog"></div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="lock" id="lock" aria-live="polite"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="#ECE6DA" stroke-width="1.6"/><path d="M12 4.5v15M4.5 12h15" stroke="#ECE6DA" stroke-width="1.4"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg><div class="t" id="lockT"></div><div class="d" id="lockD"></div><h2 id="bye"></h2><button class="pill ghost" id="on" type="button"></button></div>
+ </div>
 </div>
 <script>
 (function () {
-  var W = {"line": ["People aren't the means. People are the <em>point</em>.", "人不是手段，<br>人就是<em>意义</em>。", "人不是手段，<br>人就是<em>意義</em>。", "Las personas no son el medio. Las personas son el <em>sentido</em>.", "Les persones no són el mitjà. Les persones són el <em>sentit</em>."], "sub": ["{n} works · free · no account", "{n} 个小作品 · 免费 · 不用注册", "{n} 個小作品 · 免費 · 不用註冊", "{n} obras · gratis · sin cuenta", "{n} obres · gratis · sense compte"], "why": ["why I make them", "我为什么做这些", "我為什麼做這些", "por qué las hago", "per què les faig"], "h_late": ["Still up?", "还没睡？", "還沒睡？", "¿Sigues despierto?", "Encara despert?"], "h_morn": ["This morning", "今天上午", "今天上午", "Esta mañana", "Aquest matí"], "h_aft": ["This afternoon", "今天下午", "今天下午", "Esta tarde", "Aquesta tarda"], "h_eve": ["This evening", "今晚", "今晚", "Esta noche", "Aquest vespre"], "h_night": ["Tonight", "今夜", "今夜", "Esta noche", "Aquesta nit"], "s_late": ["Go to sleep. The cats already are.", "去睡吧，猫都睡了。", "去睡吧，貓都睡了。", "A dormir. Las gatas ya duermen.", "A dormir. Les gates ja dormen.", "", ""], "s_morn": ["Popo has one little thing for you today.", "婆婆今天给你一件小事。", "婆婆今天給你一件小事。", "Popo tiene una cosita para ti hoy.", "La Popo té una coseta per a tu avui.", "/little-things/", "lt"], "s_aft": ["Pick a corner and a time. Walk with someone later.", "约个街角和时间，晚点一起走走。", "約個街角和時間，晚點一起走走。", "Elige una esquina y una hora. Camina con alguien luego.", "Tria una cantonada i una hora. Camina amb algú després.", "/walk-with/", "ww"], "s_eve": ["Ask someone over this week.", "这周请个人来家里坐坐。", "這週請個人來家裡坐坐。", "Invita a alguien a casa esta semana.", "Convida algú a casa aquesta setmana.", "/come-over/", "co"], "s_night": ["Someone far away? Book a dinner for two.", "有人在远方？订一顿两个人的晚饭。", "有人在遠方？訂一頓兩個人的晚飯。", "¿Alguien lejos? Reserva una cena para dos.", "Algú lluny? Reserva un sopar per a dos.", "/two-candles/", "tc"], "tPaw": ["Today's card is on the table.", "今天的牌已经翻开了。", "今天的牌已經翻開了。", "La carta de hoy está sobre la mesa.", "La carta d'avui és damunt la taula."], "tGather": ["A get-together", "一次小聚", "一次小聚", "Una reunión", "Una trobada"], "tWalk": ["A walk with {n}, {c}", "和 {n} 一起走走，{c}", "和 {n} 一起走走，{c}", "Un paseo con {n}, {c}", "Un passeig amb {n}, {c}"], "someone": ["someone", "一个人", "一個人", "alguien", "algú"], "today": ["today", "今天", "今天", "hoy", "avui"], "tomorrow": ["tomorrow", "明天", "明天", "mañana", "demà"], "kick": ["Fifteen windows, still lit", "十五扇窗，还亮着", "十五扇窗，還亮著", "Quince ventanas, todavía encendidas", "Quinze finestres, encara enceses"], "down": ["Put the phone down", "放下手机", "放下手機", "Deja el móvil", "Deixa el mòbil"], "on": ["Lights back on", "把灯打开", "把燈開啟", "Enciende las luces", "Torna a encendre els llums"], "bye": ["Goodnight. Go find <em>your people</em>.", "晚安。去找<em>你的人</em>吧。", "晚安。去找<em>你的人</em>吧。", "Buenas noches. Ve a buscar a <em>los tuyos</em>.", "Bona nit. Vés a trobar <em>els teus</em>."], "none": ["Nothing is sent anywhere", "不会发送任何内容", "不會發送任何內容", "No se envía nada a ningún sitio", "No s'envia res enlloc"]}, P = [["little-things", "lt", ["Little Things", "小事", "小事", "Cosas pequeñas", "Petites coses"], ["One small offline thing at a time.", "一次一件屏幕外的小事。", "一次一件螢幕外的小事。", "Una cosita fuera de la pantalla cada vez.", "Una coseta fora de la pantalla cada vegada."], "/little-things/", "#F6B65B", "/little-things/icon-192.png"], ["paw-reading", "pw", ["Paw Reading", "猫爪占卜", "貓爪占卜", "Lectura de Patas", "Lectura de Potes"], ["One card a day, from two cats.", "每天一张牌，两只猫给的。", "每天一張牌，兩隻貓給的。", "Una carta al día, de dos gatas.", "Una carta al dia, de dues gates."], "/paw-reading/", "#E8913A", "/paw-reading/icon-192.png"], ["come-over", "co", ["Come Over", "来我家", "來我家", "Ven a Casa", "Vine a Casa"], ["Have people over.", "请大家来家里坐坐。", "請大家來家裡坐坐。", "Invita a gente a casa.", "Convida gent a casa."], "/come-over/", "#E0704F", "/come-over/icon-192.png"], ["a-few-stems", "fs", ["A Few Stems", "几枝花", "幾枝花", "Cuatro Flores", "Quatre Flors"], ["A few flowers, for someone real.", "几枝花，送给真实的人。", "幾枝花，送給真實的人。", "Unas flores, para alguien de verdad.", "Unes flors, per a algú de debò."], "/a-few-stems/", "#E58A9A", "/a-few-stems/icon-192.png"], ["borrowed-pages", "bp", ["Borrowed Pages", "借来的书", "借來的書", "Páginas Prestadas", "Pàgines Manllevades"], ["Real books, lent by hand between neighbours.", "真的书，在邻居之间亲手传递。", "真的書，在鄰居之間親手傳遞。", "Libros de verdad, prestados en mano entre vecinos.", "Llibres de debò, deixats en mà entre veïns."], "/borrowed-pages/", "#D9785B", "/borrowed-pages/icon-192.png"], ["say-hello", "sh", ["Say Hello", "问个好", "問個好", "Di Hola", "Di Hola"], ["A postcard that opens on its day.", "一张到了那天才拆开的明信片。", "一張到了那天才拆開的明信片。", "Una postal que se abre en su día.", "Una postal que se abre en su día."], "/say-hello/", "#E0604A", "/say-hello/icon-192.png"], ["home-ground", "hg", ["Home Ground", "我们的家园", "我們的家園", "Nuestro Rincón", "El Nostre Racó"], ["A town your people build together.", "一座家人朋友一起盖的小镇。", "一座家人朋友一起蓋的小鎮。", "Un pueblo que construyen los tuyos.", "Un poble que construeixen els teus."], "/home-ground/", "#9CC47A", "/home-ground/icon-192.png"], ["twelve-grapes", "tg", ["Twelve Grapes", "十二颗葡萄", "十二顆葡萄", "Las Doce Uvas", "Els Dotze Grans"], ["Twelve grapes, one for each month.", "十二颗葡萄，一个月一颗。", "十二顆葡萄，一個月一顆。", "Doce uvas, una por cada mes.", "Dotze grans de raïm, un per cada mes."], "/twelve-grapes/", "#A8C85A", "/twelve-grapes/icon-192.png"], ["ask-popo", "ap", ["Ask Popo", "问婆婆", "問婆婆", "Pregúntale a Popo", "Pregunta-li a la Popo"], ["One question a week, asked in person.", "每周一个问题，当面问。", "每週一個問題，當面問。", "Una pregunta a la semana, en persona.", "Una pregunta a la setmana, en persona."], "/ask-popo/", "#E8A838", "/ask-popo/icon-192.png"], ["walk-with", "ww", ["Walk With", "一起走走", "一起走走", "Camina Conmigo", "Camina amb Mi"], ["Twenty minutes, one corner, phones away.", "二十分钟，一个街角，收起手机。", "二十分鐘，一個街角，收起手機。", "Veinte minutos, una esquina, sin móvil.", "Vint minuts, una cantonada, sense mòbil."], "/walk-with/", "#9BB08A", "/walk-with/icon-192.png"], ["nearby", "nb", ["Nearby", "近邻", "近鄰", "Cerca", "A Prop"], ["A little world that sends you back to yours.", "一个小小的世界，把你送回你自己的世界。", "一個小小的世界，把你送回你自己的世界。", "Un mundo pequeño que te devuelve al tuyo.", "Un món petit que et torna al teu."], "/nearby/", "#8E7FE6", "/nearby/icon-192.png"], ["station", "st", ["Nearby Station", "近邻站", "近鄰站", "Estación Cerca", "Estació A Prop"], ["A window seat on a slow train.", "慢火车上一个靠窗的座位。", "慢火車上一個靠窗的座位。", "Un asiento junto a la ventana en un tren lento.", "Un seient a la finestra en un tren lent."], "/station/", "#6F93D8", "/station/icon-192.png"], ["handoff", "ho", ["Handoff", "Handoff", "Handoff", "Handoff", "Handoff"], ["For two people in different cities.", "给分隔两座城市的两个人。", "給分隔兩座城市的兩個人。", "Para dos personas en ciudades distintas.", "Per a dues persones en ciutats diferents."], "https://www.freebuilder.net/handoff/", "#E9825E", "https://www.freebuilder.net/handoff/icon-192.png"], ["two-candles", "tc", ["Two Candles", "双烛小馆", "雙燭小館", "Dos Velas", "Dues Espelmes"], ["Dinner for two, however far apart.", "两个人的晚饭，再远也一起吃。", "兩個人的晚飯，再遠也一起吃。", "Una cena para dos, por lejos que estéis.", "Un sopar per a dos, per lluny que sigueu."], "/two-candles/", "#F2B54A", "/two-candles/icon-192.png"], ["vocab", "vo", ["Vocab", "Vocab", "Vocab", "Vocab", "Vocab"], ["A few words in someone else's language.", "几句别人语言里的话。", "幾句別人語言裡的話。", "Unas palabras en el idioma de otra persona.", "Unes paraules en la llengua d'una altra persona."], "/vocab/", "#7FC9B8", "/vocab/icon.svg"]], L = ["en", "zh", "zh-Hant", "es", "ca"], SH = ["EN", "简", "繁", "ES", "CA"];
-  var $ = function (id) { return document.getElementById(id); };
-  function li() { var l = window.FBL ? FBL.get() : "en"; var i = L.indexOf(l); return i < 0 ? 0 : i; }
+  "use strict";
+  var W = {"line": ["People aren't the means. People are the <em>point</em>.", "人不是手段，<br>人就是<em>意义</em>。", "人不是手段，<br>人就是<em>意義</em>。", "Las personas no son el medio. Las personas son el <em>sentido</em>.", "Les persones no són el mitjà. Les persones són el <em>sentit</em>."], "sub": ["{n} works · free · no account", "{n} 个小作品 · 免费 · 不用注册", "{n} 個小作品 · 免費 · 不用註冊", "{n} obras · gratis · sin cuenta", "{n} obres · gratis · sense compte"], "why": ["why I make them", "我为什么做这些", "我為什麼做這些", "por qué las hago", "per què les faig"], "h_late": ["Still up?", "还没睡？", "還沒睡？", "¿Sigues despierto?", "Encara despert?"], "h_morn": ["This morning", "今天上午", "今天上午", "Esta mañana", "Aquest matí"], "h_aft": ["This afternoon", "今天下午", "今天下午", "Esta tarde", "Aquesta tarda"], "h_eve": ["This evening", "今晚", "今晚", "Esta noche", "Aquest vespre"], "h_night": ["Tonight", "今夜", "今夜", "Esta noche", "Aquesta nit"], "s_late": ["Go to sleep. The cats already are.", "去睡吧，猫都睡了。", "去睡吧，貓都睡了。", "A dormir. Las gatas ya duermen.", "A dormir. Les gates ja dormen.", "", ""], "s_morn": ["Popo has one little thing for you today.", "婆婆今天给你一件小事。", "婆婆今天給你一件小事。", "Popo tiene una cosita para ti hoy.", "La Popo té una coseta per a tu avui.", "/little-things/", "lt"], "s_aft": ["Pick a corner and a time. Walk with someone later.", "约个街角和时间，晚点一起走走。", "約個街角和時間，晚點一起走走。", "Elige una esquina y una hora. Camina con alguien luego.", "Tria una cantonada i una hora. Camina amb algú després.", "/walk-with/", "ww"], "s_eve": ["Ask someone over this week.", "这周请个人来家里坐坐。", "這週請個人來家裡坐坐。", "Invita a alguien a casa esta semana.", "Convida algú a casa aquesta setmana.", "/come-over/", "co"], "s_night": ["Someone far away? Book a dinner for two.", "有人在远方？订一顿两个人的晚饭。", "有人在遠方？訂一頓兩個人的晚飯。", "¿Alguien lejos? Reserva una cena para dos.", "Algú lluny? Reserva un sopar per a dos.", "/two-candles/", "tc"], "tPaw": ["Today's card is on the table.", "今天的牌已经翻开了。", "今天的牌已經翻開了。", "La carta de hoy está sobre la mesa.", "La carta d'avui és damunt la taula."], "tGather": ["A get-together", "一次小聚", "一次小聚", "Una reunión", "Una trobada"], "tWalk": ["A walk with {n}, {c}", "和 {n} 一起走走，{c}", "和 {n} 一起走走，{c}", "Un paseo con {n}, {c}", "Un passeig amb {n}, {c}"], "someone": ["someone", "一个人", "一個人", "alguien", "algú"], "today": ["today", "今天", "今天", "hoy", "avui"], "tomorrow": ["tomorrow", "明天", "明天", "mañana", "demà"], "yesterday": ["yesterday", "昨天", "昨天", "ayer", "ahir"], "down": ["Put the phone down", "放下手机", "放下手機", "Deja el móvil", "Deixa el mòbil"], "on": ["Lights back on", "把灯打开", "把燈開啟", "Enciende las luces", "Torna a encendre els llums"], "bye": ["Goodnight. Go find <em>your people</em>.", "晚安。去找<em>你的人</em>吧。", "晚安。去找<em>你的人</em>吧。", "Buenas noches. Ve a buscar a <em>los tuyos</em>.", "Bona nit. Vés a trobar <em>els teus</em>."], "none": ["Nothing is sent anywhere", "不会发送任何内容", "不會發送任何內容", "No se envía nada a ningún sitio", "No s'envia res enlloc"], "home": ["Home", "主屏幕", "主螢幕", "Inicio", "Inici"], "back": ["Back", "返回", "返回", "Atrás", "Enrere"], "aPhone": ["Phone", "电话", "電話", "Teléfono", "Telèfon"], "aMsg": ["Messages", "信息", "資訊", "Mensajes", "Missatges"], "aMail": ["Mail", "邮件", "郵件", "Correo", "Correu"], "aCam": ["Camera", "相机", "相機", "Cámara", "Càmera"], "aSet": ["Settings", "设置", "設定", "Ajustes", "Configuració"], "wide": ["Made for your phone. Open it there and add it to your home screen.", "为手机而做。用手机打开，加到主屏幕上。", "為手機而做。用手機開啟，加到主螢幕上。", "Hecho para tu móvil. Ábrelo allí y añádelo a la pantalla de inicio.", "Fet per al teu mòbil. Obre'l allà i afegeix-lo a la pantalla d'inici."], "nWM": ["Wei Meng", "Wei Meng", "Wei Meng", "Wei Meng", "Wei Meng"], "nWei": ["Wei", "Wei", "Wei", "Wei", "Wei"], "nMei": ["Mei", "Mei", "Mei", "Mei", "Mei"], "nPopo": ["Popo", "婆婆", "婆婆", "Popo", "Popo"], "nMiso": ["Miso", "味噌", "味噌", "Miso", "Miso"], "nYuzu": ["Yuzu", "柚子", "柚子", "Yuzu", "Yuzu"], "nMantou": ["Mantou", "馒头", "饅頭", "Mantou", "Mantou"], "nNextDoor": ["Next Door", "隔壁", "隔壁", "Al Lado", "Al Costat"], "nCats": ["Miso & Yuzu", "味噌和柚子", "味噌和柚子", "Miso y Yuzu", "Miso i Yuzu"], "rWM": ["Makes all of this, after hours", "下班后做了这一切的人", "下班後做了這一切的人", "Hace todo esto, fuera de horas", "Fa tot això, fora d'hores"], "rWei": ["Behind the counter at Next Door", "隔壁的吧台后面", "隔壁的吧檯後面", "Detrás de la barra de Al Lado", "Darrere la barra d'Al Costat"], "rMei": ["Wei's cousin, grew up in New York", "Wei 的表妹，在纽约长大", "Wei 的表妹，在紐約長大", "La prima de Wei, creció en Nueva York", "La cosina d'en Wei, va créixer a Nova York"], "rPopo": ["Wei's grandmother. Really cooks.", "Wei 的婆婆。是真的会做饭。", "Wei 的婆婆。是真的會做飯。", "La abuela de Wei. Cocina de verdad.", "L'àvia d'en Wei. Cuina de debò."], "rMiso": ["Black cat. Sits on things.", "黑猫。喜欢坐在东西上。", "黑貓。喜歡坐在東西上。", "Gata negra. Se sienta encima de las cosas.", "Gata negra. S'asseu a sobre de les coses."], "rYuzu": ["Orange cat. Reads the cards.", "橘猫。会翻牌。", "橘貓。會翻牌。", "Gata naranja. Lee las cartas.", "Gata taronja. Llegeix les cartes."], "rMantou": ["Good dog. Knows where the leash is.", "好狗狗。知道牵绳放在哪。", "好狗狗。知道牽繩放在哪。", "Buen perro. Sabe dónde está la correa.", "Bon gos. Sap on és la corretja."], "pContacts": ["Contacts", "通讯录", "通訊錄", "Contactos", "Contactes"], "pKeypad": ["Keypad", "拨号", "撥號", "Teclado", "Teclat"], "pMaker": ["The maker", "做这些的人", "做這些的人", "Quien lo hace", "Qui ho fa"], "pTown": ["Nearby", "近邻", "近鄰", "Cerca", "A Prop"], "pCall": ["call", "打电话", "打電話", "llamar", "trucar"], "pText": ["message", "信息", "資訊", "mensaje", "missatge"], "pMail": ["mail", "邮件", "郵件", "correo", "correu"], "pVisit": ["visit", "去看看", "去看看", "visitar", "visitar"], "pSite": ["website", "网站", "網站", "web", "web"], "pAwake": ["awake", "醒着", "醒著", "despierto", "despert"], "pAsleep": ["asleep", "在睡觉", "在睡覺", "durmiendo", "dormint"], "pCalling": ["calling…", "呼叫中…", "呼叫中…", "llamando…", "trucant…"], "pEnded": ["Call ended", "通话结束", "通話結束", "Llamada finalizada", "Trucada finalitzada"], "pReal": ["Now call someone real", "现在，打给一个真实的人", "現在，打給一個真實的人", "Ahora llama a alguien de verdad", "Ara truca a algú de veritat"], "pHang": ["Hang up", "挂断", "結束通話", "Colgar", "Penjar"], "pKeyHint": ["Who haven't you called in a while?", "有谁很久没打电话了？", "有誰很久沒打電話了？", "¿A quién hace tiempo que no llamas?", "A qui fa temps que no truques?"], "pKeyNote": ["This opens your real phone. That's the point.", "这会打开你真正的电话。这就是重点。", "這會開啟你真正的電話。這就是重點。", "Esto abre tu teléfono de verdad. Esa es la idea.", "Això obre el teu telèfon de veritat. Aquesta és la idea."], "vmWM": ["Hi, it's Wei. I'm probably out with people right now. Leave me a note instead, I read every one.", "你好，我是 Wei。我现在大概正和人在一起。给我写封信吧，每封我都会读。", "你好，我是 Wei。我現在大概正和人在一起。給我寫封信吧，每封我都會讀。", "Hola, soy Wei. Seguramente estoy con gente ahora mismo. Déjame una nota, las leo todas.", "Hola, sóc en Wei. Segurament ara estic amb gent. Deixa'm una nota, les llegeixo totes."], "vmTitle": ["Voicemail", "语音信箱", "語音信箱", "Buzón de voz", "Bústia de veu"], "vmWrite": ["Write to Wei", "写信给 Wei", "寫信給 Wei", "Escribir a Wei", "Escriure a en Wei"], "cWei": ["Next Door, Wei speaking. Your seat's free. Come by, and bring someone with you this time.", "隔壁，我是 Wei。你的位子空着呢。过来坐坐吧，这次带个人一起来。", "隔壁，我是 Wei。你的位子空著呢。過來坐坐吧，這次帶個人一起來。", "Al Lado, habla Wei. Tu sitio está libre. Pásate, y esta vez trae a alguien.", "Al Costat, parla en Wei. El teu lloc és lliure. Passa, i aquesta vegada porta algú."], "cWeiZ": ["z z z… (Wei's asleep. Try him after six.)", "呼……呼……（Wei 在睡觉。六点以后再打。）", "呼……呼……（Wei 在睡覺。六點以後再打。）", "z z z… (Wei duerme. Prueba después de las seis.)", "z z z… (En Wei dorm. Prova-ho després de les sis.)"], "cMei": ["ugh, who calls? text me. jk. go call someone who'd actually be happy to hear you.", "啊，谁还打电话啊？发信息啦。开玩笑的。去打给一个真的会很高兴听到你声音的人。", "啊，誰還打電話啊？發信息啦。開玩笑的。去打給一個真的會很高興聽到你聲音的人。", "ugh, ¿quién llama hoy en día? escríbeme. es broma. llama a alguien que se alegre de oírte.", "ugh, qui truca encara? escriu-me. és broma. truca a algú que s'alegri de sentir-te."], "cMeiZ": ["(voicemail) it's mei. i'm asleep. obviously.", "（语音信箱）我是 Mei。我在睡觉。很明显吧。", "（語音信箱）我是 Mei。我在睡覺。很明顯吧。", "(buzón) soy mei. estoy durmiendo. obvio.", "(bústia) sóc la mei. estic dormint. òbviament."], "cPopo": ["Wah, you call me! Eat already or not? Now call your own grandma also lah.", "哎呀，你打给我呀！吃饭了没有？现在也打给你自己的婆婆啦。", "哎呀，你打給我呀！吃飯了沒有？現在也打給你自己的婆婆啦。", "¡Ay, me llamas! ¿Comiste ya o no? Ahora llama a tu abuela también, eh.", "Ai, em truques! Ja has menjat o no? Ara truca a la teva àvia també, eh."], "cPopoZ": ["Shh. Popo's asleep. Nobody wakes Popo.", "嘘。婆婆睡了。谁都不许吵醒婆婆。", "噓。婆婆睡了。誰都不許吵醒婆婆。", "Shh. Popo duerme. A Popo no la despierta nadie.", "Xxt. La Popo dorm. Ningú desperta la Popo."], "cMiso": ["Mrrp. (She sat on the phone. The call ended.)", "咪呜。（她坐在了电话上。通话结束了。）", "咪嗚。（她坐在了電話上。通話結束了。）", "Mrrp. (Se ha sentado encima del teléfono. Se cortó.)", "Mrrp. (S'ha assegut sobre el telèfon. S'ha tallat.)"], "cYuzu": ["Mew? (purring, very close to the microphone)", "喵？（贴着话筒呼噜呼噜）", "喵？（貼著話筒呼嚕呼嚕）", "¿Miau? (ronroneando, muy cerca del micrófono)", "Miau? (roncant, molt a prop del micròfon)"], "cCatsZ": ["(purring in their sleep)", "（睡梦中呼噜呼噜）", "（睡夢中呼嚕呼嚕）", "(ronronean dormidas)", "(roncs adormits)"], "cMantou": ["Woof! Woof! (his tail is hitting the floor)", "汪！汪！（尾巴拍着地板）", "汪！汪！（尾巴拍著地板）", "¡Guau! ¡Guau! (la cola golpea el suelo)", "Bup! Bup! (la cua pica a terra)"], "cMantouZ": ["(a small, sleepy snore)", "（小小的、困困的呼噜声）", "（小小的、困困的呼嚕聲）", "(un ronquido pequeño y dormido)", "(un ronc petit i adormit)"], "mSay": ["Say it in person", "当面说吧", "當面說吧", "Dilo en persona", "Digues-ho en persona"], "mSaid": ["Better said in person.", "这句话，当面说更好。", "這句話，當面說更好。", "Mejor dicho en persona.", "Millor dit en persona."], "mWM1": ["Hi, I'm Wei. This phone holds everything I make after hours.", "你好，我是 Wei。这部手机里装着我下班后做的所有东西。", "你好，我是 Wei。這部手機裡裝著我下班後做的所有東西。", "Hola, soy Wei. Este móvil guarda todo lo que hago fuera de horas.", "Hola, sóc en Wei. Aquest mòbil guarda tot el que faig fora d'hores."], "mWM2": ["Fifteen small, free things. Each one ends with you putting the phone down, next to someone.", "十五个小小的、免费的东西。每一个的结尾，都是你放下手机，待在某个人身边。", "十五個小小的、免費的東西。每一個的結尾，都是你放下手機，待在某個人身邊。", "Quince cosas pequeñas y gratis. Todas terminan contigo dejando el móvil, junto a alguien.", "Quinze coses petites i gratis. Totes acaben amb tu deixant el mòbil, al costat d'algú."], "mWM3": ["Tap any icon to open it. No account, nothing to install, and nothing you do is sent anywhere.", "点任何一个图标就能打开。不用注册，不用安装，你做的任何事都不会发送出去。", "點任何一個圖示就能開啟。不用註冊，不用安裝，你做的任何事都不會發送出去。", "Toca cualquier icono para abrirlo. Sin cuenta, nada que instalar, y nada de lo que hagas se envía.", "Toca qualsevol icona per obrir-la. Sense compte, res a instal·lar, i res del que facis s'envia."], "mWM4": ["The card at the top changes with the hour, and lights up what's already yours today.", "最上面的卡片会随着时间变化，也会点亮今天已经属于你的东西。", "最上面的卡片會隨著時間變化，也會點亮今天已經屬於你的東西。", "La tarjeta de arriba cambia con la hora y enciende lo que ya es tuyo hoy.", "La targeta de dalt canvia amb l'hora i encén el que ja és teu avui."], "mWM5": ["Settings has your language, your name and what this phone keeps, for every app at once.", "设置里有语言、你的名字，和这部手机保存的东西，所有应用一起管。", "設定裡有語言、你的名字，和這部手機儲存的東西，所有應用一起管。", "En Ajustes están tu idioma, tu nombre y lo que guarda este móvil, para todas las apps a la vez.", "A Configuració hi ha el teu idioma, el teu nom i el que guarda aquest mòbil, per a totes les apps alhora."], "mWM6": ["When you're done, press Put the phone down. That part is the whole point.", "用完了，就按“放下手机”。那一步才是全部的意义。", "用完了，就按“放下手機”。那一步才是全部的意義。", "Cuando termines, pulsa Deja el móvil. Esa parte es lo importante.", "Quan acabis, prem Deixa el mòbil. Aquesta part és el que importa."], "mPopo1": ["Eat already or not?", "吃饭了没有？", "吃飯了沒有？", "¿Comiste ya o no?", "Ja has menjat o no?"], "mPopo2": ["Every day I got one small thing for you. Open my jar, take one paper. {app:lt}", "我每天都有一件小事给你。打开我的罐子，拿一张纸条。{app:lt}", "我每天都有一件小事給你。開啟我的罐子，拿一張紙條。{app:lt}", "Cada día tengo una cosita para ti. Abre mi tarro, coge un papel. {app:lt}", "Cada dia tinc una coseta per a tu. Obre el meu pot, agafa un paper. {app:lt}"], "mPopo3": ["One question a week, ask your grandma in person. Write two lines, keep the answer lor. {app:ap}", "一个星期一个问题，当面问你的婆婆。写两行字，把答案留下来。{app:ap}", "一個星期一個問題，當面問你的婆婆。寫兩行字，把答案留下來。{app:ap}", "Una pregunta por semana, pregúntale a tu abuela en persona. Dos líneas para guardar la respuesta. {app:ap}", "Una pregunta per setmana, pregunta-la a la teva àvia en persona. Dues línies per guardar la resposta. {app:ap}"], "mPopo4": ["Want people come your house? Pick a day, send them the link. {app:co}", "想请人来家里？选个日子，把链接发给他们。{app:co}", "想請人來家裡？選個日子，把連結發給他們。{app:co}", "¿Quieres gente en casa? Elige un día y mándales el enlace. {app:co}", "Vols gent a casa? Tria un dia i envia'ls l'enllaç. {app:co}"], "mPopo5": ["New Year's Eve, twelve grapes at my table. Don't be late ah. {app:tg}", "年三十晚上……不对，是除夕夜，来我桌上吃十二颗葡萄。别迟到啊。{app:tg}", "年三十晚上……不對，是除夕夜，來我桌上吃十二顆葡萄。別遲到啊。{app:tg}", "Nochevieja, doce uvas en mi mesa. No llegues tarde, eh. {app:tg}", "Cap d'any, dotze grans de raïm a la meva taula. No arribis tard, eh. {app:tg}"], "mMei1": ["ok quick tour bc wei is slow", "好，快速导览，因为 Wei 太慢了", "好，快速導覽，因為 Wei 太慢了", "ok tour rápido porque wei es lento", "ok tour ràpid perquè en wei és lent"], "mMei2": ["someone far away? book dinner for two. same night, two cities, two candles. my mom's in new york, we do sundays {app:tc}", "有人在远方？订一顿两个人的晚饭。同一晚，两座城市，两根蜡烛。我妈在纽约，我们每个星期天都吃 {app:tc}", "有人在遠方？訂一頓兩個人的晚飯。同一晚，兩座城市，兩根蠟燭。我媽在紐約，我們每個星期天都吃 {app:tc}", "¿alguien lejos? reserva cena para dos. misma noche, dos ciudades, dos velas. mi madre está en nueva york, lo hacemos los domingos {app:tc}", "algú lluny? reserva sopar per a dos. mateixa nit, dues ciutats, dues espelmes. la meva mare és a nova york, ho fem els diumenges {app:tc}"], "mMei3": ["for two people who live apart: {app:ho}", "给分隔两地的两个人：{app:ho}", "給分隔兩地的兩個人：{app:ho}", "para dos personas que viven lejos: {app:ho}", "per a dues persones que viuen lluny: {app:ho}"], "mMei4": ["a postcard that opens on its day. a bunch of flowers in a link. {app:sh} {app:fs}", "一张到了那天才打开的明信片。一束装在链接里的花。{app:sh} {app:fs}", "一張到了那天才開啟的明信片。一束裝在連結裡的花。{app:sh} {app:fs}", "una postal que se abre el día que toca. un ramo de flores en un enlace. {app:sh} {app:fs}", "una postal que s'obre el dia que toca. un ram de flors en un enllaç. {app:sh} {app:fs}"], "mMei5": ["and three words in someone's language > three hundred on duolingo {app:vo}", "还有，用别人的语言说三个词 > 背三百个单词 {app:vo}", "還有，用別人的語言說三個詞 > 背三百個單詞 {app:vo}", "y tres palabras en el idioma de alguien > trescientas en una app {app:vo}", "i tres paraules en l'idioma d'algú > tres-centes en una app {app:vo}"], "mMei6": ["language is in settings. you're welcome", "语言在设置里。不用谢", "語言在設定裡。不用謝", "el idioma está en ajustes. de nada", "l'idioma és a configuració. de res"], "mWei1": ["Evening. The lamps are on.", "晚上好。灯都亮了。", "晚上好。燈都亮了。", "Buenas noches. Las lámparas están encendidas.", "Bon vespre. Els llums són encesos."], "mWei2": ["Nearby is a little town. Walk in, sit at the counter, lie in the park, do nothing for a while. Then go back to yours. {app:nb}", "近邻是一个小镇。走进来，坐在吧台边，躺在公园里，什么都不做待一会儿。然后回到你自己的生活。{app:nb}", "近鄰是一個小鎮。走進來，坐在吧檯邊，躺在公園裡，什麼都不做待一會兒。然後回到你自己的生活。{app:nb}", "Cerca es un pueblecito. Entra, siéntate en la barra, túmbate en el parque, no hagas nada un rato. Luego vuelve al tuyo. {app:nb}", "A Prop és un poblet. Entra, seu a la barra, estira't al parc, no facis res una estona. Després torna al teu. {app:nb}"], "mWei3": ["If you can't sleep, there's a slow train with a window seat. {app:st}", "睡不着的话，有一列慢车，靠窗的位子给你留着。{app:st}", "睡不著的話，有一列慢車，靠窗的位子給你留著。{app:st}", "Si no puedes dormir, hay un tren lento con asiento de ventanilla. {app:st}", "Si no pots dormir, hi ha un tren lent amb seient de finestra. {app:st}"], "mWei4": ["Lend a book by hand, or build a little town with your own people. {app:bp} {app:hg}", "亲手借出一本书，或者和你自己的人一起建一座小镇。{app:bp} {app:hg}", "親手借出一本書，或者和你自己的人一起建一座小鎮。{app:bp} {app:hg}", "Presta un libro en mano, o construye un pueblecito con los tuyos. {app:bp} {app:hg}", "Deixa un llibre en mà, o construeix un poblet amb els teus. {app:bp} {app:hg}"], "mCats1": ["meow.", "喵。", "喵。", "miau.", "miau."], "mCats2": ["*Yuzu puts one paw on a card. One card a day, the same for everyone.* {app:pw}", "*柚子把一只爪子放在一张牌上。一天一张，每个人都是同一张。* {app:pw}", "*柚子把一隻爪子放在一張牌上。一天一張，每個人都是同一張。* {app:pw}", "*Yuzu pone una pata sobre una carta. Una al día, la misma para todos.* {app:pw}", "*La Yuzu posa una pota sobre una carta. Una al dia, la mateixa per a tothom.* {app:pw}"], "mCats3": ["*Miso pushes your phone off the table*", "*味噌把你的手机推下了桌子*", "*味噌把你的手機推下了桌子*", "*Miso tira tu móvil de la mesa*", "*La Miso tira el teu mòbil de la taula*"], "mDog1": ["woof!", "汪！", "汪！", "¡guau!", "bup!"], "mDog2": ["*brings you the leash* Twenty minutes, one corner, phones in pockets. {app:ww}", "*把牵绳叼给你* 二十分钟，一个街角，手机放口袋。{app:ww}", "*把牽繩叼給你* 二十分鐘，一個街角，手機放口袋。{app:ww}", "*te trae la correa* Veinte minutos, una esquina, móviles en el bolsillo. {app:ww}", "*et porta la corretja* Vint minuts, una cantonada, mòbils a la butxaca. {app:ww}"], "mDog3": ["*sits by the door, tail going*", "*坐在门边，尾巴摇个不停*", "*坐在門邊，尾巴搖個不停*", "*se sienta junto a la puerta, moviendo la cola*", "*s'asseu a la porta, movent la cua*"], "eFrom": ["from", "来自", "來自", "de", "de"], "eOpen": ["Open {app}", "打开{app}", "開啟{app}", "Abrir {app}", "Obre {app}"], "eUnsub": ["To unsubscribe, put the phone down.", "退订方法：放下手机。", "退訂方法：放下手機。", "Para darte de baja, deja el móvil.", "Per donar-te de baixa, deixa el mòbil."], "eInbox": ["Inbox", "收件箱", "收件箱", "Recibidos", "Safata d'entrada"], "e_nb_s": ["Your seat at the counter is free", "吧台边你的位子空着", "吧檯邊你的位子空著", "Tu sitio en la barra está libre", "El teu lloc a la barra és lliure"], "e_nb_b": ["Nearby is a little world that sends you back to yours. Lie in the park, borrow a book, play the jukebox, or just sit. Nobody counts how long you stay.\nThe drinks are on the house. The company is the point.", "近邻是一个会把你送回自己生活的小世界。躺在公园里，借一本书，点一首歌，或者就坐着。没有人会数你待了多久。\n饮料免费。陪伴才是重点。", "近鄰是一個會把你送回自己生活的小世界。躺在公園裡，借一本書，點一首歌，或者就坐著。沒有人會數你待了多久。\n飲料免費。陪伴才是重點。", "Cerca es un mundo pequeño que te devuelve al tuyo. Túmbate en el parque, toma un libro prestado, pon la gramola o simplemente siéntate. Nadie cuenta cuánto te quedas.\nLas bebidas corren de nuestra cuenta. Lo importante es la compañía.", "A Prop és un món petit que et torna al teu. Estira't al parc, agafa un llibre en préstec, posa el tocadiscos o simplement seu. Ningú compta quanta estona et quedes.\nLes begudes van a compte de la casa. El que importa és la companyia."], "e_st_s": ["A window seat on the slow train", "慢车上靠窗的位子", "慢車上靠窗的位子", "Asiento de ventanilla en el tren lento", "Seient de finestra al tren lent"], "e_st_b": ["The night train leaves whenever you board it. Watch the lights go by, listen to the rails, and get off when you're ready to call someone.", "夜车在你上车的时候出发。看窗外的灯一盏盏过去，听铁轨的声音，等你想打电话给谁了，就下车。", "夜車在你上車的時候出發。看窗外的燈一盞盞過去，聽鐵軌的聲音，等你想打電話給誰了，就下車。", "El tren nocturno sale cuando subes. Mira pasar las luces, escucha las vías y bájate cuando tengas ganas de llamar a alguien.", "El tren de nit surt quan hi puges. Mira passar els llums, escolta les vies i baixa quan tinguis ganes de trucar a algú."], "e_bp_s": ["Real books, lent by hand", "真正的书，亲手借出", "真正的書，親手借出", "Libros de verdad, prestados en mano", "Llibres de veritat, deixats en mà"], "e_bp_b": ["Put the books from your shelf on a little list and let your neighbours borrow them. You hand each one over in person. That's the whole system, and it works.", "把你书架上的书列成一张小清单，让邻居来借。每一本都亲手交过去。整个系统就这样，而且行得通。", "把你書架上的書列成一張小清單，讓鄰居來借。每一本都親手交過去。整個系統就這樣，而且行得通。", "Pon los libros de tu estantería en una lista y deja que tus vecinos los tomen prestados. Cada uno se entrega en mano. Ese es todo el sistema, y funciona.", "Posa els llibres del teu prestatge en una llista i deixa que els veïns els agafin. Cadascun es dona en mà. Aquest és tot el sistema, i funciona."], "e_hg_s": ["A town your people build together", "一座由你的人一起建起来的小镇", "一座由你的人一起建起來的小鎮", "Un pueblo que construyen los tuyos", "Un poble que construeixen els teus"], "e_hg_b": ["Start a little town with your family or friends. Each place is something you do for each other: showing up, saying it, looking after, having fun. Then meet in a real one.", "和家人或朋友一起开一座小镇。每个地方都是你们为彼此做的一件事：出现、说出口、照顾、一起玩。然后在真实的地方见面。", "和家人或朋友一起開一座小鎮。每個地方都是你們為彼此做的一件事：出現、說出口、照顧、一起玩。然後在真實的地方見面。", "Empieza un pueblecito con tu familia o amigos. Cada lugar es algo que hacéis el uno por el otro: estar, decirlo, cuidar, divertirse. Luego quedad en uno de verdad.", "Comença un poblet amb la teva família o amics. Cada lloc és una cosa que feu l'un per l'altre: ser-hi, dir-ho, cuidar, divertir-se. Després quedeu en un de veritat."], "e_lt_s": ["One small thing for you today", "今天给你的一件小事", "今天給你的一件小事", "Una cosita para ti hoy", "Una coseta per a tu avui"], "e_lt_b": ["Open my jar, take one paper. Small thing to do offline today: call your auntie, cook one egg for somebody, sit outside ten minutes.\nThen go do lah, don't keep reading.", "打开我的罐子，拿一张纸条。今天做一件离线的小事：打电话给你阿姨，给谁煎一个蛋，在外面坐十分钟。\n然后就去做啦，别一直看手机。", "開啟我的罐子，拿一張紙條。今天做一件離線的小事：打電話給你阿姨，給誰煎一個蛋，在外面坐十分鐘。\n然後就去做啦，別一直看手機。", "Abre mi tarro, coge un papel. Una cosita para hacer hoy sin pantalla: llama a tu tía, fríe un huevo para alguien, siéntate fuera diez minutos.\nLuego ve a hacerlo, eh, no sigas leyendo.", "Obre el meu pot, agafa un paper. Una coseta per fer avui sense pantalla: truca a la teva tieta, fregeix un ou per a algú, seu fora deu minuts.\nDesprés vés a fer-ho, eh, no continuïs llegint."], "e_ap_s": ["This week's question", "这个星期的问题", "這個星期的問題", "La pregunta de esta semana", "La pregunta d'aquesta setmana"], "e_ap_b": ["Every week one question. Ask your grandma, your dad, your old auntie. In person, not on the phone ah. Write two lines to keep the answer.\nEnd of the year, print a small book. Very nice one.", "每个星期一个问题。问你的婆婆、你爸爸、你家的老阿姨。要当面问，不要在电话里问啊。写两行字，把答案留下。\n到了年底，印成一本小书。很漂亮的。", "每個星期一個問題。問你的婆婆、你爸爸、你家的老阿姨。要當面問，不要在電話裡問啊。寫兩行字，把答案留下。\n到了年底，印成一本小書。很漂亮的。", "Cada semana una pregunta. Pregúntale a tu abuela, a tu padre, a tu tía mayor. En persona, no por teléfono, eh. Dos líneas para guardar la respuesta.\nA final de año, imprime un librito. Muy bonito.", "Cada setmana una pregunta. Pregunta-la a la teva àvia, al teu pare, a la teva tieta gran. En persona, no per telèfon, eh. Dues línies per guardar la resposta.\nA final d'any, imprimeix un llibret. Molt bonic."], "e_tg_s": ["Twelve grapes at midnight", "午夜的十二颗葡萄", "午夜的十二顆葡萄", "Doce uvas a medianoche", "Dotze grans de raïm a mitjanit"], "e_tg_b": ["New Year's Eve, one grape for every bell, one month for every grape. Say a wish for each month to the people at your table, not to the phone.", "除夕夜，钟响一下吃一颗葡萄，一颗葡萄代表一个月。把每个月的愿望说给你桌上的人听，不是说给手机听。", "除夕夜，鐘響一下吃一顆葡萄，一顆葡萄代表一個月。把每個月的願望說給你桌上的人聽，不是說給手機聽。", "Nochevieja, una uva por campanada, un mes por uva. Di un deseo para cada mes a la gente de tu mesa, no al móvil.", "Cap d'any, un gra per campanada, un mes per gra. Digues un desig per a cada mes a la gent de la teva taula, no al mòbil."], "e_co_s": ["Come over this week?", "这周来我家坐坐？", "這週來我家坐坐？", "¿Vienes a casa esta semana?", "Vens a casa aquesta setmana?"], "e_co_b": ["Have people over. Pick a day, write what you're cooking, send the link. Guests open it and say if they're coming. No group chat needed.\nI cook, you wash up.", "请人来家里。选个日子，写上你要做什么菜，把链接发出去。客人打开就能说来不来。不用建群。\n我做饭，你洗碗。", "請人來家裡。選個日子，寫上你要做什麼菜，把連結發出去。客人開啟就能說來不來。不用建群。\n我做飯，你洗碗。", "Invita a gente a casa. Elige un día, escribe qué cocinas y manda el enlace. Los invitados lo abren y dicen si vienen. Sin grupo de chat.\nYo cocino, tú friegas.", "Convida gent a casa. Tria un dia, escriu què cuines i envia l'enllaç. Els convidats l'obren i diuen si vénen. Sense grup de xat.\nJo cuino, tu rentes els plats."], "e_pw_s": ["*one paw on today's card*", "*一只爪子按在今天的牌上*", "*一隻爪子按在今天的牌上*", "*una pata sobre la carta de hoy*", "*una pota sobre la carta d'avui*"], "e_pw_b": ["*Miso sits on the deck. Yuzu turns one card over.*\nOne card a day, from two cats, the same card for everyone. It usually asks you to go and see someone.\n*mrrp.*", "*味噌坐在牌堆上。柚子翻开一张牌。*\n一天一张，两只猫给的，每个人都是同一张。它通常是让你去见一个人。\n*咪呜。*", "*味噌坐在牌堆上。柚子翻開一張牌。*\n一天一張，兩隻貓給的，每個人都是同一張。它通常是讓你去見一個人。\n*咪嗚。*", "*Miso se sienta sobre la baraja. Yuzu da la vuelta a una carta.*\nUna carta al día, de dos gatas, la misma para todos. Normalmente te pide que vayas a ver a alguien.\n*mrrp.*", "*La Miso s'asseu sobre la baralla. La Yuzu gira una carta.*\nUna carta al dia, de dues gates, la mateixa per a tothom. Normalment et demana que vagis a veure algú.\n*mrrp.*"], "e_ww_s": ["WALK? WALK??", "散步？散步？？", "散步？散步？？", "¿PASEO? ¿¿PASEO??", "PASSEIG? PASSEIG??"], "e_ww_b": ["Two people, one corner, one time, twenty minutes. No map, no tracking. Phones stay in pockets.\n*Mantou is already at the door.*", "两个人，一个街角，一个时间，二十分钟。没有地图，没有定位。手机放在口袋里。\n*馒头已经在门口等着了。*", "兩個人，一個街角，一個時間，二十分鐘。沒有地圖，沒有定位。手機放在口袋裡。\n*饅頭已經在門口等著了。*", "Dos personas, una esquina, una hora, veinte minutos. Sin mapa, sin rastreo. Los móviles en el bolsillo.\n*Mantou ya está en la puerta.*", "Dues persones, una cantonada, una hora, vint minuts. Sense mapa, sense seguiment. Els mòbils a la butxaca.\n*En Mantou ja és a la porta.*"], "e_tc_s": ["dinner for two, however far apart", "两个人的晚饭，不管隔多远", "兩個人的晚飯，不管隔多遠", "cena para dos, aunque estéis lejos", "sopar per a dos, encara que sigueu lluny"], "e_tc_b": ["book a table for two people in different cities. you each see the time in your own zone, cook the same dish, light a candle, and eat together.\nmy mom's in new york. sunday dinner, every week. it's honestly nice.", "给在不同城市的两个人订一张桌子。你们各自看到自己时区的时间，做同一道菜，点一根蜡烛，一起吃饭。\n我妈在纽约。每个星期天一起吃晚饭。说真的，挺好的。", "給在不同城市的兩個人訂一張桌子。你們各自看到自己時區的時間，做同一道菜，點一根蠟燭，一起吃飯。\n我媽在紐約。每個星期天一起吃晚飯。說真的，挺好的。", "reserva una mesa para dos personas en ciudades distintas. cada uno ve la hora en su zona, cocináis el mismo plato, encendéis una vela y cenáis juntos.\nmi madre está en nueva york. cena del domingo, cada semana. la verdad, está bien.", "reserva una taula per a dues persones en ciutats diferents. cadascú veu l'hora a la seva zona, cuineu el mateix plat, enceneu una espelma i soparu junts.\nla meva mare és a nova york. sopar de diumenge, cada setmana. la veritat, està bé."], "e_ho_s": ["for two people in different cities", "给在不同城市的两个人", "給在不同城市的兩個人", "para dos personas en ciudades distintas", "per a dues persones en ciutats diferents"], "e_ho_b": ["when your day ends, theirs is starting. handoff shows you each other's day and sleep, and lets you leave a note or a voice message that arrives at the right hour.", "你的一天结束时，对方的一天才刚开始。Handoff 让你们看到彼此的白天和睡眠，还能留一张字条或一段语音，在对的时间送到。", "你的一天結束時，對方的一天才剛開始。Handoff 讓你們看到彼此的白天和睡眠，還能留一張字條或一段語音，在對的時間送到。", "cuando tu día termina, el suyo empieza. handoff os enseña el día y el sueño del otro, y te deja una nota o un audio que llega a la hora justa.", "quan el teu dia s'acaba, el seu comença. handoff us mostra el dia i la son de l'altre, i et deixa una nota o un àudio que arriba a l'hora justa."], "e_sh_s": ["a postcard that waits for its day", "一张等着它那天的明信片", "一張等著它那天的明信片", "una postal que espera su día", "una postal que espera el seu dia"], "e_sh_b": ["write it today, seal it, and it opens on their birthday. or the day they start the new job. or whenever. you pick the day.", "今天写好，封起来，等到对方生日那天才打开。或者是开始新工作那天。或者随便哪天。日子你来定。", "今天寫好，封起來，等到對方生日那天才開啟。或者是開始新工作那天。或者隨便哪天。日子你來定。", "escríbela hoy, ciérrala, y se abre el día de su cumpleaños. o el día que empiece el trabajo nuevo. o cuando sea. tú eliges el día.", "escriu-la avui, tanca-la, i s'obre el dia del seu aniversari. o el dia que comenci la feina nova. o quan sigui. tu tries el dia."], "e_fs_s": ["a few flowers, for someone real", "几枝花，送给一个真实的人", "幾枝花，送給一個真實的人", "unas flores, para alguien de verdad", "unes flors, per a algú de veritat"], "e_fs_b": ["tie up to nine stems, pick the paper, write a little card, send it as a link. they untie the ribbon.\nthe card ends with: call me and say you got it.", "最多扎九枝花，选好包装纸，写一张小卡片，用链接寄出去。对方会解开丝带。\n卡片的最后一句是：打电话告诉我你收到了。", "最多扎九枝花，選好包裝紙，寫一張小卡片，用連結寄出去。對方會解開絲帶。\n卡片的最後一句是：打電話告訴我你收到了。", "ata hasta nueve flores, elige el papel, escribe una tarjeta y mándala como enlace. le toca desatar la cinta.\nla tarjeta acaba así: llámame y dime que te ha llegado.", "lliga fins a nou flors, tria el paper, escriu una targeta i envia-la com a enllaç. li toca deslligar la cinta.\nla targeta acaba així: truca'm i digues que t'ha arribat."], "e_vo_s": ["three words in someone's language", "用别人的语言说三个词", "用別人的語言說三個詞", "tres palabras en el idioma de alguien", "tres paraules en l'idioma d'algú"], "e_vo_b": ["a few words in someone else's language. not to pass a test. to say good morning to the neighbour, or thank you to your friend's grandma, and watch their face.", "学几个别人语言里的词。不是为了考试。是为了跟邻居说早安，跟朋友的婆婆说谢谢，然后看看他们的表情。", "學幾個別人語言裡的詞。不是為了考試。是為了跟鄰居說早安，跟朋友的婆婆說謝謝，然後看看他們的表情。", "unas pocas palabras en el idioma de otra persona. no para aprobar. para darle los buenos días al vecino, o las gracias a la abuela de tu amiga, y ver su cara.", "unes poques paraules en l'idioma d'una altra persona. no per aprovar. per donar el bon dia al veí, o les gràcies a l'àvia de la teva amiga, i veure-li la cara."], "kPhoto": ["Photo", "照片", "照片", "Foto", "Foto"], "kRoll": ["Camera roll", "相机胶卷", "相機膠捲", "Carrete", "Rodet"], "kSnapped": ["Kept on this phone", "保存在这部手机上", "儲存在這部手機上", "Guardada en este móvil", "Guardada en aquest mòbil"], "kReal": ["The best photos have you in them. Take one with your real camera, with someone.", "最好的照片里都有你。用你真正的相机，和某个人一起拍一张吧。", "最好的照片裡都有你。用你真正的相機，和某個人一起拍一張吧。", "Las mejores fotos salen contigo. Hazte una con tu cámara de verdad, con alguien.", "Les millors fotos surten amb tu. Fes-te'n una amb la teva càmera de veritat, amb algú."], "k1": ["Wei, behind the counter", "Wei，在吧台后面", "Wei，在吧檯後面", "Wei, detrás de la barra", "En Wei, darrere la barra"], "k2": ["Mei's selfie. Again.", "Mei 的自拍。又一张。", "Mei 的自拍。又一張。", "El selfie de Mei. Otra vez.", "El selfie de la Mei. Una altra vegada."], "k3": ["Popo's soup, Sunday", "婆婆的汤，星期天", "婆婆的湯，星期天", "La sopa de Popo, domingo", "La sopa de la Popo, diumenge"], "k4": ["Miso found a warm spot", "味噌找到一个暖和的地方", "味噌找到一個暖和的地方", "Miso encontró un sitio calentito", "La Miso ha trobat un lloc calentet"], "k5": ["Yuzu, not sorry", "柚子，毫无歉意", "柚子，毫無歉意", "Yuzu, sin remordimientos", "La Yuzu, sense remordiments"], "k6": ["Mantou, about to sneeze", "馒头，快要打喷嚏了", "饅頭，快要打噴嚏了", "Mantou, a punto de estornudar", "En Mantou, a punt d'esternudar"], "k7": ["Mei and Popo. Popo didn't know it was a selfie.", "Mei 和婆婆。婆婆不知道这是自拍。", "Mei 和婆婆。婆婆不知道這是自拍。", "Mei y Popo. Popo no sabía que era un selfie.", "La Mei i la Popo. La Popo no sabia que era un selfie."], "k8": ["The street at night, everyone's windows on", "夜里的街，每家的窗都亮着", "夜裡的街，每家的窗都亮著", "La calle de noche, todas las ventanas encendidas", "El carrer de nit, totes les finestres enceses"], "k9": ["Walk with Mantou, 20 minutes, the long way", "和馒头散步，二十分钟，绕远路", "和饅頭散步，二十分鐘，繞遠路", "Paseo con Mantou, 20 minutos, por el camino largo", "Passeig amb en Mantou, 20 minuts, pel camí llarg"], "k10": ["Wei's selfie (he holds the phone too far)", "Wei 的自拍（他把手机拿得太远了）", "Wei 的自拍（他把手機拿得太遠了）", "El selfie de Wei (sostiene el móvil demasiado lejos)", "El selfie d'en Wei (aguanta el mòbil massa lluny)"], "k11": ["Everyone, before the grapes", "大家，吃葡萄之前", "大家，吃葡萄之前", "Todos, antes de las uvas", "Tots, abans del raïm"], "k12": ["Two cats, one box", "两只猫，一个箱子", "兩隻貓，一個箱子", "Dos gatas, una caja", "Dues gates, una caixa"], "sAll": ["For this site and every after-hours app on this phone", "适用于本站和这部手机上所有 after-hours 应用", "適用於本站和這部手機上所有 after-hours 應用", "Para este sitio y todas las apps de after-hours en este móvil", "Per a aquest lloc i totes les apps d'after-hours d'aquest mòbil"], "sYou": ["You", "你", "你", "Tú", "Tu"], "sName": ["Your name", "你的名字", "你的名字", "Tu nombre", "El teu nom"], "sNameHint": ["Just a first name. The apps use it when they ask.", "名字就好。应用需要时会用到。", "名字就好。應用需要時會用到。", "Solo un nombre. Las apps lo usan cuando lo piden.", "Només un nom. Les apps el fan servir quan el demanen."], "sNamePh": ["A name", "一个名字", "一個名字", "Un nombre", "Un nom"], "sLang": ["Language", "语言", "語言", "Idioma", "Idioma"], "sLangHint": ["Every app follows it, on every after-hours site.", "所有应用都会跟着改，在所有 after-hours 网站上。", "所有應用都會跟著改，在所有 after-hours 網站上。", "Todas las apps lo siguen, en todos los sitios de after-hours.", "Totes les apps el segueixen, a tots els llocs d'after-hours."], "sSound": ["Sound in the town", "镇上的声音", "鎮上的聲音", "Sonido en el pueblo", "So al poble"], "sSoundHint": ["Music and little noises in Nearby and its places.", "近邻和各个地方的音乐和小声响。", "近鄰和各個地方的音樂和小聲響。", "Música y ruiditos en Cerca y sus lugares.", "Música i sorollets a A Prop i els seus llocs."], "sSky": ["Sky follows the hour", "天空跟着时间变", "天空跟著時間變", "El cielo sigue la hora", "El cel segueix l'hora"], "sSkyHint": ["Off keeps this phone at night.", "关掉的话，这部手机一直是夜晚。", "關掉的話，這部手機一直是夜晚。", "Desactivado, este móvil se queda de noche.", "Desactivat, aquest mòbil es queda de nit."], "sHome": ["Home screen", "主屏幕", "主螢幕", "Pantalla de inicio", "Pantalla d'inici"], "sTraces": ["Light up what's mine today", "点亮今天属于我的东西", "點亮今天屬於我的東西", "Encender lo que es mío hoy", "Encendre el que és meu avui"], "sTracesHint": ["Reads only what the apps already keep on this phone.", "只读取应用已经保存在这部手机上的东西。", "只讀取應用已經儲存在這部手機上的東西。", "Solo lee lo que las apps ya guardan en este móvil.", "Només llegeix el que les apps ja guarden en aquest mòbil."], "sInstall": ["Add to home screen", "加到主屏幕", "加到主螢幕", "Añadir a la pantalla de inicio", "Afegir a la pantalla d'inici"], "sInstallHint": ["iPhone: Share, then Add to Home Screen. Android: the menu, then Install app.", "iPhone：点分享，再点“添加到主屏幕”。安卓：打开菜单，点“安装应用”。", "iPhone：點分享，再點“新增到主螢幕”。安卓：開啟選單，點“安裝應用”。", "iPhone: Compartir y luego Añadir a pantalla de inicio. Android: el menú y luego Instalar app.", "iPhone: Comparteix i després Afegeix a la pantalla d'inici. Android: el menú i després Instal·la l'app."], "sInstallGo": ["Install", "安装", "安裝", "Instalar", "Instal·lar"], "sPhone": ["What this phone keeps", "这部手机保存的东西", "這部手機儲存的東西", "Lo que guarda este móvil", "El que guarda aquest mòbil"], "sKeeps": ["{n} things saved by the apps, on this phone only", "应用保存的 {n} 项，只在这部手机上", "應用儲存的 {n} 項，只在這部手機上", "{n} cosas guardadas por las apps, solo en este móvil", "{n} coses guardades per les apps, només en aquest mòbil"], "sPrivacy": ["Your privacy", "你的隐私", "你的隱私", "Tu privacidad", "La teva privacitat"], "sForget": ["Forget everything on this phone", "清除这部手机上的一切", "清除這部手機上的一切", "Olvidar todo en este móvil", "Oblidar-ho tot en aquest mòbil"], "sForgetQ": ["This clears every after-hours app on this phone: names, cards, gatherings, towns. It can't be undone.", "这会清除这部手机上所有 after-hours 应用的内容：名字、牌、聚会、小镇。无法撤销。", "這會清除這部手機上所有 after-hours 應用的內容：名字、牌、聚會、小鎮。無法撤銷。", "Esto borra todas las apps de after-hours de este móvil: nombres, cartas, reuniones, pueblos. No se puede deshacer.", "Això esborra totes les apps d'after-hours d'aquest mòbil: noms, cartes, trobades, pobles. No es pot desfer."], "sForgetYes": ["Forget it all", "全部清除", "全部清除", "Olvidarlo todo", "Oblidar-ho tot"], "sCancel": ["Keep it", "保留", "保留", "Conservar", "Conservar"], "sForgot": ["Done. This phone remembers nothing.", "好了。这部手机什么都不记得了。", "好了。這部手機什麼都不記得了。", "Hecho. Este móvil no recuerda nada.", "Fet. Aquest mòbil no recorda res."], "sAbout": ["About", "关于", "關於", "Acerca de", "Quant a"], "sAboutT": ["Small, free things that end off the screen, next to someone. Made by Wei Meng, after hours.", "小小的、免费的东西，结束在屏幕之外，某个人身边。Wei Meng 下班后做的。", "小小的、免費的東西，結束在螢幕之外，某個人身邊。Wei Meng 下班後做的。", "Cosas pequeñas y gratis que terminan fuera de la pantalla, junto a alguien. Hechas por Wei Meng, fuera de horas.", "Coses petites i gratis que acaben fora de la pantalla, al costat d'algú. Fetes per Wei Meng, fora d'hores."], "sOn": ["On", "开", "開", "Sí", "Sí"], "sOff": ["Off", "关", "關", "No", "No"]}, P = [["little-things", "lt", ["Little Things", "小事", "小事", "Cosas pequeñas", "Petites coses"], ["One small offline thing at a time.", "一次一件屏幕外的小事。", "一次一件螢幕外的小事。", "Una cosita fuera de la pantalla cada vez.", "Una coseta fora de la pantalla cada vegada."], "/little-things/", "#F6B65B", "/little-things/icon-192.png"], ["paw-reading", "pw", ["Paw Reading", "猫爪占卜", "貓爪占卜", "Lectura de Patas", "Lectura de Potes"], ["One card a day, from two cats.", "每天一张牌，两只猫给的。", "每天一張牌，兩隻貓給的。", "Una carta al día, de dos gatas.", "Una carta al dia, de dues gates."], "/paw-reading/", "#E8913A", "/paw-reading/icon-192.png"], ["come-over", "co", ["Come Over", "来我家", "來我家", "Ven a Casa", "Vine a Casa"], ["Have people over.", "请大家来家里坐坐。", "請大家來家裡坐坐。", "Invita a gente a casa.", "Convida gent a casa."], "/come-over/", "#E0704F", "/come-over/icon-192.png"], ["a-few-stems", "fs", ["A Few Stems", "几枝花", "幾枝花", "Cuatro Flores", "Quatre Flors"], ["A few flowers, for someone real.", "几枝花，送给真实的人。", "幾枝花，送給真實的人。", "Unas flores, para alguien de verdad.", "Unes flors, per a algú de debò."], "/a-few-stems/", "#E58A9A", "/a-few-stems/icon-192.png"], ["borrowed-pages", "bp", ["Borrowed Pages", "借来的书", "借來的書", "Páginas Prestadas", "Pàgines Manllevades"], ["Real books, lent by hand between neighbours.", "真的书，在邻居之间亲手传递。", "真的書，在鄰居之間親手傳遞。", "Libros de verdad, prestados en mano entre vecinos.", "Llibres de debò, deixats en mà entre veïns."], "/borrowed-pages/", "#D9785B", "/borrowed-pages/icon-192.png"], ["say-hello", "sh", ["Say Hello", "问个好", "問個好", "Di Hola", "Di Hola"], ["A postcard that opens on its day.", "一张到了那天才拆开的明信片。", "一張到了那天才拆開的明信片。", "Una postal que se abre en su día.", "Una postal que se abre en su día."], "/say-hello/", "#E0604A", "/say-hello/icon-192.png"], ["home-ground", "hg", ["Home Ground", "我们的家园", "我們的家園", "Nuestro Rincón", "El Nostre Racó"], ["A town your people build together.", "一座家人朋友一起盖的小镇。", "一座家人朋友一起蓋的小鎮。", "Un pueblo que construyen los tuyos.", "Un poble que construeixen els teus."], "/home-ground/", "#9CC47A", "/home-ground/icon-192.png"], ["twelve-grapes", "tg", ["Twelve Grapes", "十二颗葡萄", "十二顆葡萄", "Las Doce Uvas", "Els Dotze Grans"], ["Twelve grapes, one for each month.", "十二颗葡萄，一个月一颗。", "十二顆葡萄，一個月一顆。", "Doce uvas, una por cada mes.", "Dotze grans de raïm, un per cada mes."], "/twelve-grapes/", "#A8C85A", "/twelve-grapes/icon-192.png"], ["ask-popo", "ap", ["Ask Popo", "问婆婆", "問婆婆", "Pregúntale a Popo", "Pregunta-li a la Popo"], ["One question a week, asked in person.", "每周一个问题，当面问。", "每週一個問題，當面問。", "Una pregunta a la semana, en persona.", "Una pregunta a la setmana, en persona."], "/ask-popo/", "#E8A838", "/ask-popo/icon-192.png"], ["walk-with", "ww", ["Walk With", "一起走走", "一起走走", "Camina Conmigo", "Camina amb Mi"], ["Twenty minutes, one corner, phones away.", "二十分钟，一个街角，收起手机。", "二十分鐘，一個街角，收起手機。", "Veinte minutos, una esquina, sin móvil.", "Vint minuts, una cantonada, sense mòbil."], "/walk-with/", "#9BB08A", "/walk-with/icon-192.png"], ["nearby", "nb", ["Nearby", "近邻", "近鄰", "Cerca", "A Prop"], ["A little world that sends you back to yours.", "一个小小的世界，把你送回你自己的世界。", "一個小小的世界，把你送回你自己的世界。", "Un mundo pequeño que te devuelve al tuyo.", "Un món petit que et torna al teu."], "/nearby/", "#8E7FE6", "/nearby/icon-192.png"], ["station", "st", ["Nearby Station", "近邻站", "近鄰站", "Estación Cerca", "Estació A Prop"], ["A window seat on a slow train.", "慢火车上一个靠窗的座位。", "慢火車上一個靠窗的座位。", "Un asiento junto a la ventana en un tren lento.", "Un seient a la finestra en un tren lent."], "/station/", "#6F93D8", "/station/icon-192.png"], ["handoff", "ho", ["Handoff", "Handoff", "Handoff", "Handoff", "Handoff"], ["For two people in different cities.", "给分隔两座城市的两个人。", "給分隔兩座城市的兩個人。", "Para dos personas en ciudades distintas.", "Per a dues persones en ciutats diferents."], "https://www.freebuilder.net/handoff/", "#E9825E", "https://www.freebuilder.net/handoff/icon-192.png"], ["two-candles", "tc", ["Two Candles", "双烛小馆", "雙燭小館", "Dos Velas", "Dues Espelmes"], ["Dinner for two, however far apart.", "两个人的晚饭，再远也一起吃。", "兩個人的晚飯，再遠也一起吃。", "Una cena para dos, por lejos que estéis.", "Un sopar per a dos, per lluny que sigueu."], "/two-candles/", "#F2B54A", "/two-candles/icon-192.png"], ["vocab", "vo", ["Vocab", "Vocab", "Vocab", "Vocab", "Vocab"], ["A few words in someone else's language.", "几句别人语言里的话。", "幾句別人語言裡的話。", "Unas palabras en el idioma de otra persona.", "Unes paraules en la llengua d'una altra persona."], "/vocab/", "#7FC9B8", "/vocab/icon.svg"]], L = ["en", "zh", "zh-Hant", "es", "ca"], SH = ["EN", "简", "繁", "ES", "CA"], LN = ["English", "简体中文", "繁體中文", "Español", "Català"];
+  var MAIL_WM = "weimeng@protonmail.com";
+  var $ = function (id) { return document.getElementById(id); }, qa = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+  function li() { var l = window.FBL ? FBL.get() : (get("ah_lang") || "en"); var i = L.indexOf(l); return i < 0 ? 0 : i; }
   function w(k) { var v = W[k]; return v ? (v[li()] || v[0]) : k; }
   function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function put(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
   function js(k, d) { try { return JSON.parse(get(k) || "") || d; } catch (e) { return d; } }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  var H = (function () { var m = /[?&]h=(\d+)/.exec(location.search); return m ? +m[1] : new Date().getHours(); })();   // ?h= sets the hour for testing
-  function part() { return H < 5 ? "late" : H < 12 ? "morn" : H < 18 ? "aft" : H < 22 ? "eve" : "night"; }
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  var PK = {}; P.forEach(function (p) { PK[p[1]] = p; });
+  function pname(k) { var p = PK[k]; return p ? (p[2][li()] || p[2][0]) : k; }
+  var H0 = (function () { var m = /[?&]h=(\d+)/.exec(location.search); return m ? +m[1] : null; })();   // ?h= sets the hour for testing
+  function hour() { return H0 != null ? H0 : new Date().getHours(); }
+  function part() { var H = hour(); return H < 5 ? "late" : H < 12 ? "morn" : H < 18 ? "aft" : H < 22 ? "eve" : "night"; }
   function ymd(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
-  var today = ymd(new Date()), tmr = ymd(new Date(Date.now() + 864e5));
+  function loc() { return L[li()]; }
+  function hm(d) { try { return d.toLocaleTimeString(loc(), { hour: "2-digit", minute: "2-digit" }); } catch (e) { return d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0"); } }
   function when(day) {
-    if (day === today) return w("today"); if (day === tmr) return w("tomorrow");
-    try { return new Date(day + "T12:00:00").toLocaleDateString(L[li()], { weekday: "long", day: "numeric", month: "short" }); } catch (e) { return day; }
+    var today = ymd(new Date()), tmr = ymd(new Date(Date.now() + 864e5)), yst = ymd(new Date(Date.now() - 864e5));
+    if (day === today) return w("today"); if (day === tmr) return w("tomorrow"); if (day === yst) return w("yesterday");
+    try { return new Date(day + "T12:00:00").toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "short" }); } catch (e) { return day; }
   }
-  /* the sky follows the real hour: dusk and night ink, a lighter dawn and day, stars only after dark */
+  function ago(days, h, m) { var d = new Date(); d.setDate(d.getDate() - days); d.setHours(h, m, 0, 0); if (d > new Date()) d.setDate(d.getDate() - 1); return d; }
+  function stamp(d) { var t = ymd(d); return t === ymd(new Date()) ? hm(d) : days(d) < 7 ? (t === ymd(new Date(Date.now() - 864e5)) ? w("yesterday") : d.toLocaleDateString(loc(), { weekday: "short" })) : d.toLocaleDateString(loc(), { day: "numeric", month: "short" }); }
+  function days(d) { return (Date.now() - d) / 864e5; }
+  var toastT; function toast(t) { var e = $("toast"); e.textContent = t; e.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { e.classList.remove("on"); }, 2200); }
+
+  /* ── the people, drawn with the town's own sprites (FBWorld, in /fbkit/fb.js); Wei's pixels are copied from fbg.js ── */
+  var WEI = [[9,3,14,4,"#1c1917"],[7,5,4,5,"#1c1917"],[21,5,4,5,"#1c1917"],[11,2,10,2,"#292524"],[9,7,14,12,"#f5d49a"],[8,10,1,4,"#e9be78"],[23,10,1,4,"#e9be78"],
+    [10,10,4,4,"rgba(125,178,168,.3)"],[10,9,4,1,"#e0a043"],[10,14,4,1,"#e0a043"],[9,10,1,4,"#e0a043"],[14,10,1,4,"#e0a043"],[11,10,1,1,"rgba(255,255,255,.8)"],[12,12,1,2,"#1b0f07"],[15,11,2,1,"#e0a043"],
+    [18,10,4,4,"rgba(125,178,168,.3)"],[18,9,4,1,"#e0a043"],[18,14,4,1,"#e0a043"],[17,10,1,4,"#e0a043"],[22,10,1,4,"#e0a043"],[19,10,1,1,"rgba(255,255,255,.8)"],[20,12,1,2,"#1b0f07"],
+    [7,10,2,1,"#b9772c"],[23,10,2,1,"#b9772c"],[14,16,4,1,"#a0521d"],[13,19,6,2,"#f5d49a"],
+    [11,21,10,2,"#f3ead8"],[15,22,2,2,"#6b3a1b"],[8,23,16,11,"#1c1410"],[12,23,8,10,"#4a2410"],[14,24,4,7,"#f3ead8"],[15,27,2,1,"#e0a043"],[15,30,2,1,"#e0a043"]];
+  var FW = function () { return window.FBWorld || null; };
+  function drawWei(g, x, y, px, o) { WEI.forEach(function (r) { if (o && o.asleep && r[2] === 1 && r[3] === 2 && r[4] === "#1b0f07") return; g.fillStyle = r[4]; g.fillRect(x + r[0] * px, y + (r[1] - 1) * px, r[2] * px, r[3] * px); }); }
+  function bust(g, who, x, y, px, o) {   // a 32×32 person or face at (x, y)
+    var F = FW(); o = o || {};
+    try {
+      if (who === "wei") return drawWei(g, x, y, px, o);
+      if (who === "mei" && F) return F.drawMei(g, x, y, px, o);
+      if (who === "popo" && F) return F.drawPopo(g, x, y, px, o);
+      if (who === "cats" && F) return F.drawCatsFace(g, x, y, px, o);
+      if (who === "mantou" && F) return F.drawDogFace(g, x, y, px, o);
+      if ((who === "miso" || who === "yuzu") && F) return F.drawPet(g, who, x + 16 * px, y + 25 * px, px * 1.5, o);
+    } catch (e) {}
+    g.fillStyle = { mei: "#f48fb8", popo: "#d6d2ca", mantou: "#e8c48a", miso: "#231b17", yuzu: "#e8913a", cats: "#e8913a" }[who] || "#888";
+    g.beginPath(); g.arc(x + 16 * px, y + 16 * px, 11 * px, 0, 7); g.fill();
+  }
+  var WHO = {   // key: name word, role word, background, a place to visit, who keeps which hours
+    wm: { n: "nWM", r: "rWM", bg: "#1E1830" },
+    wei: { n: "nWei", r: "rWei", bg: "#3a2414", go: "/nearby/next-door/?seat=1", hrs: "wei", call: "cWei", z: "cWeiZ" },
+    mei: { n: "nMei", r: "rMei", bg: "#3B2440", go: "/two-candles/", hrs: "mei", call: "cMei", z: "cMeiZ" },
+    popo: { n: "nPopo", r: "rPopo", bg: "#3A2A22", go: "/little-things/", hrs: "popo", call: "cPopo", z: "cPopoZ" },
+    miso: { n: "nMiso", r: "rMiso", bg: "#2C3A30", go: "/paw-reading/", hrs: "cats", call: "cMiso", z: "cCatsZ" },
+    yuzu: { n: "nYuzu", r: "rYuzu", bg: "#2C3A30", go: "/paw-reading/", hrs: "cats", call: "cYuzu", z: "cCatsZ" },
+    mantou: { n: "nMantou", r: "rMantou", bg: "#28324A", go: "/walk-with/", hrs: "mantou", call: "cMantou", z: "cMantouZ" },
+    cats: { n: "nCats", bg: "#2C3A30", hrs: "cats" }
+  };
+  function asleep(k) {
+    var x = WHO[k]; if (!x || !x.hrs) return false; var F = FW(), H = hour() + (H0 != null ? 0 : new Date().getMinutes() / 60);
+    if (F && F.sleeps) return F.sleeps(x.hrs, H);
+    return { wei: H < 6 || (H >= 12 && H < 14), mei: H >= 2 && H < 12, popo: H >= 21 || H < 5, cats: H >= 23 || H < 5, mantou: H >= 22 || H < 6 }[x.hrs];
+  }
+  function avatar(k, size) {
+    var box = el("span", "av"); if (size) box.style.width = box.style.height = size + "px";
+    if (k === "wm") { box.innerHTML = '<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#1E1830"/><rect x="5" y="5" width="14" height="14" rx="2.6" fill="none" stroke="#ECE6DA" stroke-width="1.6"/><path d="M12 6v12M6 12h12" stroke="#ECE6DA" stroke-width="1.4"/><rect x="13" y="13" width="5" height="5" rx="1" fill="#F2A33A"/></svg>'; return box; }
+    var c = document.createElement("canvas"), g; c.width = 32; c.height = 32; g = c.getContext("2d");
+    g.fillStyle = (WHO[k] || {}).bg || "#222"; g.fillRect(0, 0, 32, 32);
+    if (k === "miso" || k === "yuzu") { var F = FW(); if (F && F.drawPet) { try { F.drawPet(g, k, 16, 25, 1.5, { asleep: asleep(k) }); } catch (e) {} } else bust(g, k, 0, 0, 1); }
+    else bust(g, k, 0, k === "mantou" || k === "cats" ? 0 : 2, 1, { asleep: asleep(k) });
+    box.appendChild(c); return box;
+  }
+  function nm(k) { return w(WHO[k].n); }
+
+  /* ── home ── */
   function sky() {
-    var s = $("sky"), c = { late: ["#0E0B14", "#17122A"], morn: ["#2A2238", "#5B4A62"], aft: ["#241D33", "#463A55"], eve: ["#1A1426", "#3A2638"], night: ["#120F18", "#1E1830"] }[part()];
-    s.style.background = "linear-gradient(180deg," + c[1] + "," + c[0] + " 62%)";
-    document.documentElement.classList.toggle("day", part() === "morn" || part() === "aft");
-    if (!s.children.length) for (var i = 0; i < 34; i++) { var st = document.createElement("i"); st.style.left = (Math.random() * 100) + "%"; st.style.top = (Math.random() * 46) + "%"; st.style.animationDelay = (Math.random() * 4) + "s"; s.appendChild(st); }
+    var p = part(), s = $("sky"), night = get("ah_app_sky") === "0", c = night ? ["#120F18", "#1E1830"] : { late: ["#0E0B14", "#17122A"], morn: ["#2A2238", "#6A5468"], aft: ["#241D33", "#4C3E5B"], eve: ["#1A1426", "#43293F"], night: ["#120F18", "#1E1830"] }[p];
+    s.style.background = "linear-gradient(180deg," + c[1] + "," + c[0] + " 64%)";
+    $("screen").classList.toggle("day", !night && (p === "morn" || p === "aft"));
+    if (!s.children.length) for (var i = 0; i < 40; i++) { var st = el("i"); st.style.left = (Math.random() * 100) + "%"; st.style.top = (Math.random() * 55) + "%"; st.style.animationDelay = (Math.random() * 4) + "s"; s.appendChild(st); }
+    var sl = $("skyline"); if (!sl.childNodes.length) {   // fifteen buildings, one lit window each: one per work
+      var h = "", x = 0, k = 0, seed = 7; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+      while (x < 390) { var bw = 22 + rnd() * 26, bh = 40 + rnd() * 90; h += '<rect x="' + x.toFixed(1) + '" y="' + (150 - bh).toFixed(1) + '" width="' + (bw + .5).toFixed(1) + '" height="' + bh.toFixed(1) + '" fill="#0B0910"/>';
+        for (var r = 0; r < 4; r++) for (var q = 0; q < 2; q++) { var wx = x + 5 + q * (bw / 2 - 2), wy = 150 - bh + 8 + r * 14; if (wy > 140) continue; var lit = k < P.length && r === ((k * 3) % 4) && q === k % 2; h += '<rect x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" width="5" height="7" fill="' + (lit ? P[k][5] : "#17131E") + '"' + (lit ? ' opacity=".85"' : "") + "/>"; }
+        k++; x += bw; }
+      sl.innerHTML = h;
+    }
   }
-  /* what's yours today, read from this device only (the apps keep these; nothing is sent, nothing is counted) */
   function traces() {
-    var out = [];
+    if (get("ah_app_traces") === "0") return [];
+    var out = [], today = ymd(new Date());
     var paw = js("fb_paw", null); if (paw && paw.d === today) out.push({ k: "pw", t: w("tPaw"), href: "/paw-reading/" });
     js("fb_party", []).filter(function (x) { return x && x.c && x.d && x.d >= today; }).sort(function (a, b) { return a.d < b.d ? -1 : 1; }).slice(0, 2).forEach(function (x) {
-      out.push({ k: "co", t: (x.t || w("tGather")) , m: when(x.d), href: "/come-over/#p=" + encodeURIComponent(x.c) }); });
-    var ww = js("ww_v1", null); if (ww && ww.at && ww.at > Date.now() - 20 * 6e4) { var d = new Date(ww.at); out.push({ k: "ww", t: w("tWalk").replace("{c}", ww.c || "").replace("{n}", ww.n || w("someone")), m: when(ymd(d)) + " · " + d.toLocaleTimeString(L[li()], { hour: "2-digit", minute: "2-digit" }), href: "/walk-with/" }); }
-    return out.slice(0, 3);
+      out.push({ k: "co", t: x.t || w("tGather"), m: when(x.d), href: "/come-over/#p=" + encodeURIComponent(x.c) }); });
+    var ww = js("ww_v1", null); if (ww && ww.at && ww.at > Date.now() - 20 * 6e4) { var d = new Date(ww.at); out.push({ k: "ww", t: w("tWalk").replace("{c}", ww.c || "").replace("{n}", ww.n || w("someone")), m: when(ymd(d)) + " · " + hm(d), href: "/walk-with/" }); }
+    return out.slice(0, 2);
   }
   function now() {
     var t = traces(), ul = $("nowL"); $("nowH").textContent = w("h_" + part()); ul.innerHTML = "";
-    if (!t.length) { var s = W["s_" + part()]; t = [{ t: w("s_" + part()), href: s && s[5] || "", m: s && s[6] ? (P.filter(function (p) { return p[1] === s[6]; })[0] || [0, 0, []])[2][li()] : "" }]; }
-    t.forEach(function (x) {
-      var li_ = document.createElement("li");
-      li_.innerHTML = x.href ? '<a href="' + esc(x.href) + '"><span>' + esc(x.t) + "</span><span>" + esc(x.m || "") + " ›</span></a>" : "<span>" + esc(x.t) + "</span>";
-      ul.appendChild(li_);
-    });
+    if (!t.length) { var s = W["s_" + part()]; t = [{ t: w("s_" + part()), href: s && s[5] || "", m: s && s[6] ? pname(s[6]) : "" }]; }
+    t.forEach(function (x) { ul.appendChild(el("li", "", x.href ? '<a href="' + esc(x.href) + '"><span>' + esc(x.t) + "</span><small>" + esc(x.m || "") + " ›</small></a>" : "<span>" + esc(x.t) + "</span>")); });
     return t;
   }
+  var ICONS = {   // the dock and Settings, drawn here (warm, the suite's colours; nobody's trademark)
+    phone: '<svg viewBox="0 0 60 60"><defs><linearGradient id="gp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6B65B"/><stop offset="1" stop-color="#E0843A"/></linearGradient></defs><rect width="60" height="60" fill="url(#gp)"/><path d="M21.5 17.5c1-1 2.6-1 3.5.1l2.7 3.3c.8 1 .7 2.4-.2 3.3l-1.6 1.6a17 17 0 0 0 8.3 8.3l1.6-1.6c.9-.9 2.3-1 3.3-.2l3.3 2.7c1.1.9 1.1 2.5.1 3.5l-1.9 1.9c-1.8 1.8-4.6 2.3-6.9 1.1a32 32 0 0 1-15.6-15.6c-1.2-2.3-.7-5.1 1.1-6.9z" fill="#120F18"/></svg>',
+    msg: '<svg viewBox="0 0 60 60"><defs><linearGradient id="gm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A8C85A"/><stop offset="1" stop-color="#6E9A3E"/></linearGradient></defs><rect width="60" height="60" fill="url(#gm)"/><path d="M14 18h22a5 5 0 0 1 5 5v9a5 5 0 0 1-5 5H24l-6 5v-5h-4a5 5 0 0 1-5-5v-9a5 5 0 0 1 5-5z" fill="#ECE6DA"/><path d="M44 26h2a5 5 0 0 1 5 5v7a5 5 0 0 1-5 5h-2v4l-5-4h-7a5 5 0 0 1-4-2h8a7 7 0 0 0 7-7z" fill="#120F18" opacity=".85"/></svg>',
+    mail: '<svg viewBox="0 0 60 60"><defs><linearGradient id="ge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FB0E0"/><stop offset="1" stop-color="#4F7FC0"/></linearGradient></defs><rect width="60" height="60" fill="url(#ge)"/><rect x="11" y="17" width="38" height="27" rx="4" fill="#ECE6DA"/><path d="M12 19l18 14 18-14" fill="none" stroke="#4F7FC0" stroke-width="2.4" stroke-linejoin="round"/><rect x="38" y="21" width="8" height="8" rx="1.4" fill="#120F18"/><rect x="42" y="25" width="3" height="3" fill="#F2A33A"/></svg>',
+    cam: '<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#2E2738"/><rect x="10" y="19" width="40" height="27" rx="6" fill="#ECE6DA"/><path d="M22 19l3-5h10l3 5z" fill="#ECE6DA"/><circle cx="30" cy="32.5" r="9" fill="#120F18"/><circle cx="30" cy="32.5" r="5.5" fill="#3A3150"/><circle cx="28" cy="30.5" r="1.8" fill="#ECE6DA" opacity=".8"/><circle cx="43" cy="24" r="1.8" fill="#F2A33A"/></svg>',
+    set: '<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#3A3346"/><g transform="translate(30 30)"><g fill="#B9B0C6">' + (function () { var s = ""; for (var i = 0; i < 8; i++) s += '<rect x="-3.6" y="-21" width="7.2" height="9" rx="1.6" transform="rotate(' + i * 45 + ')"/>'; return s; })() + '</g><circle r="14.5" fill="#B9B0C6"/><circle r="8.5" fill="#3A3346"/><rect x="-4" y="-4" width="8" height="8" rx="1.4" fill="none" stroke="#ECE6DA" stroke-width="1.6"/><rect x="0" y="0" width="3.4" height="3.4" fill="#F2A33A"/></g></svg>'
+  };
   function grid(lit) {
     var g = $("grid"); g.innerHTML = "";
     P.forEach(function (p) {
-      var a = document.createElement("a"); a.className = "tile" + (lit[p[1]] ? " lit" : ""); a.href = p[4]; a.style.setProperty("--g", p[5]);
-      a.innerHTML = '<img src="' + esc(p[6]) + '" alt="" width="58" height="58" loading="lazy"><b>' + esc(p[2][li()] || p[2][0]) + "</b><small>" + esc(p[3][li()] || p[3][0]) + "</small>";
-      g.appendChild(a);
+      var a = el("a", "tile" + (lit[p[1]] ? " lit" : ""), '<span class="ico"><img src="' + esc(p[6]) + '" alt="" loading="lazy" decoding="async"></span><b>' + esc(p[2][li()] || p[2][0]) + "</b>");
+      a.href = p[4]; a.style.setProperty("--g", p[5]); a.title = p[3][li()] || p[3][0]; g.appendChild(a);
+    });
+    var s = el("button", "tile", '<span class="ico">' + ICONS.set + "</span><b>" + esc(w("aSet")) + "</b>"); s.type = "button"; s.onclick = function () { open("set"); }; g.appendChild(s);
+    var d = $("dock"); d.innerHTML = "";
+    [["phone", "aPhone"], ["msg", "aMsg"], ["mail", "aMail"], ["cam", "aCam"]].forEach(function (x) {
+      var b = el("button", "tile", '<span class="ico">' + ICONS[x[0]] + "</span><b>" + esc(w(x[1])) + "</b>"); b.type = "button"; b.setAttribute("aria-label", w(x[1])); b.onclick = function () { open(x[0]); }; d.appendChild(b);
     });
   }
-  var out = false;
+  function fit() {   // the phone stands in the middle of anything wider than a phone; icons size to the screen's height
+    var wide = innerWidth > 560 && innerHeight > 600;
+    document.documentElement.classList.toggle("framed", wide);
+    var ph = $("phone"); ph.style.transform = wide ? "scale(" + Math.min(1, (innerHeight - 64) / 868, (innerWidth - 40) / 414).toFixed(3) + ")" : "";
+    var gr = $("grid"); if (gr.clientHeight) { var rowH = gr.clientHeight / 4, ic = Math.max(38, Math.min(62, rowH - 32, (gr.clientWidth / 4) - 20)); $("screen").style.setProperty("--ic", ic.toFixed(0) + "px"); }
+  }
+  function clock() { var d = new Date(); $("clock").textContent = hm(d).replace(/^0(\d:)/, "$1"); if ($("lock").classList.contains("on")) { $("lockT").textContent = hm(d); $("lockD").textContent = d.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" }); } }
+
+  /* ── opening and closing apps ── */
+  var cur = null;
+  function open(id) {
+    if (cur === id) return; if (cur) $("a-" + cur).classList.remove("open");
+    cur = id; var a = $("a-" + id); RENDER[id] && RENDER[id](); a.classList.add("open"); a.setAttribute("aria-hidden", "false"); $("home").classList.add("away");
+    if (id === "cam") camStart();
+    history.replaceState(null, "", "#" + id);
+  }
+  function home() {
+    if (!cur) return; var a = $("a-" + cur); a.classList.remove("open"); a.setAttribute("aria-hidden", "true"); if (cur === "cam") camStop(); cur = null;
+    $("home").classList.remove("away"); $("call").classList.remove("on"); $("sheet").classList.remove("on");
+    history.replaceState(null, "", location.pathname + location.search);
+  }
+  function view(app, v) { qa(".view", $("a-" + app)).forEach(function (x) { x.classList.toggle("on", x.getAttribute("data-v") === v); }); var b = qa(".view.on .body,.view.on .thread", $("a-" + app))[0]; if (b) b.scrollTop = 0; }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-home]"); if (t) { home(); return; }
+    t = e.target.closest("[data-back]"); if (t) { view(cur, t.getAttribute("data-back")); return; }
+    t = e.target.closest("[data-tab]"); if (t) { qa("[data-tab]", $("a-phone")).forEach(function (b) { b.setAttribute("aria-selected", b === t ? "true" : "false"); }); view("phone", t.getAttribute("data-tab")); }
+  });
+  document.addEventListener("keydown", function (e) { if (e.key !== "Escape") return; if ($("call").classList.contains("on")) return endCall(); if ($("sheet").classList.contains("on")) return $("sheet").classList.remove("on"); if (cur) { var back = qa(".view.on [data-back]", $("a-" + cur))[0]; if (back) back.click(); else home(); } });
+
+  /* ── Phone ── */
+  var RENDER = {};
+  RENDER.phone = function () {
+    var c = $("contacts"); c.innerHTML = "";
+    [["pMaker", ["wm"]], ["pTown", ["wei", "mei", "popo", "miso", "yuzu", "mantou"]]].forEach(function (s) {
+      c.appendChild(el("p", "sec", esc(w(s[0])))); var l = el("div", "list");
+      s[1].forEach(function (k) {
+        var r = el("button", "row"); r.type = "button"; r.appendChild(avatar(k));
+        var z = asleep(k), st = WHO[k].hrs ? '<span class="dot' + (z ? " z" : "") + '"></span>' + esc(w(z ? "pAsleep" : "pAwake")) + " · " : "";
+        r.appendChild(el("span", "tx", "<b>" + esc(nm(k)) + "</b><small>" + st + esc(w(WHO[k].r)) + "</small>")); r.appendChild(el("span", "chev", "›"));
+        r.onclick = function () { card(k); }; l.appendChild(r);
+      }); c.appendChild(l);
+    });
+    var keys = $("keys"); if (!keys.children.length) [["1", ""], ["2", "ABC"], ["3", "DEF"], ["4", "GHI"], ["5", "JKL"], ["6", "MNO"], ["7", "PQRS"], ["8", "TUV"], ["9", "WXYZ"], ["*", ""], ["0", "+"], ["#", ""]].forEach(function (k) {
+      var b = el("button", "", esc(k[0]) + "<small>" + k[1] + "</small>"); b.type = "button"; b.onclick = function () { $("num").value += k[0]; dialHref(); }; keys.appendChild(b); });
+    $("num").placeholder = w("pKeyHint");
+  };
+  function dialHref() { var v = $("num").value.replace(/[^\d+*#]/g, ""); $("dial").href = "tel:" + v; }
+  $("num").addEventListener("input", dialHref);
+  $("dial").addEventListener("click", function (e) { if (!$("num").value.replace(/\D/g, "")) { e.preventDefault(); $("num").focus(); } });
+  var SVG = {
+    call: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>',
+    text: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+    go: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>',
+    web: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>'
+  };
+  function act(icon, label, fn, href) { var a = el(href ? "a" : "button", "act", SVG[icon] + "<span>" + esc(label) + "</span>"); if (href) { a.href = href; if (/^https?:/.test(href)) { a.target = "_blank"; a.rel = "noopener"; } } else { a.type = "button"; a.onclick = fn; } return a; }
+  function card(k) {
+    var c = $("card"); c.innerHTML = ""; var cd = el("div", "card"); cd.appendChild(avatar(k));
+    var z = asleep(k); cd.appendChild(el("h4", "", esc(nm(k)))); cd.appendChild(el("p", "", (WHO[k].hrs ? '<span class="dot' + (z ? " z" : "") + '"></span>' + esc(w(z ? "pAsleep" : "pAwake")) + " · " : "") + esc(w(WHO[k].r)))); c.appendChild(cd);
+    var a = el("div", "acts");
+    a.appendChild(act("call", w("pCall"), function () { call(k); }));
+    a.appendChild(act("text", w("pText"), function () { open("msg"); thread(k === "miso" || k === "yuzu" ? "cats" : k); }));
+    if (k === "wm") { a.appendChild(act("mail", w("pMail"), null, "mailto:" + MAIL_WM)); a.appendChild(act("web", w("pSite"), null, "https://www.wei-meng.org/")); }
+    else a.appendChild(act("go", w("pVisit"), null, WHO[k].go));
+    c.appendChild(a);
+    if (k === "wm") {
+      var l = el("div", "list"); l.style.marginTop = "14px";
+      [["wei-meng.org", "https://www.wei-meng.org/"], ["wei-meng.org/portfolio", "https://www.wei-meng.org/portfolio/"], ["FREE//BUILDER", "https://www.freebuilder.net/"], [MAIL_WM, "mailto:" + MAIL_WM]].forEach(function (x) {
+        var r = el("a", "row", '<span class="tx"><b style="color:var(--lamp);font-weight:500">' + esc(x[0]) + '</b></span><span class="chev">↗</span>'); r.href = x[1]; if (/^https/.test(x[1])) { r.target = "_blank"; r.rel = "noopener"; } l.appendChild(r); });
+      c.appendChild(l);
+    }
+    view("phone", "card");
+  }
+  var callT = [];
+  function call(k) {
+    var c = $("call"), z = asleep(k), vm = k === "wm"; callT.forEach(clearTimeout); callT = [];
+    c.innerHTML = ""; c.appendChild(avatar(k)); c.appendChild(el("h4", "", esc(nm(k))));
+    var st = el("div", "st", esc(w("pCalling"))), q = el("q", ""), end = el("div", "end"); c.appendChild(st); c.appendChild(q); c.appendChild(end);
+    var hang = el("button", "hang", '<svg viewBox="0 0 24 24" fill="#fff" style="transform:rotate(135deg)">' + SVG.call.replace(/^<svg[^>]*>|<\/svg>$/g, "") + "</svg>"); hang.type = "button"; hang.setAttribute("aria-label", w("pHang")); hang.onclick = endCall; end.appendChild(hang);
+    c.classList.add("on", "ring");
+    callT.push(setTimeout(function () {
+      c.classList.remove("ring"); st.textContent = vm ? w("vmTitle") : "00:0" + (z ? 2 : 4);
+      var line = w(vm ? "vmWM" : z ? WHO[k].z : WHO[k].call), i = 0;
+      (function type() { q.textContent = line.slice(0, ++i); if (i < line.length) callT.push(setTimeout(type, 22)); else if (vm) { end.insertBefore(el("a", "pill", esc(w("vmWrite"))), hang).href = "mailto:" + MAIL_WM; } })();
+    }, 1500));
+  }
+  function endCall() {
+    var c = $("call"); callT.forEach(clearTimeout); callT = []; if (!c.classList.contains("on")) return;
+    c.classList.remove("ring"); c.querySelector(".st").textContent = w("pEnded");
+    var end = c.querySelector(".end"); end.innerHTML = "";
+    var b = el("button", "pill", esc(w("pReal"))); b.type = "button"; b.onclick = function () { c.classList.remove("on"); open("phone"); qa("[data-tab]", $("a-phone"))[1].click(); setTimeout(function () { $("num").focus(); }, 300); }; end.appendChild(b);
+    var x = el("button", "pill ghost", esc(w("back"))); x.type = "button"; x.onclick = function () { c.classList.remove("on"); }; end.appendChild(x);
+  }
+
+  /* ── Messages: the orientation, told by the people in it. Nothing is sent: the reply box says so ── */
+  var THREADS = [
+    { k: "wm", m: ["mWM1", "mWM2", "mWM3", "mWM4", "mWM5", "mWM6"], d: [0, 8, 2] },
+    { k: "mei", m: ["mMei1", "mMei2", "mMei3", "mMei4", "mMei5", "mMei6"], d: [0, 7, 41] },
+    { k: "popo", m: ["mPopo1", "mPopo2", "mPopo3", "mPopo4", "mPopo5"], d: [0, 6, 15] },
+    { k: "wei", m: ["mWei1", "mWei2", "mWei3", "mWei4"], d: [1, 19, 30] },
+    { k: "cats", m: ["mCats1", "mCats2", "mCats3"], d: [1, 15, 2] },
+    { k: "mantou", m: ["mDog1", "mDog2", "mDog3"], d: [2, 17, 48] }
+  ];
+  function chips(t) {   // "{app:lt}" → a tappable chip with the work's icon and name
+    return esc(t).replace(/\*([^*]+)\*/g, "<i>$1</i>").replace(/\{app:(\w+)\}/g, function (_, k) { var p = PK[k]; return p ? '<a class="achip" href="' + esc(p[4]) + '"><img src="' + esc(p[6]) + '" alt="">' + esc(pname(k)) + "</a>" : ""; });
+  }
+  function plain(t) { return t.replace(/\{app:\w+\}/g, function (m) { return pname(m.slice(5, -1)); }).replace(/\*/g, "").replace(/\s+/g, " ").trim(); }
+  RENDER.msg = function () {
+    var c = $("threads"); c.innerHTML = ""; var l = el("div", "list"); l.style.marginTop = "6px";
+    THREADS.forEach(function (th) {
+      var r = el("button", "row"); r.type = "button"; r.appendChild(avatar(th.k));
+      r.appendChild(el("span", "tx", "<b>" + esc(nm(th.k)) + "</b><small>" + esc(plain(w(th.m[th.m.length - 1]))) + "</small>"));
+      r.appendChild(el("span", "rt", esc(stamp(ago(th.d[0], th.d[1], th.d[2]))))); r.onclick = function () { thread(th.k); }; l.appendChild(r);
+    }); c.appendChild(l);
+    $("say").placeholder = w("mSay");
+  };
+  function thread(k) {
+    var th = THREADS.filter(function (x) { return x.k === k; })[0]; if (!th) return;
+    var who = $("thWho"); who.innerHTML = ""; who.appendChild(avatar(k, 28)); who.appendChild(document.createTextNode(nm(k)));
+    var t = $("thread"); t.innerHTML = ""; t.appendChild(el("div", "when", esc(stamp(ago(th.d[0], th.d[1], th.d[2])))));
+    th.m.forEach(function (m, i) { var b = el("div", "bub", chips(w(m))); b.style.animationDelay = (i * .08) + "s"; t.appendChild(b); });
+    view("msg", "thread"); setTimeout(function () { t.scrollTop = t.scrollHeight; }, 30);
+  }
+  $("reply").addEventListener("submit", function (e) {
+    e.preventDefault(); var v = $("say").value.trim(); if (!v) { toast(w("mSaid")); return; }
+    var t = $("thread"); t.appendChild(el("div", "bub me", esc(v))); $("say").value = ""; t.scrollTop = t.scrollHeight;
+    setTimeout(function () { toast(w("mSaid")); }, 500);
+  });
+
+  /* ── Mail: one letter per work, from whoever looks after it ── */
+  var FROM = { nb: "wei", st: "wei", bp: "wei", hg: "wei", lt: "popo", ap: "popo", tg: "popo", co: "popo", pw: "cats", ww: "mantou", tc: "mei", ho: "mei", sh: "mei", fs: "mei", vo: "mei" };
+  var MAIL = (function () { var t = [[0, 8, 12], [0, 7, 3], [1, 21, 40], [1, 18, 5], [1, 9, 30], [2, 20, 14], [2, 12, 2], [3, 19, 45], [3, 10, 20], [4, 22, 1], [5, 17, 33], [6, 11, 11], [7, 20, 50], [9, 9, 9], [12, 18, 0]], o = [];
+    P.forEach(function (p, i) { if (W["e_" + p[1] + "_s"]) o.push({ k: p[1], who: FROM[p[1]] || "wei", d: t[i % t.length] }); }); return o; })();
+  function fromLine(m) { return w(WHO[m.who].n) + " " + w("eFrom") + " " + (m.k === "nb" ? w("nNextDoor") : pname(m.k)); }
+  RENDER.mail = function () {
+    var l = $("inbox"); l.innerHTML = ""; var seen = js("ah_app_read", {});
+    MAIL.forEach(function (m) {
+      var r = el("button", "row"); r.type = "button";
+      r.appendChild(el("span", seen[m.k] ? "" : "ap", "")); if (seen[m.k]) r.firstChild.style.width = "9px";
+      r.appendChild(el("span", "tx", "<b>" + esc(fromLine(m)) + "</b><small style=\"color:var(--paper)\">" + esc(plain(w("e_" + m.k + "_s"))) + "</small><small>" + esc(plain(w("e_" + m.k + "_b"))) + "</small>"));
+      r.appendChild(el("span", "rt", esc(stamp(ago(m.d[0], m.d[1], m.d[2])))));
+      r.onclick = function () { letter(m); }; l.appendChild(r);
+    });
+  };
+  function letter(m) {
+    var seen = js("ah_app_read", {}); seen[m.k] = 1; put("ah_app_read", JSON.stringify(seen));
+    var p = PK[m.k], c = $("letter"); c.innerHTML = "";
+    c.appendChild(el("h4", "", chips(w("e_" + m.k + "_s"))));
+    var f = el("div", "from"); f.appendChild(avatar(m.who)); f.appendChild(el("div", "", "<b>" + esc(fromLine(m)) + "</b><small>" + esc(stamp(ago(m.d[0], m.d[1], m.d[2]))) + "</small>")); c.appendChild(f);
+    c.appendChild(el("div", "txt", w("e_" + m.k + "_b").split("\n").map(function (x) { return "<p>" + chips(x) + "</p>"; }).join("")));
+    var cta = el("div", "cta", '<a class="pill" href="' + esc(p[4]) + '"><img src="' + esc(p[6]) + '" alt="">' + esc(w("eOpen").replace("{app}", pname(m.k))) + "</a>"); c.appendChild(cta);
+    c.appendChild(el("p", "uns", esc(w("eUnsub"))));
+    view("mail", "read");
+  }
+
+  /* ── Camera: Nearby's camera roll, drawn with the town's sprites (120×160 pictures) ── */
+  function R(g, c, x, y, ww, hh) { g.fillStyle = c; g.fillRect(x, y, ww, hh); }
+  function rand(s) { return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+  function pet(g, k, x, y, px, o) { var F = FW(); if (F && F.drawPet) { try { F.drawPet(g, k === "mantou" ? "dog" : k, x, y, px, o || {}); return; } catch (e) {} } R(g, k === "miso" ? "#231b17" : k === "yuzu" ? "#e8913a" : "#e8c48a", x - 9 * px, y - 8 * px, 18 * px, 8 * px); }
+  var BG = {
+    bar: function (g) { R(g, "#3a2414", 0, 0, 120, 160); for (var y = 0; y < 3; y++) { R(g, "#5a3a20", 0, 22 + y * 26, 120, 3); for (var x = 4; x < 116; x += 9) R(g, ["#c8402a", "#4f9a62", "#e0a043", "#7FB0E0", "#f3ead8"][(x + y * 3) % 5], x, 10 + y * 26, 5, 12); } R(g, "#6b3a1b", 0, 118, 120, 8); R(g, "#2a1a0e", 0, 126, 120, 34); R(g, "#f2a33a", 98, 4, 10, 6); R(g, "rgba(242,163,58,.12)", 70, 0, 50, 118); },
+    kitchen: function (g) { R(g, "#efe4c8", 0, 0, 120, 160); for (var x = 0; x < 120; x += 10) for (var y = 0; y < 90; y += 10) R(g, (x + y) % 20 ? "#e2d6b4" : "#f3ead8", x, y, 9, 9); R(g, "#7a4a2a", 0, 96, 120, 64); R(g, "#5a3a20", 0, 96, 120, 4); },
+    street: function (g, t) { var gr = g.createLinearGradient(0, 0, 0, 120); gr.addColorStop(0, "#1E1830"); gr.addColorStop(1, "#3A2638"); g.fillStyle = gr; g.fillRect(0, 0, 120, 160); g.fillStyle = "#f3ead8"; g.beginPath(); g.arc(97, 18, 5, 0, 7); g.fill(); g.fillStyle = "#241C38"; g.beginPath(); g.arc(99.5, 16.5, 4.2, 0, 7); g.fill();
+      var r = rand(5); for (var x = 0; x < 120;) { var bw = 14 + (r() * 16 | 0), bh = 50 + (r() * 60 | 0); R(g, "#0B0910", x, 140 - bh, bw, bh); for (var yy = 140 - bh + 6; yy < 132; yy += 10) for (var xx = x + 3; xx < x + bw - 4; xx += 6) if (r() < .55) R(g, ["#F2A33A", "#F6B65B", "#E0704F", "#8E7FE6"][(r() * 4) | 0], xx, yy, 3, 5); x += bw; } R(g, "#17131E", 0, 140, 120, 20); R(g, "#F2A33A", 18, 112, 2, 28); R(g, "rgba(242,163,58,.35)", 13, 108, 12, 6); },
+    park: function (g) { var gr = g.createLinearGradient(0, 0, 0, 100); gr.addColorStop(0, "#9CC4E0"); gr.addColorStop(1, "#F6D6B8"); g.fillStyle = gr; g.fillRect(0, 0, 120, 160); R(g, "#7FA05A", 0, 96, 120, 64); R(g, "#6E9A3E", 0, 96, 120, 3); R(g, "#C8B48A", 40, 100, 40, 60); R(g, "#4E7A3E", 6, 58, 26, 40); R(g, "#5a3a20", 17, 92, 4, 10); R(g, "#4E7A3E", 92, 64, 24, 34); R(g, "#5a3a20", 102, 94, 4, 8); R(g, "#fff", 30, 18, 20, 5); R(g, "#fff", 36, 14, 10, 5); },
+    sill: function (g) { R(g, "#28324A", 0, 0, 120, 160); R(g, "#9CC4E0", 14, 14, 92, 90); R(g, "#C8DCEA", 14, 14, 92, 30); R(g, "#ECE6DA", 58, 14, 4, 90); R(g, "#ECE6DA", 14, 56, 92, 4); R(g, "#ECE6DA", 8, 104, 104, 8); R(g, "#3a2a22", 0, 112, 120, 48); R(g, "rgba(255,230,160,.35)", 30, 112, 60, 48); },
+    table: function (g) { R(g, "#2A1A22", 0, 0, 120, 160); R(g, "rgba(242,163,58,.18)", 30, 0, 60, 80); R(g, "#B33A3A", 0, 108, 120, 52); R(g, "#C84A4A", 0, 108, 120, 3); for (var i = 0; i < 12; i++) R(g, "#7AA040", 38 + (i % 6) * 8, 116 + (i / 6 | 0) * 7, 5, 5); R(g, "#ECE6DA", 26, 112, 70, 22); R(g, "#B33A3A", 28, 114, 66, 18); for (i = 0; i < 12; i++) R(g, "#8AB44A", 33 + (i % 6) * 10, 118 + (i / 6 | 0) * 7, 6, 6); },
+    box: function (g) { R(g, "#3A2A22", 0, 0, 120, 160); R(g, "#5a4030", 0, 100, 120, 60); R(g, "#C8A070", 18, 86, 84, 50); R(g, "#B08858", 18, 86, 84, 6); R(g, "#9A7448", 12, 80, 20, 12); R(g, "#9A7448", 88, 80, 20, 12); R(g, "#5a3a20", 40, 110, 40, 3); }
+  };
+  function selfieArm(g, skin) { R(g, skin, 96, 122, 24, 14); R(g, skin, 104, 136, 16, 24); }
+  var SHOTS = [   // [caption word, scene]; t moves the live viewfinder
+    ["k1", function (g) { BG.bar(g); bust(g, "wei", 28, 52, 2, { asleep: asleep("wei") }); R(g, "#6b3a1b", 0, 118, 120, 8); R(g, "#ECE6DA", 86, 104, 8, 14); R(g, "#F2A33A", 87, 108, 6, 9); }],
+    ["k2", function (g) { BG.street(g); bust(g, "mei", 4, 26, 3.5, {}); selfieArm(g, "#f6d6b8"); }],
+    ["k3", function (g, t) { BG.kitchen(g); bust(g, "popo", 28, 30, 2, {}); R(g, "#3a3a40", 30, 104, 60, 26); R(g, "#55555c", 26, 102, 68, 5); for (var i = 0; i < 3; i++) R(g, "rgba(255,255,255,.5)", 44 + i * 12, 88 - ((t || 0) / 3 + i * 4) % 14, 3, 8); }],
+    ["k4", function (g) { BG.sill(g); pet(g, "miso", 60, 112, 3, { asleep: true }); }],
+    ["k5", function (g) { BG.kitchen(g); pet(g, "yuzu", 52, 96, 3.4, {}); R(g, "#ECE6DA", 92, 104, 14, 8); R(g, "#7FB0E0", 100, 112, 18, 3); }],
+    ["k6", function (g) { BG.park(g); bust(g, "mantou", 4, 30, 3.5, {}); }],
+    ["k7", function (g) { BG.kitchen(g); bust(g, "popo", 50, 42, 2.4, {}); bust(g, "mei", 0, 30, 2.4, {}); selfieArm(g, "#f6d6b8"); }],
+    ["k8", function (g) { BG.street(g); }],
+    ["k9", function (g, t) { BG.park(g); var x = 30 + ((t || 0) % 60); pet(g, "mantou", x, 140, 3, { step: ((t || 0) / 4 | 0), flip: false }); g.strokeStyle = "#c8402a"; g.lineWidth = 1.5; g.beginPath(); g.moveTo(x + 18, 128); g.quadraticCurveTo(x + 40, 100, 118, 60); g.stroke(); }],
+    ["k10", function (g) { BG.bar(g); bust(g, "wei", 44, 70, 1.1, {}); selfieArm(g, "#f5d49a"); }],
+    ["k11", function (g) { BG.table(g); bust(g, "wei", 4, 50, 1.7, {}); bust(g, "popo", 38, 46, 1.7, {}); bust(g, "mei", 68, 50, 1.7, {}); pet(g, "yuzu", 24, 108, 1.6, {}); pet(g, "miso", 96, 108, 1.6, {}); }],
+    ["k12", function (g) { BG.box(g); pet(g, "yuzu", 46, 92, 2.6, {}); pet(g, "miso", 76, 90, 2.6, { asleep: true }); }]
+  ];
+  var LIVE = [0, 2, 3, 5, 7, 8, 11];
+  function paintShot(cv, i, t) { var g = cv.getContext("2d"); g.imageSmoothingEnabled = false; g.clearRect(0, 0, 120, 160); try { SHOTS[i][1](g, t || 0); } catch (e) { R(g, "#222", 0, 0, 120, 160); } }
+  function rollList() { var mine = js("ah_cam", []); return mine.map(function (x) { return { i: x.i, at: x.at, mine: 1 }; }).reverse().concat(SHOTS.map(function (_, i) { return { i: i, at: ago(i * 2 + 1, 18 - i % 6, 7 * i % 60).getTime() }; })); }
+  var camI = 0, camT = 0, camRaf = 0, camNext = 0;
+  function camStart() { view("cam", "vf"); camI = LIVE[(Math.random() * LIVE.length) | 0]; camNext = Date.now() + 7000; var cv = $("vf"); (function loop() { camT++; if (Date.now() > camNext) { camI = LIVE[(LIVE.indexOf(camI) + 1) % LIVE.length]; camNext = Date.now() + 7000; } paintShot(cv, camI, camT); camRaf = setTimeout(function () { requestAnimationFrame(loop); }, 90); })(); thumb(); }
+  function camStop() { clearTimeout(camRaf); }
+  function thumb() { var r = rollList(); paintShot($("thumb").querySelector("canvas"), r[0].i, 40); }
+  $("shutter").onclick = function () {
+    var f = $("flash"); f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
+    var mine = js("ah_cam", []); mine.push({ i: camI, at: Date.now() }); put("ah_cam", JSON.stringify(mine.slice(-12))); thumb(); toast(w("kSnapped"));
+  };
+  $("flip").onclick = function () { camI = LIVE[(LIVE.indexOf(camI) + 1) % LIVE.length]; camNext = Date.now() + 7000; };
+  $("thumb").onclick = function () { roll(); };
+  function roll() { var r = rollList(), box = $("roll"); box.innerHTML = ""; r.forEach(function (x, n) { var b = el("button"), cv = document.createElement("canvas"); cv.width = 120; cv.height = 160; b.appendChild(cv); b.setAttribute("aria-label", w(SHOTS[x.i][0])); b.onclick = function () { one(n); }; box.appendChild(b); paintShot(cv, x.i, 40); }); view("cam", "roll"); }
+  var oneN = 0;
+  function one(n) { var r = rollList(); oneN = (n + r.length) % r.length; var x = r[oneN]; paintShot($("big"), x.i, 40); $("cap").textContent = w(SHOTS[x.i][0]); $("capd").textContent = stamp(new Date(x.at)); view("cam", "one"); }
+  $("prev").onclick = function () { one(oneN - 1); }; $("next").onclick = function () { one(oneN + 1); };
+  RENDER.cam = function () {};
+
+  /* ── Settings: this site and every after-hours app on this phone (the keys the suite already shares) ── */
+  var installEv = null; window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); installEv = e; });
+  function tog(on, fn) { var b = el("button", "tog"); b.type = "button"; b.setAttribute("role", "switch"); b.setAttribute("aria-checked", on ? "true" : "false"); b.onclick = function () { var v = b.getAttribute("aria-checked") !== "true"; b.setAttribute("aria-checked", v ? "true" : "false"); fn(v); }; return b; }
+  function srow(title, hint, right) { var r = el("div", "row"); r.appendChild(el("span", "tx", "<b>" + esc(title) + "</b>" + (hint ? "<small>" + esc(hint) + "</small>" : ""))); if (right) r.appendChild(right); return r; }
+  function keyCount() { try { var n = 0; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (!/^ah_app_|^ah_lang$/.test(k)) n++; } return n; } catch (e) { return 0; } }
+  RENDER.set = function () {
+    var c = $("settings"); c.innerHTML = ""; c.appendChild(el("p", "about", esc(w("sAll"))));
+    c.appendChild(el("p", "sec", esc(w("sYou")))); var l = el("div", "list");
+    var inp = el("input"); inp.type = "text"; inp.maxLength = 32; inp.placeholder = w("sNamePh"); inp.value = get("fb_nick") || ""; inp.autocomplete = "nickname"; inp.setAttribute("data-fb-nick-show", "");
+    inp.onchange = function () { var v = inp.value.trim().slice(0, 32); put("fb_nick", v || null); if (v) put("fb_nick_asked", "1"); };
+    l.appendChild(srow(w("sName"), w("sNameHint"), inp));
+    var lg = el("div"); lg.appendChild(el("div", "row", '<span class="tx"><b>' + esc(w("sLang")) + "</b><small>" + esc(w("sLangHint")) + "</small></span>"));
+    var seg = el("div", "seg"); L.forEach(function (code, i) { var b = el("button", "", esc(LN[i])); b.type = "button"; b.setAttribute("aria-pressed", i === li() ? "true" : "false"); b.onclick = function () { setLang(i); }; seg.appendChild(b); }); lg.appendChild(seg); l.appendChild(lg);
+    l.appendChild(srow(w("sSound"), w("sSoundHint"), tog(get("fb_sound") !== "0", function (v) { put("fb_sound", v ? "1" : "0"); }))); c.appendChild(l);
+    c.appendChild(el("p", "sec", esc(w("sHome")))); l = el("div", "list");
+    l.appendChild(srow(w("sSky"), w("sSkyHint"), tog(get("ah_app_sky") !== "0", function (v) { put("ah_app_sky", v ? null : "0"); sky(); })));
+    l.appendChild(srow(w("sTraces"), w("sTracesHint"), tog(get("ah_app_traces") !== "0", function (v) { put("ah_app_traces", v ? null : "0"); paintHome(); })));
+    var ib = null; if (installEv) { ib = el("button", "pill", esc(w("sInstallGo"))); ib.type = "button"; ib.style.cssText = "padding:9px 14px;min-height:0;font-size:13px"; ib.onclick = function () { installEv.prompt(); installEv = null; ib.remove(); }; }
+    l.appendChild(srow(w("sInstall"), w("sInstallHint"), ib)); c.appendChild(l);
+    c.appendChild(el("p", "sec", esc(w("sPhone")))); l = el("div", "list");
+    l.appendChild(srow(w("sKeeps").replace("{n}", keyCount()), w("none")));
+    var pv = el("a", "row", '<span class="tx"><b class="lnk">' + esc(w("sPrivacy")) + '</b></span><span class="chev">›</span>'); pv.href = "/privacy/"; l.appendChild(pv);
+    var fg = el("button", "row", '<span class="tx"><b class="red">' + esc(w("sForget")) + "</b></span>"); fg.type = "button"; fg.onclick = forget; l.appendChild(fg); c.appendChild(l);
+    c.appendChild(el("p", "sec", esc(w("sAbout")))); c.appendChild(el("p", "about", "<em>after-hours</em> · " + esc(w("sAboutT"))));
+    l = el("div", "list"); [["wei-meng.org", "https://www.wei-meng.org/"], [w("why"), "/"]].forEach(function (x) { var r = el("a", "row", '<span class="tx"><b class="lnk">' + esc(x[0]) + '</b></span><span class="chev">↗</span>'); r.href = x[1]; l.appendChild(r); }); c.appendChild(l);
+    var ft = el("footer", "foot"); c.appendChild(ft); if (window.FBC && FBC.foot) try { FBC.foot(ft, { extra: "<span>" + esc(w("none")) + "</span>" }); } catch (e) {}
+  };
+  function forget() {
+    var s = $("sheet"); s.innerHTML = "<p>" + esc(w("sForgetQ")) + '</p><div class="btns"></div>';
+    var no = el("button", "pill ghost", esc(w("sCancel"))), yes = el("button", "pill", esc(w("sForgetYes"))); no.type = yes.type = "button"; yes.style.background = "#D9534A"; yes.style.color = "#fff";
+    no.onclick = function () { s.classList.remove("on"); };
+    yes.onclick = function () { var lang = loc(); try { localStorage.clear(); sessionStorage.clear(); } catch (e) {} if (window.FBL) FBL.set(lang); s.classList.remove("on"); toast(w("sForgot")); RENDER.set(); paintHome(); };
+    s.querySelector(".btns").appendChild(no); s.querySelector(".btns").appendChild(yes); s.classList.add("on");
+  }
+  function setLang(i) { if (window.FBL) FBL.set(L[i]); else put("ah_lang", L[i]); paint(); }
+
+  /* ── painting ── */
+  function paintHome() { var t = now(), lit = {}; t.forEach(function (x) { if (x.k) lit[x.k] = 1; }); grid(lit); }
   function paint() {
-    document.documentElement.lang = L[li()];
-    $("lang").textContent = SH[li()];
+    document.documentElement.lang = loc(); $("lang").textContent = SH[li()];
     $("line").innerHTML = w("line");
     $("sub").innerHTML = esc(w("sub").replace("{n}", P.length)) + ' · <a href="/">' + esc(w("why")) + "</a>";
-    var t = now(), lit = {}; t.forEach(function (x) { if (x.k) lit[x.k] = 1; });
-    grid(lit);
-    $("kick").textContent = w("kick");
-    $("out").textContent = out ? w("on") : w("down");
-    $("out").className = out ? "btn ghost" : "btn";
-    $("bye").innerHTML = out ? w("bye") : "";
+    $("out").textContent = w("down"); $("on").textContent = w("on"); $("bye").innerHTML = w("bye"); $("wide").textContent = w("wide");
+    qa("[data-w]").forEach(function (e) { e.textContent = w(e.getAttribute("data-w")); });
+    paintHome(); sky(); clock(); fit();
+    if (cur && RENDER[cur]) { var v = qa(".view.on", $("a-" + cur))[0]; RENDER[cur](); if (v) view(cur, v.getAttribute("data-v")); if (cur === "set") view("set", "list"); }
     document.title = "after-hours";
-    sky();
-    if (window.FBC && FBC.foot) FBC.foot($("foot"), { extra: "<span>" + esc(w("none")) + "</span>" });
   }
-  /* Put the phone down: the windows go dark one by one, and the page says goodnight */
-  $("out").onclick = function () {
-    out = !out; var tiles = [].slice.call(document.querySelectorAll(".tile"));
-    if (out) { document.documentElement.classList.add("out"); $("out").textContent = w("on"); $("out").className = "btn ghost"; $("bye").innerHTML = w("bye"); }
-    else { document.documentElement.classList.remove("out"); paint(); }
-  };
-  $("lang").onclick = function () { var i = (li() + 1) % L.length; if (window.FBL) FBL.set(L[i]); paint(); };
-  window.addEventListener("fbllang", paint);
-  document.addEventListener("visibilitychange", function () { if (!document.hidden && !out) { H = new Date().getHours(); paint(); } });
-  paint();
-  window.AHApp = { paint: paint, traces: traces };   // test hook
+  /* Put the phone down: the screen goes dark and says goodnight */
+  $("out").onclick = function () { home(); $("lock").classList.add("on"); clock(); };
+  $("on").onclick = function () { $("lock").classList.remove("on"); paint(); };
+  $("lang").onclick = function () { setLang((li() + 1) % L.length); };
+  window.addEventListener("fbl:lang", paint); window.addEventListener("fbllang", paint);
+  window.addEventListener("resize", fit);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden && !$("lock").classList.contains("on")) paint(); });
+  setInterval(clock, 15000);
+  paint(); requestAnimationFrame(fit);
+  var h = location.hash.slice(1); if (RENDER[h]) setTimeout(function () { open(h); }, 60);
+  window.AHApp = { paint: paint, traces: traces, open: open, home: home, thread: thread, call: call };   // test hook
 })();
 </script>
 </body>
