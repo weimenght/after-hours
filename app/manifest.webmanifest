@@ -1,0 +1,28 @@
+{
+ "name": "after-hours",
+ "short_name": "after-hours",
+ "description": "Small, free things that end off the screen, next to someone.",
+ "start_url": "/app/",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#120F18",
+ "theme_color": "#120F18",
+ "icons": [
+  {
+   "src": "/app/icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any"
+  },
+  {
+   "src": "/app/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/app/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}

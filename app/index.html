@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=4ed5ed2c60"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>after-hours</title>
+<meta name="description" content="Everything Wei makes after hours, in one place on your phone. Small, free things that end off the screen, next to someone.">
+<meta name="theme-color" content="#120F18">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="after-hours"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{--ink:#120F18;--ink2:#1B1624;--paper:#ECE6DA;--dim:#9C93A8;--lamp:#F2A33A;--line:rgba(236,230,218,.12);--sky1:#120F18;--sky2:#1E1830}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ink);color:var(--paper)}
+body{font:16px/1.5 'Plus Jakarta Sans',system-ui,sans-serif;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.sky{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,var(--sky2),var(--sky1) 60%);transition:background 1.5s}
+.sky i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.5;animation:tw 4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.12}}
+html.day .sky i{display:none}
+.wrap{max-width:980px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;height:52px}
+.mark{display:inline-flex;align-items:center;gap:.45em;font:italic 22px/1 'Instrument Serif',Georgia,serif}
+.mark svg{width:22px;height:22px}
+.lang{font:600 12px/1 'Space Mono',monospace;letter-spacing:.06em;color:var(--paper);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 12px;cursor:pointer;min-height:36px}
+.lang:focus-visible,.tile:focus-visible,.btn:focus-visible,.now a:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+.hero{padding:34px 0 8px}
+h1{font:400 clamp(38px,9.4vw,68px)/1.02 'Instrument Serif',Georgia,serif;margin:0;letter-spacing:-.01em;max-width:13em}
+h1 em{color:var(--lamp);font-style:italic}
+.sub{margin:16px 0 0;font:12px/1.5 'Space Mono',monospace;letter-spacing:.04em;color:var(--dim)}
+.sub a{border-bottom:1px solid var(--line)}
+.now{margin:34px 0 8px;padding:18px 18px 16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,rgba(242,163,58,.10),rgba(242,163,58,0) 60%),var(--ink2)}
+.now h2{margin:0 0 8px;font:12px/1 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--lamp)}
+.now ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.now li{font:400 21px/1.3 'Instrument Serif',Georgia,serif}
+.now li a{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.now li a span:last-child{font:12px/1 'Space Mono',monospace;color:var(--dim);white-space:nowrap}
+.kick{margin:40px 0 14px;font:12px/1 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (min-width:640px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:900px){.grid{grid-template-columns:repeat(5,1fr)}}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 8px 14px;border-radius:16px;background:var(--ink2);border:1px solid var(--line);transition:transform .25s,background .4s,box-shadow .6s,opacity .6s}
+.tile::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(80% 60% at 50% 30%,var(--g),transparent 70%);opacity:.22;transition:opacity .6s;pointer-events:none}
+.tile:hover{transform:translateY(-2px)}.tile:hover::before{opacity:.4}
+.tile.lit::before{opacity:.55}.tile.lit{box-shadow:0 0 0 1px color-mix(in srgb,var(--g) 50%,transparent),0 10px 30px -12px var(--g)}
+.tile img{width:58px;height:58px;border-radius:14px;display:block;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.tile b{display:block;margin-top:10px;font:600 13.5px/1.2 'Plus Jakarta Sans',system-ui,sans-serif;position:relative}
+.tile small{display:block;margin-top:5px;font:12px/1.35 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--dim);position:relative}
+@media (max-width:420px){.tile small{display:none}.tile{padding:14px 4px 12px}.tile img{width:54px;height:54px}}
+.tile.lit b::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lamp);margin-left:6px;vertical-align:middle}
+.down{margin:44px 0 10px;text-align:center}
+.btn{font:600 15px/1 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:var(--lamp);border:0;border-radius:999px;padding:14px 22px;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--paper);border:1px solid var(--line)}
+.bye{font:400 clamp(30px,7vw,46px)/1.1 'Instrument Serif',Georgia,serif;margin:22px 0 18px;min-height:1.1em}
+.bye em{color:var(--lamp)}
+html.out .tile{opacity:.18;transform:none;box-shadow:none}html.out .tile::before{opacity:0}
+html.out .now,html.out .hero,html.out .kick{opacity:.25;transition:opacity 1.2s}
+.foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true" id="sky"></div>
+<div class="wrap">
+  <header>
+    <a class="mark" href="/" aria-label="after-hours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg>after-hours</a>
+    <button class="lang" id="lang" type="button" data-fb-shell aria-label="Language">EN</button>
+  </header>
+  <main>
+    <section class="hero"><h1 id="line"></h1><p class="sub" id="sub"></p></section>
+    <section class="now" id="now" aria-live="polite"><h2 id="nowH"></h2><ul id="nowL"></ul></section>
+    <p class="kick" id="kick"></p>
+    <nav class="grid" id="grid" aria-labelledby="kick"></nav>
+    <section class="down"><p class="bye" id="bye" aria-live="polite"></p><button class="btn" id="out" type="button"></button></section>
+  </main>
+  <footer class="foot" id="foot"></footer>
+</div>
+<script>
+(function () {
+  var W = {"line": ["People aren't the means. People are the <em>point</em>.", "人不是手段，<br>人就是<em>意义</em>。", "人不是手段，<br>人就是<em>意義</em>。", "Las personas no son el medio. Las personas son el <em>sentido</em>.", "Les persones no són el mitjà. Les persones són el <em>sentit</em>."], "sub": ["{n} works · free · no account", "{n} 个小作品 · 免费 · 不用注册", "{n} 個小作品 · 免費 · 不用註冊", "{n} obras · gratis · sin cuenta", "{n} obres · gratis · sense compte"], "why": ["why I make them", "我为什么做这些", "我為什麼做這些", "por qué las hago", "per què les faig"], "h_late": ["Still up?", "还没睡？", "還沒睡？", "¿Sigues despierto?", "Encara despert?"], "h_morn": ["This morning", "今天上午", "今天上午", "Esta mañana", "Aquest matí"], "h_aft": ["This afternoon", "今天下午", "今天下午", "Esta tarde", "Aquesta tarda"], "h_eve": ["This evening", "今晚", "今晚", "Esta noche", "Aquest vespre"], "h_night": ["Tonight", "今夜", "今夜", "Esta noche", "Aquesta nit"], "s_late": ["Go to sleep. The cats already are.", "去睡吧，猫都睡了。", "去睡吧，貓都睡了。", "A dormir. Las gatas ya duermen.", "A dormir. Les gates ja dormen.", "", ""], "s_morn": ["Popo has one little thing for you today.", "婆婆今天给你一件小事。", "婆婆今天給你一件小事。", "Popo tiene una cosita para ti hoy.", "La Popo té una coseta per a tu avui.", "/little-things/", "lt"], "s_aft": ["Pick a corner and a time. Walk with someone later.", "约个街角和时间，晚点一起走走。", "約個街角和時間，晚點一起走走。", "Elige una esquina y una hora. Camina con alguien luego.", "Tria una cantonada i una hora. Camina amb algú després.", "/walk-with/", "ww"], "s_eve": ["Ask someone over this week.", "这周请个人来家里坐坐。", "這週請個人來家裡坐坐。", "Invita a alguien a casa esta semana.", "Convida algú a casa aquesta setmana.", "/come-over/", "co"], "s_night": ["Someone far away? Book a dinner for two.", "有人在远方？订一顿两个人的晚饭。", "有人在遠方？訂一頓兩個人的晚飯。", "¿Alguien lejos? Reserva una cena para dos.", "Algú lluny? Reserva un sopar per a dos.", "/two-candles/", "tc"], "tPaw": ["Today's card is on the table.", "今天的牌已经翻开了。", "今天的牌已經翻開了。", "La carta de hoy está sobre la mesa.", "La carta d'avui és damunt la taula."], "tGather": ["A get-together", "一次小聚", "一次小聚", "Una reunión", "Una trobada"], "tWalk": ["A walk with {n}, {c}", "和 {n} 一起走走，{c}", "和 {n} 一起走走，{c}", "Un paseo con {n}, {c}", "Un passeig amb {n}, {c}"], "someone": ["someone", "一个人", "一個人", "alguien", "algú"], "today": ["today", "今天", "今天", "hoy", "avui"], "tomorrow": ["tomorrow", "明天", "明天", "mañana", "demà"], "kick": ["Fifteen windows, still lit", "十五扇窗，还亮着", "十五扇窗，還亮著", "Quince ventanas, todavía encendidas", "Quinze finestres, encara enceses"], "down": ["Put the phone down", "放下手机", "放下手機", "Deja el móvil", "Deixa el mòbil"], "on": ["Lights back on", "把灯打开", "把燈開啟", "Enciende las luces", "Torna a encendre els llums"], "bye": ["Goodnight. Go find <em>your people</em>.", "晚安。去找<em>你的人</em>吧。", "晚安。去找<em>你的人</em>吧。", "Buenas noches. Ve a buscar a <em>los tuyos</em>.", "Bona nit. Vés a trobar <em>els teus</em>."], "none": ["Nothing is sent anywhere", "不会发送任何内容", "不會發送任何內容", "No se envía nada a ningún sitio", "No s'envia res enlloc"]}, P = [["little-things", "lt", ["Little Things", "小事", "小事", "Cosas pequeñas", "Petites coses"], ["One small offline thing at a time.", "一次一件屏幕外的小事。", "一次一件螢幕外的小事。", "Una cosita fuera de la pantalla cada vez.", "Una coseta fora de la pantalla cada vegada."], "/little-things/", "#F6B65B", "/little-things/icon-192.png"], ["paw-reading", "pw", ["Paw Reading", "猫爪占卜", "貓爪占卜", "Lectura de Patas", "Lectura de Potes"], ["One card a day, from two cats.", "每天一张牌，两只猫给的。", "每天一張牌，兩隻貓給的。", "Una carta al día, de dos gatas.", "Una carta al dia, de dues gates."], "/paw-reading/", "#E8913A", "/paw-reading/icon-192.png"], ["come-over", "co", ["Come Over", "来我家", "來我家", "Ven a Casa", "Vine a Casa"], ["Have people over.", "请大家来家里坐坐。", "請大家來家裡坐坐。", "Invita a gente a casa.", "Convida gent a casa."], "/come-over/", "#E0704F", "/come-over/icon-192.png"], ["a-few-stems", "fs", ["A Few Stems", "几枝花", "幾枝花", "Cuatro Flores", "Quatre Flors"], ["A few flowers, for someone real.", "几枝花，送给真实的人。", "幾枝花，送給真實的人。", "Unas flores, para alguien de verdad.", "Unes flors, per a algú de debò."], "/a-few-stems/", "#E58A9A", "/a-few-stems/icon-192.png"], ["borrowed-pages", "bp", ["Borrowed Pages", "借来的书", "借來的書", "Páginas Prestadas", "Pàgines Manllevades"], ["Real books, lent by hand between neighbours.", "真的书，在邻居之间亲手传递。", "真的書，在鄰居之間親手傳遞。", "Libros de verdad, prestados en mano entre vecinos.", "Llibres de debò, deixats en mà entre veïns."], "/borrowed-pages/", "#D9785B", "/borrowed-pages/icon-192.png"], ["say-hello", "sh", ["Say Hello", "问个好", "問個好", "Di Hola", "Di Hola"], ["A postcard that opens on its day.", "一张到了那天才拆开的明信片。", "一張到了那天才拆開的明信片。", "Una postal que se abre en su día.", "Una postal que se abre en su día."], "/say-hello/", "#E0604A", "/say-hello/icon-192.png"], ["home-ground", "hg", ["Home Ground", "我们的家园", "我們的家園", "Nuestro Rincón", "El Nostre Racó"], ["A town your people build together.", "一座家人朋友一起盖的小镇。", "一座家人朋友一起蓋的小鎮。", "Un pueblo que construyen los tuyos.", "Un poble que construeixen els teus."], "/home-ground/", "#9CC47A", "/home-ground/icon-192.png"], ["twelve-grapes", "tg", ["Twelve Grapes", "十二颗葡萄", "十二顆葡萄", "Las Doce Uvas", "Els Dotze Grans"], ["Twelve grapes, one for each month.", "十二颗葡萄，一个月一颗。", "十二顆葡萄，一個月一顆。", "Doce uvas, una por cada mes.", "Dotze grans de raïm, un per cada mes."], "/twelve-grapes/", "#A8C85A", "/twelve-grapes/icon-192.png"], ["ask-popo", "ap", ["Ask Popo", "问婆婆", "問婆婆", "Pregúntale a Popo", "Pregunta-li a la Popo"], ["One question a week, asked in person.", "每周一个问题，当面问。", "每週一個問題，當面問。", "Una pregunta a la semana, en persona.", "Una pregunta a la setmana, en persona."], "/ask-popo/", "#E8A838", "/ask-popo/icon-192.png"], ["walk-with", "ww", ["Walk With", "一起走走", "一起走走", "Camina Conmigo", "Camina amb Mi"], ["Twenty minutes, one corner, phones away.", "二十分钟，一个街角，收起手机。", "二十分鐘，一個街角，收起手機。", "Veinte minutos, una esquina, sin móvil.", "Vint minuts, una cantonada, sense mòbil."], "/walk-with/", "#9BB08A", "/walk-with/icon-192.png"], ["nearby", "nb", ["Nearby", "近邻", "近鄰", "Cerca", "A Prop"], ["A little world that sends you back to yours.", "一个小小的世界，把你送回你自己的世界。", "一個小小的世界，把你送回你自己的世界。", "Un mundo pequeño que te devuelve al tuyo.", "Un món petit que et torna al teu."], "/nearby/", "#8E7FE6", "/nearby/icon-192.png"], ["station", "st", ["Nearby Station", "近邻站", "近鄰站", "Estación Cerca", "Estació A Prop"], ["A window seat on a slow train.", "慢火车上一个靠窗的座位。", "慢火車上一個靠窗的座位。", "Un asiento junto a la ventana en un tren lento.", "Un seient a la finestra en un tren lent."], "/station/", "#6F93D8", "/station/icon-192.png"], ["handoff", "ho", ["Handoff", "Handoff", "Handoff", "Handoff", "Handoff"], ["For two people in different cities.", "给分隔两座城市的两个人。", "給分隔兩座城市的兩個人。", "Para dos personas en ciudades distintas.", "Per a dues persones en ciutats diferents."], "https://www.freebuilder.net/handoff/", "#E9825E", "https://www.freebuilder.net/handoff/icon-192.png"], ["two-candles", "tc", ["Two Candles", "双烛小馆", "雙燭小館", "Dos Velas", "Dues Espelmes"], ["Dinner for two, however far apart.", "两个人的晚饭，再远也一起吃。", "兩個人的晚飯，再遠也一起吃。", "Una cena para dos, por lejos que estéis.", "Un sopar per a dos, per lluny que sigueu."], "/two-candles/", "#F2B54A", "/two-candles/icon-192.png"], ["vocab", "vo", ["Vocab", "Vocab", "Vocab", "Vocab", "Vocab"], ["A few words in someone else's language.", "几句别人语言里的话。", "幾句別人語言裡的話。", "Unas palabras en el idioma de otra persona.", "Unes paraules en la llengua d'una altra persona."], "/vocab/", "#7FC9B8", "/vocab/icon.svg"]], L = ["en", "zh", "zh-Hant", "es", "ca"], SH = ["EN", "简", "繁", "ES", "CA"];
+  var $ = function (id) { return document.getElementById(id); };
+  function li() { var l = window.FBL ? FBL.get() : "en"; var i = L.indexOf(l); return i < 0 ? 0 : i; }
+  function w(k) { var v = W[k]; return v ? (v[li()] || v[0]) : k; }
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function js(k, d) { try { return JSON.parse(get(k) || "") || d; } catch (e) { return d; } }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  var H = (function () { var m = /[?&]h=(\d+)/.exec(location.search); return m ? +m[1] : new Date().getHours(); })();   // ?h= sets the hour for testing
+  function part() { return H < 5 ? "late" : H < 12 ? "morn" : H < 18 ? "aft" : H < 22 ? "eve" : "night"; }
+  function ymd(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  var today = ymd(new Date()), tmr = ymd(new Date(Date.now() + 864e5));
+  function when(day) {
+    if (day === today) return w("today"); if (day === tmr) return w("tomorrow");
+    try { return new Date(day + "T12:00:00").toLocaleDateString(L[li()], { weekday: "long", day: "numeric", month: "short" }); } catch (e) { return day; }
+  }
+  /* the sky follows the real hour: dusk and night ink, a lighter dawn and day, stars only after dark */
+  function sky() {
+    var s = $("sky"), c = { late: ["#0E0B14", "#17122A"], morn: ["#2A2238", "#5B4A62"], aft: ["#241D33", "#463A55"], eve: ["#1A1426", "#3A2638"], night: ["#120F18", "#1E1830"] }[part()];
+    s.style.background = "linear-gradient(180deg," + c[1] + "," + c[0] + " 62%)";
+    document.documentElement.classList.toggle("day", part() === "morn" || part() === "aft");
+    if (!s.children.length) for (var i = 0; i < 34; i++) { var st = document.createElement("i"); st.style.left = (Math.random() * 100) + "%"; st.style.top = (Math.random() * 46) + "%"; st.style.animationDelay = (Math.random() * 4) + "s"; s.appendChild(st); }
+  }
+  /* what's yours today, read from this device only (the apps keep these; nothing is sent, nothing is counted) */
+  function traces() {
+    var out = [];
+    var paw = js("fb_paw", null); if (paw && paw.d === today) out.push({ k: "pw", t: w("tPaw"), href: "/paw-reading/" });
+    js("fb_party", []).filter(function (x) { return x && x.c && x.d && x.d >= today; }).sort(function (a, b) { return a.d < b.d ? -1 : 1; }).slice(0, 2).forEach(function (x) {
+      out.push({ k: "co", t: (x.t || w("tGather")) , m: when(x.d), href: "/come-over/#p=" + encodeURIComponent(x.c) }); });
+    var ww = js("ww_v1", null); if (ww && ww.at && ww.at > Date.now() - 20 * 6e4) { var d = new Date(ww.at); out.push({ k: "ww", t: w("tWalk").replace("{c}", ww.c || "").replace("{n}", ww.n || w("someone")), m: when(ymd(d)) + " · " + d.toLocaleTimeString(L[li()], { hour: "2-digit", minute: "2-digit" }), href: "/walk-with/" }); }
+    return out.slice(0, 3);
+  }
+  function now() {
+    var t = traces(), ul = $("nowL"); $("nowH").textContent = w("h_" + part()); ul.innerHTML = "";
+    if (!t.length) { var s = W["s_" + part()]; t = [{ t: w("s_" + part()), href: s && s[5] || "", m: s && s[6] ? (P.filter(function (p) { return p[1] === s[6]; })[0] || [0, 0, []])[2][li()] : "" }]; }
+    t.forEach(function (x) {
+      var li_ = document.createElement("li");
+      li_.innerHTML = x.href ? '<a href="' + esc(x.href) + '"><span>' + esc(x.t) + "</span><span>" + esc(x.m || "") + " ›</span></a>" : "<span>" + esc(x.t) + "</span>";
+      ul.appendChild(li_);
+    });
+    return t;
+  }
+  function grid(lit) {
+    var g = $("grid"); g.innerHTML = "";
+    P.forEach(function (p) {
+      var a = document.createElement("a"); a.className = "tile" + (lit[p[1]] ? " lit" : ""); a.href = p[4]; a.style.setProperty("--g", p[5]);
+      a.innerHTML = '<img src="' + esc(p[6]) + '" alt="" width="58" height="58" loading="lazy"><b>' + esc(p[2][li()] || p[2][0]) + "</b><small>" + esc(p[3][li()] || p[3][0]) + "</small>";
+      g.appendChild(a);
+    });
+  }
+  var out = false;
+  function paint() {
+    document.documentElement.lang = L[li()];
+    $("lang").textContent = SH[li()];
+    $("line").innerHTML = w("line");
+    $("sub").innerHTML = esc(w("sub").replace("{n}", P.length)) + ' · <a href="/">' + esc(w("why")) + "</a>";
+    var t = now(), lit = {}; t.forEach(function (x) { if (x.k) lit[x.k] = 1; });
+    grid(lit);
+    $("kick").textContent = w("kick");
+    $("out").textContent = out ? w("on") : w("down");
+    $("out").className = out ? "btn ghost" : "btn";
+    $("bye").innerHTML = out ? w("bye") : "";
+    document.title = "after-hours";
+    sky();
+    if (window.FBC && FBC.foot) FBC.foot($("foot"), { extra: "<span>" + esc(w("none")) + "</span>" });
+  }
+  /* Put the phone down: the windows go dark one by one, and the page says goodnight */
+  $("out").onclick = function () {
+    out = !out; var tiles = [].slice.call(document.querySelectorAll(".tile"));
+    if (out) { document.documentElement.classList.add("out"); $("out").textContent = w("on"); $("out").className = "btn ghost"; $("bye").innerHTML = w("bye"); }
+    else { document.documentElement.classList.remove("out"); paint(); }
+  };
+  $("lang").onclick = function () { var i = (li() + 1) % L.length; if (window.FBL) FBL.set(L[i]); paint(); };
+  window.addEventListener("fbllang", paint);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden && !out) { H = new Date().getHours(); paint(); } });
+  paint();
+  window.AHApp = { paint: paint, traces: traces };   // test hook
+})();
+</script>
+</body>
+</html>
