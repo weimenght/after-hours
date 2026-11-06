@@ -8,6 +8,8 @@ window.WW_W = {
   lede: ["Two people. One corner. Twenty minutes.", "两个人，一个街角，二十分钟。", "兩個人，一個街角，二十分鐘。", "Dos personas. Una esquina. Veinte minutos.", "Dues persones. Una cantonada. Vint minuts."],
   pickDay: ["Which day?", "哪天？", "哪天？", "¿Qué día?", "Quin dia?"],
   pickTime: ["What time?", "几点？", "幾點？", "¿A qué hora?", "A quina hora?"],
+  otherTime: ["Another time…", "其他时间…", "其他時間…", "Otra hora…", "Una altra hora…"],
+  pastTime: ["That time has already gone today.", "今天这个时间已经过了。", "今天這個時間已經過了。", "Esa hora ya ha pasado hoy.", "Aquesta hora ja ha passat avui."],
   whereLabel: ["Which corner?", "在哪个街角？", "在哪個街角？", "¿Qué esquina?", "Quina cantonada?"],
   wherePh: ["the bakery on Elm Street", "路口的面包店", "路口的麵包店", "la panadería de la esquina", "el forn de la cantonada"],
   nameLabel: ["Your name", "你的名字", "你的名字", "Tu nombre", "El teu nom"],
