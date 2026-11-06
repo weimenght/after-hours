@@ -433,7 +433,8 @@ html.framed .hb{height:30px}
     var ph = $("phone"); ph.style.transform = wide ? "scale(" + Math.min(1, (innerHeight - 64) / 868, (innerWidth - 40) / 414).toFixed(3) + ")" : "";
     var gr = $("grid"); if (gr.clientHeight) { var rowH = gr.clientHeight / 4, ic = Math.max(38, Math.min(62, rowH - 32, (gr.clientWidth / 4) - 20)); $("screen").style.setProperty("--ic", ic.toFixed(0) + "px"); }
   }
-  function clock() { var d = new Date(); $("clock").textContent = hm(d).replace(/^0(\d:)/, "$1"); if ($("lock").classList.contains("on")) { $("lockT").textContent = hm(d); $("lockD").textContent = d.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" }); } }
+  function clock() { var d = new Date(); if (H0 != null) d.setHours(H0);   // ?h= moves the clock too
+ $("clock").textContent = hm(d).replace(/^0(\d:)/, "$1"); if ($("lock").classList.contains("on")) { $("lockT").textContent = hm(d); $("lockD").textContent = d.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" }); } }
 
   /* ── opening and closing apps ── */
   var cur = null;
