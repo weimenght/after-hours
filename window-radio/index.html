@@ -373,7 +373,7 @@ const WICON={
 const svg=(inner,fill)=>`<svg viewBox="0 0 48 48" fill="none" stroke="#3a2a40" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${fill?`<circle cx="24" cy="24" r="18" fill="${fill}"/>`:''}${inner.replace(/class="f"/g,'fill="#3a2a40"')}</svg>`;
 
 /* ---------- screens ---------- */
-function show(id){['sMood','sWeather','sPlayer','sDone'].forEach(s=>$(s).hidden=s!==id);S.screen=id;document.body.classList.toggle('mid',id==='sWeather'||id==='sPlayer');window.scrollTo(0,0)}
+function show(id){['sMood','sWeather','sPlayer','sDone'].forEach(s=>$(s).hidden=s!==id);S.screen=id;document.body.classList.toggle('mid',id==='sWeather');window.scrollTo(0,0)}
 function ctxLine(){const d=new Date(),f=festivalFor(d);return[dayName(d.getDay()),Tr(W.times[timeBlock(hourNow())]),festName(f)].filter(Boolean).join(' · ')}
 function dayName(i){return W.days[li()][i]}
 function tapeTitle(c){const o=c.useFest?Tr(W.fobj[c.fid]):Tr(W.obj[c.objIdx]);const s=F(W.wp[c.weather],{o});return li()===3||li()===4?s.charAt(0).toUpperCase()+s.slice(1):s}
