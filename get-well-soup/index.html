@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7fbfe57256"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Get Well Soup</title>
+<meta name="description" content="Someone's got a cold? Put a pot on for them. They pick the one thing that would help, and you bring it to the door.">
+<meta name="theme-color" content="#f6efe3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1d1814" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Get Well Soup">
+<link rel="stylesheet" href="/fonts/g/fonts.css">
+<style>
+  /* one screen per state; warm kitchen paper by day, a lamplit kitchen at night */
+  :root {
+    --paper:#f6efe3; --paper2:#eadcc6; --ink:#3b2a20; --soft:#7b6656; --field:#fffaf2;
+    --clay:#d9774b; --tomato:#e2654a; --sun:#e7b54a; --butter:#f2c14e; --sage:#9bb08a; --sky:#9cc3d5; --skin:#f3d2b3; --dot:rgba(59,42,32,.05); color-scheme:light;
+    --hand:"Caveat","Chalkboard SE","Segoe Print","Bradley Hand",ui-rounded,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+    --body:"Figtree",ui-rounded,"Segoe UI",system-ui,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper:#1d1814; --paper2:#2e261f; --ink:#f3ead8; --soft:#b9a88e; --field:#2a221c; --dot:rgba(255,255,255,.03); color-scheme:dark; } }
+  :root[data-theme="dark"] { --paper:#1d1814; --paper2:#2e261f; --ink:#f3ead8; --soft:#b9a88e; --field:#2a221c; --dot:rgba(255,255,255,.03); color-scheme:dark; }
+  :lang(zh-Hant) { --hand:"Caveat","PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans CJK TC",sans-serif; --body:"Figtree",system-ui,"PingFang HK","PingFang TC","Microsoft JhengHei","Noto Sans CJK TC",sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:var(--paper); color:var(--ink); }
+  body { font:19px/1.4 var(--body); -webkit-tap-highlight-color:transparent; background-image:radial-gradient(var(--dot) 1px, transparent 1px); background-size:6px 6px; }
+  header { max-width:380px; margin:0 auto; padding:10px 16px 0; display:flex; justify-content:flex-end; position:relative; }
+  #app { max-width:380px; margin:0 auto; padding:0 16px; }
+  .screen { min-height:calc(100vh - 44px); min-height:calc(100dvh - 44px); display:flex; flex-direction:column; justify-content:center; gap:16px; padding:12px 0 28px; animation:in .35s ease; }
+  body.mid footer { display:none; }
+  @keyframes in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+  h1, h2, .hand { font-family:var(--hand); font-weight:600; }
+  h1 { font-size:44px; line-height:1.04; }
+  h2 { font-size:36px; line-height:1.08; }
+  html:lang(zh) h1, html:lang(zh-Hant) h1 { font-size:32px; line-height:1.3; font-weight:700; }
+  html:lang(zh) h2, html:lang(zh-Hant) h2 { font-size:27px; line-height:1.3; font-weight:700; }
+  .lede { font-size:19px; color:var(--soft); }
+  .scene { width:100%; max-width:300px; height:auto; display:block; margin:0 auto; }
+  label { font-family:var(--hand); font-weight:600; font-size:26px; display:block; margin:2px 0 4px; }
+  html:lang(zh) label, html:lang(zh-Hant) label { font-size:19px; font-weight:700; }
+  .btn, input, textarea, .card { font:inherit; color:var(--ink); background:var(--field); border:2.5px solid var(--ink); border-radius:255px 14px 225px 14px/14px 225px 14px 255px; }
+  input, textarea { width:100%; font-size:19px; padding:12px 14px; outline:none; }
+  textarea { resize:none; min-height:78px; border-radius:18px 8px 20px 10px; }
+  input:focus, textarea:focus { box-shadow:0 0 0 3px rgba(231,181,74,.55); }
+  input::placeholder, textarea::placeholder { color:var(--soft); opacity:.7; }
+  .btn { display:block; width:100%; font-family:var(--hand); font-weight:600; font-size:32px; padding:11px 10px; cursor:pointer; background:var(--clay); color:#fffaf2; box-shadow:3px 3px 0 var(--ink); transition:transform .08s, box-shadow .08s; }
+  html:lang(zh) .btn, html:lang(zh-Hant) .btn { font-size:22px; font-weight:700; }
+  .btn:active { transform:translate(3px,3px); box-shadow:none; }
+  .btn:disabled { opacity:.4; box-shadow:none; cursor:default; }
+  .btn.quiet { background:var(--field); color:var(--ink); }
+  .btn.sage { background:var(--sage); color:#3b2a20; }
+  .link { background:none; border:0; font:inherit; font-size:16px; color:var(--soft); text-decoration:underline; text-underline-offset:3px; cursor:pointer; padding:8px; align-self:center; }
+  .grow { flex:1; min-height:4px; }
+  .offers { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .card { padding:12px 8px 10px; text-align:center; cursor:pointer; box-shadow:2px 2px 0 var(--ink); border-radius:22px 10px 24px 12px; }
+  .card svg { width:66px; height:66px; display:block; margin:0 auto 4px; }
+  .card b { display:block; font-family:var(--hand); font-weight:600; font-size:25px; line-height:1.05; }
+  html:lang(zh) .card b, html:lang(zh-Hant) .card b { font-size:18px; font-weight:700; line-height:1.3; }
+  .card small { display:block; font-size:13px; color:var(--soft); margin-top:3px; line-height:1.25; }
+  .card[aria-pressed=true] { background:var(--butter); color:#3b2a20; box-shadow:none; transform:translate(2px,2px); }
+  .card[aria-pressed=true] small { color:#5b4636; }
+  .note { font-family:var(--hand); font-weight:600; font-size:26px; line-height:1.15; background:var(--field); border:2px dashed var(--ink); border-radius:18px 6px 20px 8px; padding:12px 14px; white-space:pre-wrap; word-break:break-word; }
+  html:lang(zh) .note, html:lang(zh-Hant) .note { font-size:19px; line-height:1.45; }
+  .note span { display:block; text-align:right; font-size:.8em; color:var(--soft); margin-top:4px; }
+  .linkbox { font-size:13px; color:var(--soft); word-break:break-all; border:2px dashed var(--soft); border-radius:12px; padding:8px 10px; max-height:58px; overflow:hidden; }
+  .pot { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 0; border-bottom:2px dashed var(--paper2); }
+  .pot b { font-family:var(--hand); font-weight:600; font-size:28px; display:block; line-height:1; }
+  html:lang(zh) .pot b, html:lang(zh-Hant) .pot b { font-size:20px; font-weight:700; }
+  .pot small { font-size:14px; color:var(--soft); }
+  .pill { font-family:var(--hand); font-weight:600; font-size:23px; white-space:nowrap; border:2.5px solid var(--ink); border-radius:999px; padding:4px 14px; background:var(--sun); color:#3b2a20; box-shadow:2px 2px 0 var(--ink); cursor:pointer; }
+  html:lang(zh) .pill, html:lang(zh-Hant) .pill { font-size:16px; font-weight:700; }
+  .pill.done { background:transparent; color:var(--soft); border-color:var(--soft); box-shadow:none; cursor:default; }
+  .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(16px); background:var(--ink); color:var(--paper); padding:9px 18px; border-radius:999px; font-size:16px; opacity:0; transition:.25s; pointer-events:none; z-index:8; }
+  .toast.on { opacity:1; transform:translateX(-50%); }
+  .steam path { animation:rise 3.2s ease-in-out infinite; }
+  .steam path:nth-child(2) { animation-delay:.9s; } .steam path:nth-child(3) { animation-delay:1.8s; }
+  @keyframes rise { 0% { opacity:0; transform:translateY(8px); } 35% { opacity:.85; } 100% { opacity:0; transform:translateY(-14px); } }
+  .zz text { animation:zz 3s ease-in-out infinite; } .zz text:nth-child(2) { animation-delay:1s; }
+  @keyframes zz { 0%,100% { opacity:.2; transform:translateY(0); } 50% { opacity:1; transform:translateY(-4px); } }
+  @media (prefers-reduced-motion: reduce) { .screen, .steam path, .zz text { animation:none; } .steam path { opacity:.7; } }
+  #langBtn { font:600 15px var(--body); color:var(--soft); background:none; border:1.5px solid currentColor; border-radius:999px; padding:4px 11px; cursor:pointer; }
+  .langmenu { position:absolute; right:16px; top:42px; z-index:5; background:var(--field); border:2px solid var(--ink); border-radius:12px; padding:6px; display:flex; flex-direction:column; box-shadow:3px 3px 0 var(--ink); }
+  .langmenu button { font:16px var(--body); color:var(--ink); background:none; border:0; text-align:left; padding:8px 12px; border-radius:8px; cursor:pointer; }
+  .langmenu button[aria-checked=true] { background:var(--paper2); }
+  footer { max-width:380px; margin:0 auto; padding:0 16px 24px; font-size:13px; color:var(--soft); text-align:center; }
+  footer a { color:inherit; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+</svg>
+<header><button id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false"><span id="langLbl">EN</span></button></header>
+<main id="app"></main>
+<footer id="foot" class="np"></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="./words.js?v=9536f98db3"></script>
+<script>
+(function () {
+"use strict";
+/* ---------- Get Well Soup: someone has a cold; they pick the one thing that would help, and you bring it ----------
+   No server. The pot travels inside the link (#s=, base64url JSON: v, id, t to, f from, n note, o offers); the reply goes back
+   through the recipient's own messages app. On the device: gw_v1 (the sender's name, last offers, the pots put on) and gw_chose
+   (what this device picked for which pot). Nothing is sent, so no privacy entry. */
+var W = window.GW_W;
+var LANGS = ["en", "zh", "zh-Hant", "es", "ca"], LNAMES = ["English", "简体中文", "繁體中文", "Español", "Català"], SHORT = ["EN", "简中", "繁中", "ES", "CA"];
+function li() { var l = window.FBL ? FBL.get() : "en"; var i = LANGS.indexOf(l); return i < 0 ? 0 : i; }
+function T(a) { return a == null ? "" : typeof a === "string" ? a : (a[li()] || a[0]); }
+function F(a, v) { var s = T(a); for (var k in v) s = s.split("{" + k + "}").join(v[k]); return s; }
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+var OFFERS = ["soup", "honey", "watch", "call"];
+function O(k, part) { return T(W.offers[k][part]); }
+
+/* ---------- on the device ---------- */
+var KEY = "gw_v1", CHOSE = "gw_chose";
+function load(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+function keep(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+var st = load(KEY, null) || { me: "", offers: OFFERS.slice(), pots: [] };
+if (!Array.isArray(st.pots)) st.pots = [];
+if (!Array.isArray(st.offers) || !st.offers.length) st.offers = OFFERS.slice();
+function save() { keep(KEY, st); }
+function chose(id, v) { var m = load(CHOSE, {}); if (arguments.length > 1) { if (v) m[id] = v; else delete m[id]; keep(CHOSE, m); } return m[id] || null; }
+
+/* ---------- the link ---------- */
+function enc(o) { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+function dec(s) { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; return JSON.parse(decodeURIComponent(escape(atob(s)))); }
+function base() { return location.origin + location.pathname; }
+function readHash() {
+  var m = location.hash.match(/[#&]s=([A-Za-z0-9_-]+)/); if (!m) return null;
+  try { var p = dec(m[1]); if (!p || !p.id || !p.t || !p.f) throw 0;
+    p.t = String(p.t).slice(0, 24); p.f = String(p.f).slice(0, 24); p.n = String(p.n || "").slice(0, 160);
+    p.o = (Array.isArray(p.o) ? p.o : []).filter(function (k) { return OFFERS.indexOf(k) >= 0; }); if (!p.o.length) p.o = OFFERS.slice();
+    return p; } catch (e) { return false; }
+}
+
+/* ---------- drawings (hand-drawn, wobbly; no words inside so they need no translation) ---------- */
+var STEAM = '<g class="steam" stroke="var(--soft)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M120 70 q-8 -12 0 -24 q8 -12 0 -24"/><path d="M150 66 q-8 -12 0 -24 q8 -12 0 -24"/><path d="M180 70 q-8 -12 0 -24 q8 -12 0 -24"/></g>';
+var LN = 'fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+function potArt(o) {
+  o = o || {};
+  var lid = o.open
+    ? '<g transform="rotate(-22 230 92)"><path d="M92 96 q58 -26 116 0 z" fill="var(--butter)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/><circle cx="150" cy="80" r="7" fill="var(--butter)" stroke="var(--ink)" stroke-width="3"/></g>'
+    : '<path d="M90 100 q60 -28 120 0 z" fill="var(--butter)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/><circle cx="150" cy="84" r="7" fill="var(--butter)" stroke="var(--ink)" stroke-width="3"/>';
+  var inside = o.open ? '<ellipse cx="150" cy="104" rx="56" ry="9" fill="var(--butter)"/><circle cx="132" cy="103" r="3" fill="var(--sage)"/><circle cx="160" cy="105" r="3" fill="var(--tomato)"/><circle cx="174" cy="102" r="2.5" fill="var(--sage)"/>' : "";
+  var tag = o.tag ? '<g transform="rotate(-8 236 136)"><path d="M214 120 l40 -4 l3 30 l-40 4 z" fill="var(--field)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path d="M216 125 l-10 -8" ' + LN + ' stroke-width="2"/><path d="M224 132 q6 -6 12 0 q6 -6 12 0" fill="none" stroke="var(--tomato)" stroke-width="2.5" stroke-linecap="round"/></g>' : "";
+  return '<svg class="scene" viewBox="0 0 300 226" role="img" aria-label="' + esc(T(W.artPot)) + '"><g filter="url(#wobble)">' + STEAM + inside +
+    '<path d="M86 104 q-2 60 18 72 q46 16 92 0 q20 -12 18 -72" fill="var(--tomato)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>' +
+    '<path d="M86 116 q-18 -2 -20 8 q2 8 20 6" ' + LN + '/><path d="M214 116 q18 -2 20 8 q-2 8 -20 6" ' + LN + '/>' +
+    '<path d="M104 140 q12 6 22 0" stroke="#fffaf2" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>' + lid + tag +
+    '<path d="M58 196 h184" ' + LN + '/><path d="M76 196 v18 M224 196 v18" ' + LN + '/>' +
+    '<path d="M110 188 q6 -10 12 0 q6 -10 12 0 M166 188 q6 -10 12 0 q6 -10 12 0" stroke="var(--clay)" stroke-width="3" fill="none" stroke-linecap="round"/></g></svg>';
+}
+function bedArt() {
+  return '<svg class="scene" viewBox="0 0 300 210" role="img" aria-label="' + esc(T(W.artBed)) + '"><g filter="url(#wobble)">' +
+    '<g class="zz" fill="var(--soft)" font-weight="700" font-family="Caveat, cursive"><text x="196" y="58" font-size="28">z</text><text x="216" y="38" font-size="36">z</text></g>' +
+    '<path d="M40 170 v-70 q0 -10 10 -10 h6 q10 0 10 10 v70" fill="var(--field)" ' + LN + '/>' +
+    '<ellipse cx="102" cy="118" rx="30" ry="18" fill="var(--field)" stroke="var(--ink)" stroke-width="3"/>' +
+    '<circle cx="112" cy="104" r="20" fill="var(--skin)" stroke="var(--ink)" stroke-width="3"/>' +
+    '<path d="M104 104 q4 3 8 0 M116 104 q4 3 8 0" ' + LN + ' stroke-width="2.5"/><circle cx="126" cy="112" r="3.5" fill="var(--tomato)"/>' +
+    '<path d="M70 124 q90 -14 186 4 v42 h-186 z" fill="var(--sky)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>' +
+    '<path d="M110 140 q20 6 40 0 M170 146 q20 6 40 0" stroke="#fffaf2" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>' +
+    '<path d="M30 172 h240 M44 172 v24 M256 172 v24" ' + LN + '/>' +
+    '<path d="M262 112 h18 v-16 h-18 z" fill="var(--field)" stroke="var(--ink)" stroke-width="2.5"/><path d="M267 94 q4 -8 2 -14" stroke="var(--soft)" stroke-width="2" fill="none" stroke-linecap="round"/></g></svg>';
+}
+function doorArt() {
+  return '<svg class="scene" viewBox="0 0 300 210" role="img" aria-label="' + esc(T(W.artDoor)) + '"><g filter="url(#wobble)">' +
+    '<path d="M90 196 v-160 q0 -8 8 -8 h104 q8 0 8 8 v160" fill="var(--sage)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>' +
+    '<rect x="110" y="50" width="80" height="54" rx="6" fill="var(--butter)" stroke="var(--ink)" stroke-width="3" opacity=".85"/>' +
+    '<circle cx="188" cy="128" r="5" fill="var(--sun)" stroke="var(--ink)" stroke-width="2.5"/><path d="M40 196 h220" ' + LN + '/>' +
+    '<g transform="translate(166 146) scale(.34)"><path d="M86 104 q-2 60 18 72 q46 16 92 0 q20 -12 18 -72 z" fill="var(--tomato)" stroke="var(--ink)" stroke-width="8"/><path d="M90 100 q60 -28 120 0 z" fill="var(--butter)" stroke="var(--ink)" stroke-width="8"/>' +
+    '<g stroke="var(--soft)" stroke-width="7" fill="none" stroke-linecap="round"><path d="M130 64 q-10 -14 0 -28"/><path d="M170 64 q-10 -14 0 -28"/></g></g>' +
+    '<path d="M58 150 q-8 -18 6 -26 q14 8 6 26 z" fill="var(--sun)" stroke="var(--ink)" stroke-width="2.5"/><path d="M64 150 v46" ' + LN + ' stroke-width="2.5"/></g></svg>';
+}
+var ICON = {
+  soup: '<svg viewBox="0 0 70 70" aria-hidden="true"><g stroke="var(--soft)" stroke-width="2.5" fill="none" stroke-linecap="round"><path d="M28 20 q-4-6 0-12"/><path d="M38 20 q-4-6 0-12"/></g><path d="M12 30 h46 q0 22 -23 24 q-23 -2 -23 -24 z" fill="var(--tomato)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path d="M20 58 h30 M46 26 l12 -12" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  honey: '<svg viewBox="0 0 70 70" aria-hidden="true"><rect x="6" y="30" width="30" height="26" rx="4" fill="var(--sky)" stroke="var(--ink)" stroke-width="2.5"/><path d="M16 30 q5 -12 10 0" fill="#fffaf2" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path d="M42 28 h20 v6 h-20 z" fill="#fffaf2" stroke="var(--ink)" stroke-width="2.5"/><path d="M40 34 h24 q2 22 -12 22 q-14 0 -12 -22 z" fill="var(--butter)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path d="M46 44 h12" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/></svg>',
+  watch: '<svg viewBox="0 0 70 70" aria-hidden="true"><rect x="8" y="16" width="54" height="36" rx="6" fill="#fffaf2" stroke="var(--ink)" stroke-width="2.5"/><path d="M30 26 l12 8 l-12 8 z" fill="var(--tomato)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/><path d="M26 60 h18 M35 52 v8" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  call: '<svg viewBox="0 0 70 70" aria-hidden="true"><path d="M20 12 q-8 2 -8 12 q2 20 24 32 q10 4 16 -2 l2 -8 l-10 -6 l-6 6 q-10 -6 -14 -14 l6 -6 l-6 -10 z" fill="var(--sage)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path d="M44 14 q10 2 12 12 M44 22 q4 1 5 5" stroke="var(--soft)" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>'
+};
+function card(k, on) { return '<button type="button" class="card" data-k="' + k + '" aria-pressed="' + (on ? "true" : "false") + '">' + ICON[k] + "<b>" + esc(O(k, "n")) + "</b><small>" + esc(O(k, "s")) + "</small></button>"; }
+
+/* ---------- small helpers ---------- */
+function toast(m) { var t = $("toast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(function () { t.classList.remove("on"); }, 1700); }
+function copy(text) {
+  var done = function () { toast(T(W.copied)); return true; };
+  if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(done, function () { window.prompt("", text); return true; });
+  window.prompt("", text); return Promise.resolve(true);
+}
+/* the share sheet if there is one (a cancel stays a cancel), otherwise the clipboard */
+function share(text) {
+  if (navigator.share) return navigator.share({ text: text }).then(function () { return true; }, function (e) { return e && e.name === "AbortError" ? false : copy(text); });
+  return copy(text);
+}
+function on(id, ev, fn) { var el = $(id); if (el) el.addEventListener(ev || "click", fn); }
+
+/* ---------- screens ---------- */
+var pot = null, pick = null, cur = null, goName = "";
+var MID = { offers: 1, share: 1, open: 1, choose: 1, tell: 1 };   /* the footer shows only on the first and last screens */
+var V = {
+  make: function () {
+    return '<section class="screen">' + potArt() + "<h1>" + esc(T(W.makeTitle)) + '</h1><p class="lede">' + esc(T(W.makeLead)) + "</p>" +
+      '<div><label for="to">' + esc(T(W.toLabel)) + '</label><input id="to" maxlength="24" autocomplete="off" placeholder="' + esc(T(W.toPh)) + '"></div>' +
+      '<div><label for="me">' + esc(T(W.fromLabel)) + '</label><input id="me" maxlength="24" autocomplete="nickname" placeholder="' + esc(T(W.fromPh)) + '" value="' + esc(st.me) + '"></div>' +
+      '<div><label for="nt">' + esc(T(W.noteLabel)) + '</label><textarea id="nt" maxlength="160" placeholder="' + esc(T(W.notePh)) + '"></textarea></div>' +
+      '<button type="button" class="btn" id="go1" disabled>' + esc(T(W.next)) + "</button>" +
+      (st.pots.length ? '<button type="button" class="link" id="seePots">' + esc(T(W.myPots)) + "</button>" : "") + "</section>";
+  },
+  offers: function () {
+    return '<section class="screen"><h2>' + esc(T(W.offerTitle)) + '</h2><p class="lede">' + esc(T(W.offerLead)) + '</p><div class="offers" id="pick">' +
+      OFFERS.map(function (k) { return card(k, st.offers.indexOf(k) >= 0); }).join("") + "</div>" +
+      '<div class="grow"></div><button type="button" class="btn" id="go2"' + (st.offers.length ? "" : " disabled") + ">" + esc(T(W.makeLink)) + "</button>" +
+      '<button type="button" class="link" id="back">' + esc(T(W.back)) + "</button></section>";
+  },
+  share: function () {
+    var p = st.pots[0];
+    return '<section class="screen">' + potArt({ tag: 1 }) + "<h2>" + esc(F(W.shareTitle, { n: p.to })) + '</h2><p class="lede">' + esc(T(W.shareLead)) + "</p>" +
+      '<div class="linkbox">' + esc(p.url) + '</div><div class="grow"></div>' +
+      '<button type="button" class="btn" id="send">' + esc(T(W.send)) + '</button><button type="button" class="btn quiet" id="cp">' + esc(T(W.copy)) + "</button>" +
+      '<button type="button" class="link" id="seePots">' + esc(T(W.myPots)) + "</button></section>";
+  },
+  pots: function () {
+    var fmt = function (t) { try { return new Date(t).toLocaleDateString(T(W.locale), { month: "short", day: "numeric" }); } catch (e) { return ""; } };
+    return '<section class="screen"><h2>' + esc(T(W.potsTitle)) + '</h2><p class="lede">' + esc(T(W.potsLead)) + "</p><div>" +
+      (st.pots.length ? st.pots.map(function (p, i) {
+        return '<div class="pot"><div><b>' + esc(p.to) + "</b><small>" + esc(F(W.sentOn, { d: fmt(p.at) })) + "</small></div>" +
+          (p.done ? '<span class="pill done">' + esc(T(W.delivered)) + "</span>" : '<button type="button" class="pill" data-i="' + i + '">' + esc(T(W.onWay)) + "</button>") + "</div>";
+      }).join("") : '<p class="lede">' + esc(T(W.potsEmpty)) + "</p>") +
+      '</div><div class="grow"></div><button type="button" class="btn quiet" id="newPot">' + esc(T(W.newPot)) + "</button></section>";
+  },
+  go: function () {
+    return '<section class="screen">' + doorArt() + "<h1>" + esc(F(W.goTitle, { n: goName })) + '</h1><p class="lede">' + esc(T(W.goLead)) + "</p>" +
+      '<div class="grow"></div><button type="button" class="btn sage" id="away">' + esc(T(W.goBtn)) + "</button></section>";
+  },
+  open: function () {
+    return '<section class="screen">' + potArt({ tag: 1 }) + "<h1>" + esc(F(W.openTitle, { n: pot.t })) + "</h1>" +
+      (pot.n ? '<div class="note">' + esc(pot.n) + "<span>" + esc(pot.f) + "</span></div>" : "") +
+      '<div class="grow"></div><button type="button" class="btn" id="lift">' + esc(T(W.lift)) + "</button></section>";
+  },
+  choose: function () {
+    return '<section class="screen"><h2>' + esc(T(W.chooseTitle)) + '</h2><p class="lede">' + esc(F(W.chooseLead, { f: pot.f })) + '</p><div class="offers" id="pick">' +
+      pot.o.map(function (k) { return card(k, pick === k); }).join("") + '</div><div class="grow"></div>' +
+      '<button type="button" class="btn" id="this"' + (pick ? "" : " disabled") + ">" + esc(T(W.thisOne)) + "</button></section>";
+  },
+  tell: function () {
+    return '<section class="screen">' + potArt({ open: 1, tag: 1 }) + "<h2>" + esc(F(W.tellTitle, { f: pot.f, o: O(pick, "p") })) + '</h2><p class="lede">' + esc(T(W.tellLead)) + "</p>" +
+      '<div class="grow"></div><button type="button" class="btn" id="tellGo">' + esc(F(W.tellBtn, { f: pot.f })) + '</button>' +
+      '<button type="button" class="btn quiet" id="tellCp">' + esc(T(W.copyReply)) + '</button><button type="button" class="link" id="again">' + esc(T(W.changeMind)) + "</button></section>";
+  },
+  rest: function () {
+    return '<section class="screen">' + bedArt() + "<h1>" + esc(T(W.restTitle)) + '</h1><p class="lede">' + esc(F(W.restLead, { f: pot.f })) + "</p>" +
+      '<div class="grow"></div><button type="button" class="link" id="again">' + esc(T(W.changeMind)) + "</button></section>";
+  }
+};
+
+var B = {
+  make: function () {
+    var chk = function () { $("go1").disabled = !($("to").value.trim() && $("me").value.trim()); };
+    on("to", "input", chk); on("me", "input", chk); chk();
+    on("go1", null, function () { st.me = $("me").value.trim(); save(); draft = { t: $("to").value.trim(), n: $("nt").value.trim() }; show("offers"); });
+    on("seePots", null, function () { show("pots"); });
+  },
+  offers: function () {
+    on("pick", null, function (e) { var b = e.target.closest(".card"); if (!b) return; var k = b.getAttribute("data-k"), i = st.offers.indexOf(k);
+      if (i >= 0) st.offers.splice(i, 1); else st.offers.push(k); st.offers = OFFERS.filter(function (x) { return st.offers.indexOf(x) >= 0; }); save(); show("offers"); });
+    on("back", null, function () { show("make"); });
+    on("go2", null, function () {
+      var p = { v: 1, id: Math.random().toString(36).slice(2, 9), t: draft.t, f: st.me, n: draft.n, o: st.offers.slice() };
+      st.pots.unshift({ id: p.id, to: p.t, at: Date.now(), url: base() + "#s=" + enc(p), done: false });
+      st.pots = st.pots.slice(0, 30); save(); draft = null; show("share");
+    });
+  },
+  share: function () {
+    var p = st.pots[0];
+    on("send", null, function () { share(F(W.shareText, { t: p.to, f: st.me }) + "\n" + p.url); });
+    on("cp", null, function () { copy(p.url); });
+    on("seePots", null, function () { show("pots"); });
+  },
+  pots: function () {
+    Array.prototype.forEach.call(document.querySelectorAll(".pill[data-i]"), function (b) { b.addEventListener("click", function () {
+      var p = st.pots[+b.getAttribute("data-i")]; if (!p) return; p.done = true; save(); goName = p.to; show("go"); }); });
+    on("newPot", null, function () { show("make"); });
+  },
+  go: function () { on("away", null, function () { toast(T(W.bye)); setTimeout(function () { show("make"); }, 900); }); },
+  open: function () { on("lift", null, function () { show("choose"); }); },
+  choose: function () {
+    on("pick", null, function (e) { var b = e.target.closest(".card"); if (!b) return; pick = b.getAttribute("data-k"); show("choose"); });
+    on("this", null, function () { if (pick) show("tell"); });
+  },
+  tell: function () {
+    var txt = F(W.reply, { f: pot.f, o: O(pick, "p") });
+    var sent = function (ok) { if (ok) { chose(pot.id, pick); show("rest"); } };
+    on("tellGo", null, function () { share(txt).then(sent); });
+    on("tellCp", null, function () { copy(txt).then(sent); });
+    on("again", null, function () { chose(pot.id, null); show("choose"); });
+  },
+  rest: function () { on("again", null, function () { chose(pot.id, null); show("choose"); }); }
+};
+var draft = null;
+
+function show(sc) {
+  if (sc === "share" && !st.pots.length) sc = "make";
+  if (sc === "go" && !goName) sc = "pots";
+  cur = sc; document.body.className = MID[sc] ? "mid" : "";
+  $("app").innerHTML = V[sc](); if (B[sc]) B[sc](); scrollTo(0, 0); chrome();
+}
+
+/* ---------- language, footer ---------- */
+var menu = null;
+function closeLang() { if (menu) { menu.remove(); menu = null; $("langBtn").setAttribute("aria-expanded", "false"); } }
+$("langBtn").addEventListener("click", function (e) {
+  e.stopPropagation(); if (menu) return closeLang();
+  menu = document.createElement("div"); menu.className = "langmenu"; menu.setAttribute("role", "menu"); document.querySelector("header").appendChild(menu);
+  LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i]; menu.appendChild(b);
+    b.addEventListener("click", function () { if (window.FBL) FBL.set(l); closeLang(); redraw(); }); });
+  $("langBtn").setAttribute("aria-expanded", "true"); menu.querySelector("[aria-checked=true]").focus();
+});
+document.addEventListener("click", function (e) { if (menu && !menu.contains(e.target)) closeLang(); });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLang(); });
+function chrome() {
+  var i = li(); document.documentElement.lang = LANGS[i]; document.title = T(W.app);
+  $("langLbl").textContent = SHORT[i]; $("langBtn").setAttribute("aria-label", T(W.lang) + ": " + LNAMES[i]);
+  var _k = function (k, d) { return window.FBC && FBC.W && FBC.W[k] ? FBC.t(FBC.W[k]) : d; };
+  var _x = "<span>" + esc(_k("fLink", T(W.device))) + '</span><a href="https://www.after-hours.work/?fbl=' + LANGS[i] + '" target="_blank" rel="noopener">' + esc(_k("fAh", T(W.ah))) + "</a>";
+  if (window.FBC && FBC.foot) FBC.foot($("foot"), { px: 0, extra: _x });   // the suite's one footer; this app's promise and After hours on the line under it
+  else $("foot").innerHTML = _x;
+}
+/* a language change redraws the screen but keeps what was typed on the first one */
+function redraw() {
+  if (cur === "make") { var v = { to: $("to").value, me: $("me").value, nt: $("nt").value }; show("make"); $("to").value = v.to; $("me").value = v.me; $("nt").value = v.nt; $("to").dispatchEvent(new Event("input")); }
+  else show(cur);
+}
+addEventListener("fbl:lang", redraw);
+
+/* ---------- start: a pot in the link is for the one with the cold; otherwise you're putting one on ---------- */
+function boot() {
+  var p = readHash(); pot = null; pick = null;
+  if (p === false) { show("make"); toast(T(W.bad)); return; }
+  if (p) { pot = p; var c = chose(p.id); if (c && p.o.indexOf(c) >= 0) { pick = c; show("rest"); } else show("open"); return; }
+  show("make");
+}
+addEventListener("hashchange", boot);   /* a pot opened in a tab where the app is already open */
+window.GW = { state: function () { return st; }, screen: function () { return cur; }, pot: function () { return pot; }, show: show };
+boot();
+
+/* works offline once it has opened: a small worker keeps this app's own files (nothing else, nothing sent) */
+if ("serviceWorker" in navigator && window.isSecureContext) addEventListener("load", function () { navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function () {}); });
+})();
+</script>
+</body>
+</html>
