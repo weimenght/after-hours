@@ -265,7 +265,7 @@
   function chrome() {
     var i = li(); de.lang = LANG[i]; $("tcName").textContent = w("app"); document.title = w("app"); try { if (HOST !== window) HOST.document.title = w("app"); } catch (e) {}
     $("tcLang").setAttribute("aria-label", w("lang"));
-    var ho = $("tcHo"); ho.innerHTML = ""; var a = el("a"); a.href = "https://www.freebuilder.net/handoff/"; a.target = "_top"; a.innerHTML = esc(T.W.hoff ? T.t("hoff").replace(/\s*↗\s*$/, "") : w("handoff")) + " " + ic("arrow");   /* the town page's own words for it, one source */ ho.appendChild(a);
+    var ho = $("tcHo"); ho.innerHTML = ""; var a = el("a"); a.href = "https://www.after-hours.work/handoff/"; a.target = "_top"; a.innerHTML = esc(T.W.hoff ? T.t("hoff").replace(/\s*↗\s*$/, "") : w("handoff")) + " " + ic("arrow");   /* the town page's own words for it, one source */ ho.appendChild(a);
     var x = "<span>" + esc(w("device")) + '</span><a href="https://www.after-hours.work/?fbl=' + ["en", "zh", "zh-Hant", "es", "ca"][i] + '" target="_blank" rel="noopener">' + ic("heart") + " " + esc(w("ah")) + "</a>";
     if (window.FBC && FBC.foot) FBC.foot($("tcFbf"), { extra: x });
   }

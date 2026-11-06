@@ -29,7 +29,7 @@ self.addEventListener('fetch', (event) => {
   if (OFF || req.method !== 'GET') return;
   const u = new URL(req.url);
   if (u.origin !== self.location.origin) return;                         /* the database, the relay, anything elsewhere: untouched */
-  if (u.pathname.indexOf('https://www.freebuilder.net/handoff/') === 0 || u.pathname.indexOf('/nearby/handoff/') === 0 || /\/sw\.js$/.test(u.pathname) || u.pathname === '/config.js') return;
+  if (u.pathname.indexOf('https://www.after-hours.work/handoff/') === 0 || u.pathname.indexOf('/nearby/handoff/') === 0 || /\/sw\.js$/.test(u.pathname) || u.pathname === '/config.js') return;
   const page = req.mode === 'navigate' || (req.headers.get('accept') || '').indexOf('text/html') >= 0;
   if (page) return;   /* pages go straight to the network (fast, always fresh); only the kit, fonts and drawings are kept */
   if (false) {

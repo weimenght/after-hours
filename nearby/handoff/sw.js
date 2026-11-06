@@ -1,6 +1,6 @@
 // Handoff moved to /handoff/ (its own app). This worker stays at the old address so phones that installed Handoff
 // here keep getting their notifications; any page it controls is sent on to the new address.
-const NEW = 'https://www.freebuilder.net/handoff/';
+const NEW = 'https://www.after-hours.work/handoff/';
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => {
