@@ -449,6 +449,48 @@ html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color
 .scomf{margin:0 12px 10px;border:0}
 .picks{display:flex;flex-direction:column;gap:7px;align-self:stretch;margin:6px 0 0 34px}
 .picks button{align-self:flex-start;padding:9px 14px;border-radius:999px;border:1.5px solid var(--lamp);color:var(--lamp);font:600 14px/1 var(--sans);animation:pop .3s both}
+/* the desktop (the owner, Nov 7): on a computer /app/ is a desktop, not a phone standing in the middle. The works are icons
+   on the left, the widgets a column on the right, the dock along the bottom; an app opens as a window over it (✕ or Esc).
+   The Store is the "what" of after-hours.work: a grid of every work, and each one's page in two columns. */
+html.desk .room{display:none}
+html.desk .phone{width:100vw;height:100vh;border-radius:0;padding:0;box-shadow:none;transform:none!important;background:var(--ink)}
+html.desk .phone::before,html.desk .phone::after{display:none}
+html.desk .screen{inset:0;border-radius:0}
+html.desk .top{height:42px;padding:0 22px;justify-content:flex-start;gap:16px;background:rgba(18,15,24,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+html.desk .mark{display:inline-flex;order:-1}
+html.desk .clock{display:block;margin-left:auto}
+html.desk .skyline{height:220px}
+html.desk .home{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr) auto auto;grid-template-areas:"grid stack" "down stack" "dock dock";gap:0 36px;padding:70px max(32px,calc((100vw - 1320px) / 2)) 0}
+html.desk #grid{grid-area:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));grid-template-rows:none!important;grid-auto-rows:118px;align-content:start;gap:6px;padding:6px 0;overflow-y:auto;scrollbar-width:none;--ic:64px}
+html.desk #grid .tile b{font-size:12.5px}
+html.desk #stack{grid-area:stack;flex-direction:column;gap:12px;margin:0;padding:0 0 18px;overflow-x:hidden;overflow-y:auto;scroll-snap-type:none;align-self:stretch}
+html.desk #stack>.w{flex:none}
+html.desk #sdots{display:none}
+html.desk #downrow{grid-area:down}
+html.desk .dock{grid-area:dock;justify-self:center;margin:6px 0 22px;padding:10px 18px;gap:22px}
+html.desk .home.away{transform:none;opacity:.4;filter:blur(1.5px)}
+html.desk .app{inset:auto;left:50%;top:calc(50% + 20px);width:min(1100px,calc(100vw - 80px));height:min(800px,calc(100vh - 120px));transform:translate(-50%,-47%) scale(.985);opacity:0;transition:opacity .22s,transform .22s,visibility 0s .22s;border-radius:18px;border:1px solid var(--line);box-shadow:0 50px 140px -30px rgba(0,0,0,.85)}
+html.desk .app.open{transform:translate(-50%,-50%);opacity:1;transition:opacity .22s,transform .22s}
+html.desk .bar{padding:22px 70px 10px 28px}
+html.desk .bar h3{font-size:38px}
+html.desk .hb{position:absolute;top:16px;right:16px;width:36px;height:36px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--ink2);align-items:center;justify-content:center;z-index:6}
+html.desk .hb::before{content:"\2715";width:auto;height:auto;border-radius:0;background:none;font:600 14px/1 var(--sans);color:var(--paper)}
+html.desk .hb:hover{border-color:var(--lamp)}
+html.desk .body{padding-bottom:28px}
+html.desk .sheet{left:50%;right:auto;width:440px;transform:translateX(-50%)}
+html.desk .banner{left:auto;right:18px;width:380px;top:54px}
+html.desk .banner:not(.on){opacity:0;pointer-events:none}
+html.desk #storeL .sfeat{width:auto;max-width:760px}
+html.desk #storeL .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:10px;background:none;border:0;overflow:visible}
+html.desk #storeL .srow{border:1px solid var(--line);border-radius:16px;background:var(--ink2)}
+html.desk #storeL .srow:hover{border-color:rgba(242,163,58,.5)}
+html.desk #storeA{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:34px;align-content:start;padding:8px 18px 34px}
+html.desk #storeA .shead{grid-column:1/-1;padding:4px 10px 6px}
+html.desk #storeA .shead .tx b{font-size:40px}
+html.desk #storeA .sshots{flex-wrap:wrap;overflow:visible;padding:0 10px}
+html.desk #storeA .sshots img{height:460px}
+html.desk #storeA .sshots canvas{height:300px}
+html.desk #storeA .sabout p{font-size:16px;max-width:38em}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -1064,10 +1106,11 @@ html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color
     var p = PK[k], c = $("storeA"); c.innerHTML = "";
     var head = el("div", "shead"); head.innerHTML = '<span class="sbig">' + appIcon(k) + '</span><span class="tx"><b>' + esc(pname(k)) + "</b><small>" + esc(p[3][li()] || p[3][0]) + '</small><span class="free">' + esc(w("stFree")) + "</span></span>";
     var gb = el("span", "sget"); gb.appendChild(getBtn(k, true)); head.querySelector(".tx").appendChild(gb); c.appendChild(head);
-    c.appendChild(el("p", "sec", esc(w("stShots")))); var sh = el("div", "sshots");
+    var SL = el("div", "scol"), SR = el("div", "scol"); c.appendChild(SL); c.appendChild(SR);   // two columns on a computer, one after the other on a phone
+    SL.appendChild(el("p", "sec", esc(w("stShots")))); var sh = el("div", "sshots");
     if (p[7]) { var im = document.createElement("img"); im.src = p[7]; im.alt = ""; im.loading = "lazy"; sh.appendChild(im); }
     var si = shotIdx(k); if (si >= 0) { var cv = document.createElement("canvas"); cv.width = 120; cv.height = 160; paintShot(cv, si, 40); sh.appendChild(cv); var cap = el("span", "scap", esc(w(SHOTS[si][0]))); sh.appendChild(cap); }
-    c.appendChild(sh);
+    SL.appendChild(sh); c = SR;
     c.appendChild(el("p", "sec", esc(w("stAbout")))); var ab = el("div", "sabout"), from = (FROM[k] || "wei");
     ab.innerHTML = w("e_" + k + "_b") ? w("e_" + k + "_b").split("\n").map(function (x) { return "<p>" + chips(x) + "</p>"; }).join("") + '<p class="sby">— ' + esc(nm(from)) + "</p>" : "<p>" + esc(p[3][li()] || p[3][0]) + "</p>";
     c.appendChild(ab);
@@ -1079,7 +1122,7 @@ html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color
     f.onsubmit = function (e) { e.preventDefault(); var v = inp.value.trim(); if (!v) { inp.focus(); return; } inp.disabled = true;
       sendNote("[store:" + k + "] " + v, "store:" + k).then(function () { inp.value = ""; sfx("sent"); toast(w("stSent")); }).catch(function (x) { var m = String(x && x.message || x); toast(/kept on this device|privacy/i.test(m) ? w("fbKept") : /slow down/i.test(m) ? w("fbSlow") : w("fbFail")); }).then(function () { inp.disabled = false; }); };
     c.appendChild(el("p", "sec", esc(w("stYour")))); c.appendChild(f);
-    view("store", "app");
+    view("store", "app"); history.replaceState(null, "", "#store=" + k);   // a work's own address: /app/#store=<key>
   }
   function widgets() { wWeek(); wFar(); wUp(); wMoon(); wOne(); wgApply(); }
   var ST = $("stack");
@@ -1137,10 +1180,10 @@ html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color
   })();
 
   function fit() {   // the phone stands in the middle of anything wider than a phone; icons size to the screen's height
-    var wide = innerWidth > 560 && innerHeight > 600;
-    document.documentElement.classList.toggle("framed", wide);
+    var desk = innerWidth >= 1024 && innerHeight >= 600, wide = !desk && innerWidth > 560 && innerHeight > 600;   // a computer gets the desktop; a tablet the phone
+    document.documentElement.classList.toggle("desk", desk); document.documentElement.classList.toggle("framed", wide);
     var ph = $("phone"); ph.style.transform = wide ? "scale(" + Math.min(1, (innerHeight - 64) / 868, (innerWidth - 40) / 414).toFixed(3) + ")" : "";
-    var gr = $("grid"); if (gr.clientHeight) {
+    var gr = $("grid"); if (desk) $("screen").style.removeProperty("--ic"); else if (gr.clientHeight) {
       var lab = gr.querySelector(".tile b"), lh = lab ? lab.offsetHeight + 6 : 22, cs = getComputedStyle(gr), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
       var rowH = (gr.clientHeight - pad) / (+gr.dataset.rows || 4), ic = Math.max(30, Math.min(62, rowH - lh - 4, (gr.clientWidth / 4) - 20));
       $("screen").style.setProperty("--ic", Math.floor(ic) + "px");
@@ -1518,6 +1561,7 @@ html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color
   setInterval(clock, 15000);
   paint(); requestAnimationFrame(fit);
   var h = location.hash.slice(1); if (RENDER[h]) setTimeout(function () { open(h); }, 60);
+  else if (/^store=/.test(h)) setTimeout(function () { open("store"); storeApp(decodeURIComponent(h.slice(6))); }, 60);   // after-hours.work's windows open a work's page here
   /* sounds (the owner, Nov 7): all made here with Web Audio, nothing fetched. A soft marimba ringtone (and a buzz where the
      phone can), a two-note chime for a text, a light whoosh for mail, the camera's click, real keypad tones, a falling chord when
      the phone is put down and a rising one when the lights come back. Off in Settings (ah_app_snd). Silent until the first tap
@@ -1622,7 +1666,7 @@ html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color
   function intro() { put("ah_app_seen", "1"); open("msg"); setTimeout(function () { thread("wm", { typing: 1, pick: 1 }); }, 380); }
   if (!get("ah_app_seen") && !get("ah_app_layout")) startWith(START0);   // a brand-new visitor starts small even if they skip the intro; the pick replaces it
   var iq = /[?&]intro=([01])/.exec(location.search);
-  if (!RENDER[h] && (iq ? iq[1] === "1" : !get("ah_app_seen"))) setTimeout(intro, 900);
+  if (!RENDER[h] && !/^store=/.test(h) && (iq ? iq[1] === "1" : !get("ah_app_seen"))) setTimeout(intro, 900);   // arriving at a work's page, the guide waits for the next visit
   window.AHApp = { store: storeApp, startWith: startWith, wall: wall, theme: theme, sfx: sfx, week: wWeek, far: wFar, edit: edit, layout: layout, moon: moon, ping: ping, feasts: feasts, region: region, intro: intro, paint: paint, traces: traces, open: open, home: home, thread: thread, call: call };   // test hook
 })();
 </script>
