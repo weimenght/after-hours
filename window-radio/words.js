@@ -77,6 +77,13 @@ window.WR_W = {
     ["Do", "Re♭", "Re", "Mi♭", "Mi", "Fa", "Sol♭", "Sol", "La♭", "La", "Si♭", "Si"]
   ],
   same: ["Same picks on the same day make the same tape. Ask someone nearby to press play with you.", "同一天、同样的选择，会放出同一盘磁带。叫身边的人和你一起按播放吧。", "同一天、同樣的選擇，會放出同一盤磁帶。叫身邊的人和你一起按播放吧。", "Las mismas respuestas el mismo día dan la misma cinta. Pide a alguien cerca que le dé al play contigo.", "Les mateixes respostes el mateix dia fan la mateixa cinta. Demana a algú que tinguis a prop que premi play amb tu."],
+  share: ["Send this tape", "把这盘磁带发给别人", "把這盤磁帶傳給別人", "Enviar esta cinta", "Envia aquesta cinta"],
+  shareText: ["I'm playing “{t}” on Window Radio. Press play with me?", "我在窗边电台放《{t}》。一起按播放吧？", "我在窗邊電台放《{t}》。一起按播放吧？", "Estoy escuchando «{t}» en Radio de la Ventana. ¿Le das al play conmigo?", "Estic escoltant «{t}» a Ràdio de la Finestra. Hi poses play amb mi?"],
+  copied: ["Link copied. Send it to someone, then press play together.", "链接已复制。发给一个人，然后一起按播放。", "連結已複製。傳給一個人，然後一起按播放。", "Enlace copiado. Envíalo a alguien y dadle al play juntos.", "Enllaç copiat. Envia'l a algú i premeu play junts."],
+  copyIt: ["Copy this link and send it to someone.", "复制这个链接，发给一个人。", "複製這個連結，傳給一個人。", "Copia este enlace y envíaselo a alguien.", "Copia aquest enllaç i envia'l a algú."],
+  gotT: ["Someone sent you a tape.", "有人给你寄了一盘磁带。", "有人給你寄了一盤磁帶。", "Alguien te ha enviado una cinta.", "Algú t'ha enviat una cinta."],
+  gotB: ["Press play at the same time and you'll hear the same song. Better still, in the same room.", "同时按播放，你们会听到同一首歌。在同一个房间里更好。", "同時按播放，你們會聽到同一首歌。在同一個房間裡更好。", "Si le dais al play a la vez, oiréis la misma canción. Mejor aún, en la misma habitación.", "Si hi poseu play alhora, sentireu la mateixa cançó. Encara millor, a la mateixa habitació."],
+  mine: ["Make my own tape", "做我自己的磁带", "做我自己的磁帶", "Hacer mi propia cinta", "Fer la meva cinta"],
   doneT: ["Side A is over.", "A面放完了。", "A面放完了。", "Se acabó la cara A.", "S'ha acabat la cara A."],
   doneB: ["Leave the phone here for a bit. See who's home, and ask if they'd like tea.", "把手机放下一会儿。看看谁在家，问问要不要喝杯茶。", "把手機放下一會兒。看看誰在家，問問要不要喝杯茶。", "Deja el móvil aquí un rato. Mira quién hay en casa y pregunta si le apetece un té.", "Deixa el mòbil aquí una estona. Mira qui hi ha a casa i pregunta si li ve de gust un te."],
   again: ["Play side B", "放B面", "放B面", "Poner la cara B", "Posar la cara B"],

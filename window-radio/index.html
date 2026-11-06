@@ -79,6 +79,14 @@
   .btn { padding:10px 18px; border:2px solid var(--sticker); border-radius:var(--edge); background:var(--marigold); color:#3a2a40; font-weight:600; }
   .btn.ghost { background:transparent; color:var(--ink); border-color:var(--ink); }
   .row { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+  .got { background:var(--card); border:1.8px solid var(--ink); border-radius:var(--edge); padding:12px 14px; display:flex; flex-direction:column; gap:4px; }
+  .got .gotT { font:700 28px/1.05 var(--hand); }
+  html:lang(zh) .got .gotT, html:lang(zh-Hant) .got .gotT { font-size:22px; line-height:1.35; }
+  .got p:last-child { color:var(--soft); font-size:14px; }
+  .share { margin-top:2px; }
+  .share .btn { padding:8px 14px; font-size:15px; }
+  #shareLink { width:100%; font:13px var(--body); color:var(--ink); background:var(--card); border:1.4px solid var(--line); border-radius:8px; padding:8px 10px; }
+  .toast { min-height:1.4em; font-size:13px; color:var(--teal); }
   footer { max-width:380px; margin:0 auto; padding:0 16px 24px; font-size:13px; color:var(--soft); text-align:center; }
   body.mid footer { display:none; }
   @media (prefers-reduced-motion: reduce) { .screen { animation:none; } .pick, .play { transition:none; } .pick:hover { transform:none; } }
@@ -103,6 +111,7 @@
     <div class="grid" id="weatherGrid"></div>
   </section>
   <section class="screen" id="sPlayer" hidden>
+    <div class="got" id="got" hidden><p class="gotT" id="gotT"></p><p id="gotB"></p></div>
     <div class="frame"><canvas id="scene" role="img"></canvas></div>
     <p class="tapeno" id="tapeNo"></p>
     <h1 id="tapeTitle"></h1>
@@ -112,6 +121,9 @@
       <button class="play" id="play" type="button"></button>
       <div class="timer"><span class="lbl" id="playForLbl"></span><div class="seg" id="seg"></div><span id="left"></span></div>
     </div>
+    <div class="row share"><button class="btn ghost" id="share" type="button"></button><button class="btn ghost" id="mine" type="button" hidden></button></div>
+    <input id="shareLink" type="text" readonly hidden aria-label="Link">
+    <p class="toast" id="toast" role="status"></p>
     <p class="note" id="sameNote"></p>
   </section>
   <section class="screen" id="sDone" hidden>
@@ -132,7 +144,7 @@
   </section>
 </main>
 <footer id="foot" class="np"></footer>
-<script src="./words.js?v=1"></script>
+<script src="./words.js?v=2"></script>
 <script>
 (()=>{
 "use strict";
@@ -149,7 +161,7 @@ const WEATHERS=['sun','cloud','rain','storm','snow','wind','fog'];
 /* ---------- kept on this device: the last sky (for three hours) and how long to play ---------- */
 const store={get(k,d){try{const v=localStorage.getItem('wr_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem('wr_'+k,JSON.stringify(v))}catch(e){}}};
-const S={mood:null,weather:null,playFor:store.get('playFor','cup'),playing:false,remaining:0,screen:'sMood',side:'A'};
+const S={mood:null,weather:null,playFor:store.get('playFor','cup'),playing:false,remaining:0,screen:'sMood',side:'A',shared:null};
 const lw=store.get('weather',null);
 if(lw&&Date.now()-lw.ts<3*3600e3)S.weather=lw.w;
 
@@ -189,9 +201,10 @@ const PROGS={calm:[['I','IV','iii','vi'],['I','vi','IV','V']],okay:[['ii','V','I
   heavy:[['i','iv','bVI','v'],['i','bVI','bIII','bVII']],restless:[['i','IVd','i','bVII'],['i','IVd','bIII','v']]};
 
 let cfg=null;
-function buildCfg(){
-  const now=new Date(),tb=timeBlock(hourNow()),fest=festivalFor(now),dow=now.getDay();
-  const mood=S.mood||'calm',weather=S.weather||'cloud',fid=fest?fest.id:'';
+function buildCfg(ov){
+  ov=ov||S.shared;   // a tape someone sent: their date, hour, sky, mood and festival, so it plays exactly as it did for them
+  const now=ov?new Date(ov.d+'T12:00:00'):new Date(),tb=ov?ov.tb:timeBlock(hourNow()),fest=ov?(ov.f?{id:ov.f,eve:!!ov.e}:null):festivalFor(now),dow=now.getDay();
+  const mood=ov?ov.m:(S.mood||'calm'),weather=ov?ov.w:(S.weather||'cloud'),fid=fest?fest.id:'';
   const seedStr=[ymd(now),tb,weather,mood,fid+(fest&&fest.eve?'-eve':'')].join('|');
   const seed=hash(seedStr),r=mulberry(seed);
   const keyOff=[5,2,7,0,9,3,10][dow];
@@ -218,7 +231,7 @@ function buildCfg(){
     swing:.16+r()*.14+(dow===5?.06:0),
     pad:['fog','snow'].includes(weather)||['heavy','tired'].includes(mood)||['dongzhi','valentine','midautumn'].includes(fid),
     pluck:['lny','midautumn','dragonboat'].includes(fid),
-    objIdx,useFest,tapeNo:pad(now.getMonth()+1)+pad(now.getDate())+'-'+String(seed%1000).padStart(3,'0')};
+    shared:!!ov,d:ymd(now),eve:fest&&fest.eve?1:0,objIdx,useFest,tapeNo:pad(now.getMonth()+1)+pad(now.getDate())+'-'+String(seed%1000).padStart(3,'0')};
 }
 
 /* ---------- audio ---------- */
@@ -290,7 +303,7 @@ function startAmbient(){
 
 function playStep(st,t){
   const c=cfg,sd=60/c.bpm/4,bar=Math.floor(st/16),s=st%16,b4=bar%4,cyc=Math.floor(bar/4);
-  if(s===0&&b4===0&&bar>0&&timeBlock(hourNow())!==c.tb){cfg=buildCfg();applyCfgAudio();startAmbient();renderPlayer();rr=mulberry(cfg.seed)}
+  if(s===0&&b4===0&&bar>0&&!c.shared&&timeBlock(hourNow())!==c.tb){cfg=tape();applyCfgAudio();startAmbient();renderPlayer();rr=mulberry(cfg.seed)}
   const tt=t+((s%2)?sd*c.swing:0),chord=c.prog[b4];
   const voice=chord.map(i=>{let m=c.key+12+i;while(m>76)m-=12;while(m<55)m+=12;return m}).filter((m,i,a)=>a.indexOf(m)===i).sort((a,b)=>a-b);
   if(s===0){
@@ -393,6 +406,7 @@ function renderText(){
   const _k=(k,d)=>window.FBC&&FBC.W&&FBC.W[k]?FBC.t(FBC.W[k]):d;
   const x='<span>'+esc(Tr(W.device))+'</span><a href="https://www.after-hours.work/?fbl='+LANGS[i]+'" target="_blank" rel="noopener">'+esc(_k('fAh',Tr(W.ah)))+'</a>';
   if(window.FBC&&FBC.foot)FBC.foot($('foot'),{px:1,extra:x});else $('foot').innerHTML=x;   // the suite's one footer
+  $('share').textContent='↗ '+Tr(W.share);$('mine').textContent=Tr(W.mine);$('gotT').textContent=Tr(W.gotT);$('gotB').textContent=Tr(W.gotB);
   if(cfg)renderPlayer();renderPlayBtn();renderLeft();
 }
 function renderPlayer(){
@@ -402,7 +416,9 @@ function renderPlayer(){
   $('tapeMeta').textContent=F(W.meta,{k:W.keys[li()][c.keyOff],b:c.bpm});
   const chips=[`<span class="chip">${esc(dayName(c.dow))}</span>`,`<span class="chip">${esc(Tr(W.times[c.tb]))}</span>`];
   if(c.fest)chips.push(`<span class="chip">${esc(festName(c.fest))}</span>`);
-  chips.push(`<button class="chip" type="button" data-go="sWeather">${esc(Tr(W.weathers[c.weather]))}</button>`,`<button class="chip" type="button" data-go="sMood">${esc(Tr(W.moods[c.mood]))}</button>`);
+  if(c.shared)chips.push(`<span class="chip">${esc(Tr(W.weathers[c.weather]))}</span>`,`<span class="chip">${esc(Tr(W.moods[c.mood]))}</span>`);
+  else chips.push(`<button class="chip" type="button" data-go="sWeather">${esc(Tr(W.weathers[c.weather]))}</button>`,`<button class="chip" type="button" data-go="sMood">${esc(Tr(W.moods[c.mood]))}</button>`);
+  $('got').hidden=!c.shared;$('mine').hidden=!c.shared;$('shareLink').hidden=true;
   $('chips').innerHTML=chips.join('');
 }
 function renderPlayBtn(){const b=$('play');b.setAttribute('aria-label',Tr(S.playing?W.pause:W.play));
@@ -411,7 +427,37 @@ function renderPlayBtn(){const b=$('play');b.setAttribute('aria-label',Tr(S.play
 function renderLeft(){if(S.playFor==='open'||!timer){$('left').textContent='';return}
   $('left').textContent=F(W.left,{m:Math.max(0,Math.ceil(S.remaining/60e3))})}
 
-function enterPlayer(){cfg=buildCfg();renderPlayer();show('sPlayer');if(S.playing){applyCfgAudio();startAmbient();rr=mulberry(cfg.seed)}}
+function tape(){const c=buildCfg();if(S.side==='B'){c.seed=hash(c.seed+'B');c.motifs.reverse()}return c}
+
+/* ---------- send this tape: the link carries the picks (date, hour, sky, mood, festival, side), nothing else, and goes nowhere but where you send it ---------- */
+const TBS=['dawn','morning','afternoon','evening','night','late'];
+function code(c){return[c.d,c.tb,c.weather,c.mood,c.fid,c.eve,S.side].join('.')}
+function shareUrl(){return location.origin+location.pathname+'#t='+code(cfg)}
+function readShare(){
+  const m=/#t=([\w.-]+)/.exec(location.hash);if(!m)return null;
+  const[d,tb,w,mo,f,e,sd]=m[1].split('.');
+  if(!/^\d{4}-\d\d-\d\d$/.test(d)||!TBS.includes(tb)||!WEATHERS.includes(w)||!MOODS.includes(mo)||(f&&!W.fest[f])||!/^[01]$/.test(e||'0')||!/^[AB]$/.test(sd||'A'))return null;
+  return{d,tb,w,m:mo,f:f||'',e:+(e||0),s:sd||'A'};
+}
+let toastT=0;
+function toast(t){$('toast').textContent=t;clearTimeout(toastT);toastT=setTimeout(()=>$('toast').textContent='',4000)}
+$('share').onclick=async()=>{
+  if(!cfg)return;
+  const url=shareUrl(),text=F(W.shareText,{t:tapeTitle(cfg)});
+  if(navigator.share){try{await navigator.share({title:Tr(W.app),text,url});return}catch(e){if(e&&e.name==='AbortError')return}}
+  try{await navigator.clipboard.writeText(text+'\n'+url);toast(Tr(W.copied))}
+  catch(e){const f=$('shareLink');f.value=url;f.hidden=false;f.focus();f.select();toast(Tr(W.copyIt))}
+};
+$('mine').onclick=()=>{
+  if(S.playing)pausePlay(.3);resetTape();S.shared=null;S.side='A';cfg=null;S.remaining=segMs();
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  renderText();show('sMood');
+};
+function arrive(){const sh=readShare();if(!sh)return false;
+  if(S.playing)pausePlay(.3);resetTape();S.shared=sh;S.side=sh.s;S.remaining=segMs();cfg=tape();renderText();show('sPlayer');return true}
+addEventListener('hashchange',arrive);
+
+function enterPlayer(){cfg=tape();renderPlayer();show('sPlayer');if(S.playing){applyCfgAudio();startAmbient();rr=mulberry(cfg.seed)}}
 let returnToPlayer=false;
 $('moodGrid').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;S.mood=b.dataset.m;renderText();
   if(returnToPlayer){returnToPlayer=false;enterPlayer()}else show('sWeather')});
@@ -420,8 +466,8 @@ $('wBack').onclick=()=>show(returnToPlayer?'sPlayer':'sMood');
 $('chips').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;returnToPlayer=true;show(b.dataset.go)});
 $('seg').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;S.playFor=b.dataset.k;store.set('playFor',S.playFor);S.remaining=segMs();renderText()});
 $('play').onclick=()=>S.playing?pausePlay():startPlay();
-$('again').onclick=()=>{resetTape();S.remaining=segMs();S.side='B';cfg=buildCfg();cfg.seed=hash(cfg.seed+'B');cfg.motifs.reverse();renderPlayer();show('sPlayer');startPlay()};
-$('backWin').onclick=()=>{resetTape();S.remaining=segMs();S.side='A';cfg=buildCfg();renderPlayer();show('sPlayer')};
+$('again').onclick=()=>{resetTape();S.remaining=segMs();S.side='B';cfg=tape();renderPlayer();show('sPlayer');startPlay()};
+$('backWin').onclick=()=>{resetTape();S.remaining=segMs();S.side='A';cfg=tape();renderPlayer();show('sPlayer')};
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&S.screen==='sPlayer'&&e.target===document.body){e.preventDefault();$('play').click()}});
 
 /* ---------- the window (hand-drawn canvas) ---------- */
@@ -539,7 +585,7 @@ function draw(now){
 requestAnimationFrame(draw);
 
 /* ---------- start ---------- */
-S.remaining=segMs();renderText();show('sMood');
+S.remaining=segMs();renderText();if(!arrive())show('sMood');
 setInterval(()=>{if(S.screen==='sMood')$('ctxLine').textContent=ctxLine()},60e3);
 window.WR={S,cfg:()=>cfg,build:buildCfg};   // test hook
 })();
