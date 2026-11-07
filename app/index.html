@@ -915,7 +915,12 @@ html.desk #storeA .sabout p{font-size:16px;max-width:38em}
   /* edit mode: a long press (≈ half a second, finger still) starts it; drag moves an icon, − removes it, Done (or Esc, or a tap on
      an empty spot) ends it. A tap on an icon while editing never opens it. */
   var editing = false, press = null, drag = null;
-  function edit(on) { if (on && !editing) sfx("jig"); editing = on; $("home").classList.toggle("edit", on); document.documentElement.classList.toggle("editing", on); $("done").textContent = w("eDone"); $("wadd").textContent = "+ " + w("wgAdd"); $("fadd").textContent = "+ " + w("fdAdd"); if (!on) saveOrder(); }
+  function edit(on) {
+    if (on !== editing && !NAVING) {   // jiggling is a step too: back stops it
+      if (on) step({ t: "ovl", el: "edit" });
+      else { var top = NAV[NAV.length - 1]; if (top && top.t === "ovl" && top.el === "edit") { NAV.pop(); unstep(1); } }
+    }
+    if (on && !editing) sfx("jig"); editing = on; $("home").classList.toggle("edit", on); document.documentElement.classList.toggle("editing", on); $("done").textContent = w("eDone"); $("wadd").textContent = "+ " + w("wgAdd"); $("fadd").textContent = "+ " + w("fdAdd"); if (!on) saveOrder(); }
   function saveOrder() { var L = layout(), shown = qa("#grid .tile[data-k]").map(function (t) { return t.getAttribute("data-k"); }), hid = L.o.filter(function (k) { return shown.indexOf(k) < 0; }); saveLayout({ o: shown.concat(hid), x: L.x, n: L.n }); }
   $("done").onclick = function () { edit(false); };
   var G = $("grid");
@@ -1406,32 +1411,82 @@ html.desk #storeA .sabout p{font-size:16px;max-width:38em}
 
   /* ── opening and closing apps ── */
   var cur = null;
+  /* back is back (the owner, Nov 7: people swipe back, as on any phone, and it should take them one step back here, not off
+     the page). Every step in (an app, a page inside one, a folder, a sheet) leaves an entry in the browser's history; the
+     browser's back, a swipe or the back key undoes one step here; our own ‹, the home bar and ✕ take their entries back out
+     quietly, so the two never disagree. Leaving the phone takes one more back, from the home screen. */
+  var NAV = [], NAVING = false, ignore = 0, pushQ = [];
+  function step(e, url) { var go = function () { NAV.push(e); try { history.pushState({ ah: NAV.length }, "", url == null ? location.href : url); } catch (x) {} }; if (ignore) pushQ.push(go); else go(); }
+  function unstep(k) { if (k > 0) { ignore++; try { history.go(-k); } catch (x) { ignore--; } } }
+  function homeUrl() { try { history.replaceState(null, "", location.pathname + location.search); } catch (x) {} }
+  function rootView(app, v) { var f = qa(".view", $("a-" + app))[0]; return (f && f.getAttribute("data-v") === v) || (app === "phone" && /^(list|keys|voice)$/.test(v)); }
+  function dropViews(app) { var k = 0; while (NAV.length && NAV[NAV.length - 1].t === "view" && NAV[NAV.length - 1].app === app) { NAV.pop(); k++; } unstep(k); }
+  function stepBack(e) {   // one step back, from the browser
+    NAVING = true;
+    try {
+      if (e.t === "ovl") { if (e.el === "fold") closeFolder(); else if (e.el === "edit") edit(false); else $(e.el).classList.remove("on"); }
+      else if (e.t === "view") { view(e.app, e.from); if (e.app === "phone") qa("[data-tab]", $("a-phone")).forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === e.from ? "true" : "false"); }); }
+      else if (e.t === "app") { if (e.prev && $("a-" + e.prev)) open(e.prev); else home(); }
+    } finally { NAVING = false; }
+  }
+  window.addEventListener("popstate", function () {
+    if (ignore) { ignore--; if (!ignore) { var q = pushQ; pushQ = []; q.forEach(function (f) { f(); }); } if (!cur && !NAV.length) homeUrl(); return; }
+    // things that aren't steps of their own just close, and the step stays where it was
+    var lone = $("call").classList.contains("on") ? function () { $("call").classList.remove("on", "ring"); callT.forEach(clearTimeout); callT = []; } : $("lock").classList.contains("on") ? function () { $("on").click(); } : null;
+    var tp = NAV[NAV.length - 1]; if (tp && tp.t === "ovl") lone = null;   // an open sheet or folder goes first
+    if (lone) { lone(); if (NAV.length) { var t = NAV.pop(); step(t); } return; }
+    var e = NAV.pop(); if (e) stepBack(e); else if (cur) { NAVING = true; home(); NAVING = false; }
+    if (!cur && !NAV.length) homeUrl();
+  });
+  ["sheet", "fold"].forEach(function (id) {   // a sheet or a folder opening is a step; closing it any other way takes the step out
+    var el = $(id), was = false; if (!el || !window.MutationObserver) return;
+    new MutationObserver(function () { var on = el.classList.contains("on"); if (on === was) return; was = on;
+      if (NAVING) return;
+      if (on) step({ t: "ovl", el: id });
+      else { var top = NAV[NAV.length - 1]; if (top && top.t === "ovl" && top.el === id) { NAV.pop(); unstep(1); } }
+    }).observe(el, { attributes: true, attributeFilter: ["class"] });
+  });
   function open(id) {
-    if (cur === id) return; if (cur) $("a-" + cur).classList.remove("open");
+    if (cur === id) return; var prev = cur; if (cur) $("a-" + cur).classList.remove("open");
     cur = id; document.documentElement.classList.add("inapp"); var a = $("a-" + id); RENDER[id] && RENDER[id](); a.classList.add("open"); a.setAttribute("aria-hidden", "false"); $("home").classList.add("away");
     if (id === "cam") camStart();
     if (id === "msg") msgDot(false);
     if (id === "msg" && introLater) { introLater = false; setTimeout(function () { intro(); }, 200); }
     if (id === "mail") dockDot(3, false);
     if (id === "msg" && askDot()) { put("ah_app_dot_seen", "1"); dockDot(2, false); }
-    history.replaceState(null, "", "#" + id);
+    if (NAVING) { try { history.replaceState(history.state, "", "#" + id); } catch (x) {} } else step({ t: "app", id: id, prev: prev }, "#" + id);
   }
   function home() {
+    var k = NAVING ? 0 : NAV.length; if (!NAVING) NAV = [];
+    var was = NAVING; NAVING = true;
+    try { homeIn(); } finally { NAVING = was; }
+    if (k) unstep(k); else homeUrl();
+  }
+  function homeIn() {
     typeT.forEach(clearTimeout); typeT = [];
     if (REC && REC.mr.state !== "inactive") try { REC.mr.stop(); } catch (e) {}
     if (!cur) return; document.documentElement.classList.remove("inapp"); var a = $("a-" + cur); a.classList.remove("open"); a.setAttribute("aria-hidden", "true"); if (cur === "cam") camStop(); cur = null;
     $("home").classList.remove("away"); $("call").classList.remove("on"); $("sheet").classList.remove("on");
-    history.replaceState(null, "", location.pathname + location.search);
     if (introLater) { introLater = false; setTimeout(intro, 450); }   // a newcomer who landed in an app gets the welcome on their first look at the home screen
   }
-  function view(app, v) { qa(".view", $("a-" + app)).forEach(function (x) { x.classList.toggle("on", x.getAttribute("data-v") === v); }); var b = qa(".view.on .body,.view.on .thread", $("a-" + app))[0]; if (b) b.scrollTop = 0; }
+  var BACKING = false;
+  function view(app, v, tab) {
+    var from = (qa(".view.on", $("a-" + app))[0] || {}).getAttribute ? qa(".view.on", $("a-" + app))[0].getAttribute("data-v") : null;
+    if (!NAVING && from !== v) {
+      if (rootView(app, v)) dropViews(app);
+      else if (BACKING) { var top = NAV[NAV.length - 1]; if (top && top.t === "view" && top.app === app) { NAV.pop(); unstep(1); } }
+      else if (cur === app) step({ t: "view", app: app, from: from });
+    }
+    view0(app, v);
+  }
+  function view0(app, v) { qa(".view", $("a-" + app)).forEach(function (x) { x.classList.toggle("on", x.getAttribute("data-v") === v); }); var b = qa(".view.on .body,.view.on .thread", $("a-" + app))[0]; if (b) b.scrollTop = 0; }
   (function () {   // the bar also goes home with a swipe up, the way a phone's does
     var y0 = null; document.addEventListener("pointerdown", function (e) { y0 = e.target.closest && e.target.closest(".hb") ? e.clientY : null; });
     document.addEventListener("pointerup", function (e) { if (y0 != null && y0 - e.clientY > 14) home(); y0 = null; });
   })();
   document.addEventListener("click", function (e) {
     var t = e.target.closest("[data-home]"); if (t) { home(); return; }
-    t = e.target.closest("[data-back]"); if (t) { view(cur, t.getAttribute("data-back")); return; }
+    t = e.target.closest("[data-back]"); if (t) { BACKING = true; try { view(cur, t.getAttribute("data-back")); } finally { BACKING = false; } return; }
     t = e.target.closest("[data-tab]"); if (t) { qa("[data-tab]", $("a-phone")).forEach(function (b) { b.setAttribute("aria-selected", b === t ? "true" : "false"); }); if (t.getAttribute("data-tab") === "voice") RENDER.voiceView(); view("phone", t.getAttribute("data-tab")); }
   });
   document.addEventListener("keydown", function (e) { if (e.key !== "Escape") return; if ($("call").classList.contains("on")) return endCall(); if ($("sheet").classList.contains("on")) return $("sheet").classList.remove("on"); if (cur) { var back = qa(".view.on [data-back]", $("a-" + cur))[0]; if (back) back.click(); else home(); } });
