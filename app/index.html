@@ -1916,6 +1916,7 @@ html.desk #storeA .sabout p{font-size:16px;max-width:38em}
     var seg = el("div", "seg"); L.forEach(function (code, i) { var b = el("button", "", esc(LN[i])); b.type = "button"; b.setAttribute("aria-pressed", i === li() ? "true" : "false"); b.onclick = function () { setLang(i); }; seg.appendChild(b); }); lg.appendChild(seg); l.appendChild(lg);
     l.appendChild(srow(w("sSnd"), w("sSndHint"), tog(sndOn(), function (v) { put("ah_app_snd", v ? null : "0"); if (v) { ac(); setTimeout(function () { sfx("text"); }, 60); } else ringOff(); })));
     l.appendChild(srow(w("sSound"), w("sSoundHint"), tog(get("fb_sound") !== "0", function (v) { put("fb_sound", v ? "1" : "0"); }))); c.appendChild(l);
+    acct(c);   // the account sits right under You, where people look for it (the owner, Nov 7)
     c.appendChild(el("p", "sec", esc(w("sLook")))); l = el("div", "list"); l.appendChild(lookPick()); c.appendChild(l);
     c.appendChild(el("p", "sec", esc(w("sWall")))); l = el("div", "list"); l.appendChild(wallPick()); l.appendChild(el("div", "row", '<span class="tx"><small>' + esc(w("sWallHint")) + "</small></span>")); c.appendChild(l);
     c.appendChild(el("p", "sec", esc(w("sIcons")))); l = el("div", "list"); l.appendChild(iconPick()); c.appendChild(l);
@@ -1931,7 +1932,6 @@ html.desk #storeA .sabout p{font-size:16px;max-width:38em}
       b.onclick = function () { var L = layout(); L.x = L.x.filter(function (x) { return x !== k; }); saveLayout(L); paintHome(); RENDER.set(); }; ch.appendChild(b); }); l.appendChild(ch); }
     var rs = el("button", "row", '<span class="tx"><b class="lnk">' + esc(w("sRestore")) + "</b><small>" + esc(w("eHint")) + "</small></span>"); rs.type = "button"; rs.onclick = function () { restoreLayout(); RENDER.set(); toast(w("sRestored")); }; l.appendChild(rs);
     c.appendChild(l);
-    acct(c);
     c.appendChild(el("p", "sec", esc(w("sPhone")))); l = el("div", "list");
     var inAcct = AH() && AHID.user();
     l.appendChild(srow(w(inAcct ? "sKeepsAcc" : "sKeeps").replace("{n}", keyCount()), w(inAcct ? "aCopy" : "none")));
