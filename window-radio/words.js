@@ -64,6 +64,7 @@ window.WR_W = {
     pot: ["A pot · 30 min", "一壶茶 · 30分钟", "一壺茶 · 30分鐘", "Una tetera · 30 min", "Una tetera · 30 min"],
     open: ["Until I stop", "直到我停下", "直到我停下", "Hasta que pare", "Fins que pari"]
   },
+  winding: ["Recording your tape…", "正在录你的磁带…", "正在錄你的磁帶…", "Grabando tu cinta…", "Gravant la teva cinta…"],
   left: ["{m} min left", "还剩 {m} 分钟", "還剩 {m} 分鐘", "Quedan {m} min", "Queden {m} min"],
   side: ["Side A", "A面", "A面", "Cara A", "Cara A"],
   sideB: ["Side B", "B面", "B面", "Cara B", "Cara B"],
@@ -90,7 +91,8 @@ window.WR_W = {
   backWin: ["Back to the window", "回到窗边", "回到窗邊", "Volver a la ventana", "Tornar a la finestra"],
   play: ["Play", "播放", "播放", "Reproducir", "Reprodueix"],
   pause: ["Pause", "暂停", "暫停", "Pausa", "Pausa"],
-  scene: ["A window, a desk, a little tape player and Yuzu asleep", "一扇窗、一张桌子、一台小录音机，柚子在睡觉", "一扇窗、一張桌子、一台小錄音機，柚子在睡覺", "Una ventana, un escritorio, un pequeño radiocasete y Yuzu dormida", "Una finestra, un escriptori, un petit radiocasset i la Yuzu adormida"],
+  scene: ["A window, a desk, a little tape player and {p}", "一扇窗、一张桌子、一台小录音机，还有{p}", "一扇窗、一張桌子、一台小錄音機，還有{p}", "Una ventana, un escritorio, un pequeño radiocasete y {p}", "Una finestra, un escriptori, un petit radiocasset i {p}"],
+  pets: { miso: ["Miso", "味噌", "味噌", "Miso", "el Miso"], yuzu: ["Yuzu", "柚子", "柚子", "Yuzu", "la Yuzu"], dog: ["Mantou", "馒头", "饅頭", "Mantou", "el Mantou"] },
   /* the tape's name: what's outside + something nearby */
   wp: {
     sun: ["Sunlight on {o}", "阳光照在{o}", "陽光照在{o}", "Sol sobre {o}", "Sol sobre {o}"],
