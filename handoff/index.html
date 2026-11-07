@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d2609880ff"></script>
+    <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
     <!-- Pinch-zoom stays allowed (accessibility). interactive-widget lets Android shrink the layout when the keyboard opens. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="color-scheme" content="dark light">
@@ -942,6 +942,7 @@
                 notifUnsupported: 'Not supported in this browser',
                 notifIosHint: 'On iPhone, add Handoff to your Home Screen first.',
                 notifNotConfigured: 'Not available yet',
+                notifPhone: 'Only on your after-hours phone', notifOpen: 'Open ↗',
                 passwordSection: 'Change password (optional)',
                 currentPassVerify: 'Current password',
                 newPassLabel: 'New password',
@@ -1042,6 +1043,7 @@
                 notifUnsupported: '此浏览器不支持',
                 notifIosHint: '在 iPhone 上，请先将 Handoff 添加到主屏幕。',
                 notifNotConfigured: '暂时还不能用',
+                notifPhone: '只在你的 after-hours 手机上', notifOpen: '打开 ↗',
                 passwordSection: '修改密码（选填）',
                 currentPassVerify: '当前密码',
                 newPassLabel: '新密码',
@@ -1142,6 +1144,7 @@
                 notifUnsupported: '此瀏覽器不支援',
                 notifIosHint: '在 iPhone 上，請先將 Handoff 加入主畫面。',
                 notifNotConfigured: '暫時還不能用',
+                notifPhone: '只在你的 after-hours 手機上', notifOpen: '打開 ↗',
                 passwordSection: '修改密碼（選填）',
                 currentPassVerify: '目前密碼',
                 newPassLabel: '新密碼',
@@ -1242,6 +1245,7 @@
                 notifUnsupported: 'No compatibles con este navegador',
                 notifIosHint: 'En iPhone, añade Handoff a la pantalla de inicio primero.',
                 notifNotConfigured: 'Aún no disponible',
+                notifPhone: 'Solo en tu teléfono de after-hours', notifOpen: 'Abrir ↗',
                 passwordSection: 'Cambiar contraseña (opcional)',
                 currentPassVerify: 'Contraseña actual',
                 newPassLabel: 'Nueva contraseña',
@@ -1342,6 +1346,7 @@
                 notifUnsupported: 'No compatibles amb aquest navegador',
                 notifIosHint: 'A l’iPhone, afegeix Handoff a la pantalla d’inici primer.',
                 notifNotConfigured: 'Encara no disponible',
+                notifPhone: 'Només al teu telèfon d’after-hours', notifOpen: 'Obre ↗',
                 passwordSection: 'Canviar contrasenya (opcional)',
                 currentPassVerify: 'Contrasenya actual',
                 newPassLabel: 'Nova contrasenya',
@@ -2567,43 +2572,24 @@
             }, { onConflict: 'endpoint' });
         }
 
+        // The owner, Nov 7: Handoff's news lives only on the after-hours phone (after-hours.work/app/ reads your capsules with your
+        // sign-in and shows "something arrived" there). No notification goes through the browser: a subscription made before is
+        // taken off the server and out of the browser.
         async function refreshPushStatus() {
             const btn = $('notif-btn');
-            show(btn, false);
-            if (!vapidPublicKey) { setText('notif-status', t('notifNotConfigured')); return; }
-            if (!swReg || !('PushManager' in window) || typeof Notification === 'undefined') {
-                setText('notif-status', isIOS() && !isStandalone() ? t('notifIosHint') : t('notifUnsupported'));
-                return;
-            }
-            if (Notification.permission === 'denied') { setText('notif-status', t('notifBlocked')); return; }
-            const sub = await getPushSub();
-            setText('notif-status', sub ? t('notifOn') : t('notifOff'));
-            btn.textContent = sub ? t('notifDisable') : t('notifEnable');
+            setText('notif-status', t('notifPhone'));
+            btn.textContent = t('notifOpen');
             show(btn, true);
+            try {
+                const old = await getPushSub();
+                if (old) {
+                    if (supabaseClient) await supabaseClient.from('push_subscriptions').delete().eq('endpoint', old.endpoint);
+                    await old.unsubscribe();
+                }
+            } catch (e) {}
         }
 
-        async function togglePush() {
-            const btn = $('notif-btn');
-            btn.disabled = true;
-            try {
-                const existing = await getPushSub();
-                if (existing) {
-                    await supabaseClient.from('push_subscriptions').delete().eq('endpoint', existing.endpoint);
-                    await existing.unsubscribe();
-                } else {
-                    const perm = await Notification.requestPermission();
-                    if (perm === 'granted') {
-                        const sub = await swReg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(vapidPublicKey) });
-                        await savePushSub(sub);
-                    }
-                }
-            } catch (e) {
-                showMsg('modal-msg', t('errGeneric'));
-            } finally {
-                btn.disabled = false;
-                refreshPushStatus();
-            }
-        }
+        function togglePush() { location.href = '/app/'; }
 
         // ============================================================================
         // 12. REALTIME, LIFECYCLE, BOOT

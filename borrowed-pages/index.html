@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d2609880ff"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Borrowed Pages · real books, lent by hand</title>
 <meta name="description" content="Real books, lent by hand between neighbours. Browse a house of books people actually own, ask for one, meet and hand it over. No account.">
@@ -683,11 +683,11 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px;padding:8px 0;mi
   var askFor = new URLSearchParams(location.search).get("book");
   (function config() {
     var sc = document.createElement("script"); sc.src = "/config.js";
-    sc.onload = function () { var c = window.FB_SUPABASE || {}; cfg.url = c.url || ""; cfg.key = c.anonKey || ""; load().then(refreshMine).then(function () { if (askFor) openBook(askFor); }); };
+    sc.onload = function () { var c = window.FB_SUPABASE || {}; cfg.url = c.url || ""; cfg.key = c.anonKey || ""; load().then(refreshMine).then(function () { if (askFor) openBook(askFor); else if (/^#mine$/.test(location.hash)) { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} myShelf(); } }); };   /* #mine: the after-hours phone sends "someone asked" here */
     sc.onerror = function () { failed = true; render(); };
     document.head.appendChild(sc);
   })();
-  if (!lsGet("bp_app_seen") && !askFor && !/[#&]keys?=/.test(location.hash)) setTimeout(welcome, 500);
+  if (!lsGet("bp_app_seen") && !askFor && !/[#&]keys?=|^#mine$/.test(location.hash)) setTimeout(welcome, 500);
 })();
 </script>
 </body>

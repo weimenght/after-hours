@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d2609880ff"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Paw Reading</title>
 <meta name="description" content="Miso and Yuzu's stall from Nearby: one card a day from the Nearby deck, and it asks one thing of you, somewhere real. Draw with someone and you both get the same card. Kept on your own device.">
@@ -189,10 +189,11 @@ var W = {
   hTown: ["In Nearby, the stall is by the Plaza", "在近邻里，小摊就在广场边上", "在近鄰裡，小攤就在廣場邊上", "En Cerca, el puesto está junto a la Plaza", "A A Prop, la parada és al costat de la Plaça"],
   ok: ["OK", "好", "好", "Vale", "D'acord"],
   mBtn: ["A card in the morning", "每天早上一张牌", "每天早上一張牌", "Una carta por la mañana", "Una carta al matí"],
-  mHead: ["The cats nudge you once a day, at a time you pick. Off unless you turn it on.", "猫咪每天在你选的时间轻轻提醒你一次。你不打开就不会有。", "貓咪每天在你選的時間輕輕提醒你一次。你不打開就不會有。", "Las gatas te avisan una vez al día, a la hora que elijas. Apagado si no lo activas.", "Les gates t'avisen un cop al dia, a l'hora que triïs. Apagat si no ho actives."],
+  mHead: ["The cats nudge you once a day, at a time you pick, only on your after-hours phone. Nothing is sent. Off unless you turn it on.", "猫咪每天在你选的时间轻轻提醒你一次，只在你的 after-hours 手机上，不发送任何东西。你不打开就不会有。", "貓咪每天在你選的時間輕輕提醒你一次，只在你的 after-hours 手機上，不傳送任何東西。你不打開就不會有。", "Las gatas te avisan una vez al día, a la hora que elijas, solo en tu teléfono de after-hours. No se envía nada. Apagado si no lo activas.", "Les gates t'avisen un cop al dia, a l'hora que triïs, només al teu telèfon d'after-hours. No s'envia res. Apagat si no ho actives."],
   mTime: ["At", "时间", "時間", "A las", "A les"],
   mOn: ["Turn it on", "打开", "打開", "Activar", "Activa-ho"],
   mOff: ["Stop it", "关掉", "關掉", "Desactivar", "Desactiva-ho"],
+  mPhone: ["On your after-hours phone", "在你的 after-hours 手机上", "在你的 after-hours 手機上", "En tu teléfono de after-hours", "Al teu telèfon d'after-hours"],
   mIsOn: ["A card every morning at {t}.", "每天早上{t}，一张牌。", "每天早上{t}，一張牌。", "Una carta cada mañana a las {t}.", "Una carta cada matí a les {t}."],
   mDenied: ["The browser said no to notifications. You can allow them in its settings.", "浏览器没有允许通知。你可以在浏览器设置里打开。", "瀏覽器沒有允許通知。你可以在瀏覽器設定裡打開。", "El navegador ha dicho que no a las notificaciones. Puedes permitirlas en sus ajustes.", "El navegador ha dit que no a les notificacions. Les pots permetre a la seva configuració."],
   mFail: ["Couldn't reach the server. Try again later.", "暂时连不上服务器，稍后再试。", "暫時連不上伺服器，稍後再試。", "No se ha podido conectar. Prueba más tarde.", "No s'ha pogut connectar. Torna-ho a provar més tard."],
@@ -413,74 +414,42 @@ function bell(ac) {
 }
 function niceDay(d) { var m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(d); if (!m) return d; try { return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString(LANGS[li()] === "zh-Hant" ? "zh-TW" : LANGS[li()], { month: "long", day: "numeric" }); } catch (e) { return d; } }
 
-/* ---------------- a card in the morning: Little Things' Web Push, reused ----------------
-   Off unless asked. Same pieces as Little Things: the town's device key hashed as sha256("lt:" + fb_device_key) (so Nearby's
-   "Delete my things from the server" covers it), lt_push_get for the public key (hidden until the server side is set up),
-   lt_push_set with p_app 'paw', lt_push_off. Its own registration of /little-things/sw.js at scope /little-things/paw/, so
-   it has its own subscription and never replaces Little Things' nudge. Privacy entry "paw" in fbc.js. */
-var KOK = /^[A-Za-z0-9_-]{32,128}$/, SCOPE = "/little-things/paw/";
+/* ---------------- a card in the morning: only on the after-hours phone ----------------
+   The owner, Nov 7: no notification through the browser any more. The time is kept on this device (paw_push {h, m}) and
+   after-hours.work/app/ shows "Today's card is waiting" from that time on a day no card is drawn yet. Nothing is sent.
+   A morning card someone turned on before (it had an address, ep) is taken off the server and out of the browser once,
+   with the same pieces it was made with (sha256("lt:" + fb_device_key), lt_push_off, the worker at /little-things/paw/). */
+var KOK = /^[A-Za-z0-9_-]{32,128}$/;
 function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 function lsSet(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
 function cfg() { return new Promise(function (res) { if (window.FB_SUPABASE && FB_SUPABASE.url) return res(FB_SUPABASE); var sc = document.createElement("script"); sc.src = "/config.js"; sc.onload = sc.onerror = function () { res(window.FB_SUPABASE || {}); }; document.head.appendChild(sc); }); }
 function rpc(fn, body) {
   return cfg().then(function (c) {
     if (!c.url) throw new Error("offline");
-    return fetch(c.url + "/rest/v1/rpc/" + fn, { method: "POST", headers: { apikey: c.anonKey, Authorization: "Bearer " + c.anonKey, "Content-Type": "application/json" }, body: JSON.stringify(body || {}) })
-      .then(function (r) { return r.text().then(function (x) { var j = null; try { j = x ? JSON.parse(x) : null; } catch (e) {} if (!r.ok) throw new Error((j && j.message) || "error"); return j; }); });
+    return (window.__fbRealFetch || fetch).call(window, c.url + "/rest/v1/rpc/" + fn, { method: "POST", headers: { apikey: c.anonKey, Authorization: "Bearer " + c.anonKey, "Content-Type": "application/json" }, body: JSON.stringify(body || {}) })
+      .then(function (r) { if (!r.ok) throw new Error("error"); });
   });
 }
-function newKey() { var a = new Uint8Array(32); crypto.getRandomValues(a); return btoa(String.fromCharCode.apply(null, a)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
-function devKey() { var k = lsGet("fb_device_key"); if (!k || !KOK.test(k)) { k = newKey(); lsSet("fb_device_key", k); } return k; }
-var secMemo = null;
-function secret() { return secMemo || (secMemo = crypto.subtle.digest("SHA-256", new TextEncoder().encode("lt:" + devKey())).then(function (b) { return Array.prototype.map.call(new Uint8Array(b), function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); })); }
-function consent() { try { if (window.FBC && FBC.ask) { var d = (FBC.DATA || []).filter(function (x) { return x.k === "paw"; })[0]; if (d) return FBC.ask(d); } } catch (e) {} return Promise.resolve(true); }
-function pushCan() { try { return !!(window.isSecureContext && "serviceWorker" in navigator && "PushManager" in window && "Notification" in window); } catch (e) { return false; } }
-var pushProbe = null, pushKey = null;
-function probePush() {
-  if (!pushCan()) return Promise.resolve(null);
-  if (!pushProbe) pushProbe = rpc("lt_push_get", {}).then(function (k) { return typeof k === "string" && /^[A-Za-z0-9_-]{40,200}$/.test(k) ? (pushKey = k) : null; }).catch(function () { pushProbe = null; return null; });
-  return pushProbe;
-}
+function secret() { var k = lsGet("fb_device_key"); if (!k || !KOK.test(k)) return Promise.reject(new Error("nokey")); return crypto.subtle.digest("SHA-256", new TextEncoder().encode("lt:" + k)).then(function (b) { return Array.prototype.map.call(new Uint8Array(b), function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); }); }
 function pushState() { try { var o = JSON.parse(lsGet("paw_push") || "null"); return o && typeof o.h === "number" ? o : null; } catch (e) { return null; } }
-function tz() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch (e) { return "UTC"; } }
-function keyBytes(b) { b = b.replace(/-/g, "+").replace(/_/g, "/"); while (b.length % 4) b += "="; var r = atob(b), a = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
-function myReg() { return navigator.serviceWorker.getRegistrations().then(function (rs) { return rs.filter(function (r) { return /\/little-things\/paw\/$/.test(r.scope); })[0] || null; }); }
-function swReg() { return navigator.serviceWorker.register("/little-things/sw.js", { scope: SCOPE }).then(function (reg) { return reg.active ? reg : new Promise(function (res) { var w = reg.installing || reg.waiting; if (!w) return res(reg); w.addEventListener("statechange", function () { if (w.state === "activated") res(reg); }); }); }); }
-function sub(reg, k) { return reg.pushManager.getSubscription().then(function (s) { return s || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(k) }); }); }
-function sendSub(s, h, m) {
-  var j = s.toJSON ? s.toJSON() : s;
-  return secret().then(function (k) { return rpc("lt_push_set", { p_secret: k, p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth, p_hour: h, p_minute: m, p_tz: tz(), p_lang: LANGS[li()], p_app: "paw" }); })
-    .then(function () { lsSet("paw_push", JSON.stringify({ h: h, m: m, ep: j.endpoint, l: LANGS[li()] })); });
-}
-function pushOn(h, m) {
-  return consent().then(function (yes) {
-    if (!yes) return "no";
-    return Promise.resolve(Notification.permission === "granted" ? "granted" : Notification.requestPermission()).then(function (p) {
-      if (p !== "granted") return "denied";
-      return swReg().then(function (reg) { return sub(reg, pushKey); }).then(function (s) { return sendSub(s, h, m); }).then(function () { return "ok"; });
-    });
+function retire(P) {
+  if (!P || !P.ep) return Promise.resolve();
+  return secret().then(function (k) { return rpc("lt_push_off", { p_secret: k, p_endpoint: P.ep }); }).catch(function () {}).then(function () {
+    try { if (!("serviceWorker" in navigator)) return; return navigator.serviceWorker.getRegistrations().then(function (rs) { return Promise.all(rs.filter(function (r) { return /\/little-things\/paw\/$/.test(r.scope); }).map(function (r) { return r.pushManager.getSubscription().then(function (s) { return s && s.unsubscribe(); }).then(function () { return r.unregister(); }); })); }).catch(function () {}); } catch (e) {}
   });
 }
-function pushOff() {
-  var Pp = pushState();
-  return secret().then(function (k) { return rpc("lt_push_off", { p_secret: k, p_endpoint: Pp && Pp.ep || null }); }).then(function () {
-    lsSet("paw_push", null);
-    return myReg().then(function (r) { return r && r.pushManager.getSubscription().then(function (s) { return s && s.unsubscribe(); }).then(function () { return r.unregister(); }); }).catch(function () {});
-  });
-}
-function pushCheck() {   /* a morning card that's on: keep its address and language fresh (browsers renew subscriptions) */
-  var Pp = pushState(); if (!Pp || !pushCan() || Notification.permission !== "granted") return;
-  probePush().then(function (k) { if (!k) return; return myReg().then(function (r) { return r || swReg(); }).then(function (reg) { return sub(reg, k); }).then(function (s) { if (s.endpoint !== Pp.ep || Pp.l !== LANGS[li()]) return sendSub(s, Pp.h, Pp.m); }); }).catch(function () {});
-}
+function pushOn(h, m) { return retire(pushState()).then(function () { lsSet("paw_push", JSON.stringify({ h: h, m: m })); return "ok"; }); }
+function pushOff() { return retire(pushState()).then(function () { lsSet("paw_push", null); }); }
+function pushCheck() { var P = pushState(); if (P && P.ep) retire(P).then(function () { lsSet("paw_push", JSON.stringify({ h: P.h, m: P.m })); }); }
 function hm(h, m) { var d = new Date(); d.setHours(h, m, 0, 0); try { return new Intl.DateTimeFormat(LANGS[li()] === "zh-Hant" ? "zh-HK" : LANGS[li()], { hour: "numeric", minute: "2-digit" }).format(d); } catch (e) { return h + ":" + ("0" + m).slice(-2); } }
 var mornOpen = false;
 function morning(parent) {
   var box = el("div", "morn", null, parent); box.hidden = true;
-  probePush().then(function (k) {
-    var on = pushState(); if (!k && !on) return;
+  (function () {
+    var on = pushState();
     box.hidden = false; box.innerHTML = "";
     if (on) {
-      el("p", "sub", "🔔 " + esc(T(W.mIsOn, { t: hm(on.h, on.m) })), box);
+      el("p", "sub", "🔔 " + esc(T(W.mIsOn, { t: hm(on.h, on.m) })) + ' <a href="/app/">' + esc(T(W.mPhone)) + " ↗</a>", box);
       lk(W.mOff, function () { pushOff().then(function () { mornOpen = false; go(view); }, function () { toast(T(W.mFail)); }); }, box);
       return;
     }
@@ -491,10 +460,10 @@ function morning(parent) {
     var r = el("div", "row", null, box);
     btn(W.mOn, function (b) {
       var m = /^(\d{1,2}):(\d{2})/.exec(inp.value || "08:00"); if (!m) return; b.disabled = true;
-      pushOn(+m[1], +m[2]).then(function (res) { mornOpen = false; go(view); if (res === "denied") toast(T(W.mDenied)); }, function () { b.disabled = false; toast(T(W.mFail)); });
+      pushOn(+m[1], +m[2]).then(function () { mornOpen = false; go(view); }, function () { b.disabled = false; toast(T(W.mFail)); });
     }, "pri sm", r);
     btn(W.notNow, function () { mornOpen = false; go(view); }, "sm", r);
-  });
+  })();
 }
 
 /* ---------------- help, language, footer ---------------- */

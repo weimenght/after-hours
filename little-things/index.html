@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d2609880ff"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Little Things</title>
 <meta name="description" content="Popo's jar of little offline things: one at a time, in her kitchen, for a fuller life away from the screen. Kept on your own device.">
@@ -211,6 +211,7 @@ var W = {
   bCopyOn: ["A copy is kept ✓", "已留一份 ✓", "已留一份 ✓", "Copia guardada ✓", "Còpia guardada ✓"],
   bKey: ["Open it on another device", "在另一台设备上打开", "在另一部裝置上打開", "Abrirlo en otro dispositivo", "Obrir-lo en un altre dispositiu"],
   bPush: ["A knock each day", "每天提醒一下", "每天提醒一下", "Un toque cada día", "Un toc cada dia"],
+  openPhone: ["Open the phone ↗", "打开手机 ↗", "打開手機 ↗", "Abrir el teléfono ↗", "Obre el telèfon ↗"],
   bPushOn: ["A knock at {t} ✓", "每天 {t} 提醒 ✓", "每天 {t} 提醒 ✓", "Un toque a las {t} ✓", "Un toc a les {t} ✓"],
   yesCopy: ["Yes, keep a copy", "好，留一份", "好，留一份", "Sí, guarda una copia", "Sí, guarda'n una còpia"],
   noCopy: ["No, only here", "不用，只放这里", "不用，只放這裡", "No, solo aquí", "No, només aquí"],
@@ -262,7 +263,7 @@ var PP = {
   keyDone: ["*hands you the jar* Here. Same jar, new place. All your papers.", "*把罐子递给你* 拿着。同一个罐子，新地方。你的纸条全都在。", "*將個樽遞俾你* 嗱，同一個樽，換咗個新地方，你啲紙仔全部喺度。", "*te da el tarro* Toma. Mismo tarro, sitio nuevo. Todos tus papeles.", "*et dona el pot* Té. El mateix pot, en un lloc nou. Tots els teus papers."],
   keyEmpty: ["Hm. The safe box got nothing for this key. Maybe the other one never kept a copy?", "嗯……这把钥匙的保险箱是空的喔。是不是另一台从来没留过？", "嗯……呢條鎖匙個夾萬係空嘅喎。會唔會第二部從來都冇留過呀？", "Mm. La caja fuerte está vacía para esta llave. ¿Quizás el otro nunca guardó copia?", "Mm. Per a aquesta clau, la caixa forta és buida. Potser l'altre no en va guardar mai cap còpia?"],
   keyBad: ["*squints* This is not a key. This is… a noodle meh?", "*眯起眼睛* 这个不是钥匙。是……面条？", "*瞇埋對眼* 呢條唔係鎖匙嚟㗎，係……麵嚟？", "*entorna los ojos* Esto no es llave. Esto es… ¿un fideo?", "*arruga els ulls* Això no és una clau. És… un fideu?"],
-  pushQ: ["I can give you one little knock a day. Small knock, not loud. What time is good?", "我可以每天轻轻敲你一下。小小声，不吵的。几点好呀？", "我可以每日輕輕敲你一下，細細聲，唔嘈嘅。你幾點方便呀？", "Puedo darte un toquecito al día. Pequeño, no fuerte. ¿Qué hora va bien?", "Et puc fer un toquet cada dia. Fluixet, sense fer soroll. A quina hora et va bé?"],
+  pushQ: ["I can knock on your after-hours phone, one little knock a day. Small knock, not loud. Only there, nowhere else. What time is good?", "我可以在你的 after-hours 手机上，每天轻轻敲你一下。小小声，不吵的。只在那里敲喔。几点好呀？", "我可以喺你部 after-hours 電話度，每日輕輕敲你一下，細細聲，唔嘈嘅。淨係喺嗰度敲咋。你幾點方便呀？", "Puedo tocar en tu teléfono de after-hours, un toquecito al día. Pequeño, no fuerte. Solo allí, en ningún otro sitio. ¿Qué hora va bien?", "Et puc fer un toquet cada dia al teu telèfon d'after-hours. Fluixet, sense fer soroll. Només allà, enlloc més. A quina hora et va bé?"],
   pushOnQ: ["Every day at {t}, I knock. Small knock.", "每天 {t}，我敲一下。小小声。", "每日 {t}，我敲一下，細細聲。", "Cada día a las {t}, toco. Toquecito.", "Cada dia a les {t} faig un toquet. Fluixet."],
   pushOn: ["OK! At {t}, knock knock. If you're busy, no problem lah, come later.", "好！{t} 我就来敲门。你忙的话，没关系，晚点再来。", "好！{t} 我就嚟敲門。你忙嘅話唔緊要，遲啲先嚟。", "¡Vale! A las {t}, toc toc. Si estás ocupado, no problema, vienes luego.", "Entesos! A les {t}, toc toc. Si estàs enfeinat, cap problema, ja vindràs després."],
   pushOff: ["OK, no more knocking. Come when you want, the door is open.", "好，不敲咯。想来就来，门开着的。", "好，唔敲喇。想嚟就嚟，度門開住㗎。", "Vale, no más toc toc. Ven cuando quieras, puerta abierta.", "D'acord, prou tocs. Vine quan vulguis, la porta és oberta."],
@@ -1075,50 +1076,20 @@ function takeKey(code) {
   }).catch(function () { return "fail"; });
 }
 
-/* the knock: Web Push, only once asked, only once the server side is there (lt_push_get gives the public key; otherwise hidden) */
-function pushCan() { try { return !!(window.isSecureContext && "serviceWorker" in navigator && "PushManager" in window && "Notification" in window); } catch (e) { return false; } }
-var pushProbe = null, pushKey = null;
-function probePush() {
-  if (!pushCan()) return Promise.resolve(null);
-  if (!pushProbe) pushProbe = rpc("lt_push_get", {}).then(function (k) { return typeof k === "string" && /^[A-Za-z0-9_-]{40,200}$/.test(k) ? (pushKey = k) : null; }).catch(function () { pushProbe = null; return null; });
-  return pushProbe;
-}
+/* the knock: only on the after-hours phone (the owner, Nov 7: no notification through the browser any more). The time is kept
+   on this device (lt_push {h, m}) and after-hours.work/app/ shows Popo's paper from that time on a day nothing is done yet.
+   Nothing is sent. A knock someone turned on before (it had an address, ep) is taken off the server and the browser once. */
 function pushState() { try { var o = JSON.parse(lsGet("lt_push") || "null"); return o && typeof o.h === "number" ? o : null; } catch (e) { return null; } }
 function hm(h, m) { var d = new Date(); d.setHours(h, m, 0, 0); try { return new Intl.DateTimeFormat(LANGS[li()] === "zh-Hant" ? "zh-HK" : LANGS[li()], { hour: "numeric", minute: "2-digit" }).format(d); } catch (e) { return h + ":" + ("0" + m).slice(-2); } }
-function tz() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch (e) { return "UTC"; } }
-function keyBytes(b) { b = b.replace(/-/g, "+").replace(/_/g, "/"); while (b.length % 4) b += "="; var r = atob(b), a = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
-function swReg() { return navigator.serviceWorker.register("/little-things/sw.js", { scope: "/little-things/" }).then(function () { return navigator.serviceWorker.ready; }); }
-function sendSub(sub, h, m) {
-  var j = sub.toJSON ? sub.toJSON() : sub;
-  return secret().then(function (k) { return rpc("lt_push_set", { p_secret: k, p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth, p_hour: h, p_minute: m, p_tz: tz(), p_lang: LANGS[li()] }); })
-    .then(function () { lsSet("lt_push", JSON.stringify({ h: h, m: m, ep: j.endpoint, l: LANGS[li()] })); });
-}
-function pushOn(h, m) {
-  return consent().then(function (yes) {
-    if (!yes) return "no";
-    return Promise.resolve(Notification.permission === "granted" ? "granted" : Notification.requestPermission()).then(function (p) {
-      if (p !== "granted") return "denied";
-      return swReg().then(function (reg) { return reg.pushManager.getSubscription().then(function (s) { return s || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(pushKey) }); }); })
-        .then(function (sub) { return sendSub(sub, h, m); }).then(function () { return "ok"; });
-    });
+function retire(P) {   /* an old browser knock: off the server, out of the browser */
+  if (!P || !P.ep) return Promise.resolve();
+  return secret().then(function (k) { return rpc("lt_push_off", { p_secret: k, p_endpoint: P.ep }); }).catch(function () {}).then(function () {
+    try { if (!("serviceWorker" in navigator)) return; return navigator.serviceWorker.getRegistration("/little-things/").then(function (r) { return r && r.pushManager && r.pushManager.getSubscription().then(function (s) { return s && s.unsubscribe(); }).then(function () { return r.unregister(); }); }).catch(function () {}); } catch (e) {}
   });
 }
-function pushOff() {
-  var P = pushState();
-  return secret().then(function (k) { return rpc("lt_push_off", { p_secret: k, p_endpoint: P && P.ep || null }); }).then(function () {
-    lsSet("lt_push", null);
-    return navigator.serviceWorker.getRegistration("/little-things/").then(function (r) { return r && r.pushManager.getSubscription(); }).then(function (s) { return s && s.unsubscribe(); }).catch(function () {});
-  });
-}
-function pushCheck() {   /* a knock that's on: keep its address and language fresh (browsers renew subscriptions) */
-  var P = pushState(); if (!P || !pushCan()) return;   /* if the browser took the permission back, subscribe fails quietly */
-  probePush().then(function (k) {
-    if (!k) return;
-    return navigator.serviceWorker.getRegistration("/little-things/").then(function (r) { return r || swReg(); }).then(function (reg) {
-      return reg.pushManager.getSubscription().then(function (s) { return s || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(k) }); });
-    }).then(function (sub) { if (sub.endpoint !== P.ep || P.l !== LANGS[li()]) return sendSub(sub, P.h, P.m); });
-  }).catch(function () {});
-}
+function pushOn(h, m) { var P = pushState(); return retire(P).then(function () { lsSet("lt_push", JSON.stringify({ h: h, m: m })); return "ok"; }); }
+function pushOff() { var P = pushState(); return retire(P).then(function () { lsSet("lt_push", null); }); }
+function pushCheck() { var P = pushState(); if (P && P.ep) retire(P).then(function () { lsSet("lt_push", JSON.stringify({ h: P.h, m: P.m })); }); }
 
 /* ---------------- taking the jar along (take.js): the whole jar in a link's # or in a file; nothing is sent anywhere ----------------
    It arrives as { app: "little-things", v: 1, jar: { v, size, done, old, reset } } and goes in through merge(), paper by paper. */
@@ -1155,8 +1126,7 @@ function pocket(box, first) {
   mk(r0, papers ? T(W.bTake) : T(W.bBring), papers ? takeView : bringView, "pri");
   mk(r0, syncOn() ? T(W.bCopyOn) : T(W.bCopy), copyView);
   var ib = mk(r0, T(W.invite), function () { shareIt(T(W.inviteText), inviteLink(), ib); });
-  var pb = mk(r0, P ? T(W.bPushOn).replace("{t}", hm(P.h, P.m)) : T(W.bPush), pushView); pb.hidden = !P;
-  if (!P) probePush().then(function (k) { if (k && pb.isConnected) pb.hidden = false; });
+  mk(r0, P ? T(W.bPushOn).replace("{t}", hm(P.h, P.m)) : T(W.bPush), pushView);
 
   function copyView() {
     if (syncOn()) { speak(PP.copyOnQ); var r = row(); mk(r, T(W.stopCopy), function () { busy(); copyOff().then(function () { speak(PP.copyGone); back(); chrome(); }).catch(function () { speak(PP.fail); back(); }); }, "quiet"); mk(r, T(W.keepCopy), function () { pocket(box); }, "pri"); return; }
@@ -1227,7 +1197,7 @@ function pocket(box, first) {
     mk(r, T(W.yesPush), function () {
       var m = /^(\d{1,2}):(\d{2})/.exec(inp.value || "") || [0, 10, 0], h = Math.min(23, +m[1] || 0), mi = Math.round((+m[2] || 0) / 15) * 15; if (mi === 60) { mi = 0; h = (h + 1) % 24; }
       busy();
-      pushOn(h, mi).then(function (x) { speak(x === "ok" ? T(PP.pushOn).replace("{t}", hm(h, mi)) : x === "denied" ? T(PP.pushNo) : T(PP.onlyHere)); back(); })
+      pushOn(h, mi).then(function () { speak(T(PP.pushOn).replace("{t}", hm(h, mi))); var r2 = row(); var ph = document.createElement("a"); ph.className = "btn sm"; ph.href = "/app/"; ph.textContent = T(W.openPhone); r2.appendChild(ph); back(r2); })
         .catch(function () { speak(PP.fail); back(); });
     }, "pri");
     mk(r, T(W.noPush), function () { pocket(box); }, "quiet");
