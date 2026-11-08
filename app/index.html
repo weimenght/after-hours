@@ -1255,7 +1255,8 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     function lum(r, g, b) { return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; }
     function hex(c) { var m = /^#?([0-9a-f]{6})$/i.exec(c || ""); if (!m) return 0; var n = parseInt(m[1], 16); return lum(n >> 16 & 255, n >> 8 & 255, n & 255); }
     try {
-      if (wallNow() === "sky") { var c = skyCols(wHour()); L = hex(c[0]) * .5 + hex(c[1]) * .5; }
+      if (wallNow() === "sky") { var bg = getComputedStyle($("sky")).backgroundImage || "", m2 = bg.match(/rgba?\(([^)]+)\)/g) || [], tt = 0;   /* the colours the sky actually shows */
+        m2.forEach(function (x) { var v = x.replace(/[^\d.,]/g, "").split(",").map(Number); tt += lum(v[0], v[1], v[2]); }); L = m2.length ? tt / m2.length : 0; }
       else if (WC && WC.width) { var g = WC.getContext("2d"), t = 0, n = 0;
         for (var i = 1; i < 6; i++) for (var j = 1; j < 6; j++) { var d = g.getImageData(Math.floor(WC.width * i / 6), Math.floor(WC.height * (.12 + j * .1)), 1, 1).data; t += lum(d[0], d[1], d[2]); n++; }
         L = t / n; }
