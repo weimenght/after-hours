@@ -5,6 +5,7 @@
 window.CH_W = {
   title: ["Common Hand", "凑一手", "湊一手", "Mano Común", "Mà Comuna"],
   sub: ["Find something in common for every pair at the table. Ten minutes, while the tiles are washed.", "让桌上每两个人都找到一个共同点。洗牌的十分钟就够了。", "讓桌上每兩個人都找到一個共同點。洗牌的十分鐘就夠了。", "Encontrad algo en común para cada pareja de la mesa. Diez minutos, mientras se lavan las fichas.", "Trobeu alguna cosa en comú per a cada parella de la taula. Deu minuts, mentre es renten les fitxes."],
+  sound: ["Sound", "声音", "聲音", "Sonido", "So"],
   lang: ["Language", "语言", "語言", "Idioma", "Idioma"],
   names: { popo: ["Popo", "婆婆", "婆婆", "Popo", "Popo"], mei: ["Mei", "Mei", "Mei", "Mei", "Mei"], wei: ["Wei", "Wei", "Wei", "Wei", "Wei"], mantou: ["Mantou", "馒头", "饅頭", "Mantou", "Mantou"] },
   homeLines: [

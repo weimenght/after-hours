@@ -137,6 +137,8 @@ input::placeholder { color: #a08a70; }
 .note:empty { display: none; }
 :lang(zh-Hant) { --vt: "VT323", "PingFang HK", "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", ui-monospace, monospace; }
 .langm { position: relative; }
+.tops { display: flex; gap: 8px; align-items: center; }
+#sndBtn[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
 .langm .menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; background: var(--wood); border: 3px solid #000; box-shadow: var(--drop); display: grid; min-width: 150px; }
 .langm .menu button { all: unset; cursor: pointer; padding: 10px 14px; font-family: var(--vt); font-size: 20px; color: var(--ink-on-wood); }
 .langm .menu button[aria-checked="true"] { color: var(--amber); }
@@ -147,7 +149,7 @@ input::placeholder { color: #a08a70; }
 <div id="app">
   <div class="top">
     <span class="brand" id="brand">Common Hand</span>
-    <div class="langm"><button class="btn small" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false">EN</button><div class="menu" id="langMenu" role="menu" hidden></div></div>
+    <div class="tops"><button class="btn small" id="sndBtn" type="button" aria-pressed="true">♪</button><div class="langm"><button class="btn small" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false">EN</button><div class="menu" id="langMenu" role="menu" hidden></div></div></div>
   </div>
 
   <!-- home: who's at the table -->
@@ -407,6 +409,37 @@ var BAMB = { 2: [[14, 4, 13], [14, 20, 13]], 3: [[14, 4, 13], [8, 20, 13], [20, 
   5: [[6, 4, 13], [22, 4, 13], [14, 12, 13, 1], [6, 20, 13], [22, 20, 13]], 6: [[6, 4, 13], [14, 4, 13], [22, 4, 13], [6, 20, 13], [14, 20, 13], [22, 20, 13]],
   7: [[14, 3, 9, 1], [6, 15, 8], [14, 15, 8], [22, 15, 8], [6, 25, 8], [14, 25, 8], [22, 25, 8]], 8: [[4, 4, 13], [11, 4, 13], [17, 4, 13], [24, 4, 13], [4, 20, 13], [11, 20, 13, 1], [17, 20, 13, 1], [24, 20, 13]] };
 var HCOL = {};
+/* the circles are round things from Nearby: one kind a tile, so the count still reads at a glance */
+function roundThing(g, kind, cx, cy, r) {
+  var C = { bun: ["#a8875a", "#fffaf0", "#ffffff"], tart: ["#a8692a", "#c98a3a", "#f6c445"], cookie: ["#9a6a2a", "#e2b25c", "#f3d38e"], orange: ["#c25e12", "#f08a24", "#ffb35c"], mooncake: ["#7a4a1c", "#c98a3a", "#e2a85a"] }[kind];
+  for (var y = -r; y <= r; y++) for (var x = -r; x <= r; x++) {
+    var d = Math.sqrt(x * x + y * y); if (d > r + .35) continue;
+    var c = d > r - 1 ? C[0] : C[1];
+    if (kind === "tart") { c = d > r - 1 ? ((x + y) & 1 ? C[0] : C[1]) : d > r - 2 ? C[1] : C[2]; }
+    if (kind === "cookie" && r >= 4 && d < r - 2.6) continue;   /* Popo's ring biscuits from the blue tin */
+    if (kind === "mooncake" && r >= 4 && (Math.abs(x) + Math.abs(y) === 2 || (x === 0 && y === 0))) c = C[2];
+    if ((kind === "bun" || kind === "orange") && x < 0 && y < 0 && d < r - 1.5 && d > r - 3) c = C[2];
+    if (kind === "bun" && x + y > 1 && d > r - 2.3 && d <= r - 1) c = "#e6d3ac";
+    px(g, Math.round(cx + x), Math.round(cy + y), c);
+  }
+  if (kind === "bun") { px(g, cx - 2, cy - r + 2, C[0], 5, 1); px(g, cx - 1, cy - r + 1, C[0], 3, 1); px(g, cx, cy - r + 3, C[0]); }
+  if (kind === "orange") { px(g, cx, cy - r - 1, TC.greenLo); px(g, cx + 1, cy - r - 1, TC.green, 2, 1); }
+  if (kind === "cookie") { [[-2, -r + 1], [r - 2, 0], [-r + 1, 1], [1, r - 1]].forEach(function (p) { px(g, cx + p[0], cy + p[1], "#fff8e6"); }); }
+}
+function pet(g, k, x, y, o) {   /* the town's own sprite, with a thin dark edge so it stands off the ivory */
+  var P = PETS[k], dark = {}; for (var c in P) dark[c] = P[c] ? "#3a2614" : P[c];
+  PETS[k] = dark; [[-1, 0], [1, 0], [0, -1], [0, 1]].forEach(function (d) { drawPet(g, k, x + d[0], y + d[1], 1, o); }); PETS[k] = P;
+  drawPet(g, k, x, y, 1, o);
+}
+function paw(g, cx, cy) { var c = "#5a3a2a"; px(g, cx - 1, cy, c, 3, 2); px(g, cx - 2, cy - 2, c); px(g, cx, cy - 3, c); px(g, cx + 2, cy - 2, c); }
+function cushion(g) {   /* the 1 of circles: Popo's round cushion, with Miso asleep on it */
+  for (var y = -11; y <= 11; y++) for (var x = -11; x <= 11; x++) { var d = Math.sqrt(x * x + y * y); if (d > 11.35) continue; px(g, 16 + x, 19 + y, d > 10.2 ? TC.blue : d > 9 ? TC.gold : d > 8 ? TC.red : (x + y) % 4 ? TC.red : "#b02a33"); }
+  [[16, 7], [16, 31], [4, 19], [28, 19]].forEach(function (p) { px(g, p[0], p[1], TC.gold); });
+  pet(g, "miso", 16, 25, { asleep: true });
+}
+var CIRC_KIND = { 2: "bun", 3: "tart", 4: "cookie", 5: "orange", 6: "mooncake" };
+/* who walks behind the bamboo: [animal, x, asleep, flip] (the stalks are drawn over them) */
+var BAMB_PET = { 2: ["miso", 15], 3: ["yuzu", 16, 0, 1], 4: ["dog", 16], 5: ["yuzu", 15], 6: ["miso", 17, 0, 1], 7: ["dog", 16, 0, 1], 8: ["yuzu", 16, 1] };
 function bitmap(g, rows, ox, oy, map) { rows.forEach(function (row, y) { for (var x = 0; x < row.length; x++) if (map[row[x]]) px(g, ox + x, oy + y, map[row[x]]); }); }
 function seg(g, x0, y0, x1, y1, c, w) { w = w || 2; var n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) * 2 || 1; for (var i = 0; i <= n; i++) px(g, Math.round(x0 + (x1 - x0) * i / n), Math.round(y0 + (y1 - y0) * i / n), c, w, w); }
 function baiban(g) {   /* 白板: the blank, a blue frame with a hairline inside and notched corners */
@@ -434,8 +467,16 @@ var PIC = {
 var BONUS = { "春": [1, TC.red, "sprout"], "夏": [2, TC.red, "sun"], "秋": [3, TC.red, "maple"], "冬": [4, TC.red, "snow"], "梅": [1, TC.blue, "plum"], "兰": [2, TC.blue, "orchid"], "竹": [3, TC.blue, "bamboo"], "菊": [4, TC.blue, "mum"] };
 function drawTile(g, q) {
   shell(g, false);
-  if (q.s === "c") CIRC[q.t].forEach(function (d) { disc(g, d[0], d[1], d[2]); });
-  else if (q.s === "b") { if (q.t === 1) bird(g, 8, 10); else BAMB[q.t].forEach(function (b) { stalk(g, b[0], b[1], b[2], b[3]); }); }
+  if (q.s === "c") {
+    if (q.t === 1) cushion(g);
+    else if (q.t === 8) [[10, 5], [22, 8], [10, 13], [22, 16], [10, 21], [22, 24], [10, 29], [22, 32]].forEach(function (p) { paw(g, p[0], p[1]); });
+    else if (q.t === 7) CIRC[7].forEach(function (d, i) { roundThing(g, i < 3 ? "cookie" : "tart", d[0], d[1], d[2]); });
+    else CIRC[q.t].forEach(function (d) { roundThing(g, CIRC_KIND[q.t], d[0], d[1], d[2]); });
+  }
+  else if (q.s === "b") {
+    if (q.t === 1) { stalk(g, 5, 4, 28); seg(g, 9, 9, 13, 6, TC.green, 1); seg(g, 9, 10, 13, 8, TC.greenHi, 1); pet(g, "yuzu", 19, 33, { flip: true }); }
+    else { var P = BAMB_PET[q.t]; if (P) pet(g, P[0], P[1], 33, { asleep: !!P[2], flip: !!P[3] }); BAMB[q.t].forEach(function (b) { stalk(g, b[0], b[1], b[2], b[3]); }); }
+  }
   else if (q.s === "m") { g.jobs.push([NUM[q.t], 16, 9.5, 14, TC.ink, 700, .45], ["萬", 16, 25.5, 20, TC.red, 700, .45]); }
   else if (q.s === "f") { var B = BONUS[q.t]; bitmap(g, DIG[B[0]], 3, 3, { "#": B[1] }); PIC[B[2]](g); g.jobs.push([q.t, 16, 27.5, 15, B[1], 500, .42, false]); }
   else if (q.t === "白") baiban(g);
@@ -462,6 +503,41 @@ function tileURL(key, draw) {
 function tileHTML(qi, cls) { return '<img class="tile ' + (cls || "") + '" src="' + tileURL(qi, function (g) { drawTile(g, Q[qi]); }) + '" alt="" aria-hidden="true">'; }
 function backURL() { return tileURL("back", function (g) { shell(g, true); }); }
 
+/* ---------- sound: tiles knocking, made in the browser (no files); only after a tap; ♪ turns it off (ch_snd, on this device) ---------- */
+var AC = null, SND = true;
+try { SND = localStorage.getItem("ch_snd") !== "0"; } catch (e) {}
+function ac() {
+  if (!SND) return null;
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+  if (AC.state === "suspended") AC.resume();
+  return AC;
+}
+function noise(a, dur) { var b = a.createBuffer(1, Math.ceil(a.sampleRate * dur), a.sampleRate), d = b.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; var n = a.createBufferSource(); n.buffer = b; return n; }
+function clack(a, t, f, v) {   /* two tiles knocking: a bright tick and a short hollow body */
+  f = f || 2800; v = v || .5;
+  var n = noise(a, .05), bp = a.createBiquadFilter(), g = a.createGain(); bp.type = "bandpass"; bp.frequency.value = f; bp.Q.value = 3.5;
+  g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + .045); n.connect(bp); bp.connect(g); g.connect(a.destination); n.start(t); n.stop(t + .05);
+  var o = a.createOscillator(), og = a.createGain(); o.type = "triangle"; o.frequency.setValueAtTime(f / 9, t); o.frequency.exponentialRampToValueAtTime(f / 14, t + .06);
+  og.gain.setValueAtTime(v * .5, t); og.gain.exponentialRampToValueAtTime(.001, t + .07); o.connect(og); og.connect(a.destination); o.start(t); o.stop(t + .08);
+}
+function slide(a, t) {   /* a tile pushed across the felt */
+  var n = noise(a, .16), lp = a.createBiquadFilter(), g = a.createGain(); lp.type = "lowpass"; lp.frequency.setValueAtTime(700, t); lp.frequency.linearRampToValueAtTime(1600, t + .14);
+  g.gain.setValueAtTime(.001, t); g.gain.linearRampToValueAtTime(.18, t + .06); g.gain.exponentialRampToValueAtTime(.001, t + .15); n.connect(lp); lp.connect(g); g.connect(a.destination); n.start(t); n.stop(t + .16);
+}
+function bell(a, t, f, v) { [1, 2.76].forEach(function (m, i) { var o = a.createOscillator(), g = a.createGain(); o.type = "sine"; o.frequency.value = f * m; g.gain.setValueAtTime((v || .14) / (i + 1), t); g.gain.exponentialRampToValueAtTime(.001, t + (i ? .5 : 1.1)); o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + 1.2); }); }
+function sfx(kind) {
+  var a = ac(); if (!a) return; var t = a.currentTime + .01, i;
+  if (kind === "tap") clack(a, t, 3400, .18);
+  else if (kind === "draw") { slide(a, t); clack(a, t + .15, 2600, .45); }
+  else if (kind === "discard") { slide(a, t); clack(a, t + .13, 1900, .3); }
+  else if (kind === "pung") { clack(a, t, 2500); clack(a, t + .11, 2900); bell(a, t + .24, 784, .07); }
+  else if (kind === "chow") { for (i = 0; i < 3; i++) clack(a, t + i * .09, 2400 + i * 300); bell(a, t + .3, 880, .08); }
+  else if (kind === "kong") { for (i = 0; i < 4; i++) clack(a, t + i * .075, 2300 + i * 260, .55); bell(a, t + .34, 988, .12); bell(a, t + .46, 1319, .1); }
+  else if (kind === "wash") { for (i = 0; i < 14; i++) clack(a, t + i * .055 + Math.random() * .03, 1700 + Math.random() * 1600, .18 + Math.random() * .2); }
+  else if (kind === "hu") { for (i = 0; i < 6; i++) clack(a, t + i * .06, 2200 + i * 180, .4); [523, 659, 784, 1047].forEach(function (f, j) { bell(a, t + .45 + j * .13, f, .13); }); }
+}
+function sndBtn() { var b = $("sndBtn"); b.setAttribute("aria-pressed", String(SND)); b.setAttribute("aria-label", t("sound")); b.title = t("sound"); }
+
 /* ---------- screens ---------- */
 var cur = "home", toast = "", flip = false, line = null, recv = null;
 var MID = { play: 1 };   /* the footer shows everywhere but the table itself */
@@ -474,6 +550,7 @@ function render() {
   document.documentElement.lang = LANGS[li()];
   document.title = t("title");
   document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
+  sndBtn();
   $("brand").textContent = t("title"); $("langBtn").textContent = SHORT[li()]; $("langBtn").setAttribute("aria-label", t("lang"));
   $("foot").hidden = !!MID[cur]; foot();
   if (cur === "home") renderHome(); else if (cur === "play") renderPlay(); else if (cur === "done") renderDone(); else if (cur === "recv") renderRecv();
@@ -522,16 +599,17 @@ function renderPlay() {
     say($("sayPlay"), "popo", t("pairsLeft", { n: 6 - n }) + ".");
     $("drawBtn").onclick = draw;
   }
-  $("felt").querySelectorAll("[data-seat]").forEach(function (b) { b.onclick = function () { if (S.drawn == null) return; var i = +b.getAttribute("data-seat"); S.sel = S.sel.indexOf(i) >= 0 ? S.sel.filter(function (x) { return x !== i; }) : S.sel.concat(i); toast = ""; save(); renderPlay(); }; });
+  $("felt").querySelectorAll("[data-seat]").forEach(function (b) { b.onclick = function () { if (S.drawn == null) return; sfx("tap"); var i = +b.getAttribute("data-seat"); S.sel = S.sel.indexOf(i) >= 0 ? S.sel.filter(function (x) { return x !== i; }) : S.sel.concat(i); toast = ""; save(); renderPlay(); }; });
 }
-function draw() { if (!S.deck.length) S.deck = shuffled(); S.drawn = S.deck.shift(); S.sel = []; flip = true; toast = ""; save(); renderPlay(); }
+function draw() { sfx("draw"); if (!S.deck.length) S.deck = shuffled(); S.drawn = S.deck.shift(); S.sel = []; flip = true; toast = ""; save(); renderPlay(); }
 function claim() {
+  sfx(S.sel.length < 2 ? "discard" : S.sel.length === 2 ? "pung" : S.sel.length === 3 ? "chow" : "kong");
   if (S.sel.length < 2) { S.deck.push(S.drawn); S.drawn = null; S.sel = []; toast = t("discarded"); save(); renderPlay(); return; }
   var sel = S.sel.slice().sort(), fresh = [];
   for (var i = 0; i < sel.length; i++) for (var j = i + 1; j < sel.length; j++) { var k = pk(sel[i], sel[j]); if (S.pairs[k] == null) { S.pairs[k] = S.drawn; fresh.push(nm(sel[i]) + t("and") + nm(sel[j])); } }
   toast = fresh.length ? t("newSet", { p: fresh.join(", ") }) : t("already");
   S.drawn = null; S.sel = []; save();
-  if (found() === 6) { toast = ""; show("done"); } else renderPlay();
+  if (found() === 6) { toast = ""; setTimeout(function () { sfx("hu"); }, 550); show("done"); } else renderPlay();
 }
 function setsHTML(names, tiles) {
   return PAIRS.map(function (p, i) { var qi = tiles[i];
@@ -586,10 +664,11 @@ function foot() {
   if (window.FBC && FBC.foot) FBC.foot(f, { px: 1, extra: x }); else f.innerHTML = x;
 }
 if ("serviceWorker" in navigator && window.isSecureContext) addEventListener("load", function () { navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function () {}); });
-$("wash").onclick = function () { S.names = S.names.map(function (x) { return (x || "").trim(); }); if (S.screen !== "play" || found() === 6) { var nms = S.names; S = fresh(nms); } line = null; toast = ""; show("play"); };
+$("wash").onclick = function () { sfx("wash"); S.names = S.names.map(function (x) { return (x || "").trim(); }); if (S.screen !== "play" || found() === 6) { var nms = S.names; S = fresh(nms); } line = null; toast = ""; show("play"); };
 $("reseat").onclick = function () { S.drawn = null; S.sel = []; S.pairs = {}; S.deck = shuffled(); line = null; toast = ""; show("home"); };
 $("again").onclick = function () { S = fresh(S.names); line = null; toast = ""; $("sendNote").textContent = ""; show("play"); };
 $("send").onclick = send;
+$("sndBtn").onclick = function () { SND = !SND; try { localStorage.setItem("ch_snd", SND ? "1" : "0"); } catch (e) {} sndBtn(); if (SND) sfx("tap"); };
 $("dealOwn").onclick = function () { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} recv = null; line = null; show(S.screen === "play" && found() < 6 ? "play" : "home"); };
 $("putDown").onclick = function () { sceneDark($("scDark")); $("darkLine").textContent = t("lights"); $("dark").hidden = false; };
 function wakeUp() { $("dark").hidden = true; }
