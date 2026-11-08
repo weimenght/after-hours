@@ -1,6 +1,6 @@
 /* Common Hand: works offline once opened. Keeps only what this app needs to draw itself (its own folder, the kit, the fonts),
    always asks the network first and falls back to the copy it kept. Never touches anything off the site; sends nothing. */
-var V = "ch-1";
+var V = "ch-2";
 var OWN = /^\/(common-hand|fbkit|fonts)\//;
 self.addEventListener("install", function (e) {
   self.skipWaiting();

@@ -478,7 +478,7 @@ function drawTile(g, q) {
     else { var P = BAMB_PET[q.t]; if (P) pet(g, P[0], P[1], 33, { asleep: !!P[2], flip: !!P[3] }); BAMB[q.t].forEach(function (b) { stalk(g, b[0], b[1], b[2], b[3]); }); }
   }
   else if (q.s === "m") { g.jobs.push([NUM[q.t], 16, 9.5, 14, TC.ink, 700, .45], ["萬", 16, 25.5, 20, TC.red, 700, .45]); }
-  else if (q.s === "f") { var B = BONUS[q.t]; bitmap(g, DIG[B[0]], 3, 3, { "#": B[1] }); PIC[B[2]](g); g.jobs.push([q.t, 16, 27.5, 15, B[1], 500, .42, false]); }
+  else if (q.s === "f" || BONUS[q.t]) { var B = BONUS[q.t]; bitmap(g, DIG[B[0]], 3, 3, { "#": B[1] }); PIC[B[2]](g); g.jobs.push([q.t, 16, 27.5, 15, B[1], 500, .42, false]); }
   else if (q.t === "白") baiban(g);
   else g.jobs.push([q.t, 16, 18, q.t === "中" ? 27 : 25, q.t === "中" ? TC.red : q.t === "發" ? TC.green : TC.ink, 700, .45]);
 }
@@ -591,7 +591,7 @@ function renderPlay() {
     var k = S.sel.length, lbl = k < 2 ? t("nobody") : k === 2 ? t("pung") : k === 3 ? t("chow") : t("kong");
     card.innerHTML = '<p class="q">' + esc(T(q.q)) + '</p><p class="hint">' + esc(t("tapWho")) + "</p>" +
       '<button class="btn ' + (k < 2 ? "" : "pri ") + 'lg wide" id="claim" type="button">' + esc(lbl) + "</button>";
-    var sl = W.suitLines[q.s]; if (!line || line.tile !== S.drawn) line = { tile: S.drawn, w: sl.w, t: pick(sl.t) };
+    var sl = W.suitLines[BONUS[q.t] ? "f" : q.s] || W.suitLines.h; if (!line || line.tile !== S.drawn) line = { tile: S.drawn, w: sl.w, t: pick(sl.t) };
     say($("sayPlay"), line.w, T(line.t));
     $("claim").onclick = claim;
   } else {
