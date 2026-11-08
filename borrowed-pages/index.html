@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b27a14c602"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Borrowed Pages · real books, lent by hand</title>
 <meta name="description" content="Real books, lent by hand between neighbours. Browse a house of books people actually own, ask for one, meet and hand it over. No account.">
@@ -486,6 +486,7 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px;padding:8px 0;mi
   function date(d) { try { return new Date(d).toLocaleDateString(LOCALE[lang()], { month: "short", year: "numeric" }); } catch (e) { return ""; } }
   function bookUrl(b) { return location.origin + "/borrowed-pages/?book=" + encodeURIComponent(b.id); }
   function share(text, url) {
+    if (window.FBShare && FBShare.card({ text: text, url: url, mascots: ["miso"] })) return;   /* the share card */
     if (navigator.share) return navigator.share({ text: text, url: url }).catch(function () {});
     var all = text + " " + url; if (navigator.clipboard) navigator.clipboard.writeText(all).then(function () { toast(t("copied")); }, function () { prompt("", all); }); else prompt("", all);
   }

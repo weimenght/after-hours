@@ -247,6 +247,7 @@
   }
   function share(b, now) {
     var u = link(b), txt = b.w && !now ? w("inviteText", { when: fmt(when(b), b.z || tz()), dish: dishLower(b.d || "pasta") }) : w("inviteNow");
+    if (window.FBShare && FBShare.card({ text: txt, url: u, app: w("app"), mascots: ["miso", "yuzu"] })) return;   /* the share card */
     if (navigator.share) { navigator.share({ title: w("app"), text: txt, url: u }).catch(function () {}); return; }
     try { navigator.clipboard.writeText(txt + " " + u).then(function () { say(w("copied")); }, function () { prompt("", u); }); } catch (e) { prompt("", u); }
   }

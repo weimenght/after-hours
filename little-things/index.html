@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b27a14c602"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Little Things</title>
 <meta name="description" content="Popo's jar of little offline things: one at a time, in her kitchen, for a fuller life away from the screen. Kept on your own device.">
@@ -1209,6 +1209,7 @@ function refresh() { if (!sheet.hidden) drawBig(); scene(performance.now()); }
 /* ---------------- a friend: an invitation, or one paper to do together. Only in the link; nothing stored, nobody counted ---------------- */
 function nick() { return (lsGet("fb_nick") || "").replace(/[*<>]/g, "").slice(0, 24); }
 function shareIt(text, url, b) {
+  if (window.FBShare && FBShare.card({ text: text, url: url, app: T(W.app), mascots: ["mantou", "yuzu", "miso"] })) return;   /* the share card */
   if (navigator.share) return navigator.share({ title: T(W.app), text: text, url: url }).catch(function () {});
   if (navigator.clipboard) navigator.clipboard.writeText(text + " " + url).then(function () { if (!b) return; var was = b.innerHTML; b.textContent = T(W.linkCopied); setTimeout(function () { b.innerHTML = was; }, 2200); }).catch(function () {});
 }

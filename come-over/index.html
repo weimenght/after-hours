@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b27a14c602"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Come Over · have people round</title>
 <meta name="description" content="Have people over: write the invitation, send the link, see who's coming and what they'll bring. No account; deleted a week after the day.">
@@ -561,7 +561,7 @@ a{color:var(--accent)}
       '<label class="fld"><span class="sr">' + esc(t("s_h")) + '</span><textarea id="sL" class="hand" rows="4" maxlength="400">' + esc(lineFor(who)) + '</textarea><small style="overflow-wrap:anywhere">' + esc(link()) + "</small></label>" +
       '<div class="acts" style="justify-content:flex-start;margin-top:0"><button class="btn pri" type="button" id="sGo">' + IC.send + esc(t("shareIt")) + '</button><button class="btn" type="button" id="sCp">' + esc(t("copy")) + "</button></div></div>", sendSheet);
     $("#sTo", s).onclick = function (x) { var b = x.target.closest("[data-to]"); if (!b) return; who = b.dataset.to; lsSet("co_to", who); $$("[data-to]", s).forEach(function (c) { c.setAttribute("aria-pressed", String(c === b)); }); $("#sL", s).value = lineFor(who); };
-    $("#sGo", s).onclick = function () { var text = $("#sL", s).value.trim(); if (navigator.share) navigator.share({ title: ev.title, text: text, url: link() }).then(closeSheet).catch(function () {}); else copy(text + " " + link()); };
+    $("#sGo", s).onclick = function () { var text = $("#sL", s).value.trim(), cc = window.FBShare && FBShare.card({ text: text, url: link(), title: ev.title, mascots: ["mantou", "yuzu", "miso"] }); if (cc) { cc.then(function (ok) { if (ok) closeSheet(); }); return; } if (navigator.share) navigator.share({ title: ev.title, text: text, url: link() }).then(closeSheet).catch(function () {}); else copy(text + " " + link()); };
     $("#sCp", s).onclick = function () { copy(link()); };
   }
   function copy(text) { if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { toast(t("copied")); }).catch(function () { prompt("", text); }); else prompt("", text); }
@@ -584,6 +584,7 @@ a{color:var(--accent)}
       var b = BQ[pick], o = { f: b.f.join(""), w: b.w, t: h.slice(0, 24), m: ($("#bqM", s).value.trim() || t("fl_lineP")).slice(0, 80), n: ((ans && ans.name) || lsGet("fb_nick") || "").slice(0, 24) };
       var bq = "#bq=" + btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""), text = t("fl_share");
       var url = window.FBApps ? FBApps.link("flowers", bq) : location.origin + "/nearby/plaza/" + bq;   /* the flower app once it's out, the Plaza's stall till then */
+      var cc = window.FBShare && FBShare.card({ text: text, url: url, title: t("fl_h", { h: h }), mascots: ["yuzu"] }); if (cc) { cc.then(function (ok) { if (ok) closeSheet(); }); return; }
       if (navigator.share) navigator.share({ title: t("fl_h", { h: h }), text: text, url: url }).then(closeSheet).catch(function () {}); else { copy(text + " " + url); closeSheet(); }
     };
   }

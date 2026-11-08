@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b27a14c602"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Paw Reading</title>
 <meta name="description" content="Miso and Yuzu's stall from Nearby: one card a day from the Nearby deck, and it asks one thing of you, somewhere real. Draw with someone and you both get the same card. Kept on your own device.">
@@ -377,6 +377,7 @@ function withSomeone() {
   el("p", "sub", esc(T(W.withNote)), panel);
 }
 function share(title, text, url, copiedMsg) {
+  if (url && window.FBShare && FBShare.card({ text: text, url: url, app: title, mascots: ["yuzu", "miso"] })) return;   /* the share card */
   if (navigator.share) return navigator.share(url ? { title: title, text: text, url: url } : { text: text }).catch(function () {});
   var all = url ? text + " " + url : text;
   if (navigator.clipboard) navigator.clipboard.writeText(all).then(function () { toast(T(copiedMsg)); }).catch(function () { prompt("", all); });
