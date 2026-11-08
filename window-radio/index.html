@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Window Radio</title>
 <meta name="description" content="Lo-fi from your window. The day, the hour, the sky and your mood write the tape. Play it for one cup of tea, then go find someone to share the pot.">
@@ -528,6 +528,7 @@ function toast(t){$('toast').textContent=t;clearTimeout(toastT);toastT=setTimeou
 $('share').onclick=async()=>{
   if(!cfg)return;
   const url=shareUrl(),text=F(W.shareText,{t:tapeTitle(cfg)});
+  const c=window.FBShare&&FBShare.card({text,url,app:Tr(W.app),mascots:[cfg.pet==='dog'?'mantou':cfg.pet||'yuzu']});if(c)return c;   /* the share card */
   if(navigator.share){try{await navigator.share({title:Tr(W.app),text,url});return}catch(e){if(e&&e.name==='AbortError')return}}
   try{await navigator.clipboard.writeText(text+'\n'+url);toast(Tr(W.copied))}
   catch(e){const f=$('shareLink');f.value=url;f.hidden=false;f.focus();f.select();toast(Tr(W.copyIt))}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cook for Someone</title>
 <meta name="description" content="Family recipes from Popo's recipe box at Next Door in Nearby. Pick one, cook it for someone, or leave your own family's recipe in the box.">
@@ -698,6 +698,7 @@ $("leaveForm").onsubmit = function (e) {
 
 /* ---------- sending a line to someone ---------- */
 function shareText(text, done) {
+  var c = window.FBShare && FBShare.card({ text: text, mascots: ["mantou", "miso"] }); if (c) { c.then(function (ok) { if (ok && done) done(); }); return; }   /* the share card */
   if (navigator.share) { navigator.share({ text: text }).then(done || function () {}).catch(function () {}); return; }
   var ok = function () { toast(t("copied")); if (done) done(); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok).catch(function () { prompt("", text); });

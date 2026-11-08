@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Walk With</title>
 <meta name="description" content="Two people, one corner, twenty minutes, same clock time. Pick a time, name a corner, send one link. Then put the phone away.">
@@ -277,6 +277,7 @@ bye: function () { return '<section class="screen center">' + WALKING() +
 
 function on(id, fn) { var e = $(id); if (e) e.onclick = fn; }
 function share(text, onCopied) {
+  var c = window.FBShare && FBShare.card({ text: text, app: T(W.app), mascots: ["mantou"] }); if (c) return c;   /* the share card: a picture with a QR for WeChat, or WhatsApp */
   if (navigator.share) return navigator.share({ text: text }).catch(function () {});
   if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(function () { if (onCopied) onCopied(); }, function () { window.prompt("", text); });
   window.prompt("", text);

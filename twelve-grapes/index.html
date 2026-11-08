@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=500979812a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=7c787fce0b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Twelve Grapes</title>
 <meta name="description" content="New Year's Eve at Popo's table: twelve grapes for twelve months, a chair for everyone you care about, three small red papers on the door. Kept on your own device.">
@@ -284,6 +284,7 @@ function el(tag, cls, html, parent) { var e = document.createElement(tag); if (c
 function go(fn) { var args = [].slice.call(arguments, 1); view = function () { fn.apply(null, args); }; fn.apply(null, args); }
 function pick(arr, key) { var v = arr[S[key] % arr.length]; S[key]++; return v; }
 function share(text, url, b, okMsg, copiedMsg) {
+  var c = url && window.FBShare && FBShare.card({ text: text, url: url, app: T(W.app), mascots: ["yuzu", "miso", "mantou"] }); if (c) { c.then(function (ok) { if (ok && okMsg) okMsg(); }); return; }   /* the share card */
   var all = text + (url ? " " + url : "");
   if (navigator.share) { navigator.share(url ? { text: text, url: url } : { text: text }).then(function () { if (okMsg) okMsg(); }, function () {}); return; }
   try { navigator.clipboard.writeText(all).then(function () { b.textContent = T(W.b.copied); if (copiedMsg) copiedMsg(); }, function () { b.textContent = T(W.b.select); }); } catch (e) { b.textContent = T(W.b.select); }
