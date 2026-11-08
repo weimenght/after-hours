@@ -400,33 +400,63 @@ var BIRD = ["......gg........", ".....gGGg.......", "....gGkGGg......", "....gGG
 function bird(g, ox, oy) { var C = { g: TC.greenLo, G: TC.green, k: TC.ink, r: TC.red, b: TC.blue }; BIRD.forEach(function (row, y) { for (var x = 0; x < row.length; x++) if (C[row[x]]) px(g, ox + x, oy + y, C[row[x]]); }); }
 function blossom(g, cx, cy) { [[0, -3], [3, -1], [2, 3], [-2, 3], [-3, -1]].forEach(function (p) { px(g, cx + p[0] - 1, cy + p[1] - 1, TC.pink, 3, 3); }); px(g, cx - 1, cy - 1, TC.gold, 3, 3); px(g, cx, cy, TC.red); px(g, cx + 6, cy + 5, TC.greenLo, 1, 5); px(g, cx + 3, cy + 6, TC.greenLo, 3, 1); }
 var SANS_FONT = '"Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Noto Sans CJK SC",sans-serif';
-var GLYPH_FONT = '"Noto Serif CJK TC","Songti TC","STSong","SimSun","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",serif';
-function glyph(g, ch, cx, cy, size, col, font) {   /* a character drawn small, then snapped to whole pixels so it reads as pixel art */
-  var o = document.createElement("canvas"); o.width = TW; o.height = TH; var q = o.getContext("2d");
-  q.font = "900 " + size + "px " + (font || GLYPH_FONT); q.textAlign = "center"; q.textBaseline = "middle"; q.fillStyle = "#000"; q.fillText(ch, cx, cy + 1);
-  var d = q.getImageData(0, 0, TW, TH).data; g.fillStyle = col;
-  for (var y = 0; y < TH; y++) for (var x = 0; x < TW; x++) if (d[(y * TW + x) * 4 + 3] > 115) g.fillRect(x, y, 1, 1);
-}
 var CIRC = { 1: [[16, 17, 10]], 2: [[16, 10, 6], [16, 26, 6]], 3: [[9, 9, 4], [16, 18, 4], [23, 27, 4]], 4: [[10, 11, 5], [22, 11, 5], [10, 25, 5], [22, 25, 5]],
   5: [[9, 9, 4], [23, 9, 4], [16, 18, 4], [9, 27, 4], [23, 27, 4]], 6: [[10, 8, 4], [22, 8, 4], [10, 18, 4], [22, 18, 4], [10, 28, 4], [22, 28, 4]],
   7: [[8, 6, 3], [16, 9, 3], [24, 12, 3], [10, 20, 4], [22, 20, 4], [10, 29, 4], [22, 29, 4]], 8: [[10, 6, 3], [22, 6, 3], [10, 14, 3], [22, 14, 3], [10, 22, 3], [22, 22, 3], [10, 30, 3], [22, 30, 3]] };
 var BAMB = { 2: [[14, 4, 13], [14, 20, 13]], 3: [[14, 4, 13], [8, 20, 13], [20, 20, 13]], 4: [[9, 4, 13], [19, 4, 13], [9, 20, 13], [19, 20, 13]],
   5: [[6, 4, 13], [22, 4, 13], [14, 12, 13, 1], [6, 20, 13], [22, 20, 13]], 6: [[6, 4, 13], [14, 4, 13], [22, 4, 13], [6, 20, 13], [14, 20, 13], [22, 20, 13]],
   7: [[14, 3, 9, 1], [6, 15, 8], [14, 15, 8], [22, 15, 8], [6, 25, 8], [14, 25, 8], [22, 25, 8]], 8: [[4, 4, 13], [11, 4, 13], [17, 4, 13], [24, 4, 13], [4, 20, 13], [11, 20, 13, 1], [17, 20, 13, 1], [24, 20, 13]] };
-var HCOL = { "中": TC.red, "發": TC.green, "春": TC.red };
+var HCOL = {};
+function bitmap(g, rows, ox, oy, map) { rows.forEach(function (row, y) { for (var x = 0; x < row.length; x++) if (map[row[x]]) px(g, ox + x, oy + y, map[row[x]]); }); }
+function seg(g, x0, y0, x1, y1, c, w) { w = w || 2; var n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) * 2 || 1; for (var i = 0; i <= n; i++) px(g, Math.round(x0 + (x1 - x0) * i / n), Math.round(y0 + (y1 - y0) * i / n), c, w, w); }
+function baiban(g) {   /* 白板: the blank, a blue frame with a hairline inside and notched corners */
+  var b = TC.blue; px(g, 7, 5, b, 18, 2); px(g, 7, 30, b, 18, 2); px(g, 6, 6, b, 2, 25); px(g, 24, 6, b, 2, 25);
+  px(g, 10, 9, b, 12, 1); px(g, 10, 27, b, 12, 1); px(g, 10, 9, b, 1, 19); px(g, 21, 9, b, 1, 19);
+  [[8, 7], [22, 7], [8, 28], [22, 28]].forEach(function (p) { px(g, p[0], p[1], b, 2, 2); });
+}
+var DIG = { 1: [".#.", "##.", ".#.", ".#.", "###"], 2: ["##.", "..#", ".#.", "#..", "###"], 3: ["##.", "..#", ".#.", "..#", "##."], 4: ["#.#", "#.#", "###", "..#", "..#"] };
+var MAPLE = [".....o.....", "....ooo....", "o...oro...o", "oo..oro..oo", ".ooooroooo.", "..oooroooo.", ".ooooroooo.", "...oorooo..", "....oro....", ".....s.....", ".....s....."];
+var PIC = {
+  sprout: function (g) { var G = TC.green, L = TC.greenHi; px(g, 15, 8, G, 2, 11); px(g, 10, 12, G, 5, 2); px(g, 11, 11, L, 3, 1); px(g, 9, 13, G, 2, 1); px(g, 17, 9, G, 5, 2); px(g, 18, 8, L, 3, 1); px(g, 22, 10, G, 2, 1); px(g, 14, 5, TC.pink, 4, 3); px(g, 15, 6, TC.red, 2, 1); px(g, 11, 19, TC.greenLo, 10, 1); },
+  sun: function (g) { var o = "#e07a2a"; for (var y = -5; y <= 5; y++) for (var x = -5; x <= 5; x++) { var d = Math.sqrt(x * x + y * y); if (d <= 5.3) px(g, 16 + x, 12 + y, d > 4.2 ? o : TC.gold); }
+    [[0, -8], [0, 7], [-8, 0], [7, 0], [-6, -6], [5, -6], [-6, 5], [5, 5]].forEach(function (p) { px(g, 16 + p[0], 12 + p[1], o, 2, 2); }); },
+  maple: function (g) { bitmap(g, MAPLE, 11, 6, { o: "#d9541e", r: "#9a2a18", s: "#6a4024" }); },
+  snow: function (g) { var b = TC.blue, cx = 16, cy = 12; px(g, cx, cy - 7, b, 1, 15); px(g, cx - 7, cy, b, 15, 1); for (var i = -5; i <= 5; i++) { px(g, cx + i, cy + i, b); px(g, cx + i, cy - i, b); }
+    [[0, -6], [0, 6], [-6, 0], [6, 0]].forEach(function (p) { var dx = p[0] ? 0 : 1, dy = p[0] ? 1 : 0; px(g, cx + p[0] - dx, cy + p[1] - dy, b); px(g, cx + p[0] + dx, cy + p[1] + dy, b); }); px(g, cx - 1, cy - 1, "#cfe0f5", 3, 3); px(g, cx, cy, b); },
+  plum: function (g) { var br = "#6a4024"; seg(g, 8, 19, 14, 13, br, 1); seg(g, 14, 13, 22, 11, br, 1); seg(g, 18, 12, 21, 6, br, 1); blossom(g, 14, 11); px(g, 21, 5, TC.pink, 2, 2); px(g, 23, 10, TC.pink, 2, 2); },
+  orchid: function (g) { var G = TC.green; seg(g, 15, 19, 8, 9, G, 1); seg(g, 16, 19, 12, 6, G, 1); seg(g, 17, 19, 24, 12, G, 1); seg(g, 16, 19, 20, 9, G, 1);
+    var v = "#8a4fb8", l = "#c79be0"; px(g, 18, 4, v, 3, 2); px(g, 16, 6, v, 2, 3); px(g, 21, 6, v, 2, 3); px(g, 18, 6, l, 3, 3); px(g, 19, 7, TC.gold); },
+  bamboo: function (g) { stalk(g, 14, 4, 16); var G = TC.green, L = TC.greenHi; seg(g, 18, 9, 23, 6, G, 1); seg(g, 18, 10, 23, 8, L, 1); seg(g, 13, 13, 8, 10, G, 1); seg(g, 13, 14, 8, 12, L, 1); seg(g, 18, 16, 22, 15, G, 1); },
+  mum: function (g) { for (var a = 0; a < 16; a++) { var t = a / 16 * Math.PI * 2, r = a % 2 ? 6 : 5; seg(g, 16 + Math.round(Math.cos(t) * 2), 11 + Math.round(Math.sin(t) * 2), 16 + Math.round(Math.cos(t) * r), 11 + Math.round(Math.sin(t) * r), a % 2 ? TC.gold : "#f0cf6a", 1); }
+    px(g, 15, 10, "#e07a2a", 3, 3); px(g, 16, 17, TC.green, 1, 3); px(g, 17, 18, TC.green, 3, 1); }
+};
+/* the bonus tiles: seasons in red (1 spring … 4 winter), flowers in blue (1 plum … 4 chrysanthemum), a number in the corner, a picture, the character */
+var BONUS = { "春": [1, TC.red, "sprout"], "夏": [2, TC.red, "sun"], "秋": [3, TC.red, "maple"], "冬": [4, TC.red, "snow"], "梅": [1, TC.blue, "plum"], "兰": [2, TC.blue, "orchid"], "竹": [3, TC.blue, "bamboo"], "菊": [4, TC.blue, "mum"] };
 function drawTile(g, q) {
   shell(g, false);
   if (q.s === "c") CIRC[q.t].forEach(function (d) { disc(g, d[0], d[1], d[2]); });
   else if (q.s === "b") { if (q.t === 1) bird(g, 8, 10); else BAMB[q.t].forEach(function (b) { stalk(g, b[0], b[1], b[2], b[3]); }); }
-  else if (q.s === "m") { glyph(g, NUM[q.t], 16, 11, 15, TC.ink, SANS_FONT); glyph(g, "萬", 16, 27, 18, TC.red, SANS_FONT); }
-  else if (q.t === "白") { px(g, 7, 6, TC.blue, 18, 2); px(g, 7, 30, TC.blue, 18, 2); px(g, 7, 6, TC.blue, 2, 26); px(g, 23, 6, TC.blue, 2, 26); px(g, 10, 9, TC.blue, 12, 1); px(g, 10, 28, TC.blue, 12, 1); px(g, 10, 9, TC.blue, 1, 20); px(g, 21, 9, TC.blue, 1, 20); }
-  else if (q.t === "春") { blossom(g, 13, 11); glyph(g, "春", 16, 27, 15, TC.red); }
-  else glyph(g, q.t, 16, 18, 24, HCOL[q.t] || TC.ink);
+  else if (q.s === "m") { g.jobs.push([NUM[q.t], 16, 9.5, 14, TC.ink, 700, .45], ["萬", 16, 25.5, 20, TC.red, 700, .45]); }
+  else if (q.s === "f") { var B = BONUS[q.t]; bitmap(g, DIG[B[0]], 3, 3, { "#": B[1] }); PIC[B[2]](g); g.jobs.push([q.t, 16, 27.5, 15, B[1], 500, .42, false]); }
+  else if (q.t === "白") baiban(g);
+  else g.jobs.push([q.t, 16, 18, q.t === "中" ? 27 : 25, q.t === "中" ? TC.red : q.t === "發" ? TC.green : TC.ink, 700, .45]);
+}
+/* characters are drawn on a grid twice as fine as the tile (64×88), from the font drawn six times larger and averaged,
+   with a darker edge down and to the right, like the carved and inked characters on a real tile */
+var SHADE = {}; SHADE[TC.red] = "#8a1f26"; SHADE[TC.green] = "#1b5426"; SHADE[TC.ink] = "#9a8a78";
+function fine(b, ch, cx, cy, size, col, wt, cut, carve) {
+  var F = TS, SS = 6, w0 = TW * F, h0 = TH * F, o = document.createElement("canvas"); o.width = w0 * SS; o.height = h0 * SS;
+  var q = o.getContext("2d"); q.font = (wt || 700) + " " + size * F * SS + "px " + SANS_FONT; q.textAlign = "center"; q.textBaseline = "middle"; q.fillStyle = "#000"; q.fillText(ch, cx * F * SS, cy * F * SS);
+  var d = q.getImageData(0, 0, w0 * SS, h0 * SS).data, on = {}, pts = [];
+  for (var y = 0; y < h0; y++) for (var x = 0; x < w0; x++) { var a = 0; for (var j = 0; j < SS; j++) for (var i = 0; i < SS; i++) a += d[((y * SS + j) * w0 * SS + x * SS + i) * 4 + 3]; if (a / (SS * SS * 255) > (cut || .45)) { pts.push([x, y]); on[x + "," + y] = 1; } }
+  if (carve !== false && SHADE[col]) { b.fillStyle = SHADE[col]; pts.forEach(function (p) { if (!on[(p[0] + 1) + "," + (p[1] + 1)]) b.fillRect(p[0] + 1, p[1] + 1, 1, 1); }); }
+  b.fillStyle = col; pts.forEach(function (p) { b.fillRect(p[0], p[1], 1, 1); });
 }
 function tileURL(key, draw) {
   if (tileCache[key]) return tileCache[key];
-  var c = document.createElement("canvas"); c.width = TW; c.height = TH; var g = c.getContext("2d"); draw(g);
+  var c = document.createElement("canvas"); c.width = TW; c.height = TH; var g = c.getContext("2d"); g.jobs = c.jobs = []; draw(g);
   var big = document.createElement("canvas"); big.width = TW * TS; big.height = TH * TS; var b = big.getContext("2d"); b.imageSmoothingEnabled = false; b.drawImage(c, 0, 0, TW * TS, TH * TS);
+  (c.jobs || []).forEach(function (j) { fine.apply(null, [b].concat(j)); });
   return (tileCache[key] = big.toDataURL("image/png"));
 }
 function tileHTML(qi, cls) { return '<img class="tile ' + (cls || "") + '" src="' + tileURL(qi, function (g) { drawTile(g, Q[qi]); }) + '" alt="" aria-hidden="true">'; }

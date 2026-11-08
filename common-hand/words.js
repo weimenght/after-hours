@@ -1,7 +1,7 @@
 /* Common Hand: every word, five languages [en, zh, zh-Hant, es, ca].
    Popo keeps her voice (Hong Kong English, broken Spanish, a Hong Kong grandmother's Mandarin in zh, her own Cantonese in zh-Hant,
    fluent Catalan). Mei and Wei speak plainly; Mantou only acts. The tiles' questions are read aloud to the table, so they are
-   plain, standard language. Never reorder Q: a shared hand keeps tiles by their index. */
+   plain, standard language. Never reorder Q (only add at the end): a shared hand keeps tiles by their index. */
 window.CH_W = {
   title: ["Common Hand", "凑一手", "湊一手", "Mano Común", "Mà Comuna"],
   sub: ["Find something in common for every pair at the table. Ten minutes, while the tiles are washed.", "让桌上每两个人都找到一个共同点。洗牌的十分钟就够了。", "讓桌上每兩個人都找到一個共同點。洗牌的十分鐘就夠了。", "Encontrad algo en común para cada pareja de la mesa. Diez minutos, mientras se lavan las fichas.", "Trobeu alguna cosa en comú per a cada parella de la taula. Deu minuts, mentre es renten les fitxes."],
@@ -30,11 +30,12 @@ window.CH_W = {
   discarded: ["Back to the bottom of the wall.", "放回牌墙底下。", "放回牌牆底下。", "Vuelve al fondo del muro.", "Torna al fons del mur."],
   pairsLeft: ["{n} pairs still to find", "还有 {n} 对没凑上", "還有 {n} 對沒湊上", "Faltan {n} parejas", "Falten {n} parelles"],
   reset: ["Change seats", "换座位", "換座位", "Cambiar de sitio", "Canviar de lloc"],
-  /* who speaks when a tile is drawn: food Wei, places Mei, family Popo, the honours Mantou */
+  /* who speaks when a tile is drawn: food Wei, places Mei, family Popo, the winds and dragons Mantou, the flowers and seasons Popo */
   suitLines: {
     b: { w: "wei", t: [["*slides a bowl over* A food one.", "*推过来一只碗* 吃的题。", "*推過來一隻碗* 吃的題。", "*desliza un cuenco* Una de comida.", "*fa lliscar un bol* Una de menjar."], ["A kitchen question. I'm listening.", "厨房的问题，我听着。", "廚房的問題，我聽著。", "Una pregunta de cocina. Te escucho.", "Una pregunta de cuina. T'escolto."]] },
     c: { w: "mei", t: [["Ooh, a places one. Go.", "哦，地方的题。来。", "哦，地方的題。來。", "Uy, una de sitios. Venga.", "Uh, una de llocs. Som-hi."], ["Places! I've moved like nine times, so.", "地方！我搬过九次家，所以嘛。", "地方！我搬過九次家，所以嘛。", "¡Sitios! Yo me he mudado como nueve veces, así que.", "Llocs! Jo m'he mudat unes nou vegades, així que."]] },
     m: { w: "popo", t: [["Family question. Answer honest, ah.", "家里的题。老实讲啊。", "屋企嘅題。老實講呀。", "Pregunta de familia. Contesta sincero, ¿eh?", "Pregunta de família. Respon de veritat, eh."], ["Ah, this one I like. Who is like who?", "啊，这题我喜欢。谁跟谁一样？", "啊，呢題我鍾意。邊個同邊個一樣？", "Ah, esta me gusta. ¿Quién es como quién?", "Ah, aquesta m'agrada. Qui s'assembla a qui?"]] },
+    f: { w: "popo", t: [["Wah, a flower tile! Lucky one, ah.", "哇，花牌！好兆头呀。", "嘩，花牌！好彩呀。", "¡Wah, ficha de flor! Trae suerte, ¿eh?", "Uau, una fitxa de flor! Porta sort."], ["Ah, this one Popo like. Read it, read it.", "啊，这张婆婆喜欢。念呀，念呀。", "啊，呢張婆婆鍾意。讀呀，讀呀。", "Ah, esta a Popo gusta. Lee, lee.", "Ah, aquesta m'agrada. Llegeix-la, llegeix-la."]] },
     h: { w: "mantou", t: [["*puts his chin on the table, tail going*", "*把下巴搁在桌上，尾巴摇个不停*", "*把下巴擱在桌上，尾巴搖個不停*", "*apoya la barbilla en la mesa, moviendo la cola*", "*recolza la barbeta a la taula, remenant la cua*"], ["*a wind tile! he sits up very straight*", "*风牌！它坐得笔直*", "*風牌！牠坐得筆直*", "*¡una ficha de viento! se sienta muy recto*", "*una fitxa de vent! s'asseu ben dret*"]] }
   },
   doneT: ["Hand complete", "胡了", "食糊", "Mano completa", "Mà completa"],
@@ -55,7 +56,7 @@ window.CH_W = {
   dealOwn: ["Deal your own hand", "凑你们自己的一手", "湊你們自己的一手", "Haced vuestra mano", "Feu la vostra mà"],
   device: ["Stays on this device", "只留在这台设备上", "只留在這台裝置上", "Se queda en este dispositivo", "Es queda en aquest dispositiu"],
   ah: ["After hours", "下班后", "下班後", "Fuera de horas", "Fora d'hores"],
-  /* the wall: s suit (b bamboo = food, c circles = places, m characters = family, h honours = anything), t the tile,
+  /* the wall: s suit (b bamboo = food, c circles = places, m characters = family, h winds and dragons = anything, f flowers and seasons = anything), t the tile,
      q the question read aloud, k what a pair shares (a plural verb phrase: "both {k}", "都{k}", "los dos {k}", "tots dos {k}") */
   Q: [
     { s: "b", t: 1, q: ["Who puts chili on almost everything?", "谁几乎什么都要加辣？", "誰幾乎甚麼都要加辣？", "¿Quién le pone picante a casi todo?", "Qui hi posa picant a gairebé tot?"], k: ["put chili on everything", "什么都加辣", "甚麼都加辣", "le ponen picante a todo", "hi posen picant a tot"] },
@@ -89,6 +90,13 @@ window.CH_W = {
     { s: "h", t: "中", q: ["Who is secretly very competitive at this table?", "谁在这张桌上其实超级好胜？", "誰在這張桌上其實超級好勝？", "¿Quién es en secreto muy competitivo en esta mesa?", "Qui és en secret molt competitiu en aquesta taula?"], k: ["are secretly competitive", "其实超好胜", "其實超好勝", "son competitivos en secreto", "són competitius en secret"] },
     { s: "h", t: "發", q: ["Who has a talent nobody here knows about?", "谁有一个在座都不知道的才艺？", "誰有一個在座都不知道的才藝？", "¿Quién tiene un talento que nadie aquí conoce?", "Qui té un talent que ningú d'aquí coneix?"], k: ["have a hidden talent", "有隐藏的才艺", "有隱藏的才藝", "tienen un talento escondido", "tenen un talent amagat"] },
     { s: "h", t: "白", q: ["Who wakes up before their alarm?", "谁总在闹钟响之前就醒了？", "誰總在鬧鐘響之前就醒了？", "¿Quién se despierta antes de que suene el despertador?", "Qui es desperta abans que soni el despertador?"], k: ["wake before the alarm", "闹钟没响就醒", "鬧鐘沒響就醒", "se despiertan antes del despertador", "es desperten abans del despertador"] },
-    { s: "h", t: "春", q: ["Who has written a letter by hand this year?", "谁今年手写过一封信？", "誰今年手寫過一封信？", "¿Quién ha escrito una carta a mano este año?", "Qui ha escrit una carta a mà aquest any?"], k: ["wrote a letter by hand this year", "今年手写过信", "今年手寫過信", "han escrito una carta a mano este año", "han escrit una carta a mà aquest any"] }
+    { s: "f", t: "春", q: ["Who has written a letter by hand this year?", "谁今年手写过一封信？", "誰今年手寫過一封信？", "¿Quién ha escrito una carta a mano este año?", "Qui ha escrit una carta a mà aquest any?"], k: ["wrote a letter by hand this year", "今年手写过信", "今年手寫過信", "han escrito una carta a mano este año", "han escrit una carta a mà aquest any"] },
+    { s: "f", t: "夏", q: ["Who has jumped into the sea, a river or a lake this year?", "谁今年跳进过海里、河里或湖里？", "誰今年跳進過海裡、河裡或湖裡？", "¿Quién se ha tirado al mar, a un río o a un lago este año?", "Qui s'ha tirat al mar, a un riu o a un llac aquest any?"], k: ["jumped in the water this year", "今年跳进过水里", "今年跳進過水裡", "se han tirado al agua este año", "s'han tirat a l'aigua aquest any"] },
+    { s: "f", t: "秋", q: ["Who waits all year for one autumn food?", "谁一整年都在等一样秋天才有的吃的？", "誰一整年都在等一樣秋天才有的吃的？", "¿Quién espera todo el año una comida de otoño?", "Qui espera tot l'any un menjar de tardor?"], k: ["wait all year for an autumn food", "一整年都在等秋天的味道", "一整年都在等秋天的味道", "esperan todo el año una comida de otoño", "esperen tot l'any un menjar de tardor"] },
+    { s: "f", t: "冬", q: ["Who would rather stay in on a cold night than go out?", "冷天晚上，谁宁愿待在家里也不出门？", "冷天晚上，誰寧願待在家裡也不出門？", "¿Quién prefiere quedarse en casa una noche fría que salir?", "Qui prefereix quedar-se a casa una nit freda que sortir?"], k: ["stay in on cold nights", "冷天晚上宁愿待在家", "冷天晚上寧願待在家", "prefieren quedarse en casa las noches frías", "prefereixen quedar-se a casa les nits fredes"] },
+    { s: "f", t: "梅", q: ["Who has kept a plant alive for years?", "谁有一盆养了好几年还活着的植物？", "誰有一盆養了好幾年還活著的植物？", "¿Quién tiene una planta que lleva años viva?", "Qui té una planta que fa anys que viu?"], k: ["kept a plant alive for years", "有一盆养了好几年的植物", "有一盆養了好幾年的植物", "tienen una planta que lleva años viva", "tenen una planta que fa anys que viu"] },
+    { s: "f", t: "兰", q: ["Who would pick a quiet evening over a party?", "谁宁愿安安静静过一个晚上，也不去热闹的聚会？", "誰寧願安安靜靜過一個晚上，也不去熱鬧的聚會？", "¿Quién elegiría una noche tranquila antes que una fiesta?", "Qui triaria una nit tranquil·la abans que una festa?"], k: ["pick a quiet evening over a party", "宁愿安静过一晚", "寧願安靜過一晚", "eligen una noche tranquila antes que una fiesta", "trien una nit tranquil·la abans que una festa"] },
+    { s: "f", t: "竹", q: ["Who has seen a panda in real life?", "谁亲眼见过大熊猫？", "誰親眼見過大熊貓？", "¿Quién ha visto un panda en persona?", "Qui ha vist un panda en persona?"], k: ["seen a panda in real life", "亲眼见过大熊猫", "親眼見過大熊貓", "han visto un panda en persona", "han vist un panda en persona"] },
+    { s: "f", t: "菊", q: ["Who drinks more tea than coffee?", "谁喝茶比喝咖啡多？", "誰喝茶比喝咖啡多？", "¿Quién toma más té que café?", "Qui pren més te que cafè?"], k: ["drink more tea than coffee", "喝茶比喝咖啡多", "喝茶比喝咖啡多", "toman más té que café", "prenen més te que cafè"] }
   ]
 };
