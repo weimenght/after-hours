@@ -155,6 +155,7 @@ html.light .navg .nb i{background:rgba(40,30,20,.55)}
 .row .chev{color:var(--dim);font-size:18px}
 .av{flex:none;width:42px;height:42px;border-radius:50%;overflow:hidden;background:var(--ink3);display:grid;place-items:center}
 .av canvas,.av svg{width:100%;height:100%;image-rendering:pixelated;display:block}
+.av svg{image-rendering:auto}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:1px;background:#7FC98A}
 .dot.z{background:#6B6478}
 .tabs{flex:none;display:flex;border-top:1px solid var(--line);background:var(--ink)}
@@ -801,7 +802,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   }
   function avatar(k, size) {
     var box = el("span", "av"); if (size) box.style.width = box.style.height = size + "px";
-    if (k === "wm") { box.innerHTML = '<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#1E1830"/><rect x="5" y="5" width="14" height="14" rx="2.6" fill="none" stroke="#ECE6DA" stroke-width="1.6"/><path d="M12 6v12M6 12h12" stroke="#ECE6DA" stroke-width="1.4"/><rect x="13" y="13" width="5" height="5" rx="1" fill="#F2A33A"/></svg>'; return box; }
+    if (k === "wm") { box.innerHTML = '<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#1E1830"/><path fill="#ECE6DA" fill-rule="evenodd" d="M7.6 4.2h8.8a3.4 3.4 0 0 1 3.4 3.4v8.8a3.4 3.4 0 0 1-3.4 3.4H7.6a3.4 3.4 0 0 1-3.4-3.4V7.6a3.4 3.4 0 0 1 3.4-3.4ZM7.8 5.8a2 2 0 0 0-2 2v3.5h5.5V5.8Zm4.9 0v5.5h5.5V7.8a2 2 0 0 0-2-2Zm-6.9 6.9v3.5a2 2 0 0 0 2 2h3.5v-5.5Zm6.9 0v5.5h3.5a2 2 0 0 0 2-2v-3.5Z"/><rect x="13.4" y="13.4" width="4.1" height="4.1" rx=".9" fill="#F2A33A"/></svg>';   /* filled shapes, no strokes: no hairline at any size (Nov 8) */ return box; }
     var c = document.createElement("canvas"), g; c.width = 32; c.height = 32; g = c.getContext("2d");
     g.fillStyle = (WHO[k] || {}).bg || "#222"; g.fillRect(0, 0, 32, 32);
     if (k === "miso" || k === "yuzu") { var F = FW(); if (F && F.drawPet) { try { F.drawPet(g, k, 16, 25, 1.5, { asleep: asleep(k) }); } catch (e) {} } else bust(g, k, 0, 0, 1); }
