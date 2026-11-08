@@ -1162,7 +1162,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
      (FBWorld.drawPet); they follow the hour (and the "sky follows the hour" switch), move slowly (about 12 frames a second)
      and rest while an app is open, the phone is put down or the tab is hidden. Chosen in Settings (ah_app_wall). */
   var WALL_KEYS = ["sky", "town", "weather", "station", "lake", "plain"], WALL_W = { sky: "wallSky", town: "wallTown", weather: "wallWeather", station: "wallStation", lake: "wallLake", plain: "wallPlain" };
-  function wallNow() { var k = get("ah_app_wall"); return WALL_KEYS.indexOf(k) >= 0 ? k : "sky"; }
+  function wallNow() { return "sky"; }   // no choosing any more (the owner, Nov 8): the sky, with the almanac over it; the other scenes stay unused
   function wHour() { return get("ah_app_sky") === "0" ? 22 : hour() + (H0 != null ? 0 : new Date().getMinutes() / 60); }
   function skyCols(h) { return h < 5 || h >= 22 ? ["#0E0B1A", "#1E1830", 1] : h < 7 ? ["#3A2A4A", "#E09A7A", .4] : h < 17 ? ["#6FA8D8", "#CFE3EE", 0] : h < 19.5 ? ["#5A4A7A", "#F2A36A", .1] : ["#1A1426", "#43293F", .8]; }
   function wsky(g, W, H, h, hz) { var c = skyCols(h), gr = g.createLinearGradient(0, 0, 0, hz); gr.addColorStop(0, c[0]); gr.addColorStop(1, c[1]); g.fillStyle = gr; g.fillRect(0, 0, W, hz + 1); return c[2]; }
@@ -1490,7 +1490,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   };
   var DOCKC = { store: "#C8902E", phone: "#E0843A", msg: "#6E9A3E", mail: "#4F7FC0", cam: "#8A7FA0", set: "#7A7088" };
   var ISTY = ["pixel", "flat", "nouveau", "minimal"], ISTY_W = { pixel: "isPixel", flat: "isFlat", nouveau: "isNouveau", minimal: "isMinimal" };
-  function istyle() { var s = get("ah_app_icons"); return ISTY.indexOf(s) >= 0 ? s : "pixel"; }
+  function istyle() { return "pixel"; }   // each app's own icon, no choosing any more (the owner, Nov 8)
   function glyph(k, stroke, sw, fill) {
     var G = GLY[k] || GLY.set, h = '<path d="' + G.d + '" fill="none" stroke="' + stroke + '" stroke-width="' + sw + '" stroke-linecap="round" stroke-linejoin="round"/>';
     if (G.f) h += '<path d="' + G.f + '" fill="' + fill + '"/>';
@@ -2153,8 +2153,6 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     l.appendChild(srow(w("sSound"), w("sSoundHint"), tog(get("fb_sound") !== "0", function (v) { put("fb_sound", v ? "1" : "0"); }))); c.appendChild(l);
     acct(c);   // the account sits right under You, where people look for it (the owner, Nov 7)
     c.appendChild(el("p", "sec", esc(w("sLook")))); l = el("div", "list"); l.appendChild(lookPick()); c.appendChild(l);
-    c.appendChild(el("p", "sec", esc(w("sWall")))); l = el("div", "list"); l.appendChild(wallPick()); l.appendChild(el("div", "row", '<span class="tx"><small>' + esc(w("sWallHint")) + "</small></span>")); c.appendChild(l);
-    c.appendChild(el("p", "sec", esc(w("sIcons")))); l = el("div", "list"); l.appendChild(iconPick()); c.appendChild(l);
     c.appendChild(el("p", "sec", esc(w("sHome")))); l = el("div", "list");
     l.appendChild(srow(w("sSky"), w("sSkyHint"), tog(get("ah_app_sky") !== "0", function (v) { put("ah_app_sky", v ? null : "0"); sky(); })));
     l.appendChild(srow(w("calT"), w("calSet"), tog(calOn(), function (v) { put("ah_app_cal", v ? null : "0"); ALM = null; decorate(); fx(); })));
