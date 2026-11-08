@@ -323,7 +323,7 @@
         up.slice(0, 6).forEach(function (x) { var li0 = el("li"), who = x.by ? x.o : x.n, tx = el("span"); tx.appendChild(el("b", "", x.w ? fmt(when(x), null, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }) : "·")); tx.appendChild(el("small", "", [who, dishName(x.d)].filter(Boolean).join(" · ")));
           li0.appendChild(tx); li0.appendChild(btn("tc-btn sm", null, w("open"), function () { x.w ? booked(x) : table(x); })); ul.appendChild(li0); });
       }
-      var t3 = card(m, "quiet"); t3.appendChild(el("p", "tc-lab", w("haveLink"))); var r = el("div", "tc-paste"), inp = el("input", "tc-in"); inp.type = "url"; inp.placeholder = "freebuilder.net/…?t=…"; inp.setAttribute("aria-label", w("haveLink")); r.appendChild(inp);
+      var t3 = card(m, "quiet"); t3.appendChild(el("p", "tc-lab", w("haveLink"))); var r = el("div", "tc-paste"), inp = el("input", "tc-in"); inp.type = "url"; inp.placeholder = "after-hours.work/…?t=…"; inp.setAttribute("aria-label", w("haveLink")); r.appendChild(inp);
       r.appendChild(btn("tc-btn sm", null, w("open"), function () { var b = parse(inp.value); if (!b) { say(w("badLink")); inp.focus(); return; } arrive(b); })); t3.appendChild(r);
     });
   }
