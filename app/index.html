@@ -112,7 +112,11 @@ html.framed .banner{top:12px}
 .ico img,.ico svg{width:100%;height:100%;display:block}
 .tile.lit .ico{box-shadow:0 0 0 2px var(--g),0 8px 26px -6px var(--g)}
 .tile.lit .ico::after{content:"";position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--lamp);box-shadow:0 0 6px var(--lamp)}
-.tile b{font:500 11.5px/1.15 var(--sans);max-width:100%;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.tile b{font:500 11.5px/1.15 var(--sans);letter-spacing:.005em;max-width:100%;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the names and the top row follow how bright the wallpaper is behind them (html.wbright, wallTone()), not the theme (the owner, Nov 8) */
+.home .grid .tile b{color:#F7F2E9;text-shadow:0 1px 1.5px rgba(10,8,16,.55),0 0 6px rgba(10,8,16,.25)}
+html.wbright .home .grid .tile b{color:#2A2230;font-weight:600;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+html.wbright .ico{box-shadow:0 4px 10px -4px rgba(40,30,20,.28),0 1px 2px rgba(40,30,20,.12),0 0 0 1px rgba(34,28,46,.06)}
 .dock{margin:0 -4px calc(10px + env(safe-area-inset-bottom));padding:12px 14px;display:flex;justify-content:space-around;border-radius:30px;background:rgba(37,30,49,.62);border:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 html.framed .dock{margin-bottom:22px}
 .dock .tile b{display:none}
@@ -528,6 +532,11 @@ html.light .toast,html.light .sheet{background:#FFFDF8;color:var(--paper)}
 html.light .hb::before{background:rgba(34,28,46,.35)}
 html.light .bub.me{color:#221C2E}
 html.light.inapp .top{color:var(--paper)}
+html.wbright:not(.inapp):not(.desk) .top{color:#221C2E}
+html.wbright:not(.inapp):not(.desk) .top .chip{background:rgba(255,252,246,.62);border-color:rgba(34,28,46,.14)}
+html.light.desk .top{background:rgba(255,252,246,.8);color:#221C2E;border-bottom-color:rgba(34,28,46,.1)}
+html.light.desk .top .chip{background:rgba(34,28,46,.06);border-color:rgba(34,28,46,.12)}
+html.light .dock{box-shadow:0 10px 30px -14px rgba(40,30,20,.3)}
 html.light.inapp .chip{background:rgba(255,255,255,.6)}
 html.light .wmoon svg circle:first-child{fill:#3A3150}
 html.light .call,html.light .lock{--paper:#ECE6DA;--dim:#9C93A8;color:#ECE6DA}
@@ -1237,8 +1246,23 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var k = wallNow(), sky = k === "sky"; $("sky").style.display = sky ? "" : "none"; $("skyline").style.display = sky ? "" : "none";
     if (!WC) { WC = document.createElement("canvas"); WC.id = "wall"; WC.setAttribute("aria-hidden", "true"); $("screen").insertBefore(WC, $("screen").firstChild); }
     WC.style.display = sky ? "none" : "block"; cancelAnimationFrame(wRaf);
+    setTimeout(wallTone, 60);
     if (sky) return; var s = wallSize(); WC.width = s.W; WC.height = s.H; wallDraw(WC, k, performance.now()); if (k !== "plain") wRaf = requestAnimationFrame(wallLoop);
   }
+  /* how bright is the wallpaper where the names sit? the sky by its colours, a drawn wall by a few samples across the grid */
+  function wallTone() {
+    var L = 0;
+    function lum(r, g, b) { return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; }
+    function hex(c) { var m = /^#?([0-9a-f]{6})$/i.exec(c || ""); if (!m) return 0; var n = parseInt(m[1], 16); return lum(n >> 16 & 255, n >> 8 & 255, n & 255); }
+    try {
+      if (wallNow() === "sky") { var c = skyCols(wHour()); L = hex(c[0]) * .5 + hex(c[1]) * .5; }
+      else if (WC && WC.width) { var g = WC.getContext("2d"), t = 0, n = 0;
+        for (var i = 1; i < 6; i++) for (var j = 1; j < 6; j++) { var d = g.getImageData(Math.floor(WC.width * i / 6), Math.floor(WC.height * (.12 + j * .1)), 1, 1).data; t += lum(d[0], d[1], d[2]); n++; }
+        L = t / n; }
+    } catch (e) { L = document.documentElement.classList.contains("light") ? 1 : 0; }
+    document.documentElement.classList.toggle("wbright", L > .58);
+  }
+  setInterval(function () { if (!document.hidden) wallTone(); }, 60000);
   function wallPick() {   // the Settings row: a preview of each, tap to choose
     var box = el("div", "walls"); WALL_KEYS.forEach(function (k) {
       var b = el("button", "wp" + (k === wallNow() ? " on" : "")), cv = document.createElement("canvas"); b.type = "button"; cv.width = 60; cv.height = 120;
@@ -1311,7 +1335,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   var LOOKS = ["auto", "day", "night", "hour"], LOOK_W = { auto: "lkAuto", day: "lkDay", night: "lkNight", hour: "lkHour" }, MQ = window.matchMedia ? matchMedia("(prefers-color-scheme: light)") : null;
   function lookNow() { var v = get("ah_app_look"); return LOOKS.indexOf(v) >= 0 ? v : "auto"; }
   function theme() { var v = lookNow(), h = hour(), light = v === "day" || (v === "hour" && h >= 7 && h < 19) || (v === "auto" && MQ && MQ.matches);
-    document.documentElement.classList.toggle("light", !!light); var m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = light ? "#F3EDE2" : "#120F18"; }
+    document.documentElement.classList.toggle("light", !!light); var m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = light ? "#F3EDE2" : "#120F18"; setTimeout(wallTone, 80); }
   if (MQ && MQ.addEventListener) MQ.addEventListener("change", theme);
   setInterval(theme, 6e4);
   function lookPick() { var seg = el("div", "seg"); LOOKS.forEach(function (v) { var b = el("button", "", esc(w(LOOK_W[v]))); b.type = "button"; b.setAttribute("aria-pressed", v === lookNow() ? "true" : "false");
@@ -2253,7 +2277,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     qa(".tile[data-k],.tile[data-a]").forEach(function (t) { var k = t.getAttribute("data-a") || t.getAttribute("data-k"), on = false, ic = t.querySelector(".ico"); if (!ic || t.closest(".dock")) return;
       if (k.slice(0, 2) === "f:") { var f = folder(k.slice(2)); on = !!f && f.a.some(function (a) { return un[a]; }); } else on = !!un[k];
       ic.classList.toggle("pdot", on); });
-    var b = $("ntb"); if (b) { b.classList.toggle("has", !!(N.length || NTLOG.length)); b.classList.toggle("new", Object.keys(un).length > 0); b.setAttribute("aria-label", w("ntT")); b.title = w("ntT"); }
+    var b = $("ntb"); if (b) { b.classList.toggle("has", !!(N.length || (NTLOG || []).length)); b.classList.toggle("new", Object.keys(un).length > 0); b.setAttribute("aria-label", w("ntT")); b.title = w("ntT"); }
     return N;
   }
   function ntIcon(k) { return '<span class="ni">' + appIcon(k) + "</span>"; }
@@ -2277,9 +2301,9 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var N = notices(), seen = ntSeen(), ul = el("ul", "ntl");
     N.slice().reverse().forEach(function (n) { var li2 = el("li"), a = el("a", seen[n.id] ? "" : "new", ntIcon(n.k)); a.href = n.href; a.appendChild(el("span", "tx", "<b>" + esc(pname(n.k)) + "</b><span class=\"pv\">" + esc(n.t) + "</span>"));
       a.onclick = function () { ntMark([n.id]); }; li2.appendChild(a); ul.appendChild(li2); });
-    NTLOG.forEach(function (x) { var li2 = el("li"), a = el("button"); a.type = "button"; a.appendChild(avatar(x.c)); a.appendChild(el("span", "tx", "<b>" + esc(nm(x.c)) + "<small>" + esc(x.l) + " · " + esc(hm(new Date(x.at))) + "</small></b><span class=\"pv\">" + esc(plain(x.t)) + "</span>"));
+    (NTLOG || []).forEach(function (x) { var li2 = el("li"), a = el("button"); a.type = "button"; a.appendChild(avatar(x.c)); a.appendChild(el("span", "tx", "<b>" + esc(nm(x.c)) + "<small>" + esc(x.l) + " · " + esc(hm(new Date(x.at))) + "</small></b><span class=\"pv\">" + esc(plain(x.t)) + "</span>"));
       a.onclick = function () { s.classList.remove("on"); x.go(); }; li2.appendChild(a); ul.appendChild(li2); });
-    if (!N.length && !NTLOG.length) ul.appendChild(el("li", "none", esc(w("ntNone"))));
+    if (!N.length && !(NTLOG || []).length) ul.appendChild(el("li", "none", esc(w("ntNone"))));
     s.appendChild(ul);
     var b = el("div", "btns"), ok = el("button", "pill", esc(w("eDone"))); ok.type = "button"; ok.onclick = function () { s.classList.remove("on"); }; b.appendChild(ok); s.appendChild(b);
     s.classList.add("on");
