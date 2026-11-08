@@ -3119,15 +3119,14 @@
 
     function validateCallsign() {
       const inputEl = document.getElementById('callsignInput');
-      const val = inputEl.value.trim();
-      if (!val) {
-        document.getElementById('nameRequiredWarn').classList.remove('hidden');
-        inputEl.focus();
-        return false;
-      }
+      /* a name is never a gate (the town's rule: a place asks only if the town never has): an empty field climbs as the
+         visitor's town name, or else as the climber picked from the roster. Climb used to do nothing without one. */
+      let val = inputEl.value.trim();
+      if (!val) { try { val = (localStorage.getItem('fb_nick') || '').trim().slice(0, 14); } catch (e) {} }
+      if (!val) val = (currentChar && currentChar.name) || 'Climber';
       document.getElementById('nameRequiredWarn').classList.add('hidden');
       callsign = val;
-      lsSet('crag_callsign', callsign);
+      if (inputEl.value.trim()) lsSet('crag_callsign', callsign);   /* only a name they typed is remembered */
       return true;
     }
 
@@ -3202,6 +3201,12 @@
     }
 
     document.getElementById('startClimbBtn').addEventListener('click', startDirectClimb);
+    (function () {   /* the climbing controls do nothing on the title screen, so they don't show there (their space is kept, so the wall doesn't jump) */
+      const ts = document.getElementById('titleScreen'), bar = document.getElementById('inGameFooterBar');
+      if (!ts || !bar) return;
+      const sync = () => { bar.style.visibility = ts.classList.contains('hidden') ? '' : 'hidden'; };
+      new MutationObserver(sync).observe(ts, { attributes: true, attributeFilter: ['class'] }); sync();
+    })();
     document.getElementById('retryClimbBtn').addEventListener('click', () => {
       // Same seed + same crag = identical route; keep the plan so it can be refined
       enterInspection();
