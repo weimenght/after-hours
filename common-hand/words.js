@@ -43,6 +43,7 @@ window.CH_W = {
   pairLine: ["{a} & {b}: both {k}", "{a}和{b}：都{k}", "{a}和{b}：都{k}", "{a} y {b}: los dos {k}", "{a} i {b}: tots dos {k}"],
   send: ["Send our hand", "把这一手发出去", "把這一手發出去", "Enviar nuestra mano", "Enviar la nostra mà"],
   shareText: ["Our table found its common hand:\n{lines}\nDeal your own:", "我们这桌凑齐了一手：\n{lines}\n你们也来凑一手：", "我們這桌湊齊了一手：\n{lines}\n你們也來湊一手：", "Nuestra mesa encontró su mano común:\n{lines}\nHaced la vuestra:", "La nostra taula ha trobat la seva mà comuna:\n{lines}\nFeu la vostra:"],
+  cardLine: ["Our table of four found something in common for every pair. Deal your own:", "我们这桌四个人，每两个人都找到了共同点。你们也来凑一手：", "我們這桌四個人，每兩個人都找到了共同點。你們也來湊一手：", "En nuestra mesa de cuatro, cada pareja encontró algo en común. Haced la vuestra:", "A la nostra taula de quatre, cada parella ha trobat alguna cosa en comú. Feu la vostra:"],
   copied: ["Copied. Paste it in your chat.", "已复制，贴到聊天里吧。", "已複製，貼到聊天裡吧。", "Copiado. Pégalo en el chat.", "Copiat. Enganxa-ho al xat."],
   putDown: ["Phone face down", "手机扣过来", "手機扣過來", "Móvil boca abajo", "Mòbil cap per avall"],
   lights: ["Wash the tiles. Deal. The phone can sleep now.", "洗牌，开打。手机可以睡了。", "洗牌，開枱。手機可以瞓喇。", "Lavad las fichas. Repartid. El móvil ya puede dormir.", "Renteu les fitxes. Repartiu. El mòbil ja pot dormir."],

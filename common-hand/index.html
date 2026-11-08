@@ -95,27 +95,23 @@ input::placeholder { color: #a08a70; }
   box-shadow: inset -2px -2px 0 rgba(0,0,0,.15), 3px 3px 0 #000; }
 .seat:hover { background: #f8efdc; }
 .seat:active { transform: translate(calc(-50% + 2px), calc(-50% + 2px)); box-shadow: inset -2px -2px 0 rgba(0,0,0,.15), 1px 1px 0 #000; }
-.mid .tile.back:active { transform: translate(2px, 2px); }
 .seat .w { font-family: var(--kai); font-size: 17px; color: var(--red); line-height: 1; font-weight: 700; }
 .seat .n { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .seat[aria-pressed="true"] { background: var(--amber); box-shadow: inset 0 0 0 2px #fff, 3px 3px 0 #000; }
 .seat[disabled] { cursor: default; opacity: 1; }
 .s0 { left: 50%; top: 86%; } .s1 { left: 83%; top: 50%; } .s2 { left: 50%; top: 14%; } .s3 { left: 17%; top: 50%; }
 .mid { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
-.tile { box-sizing: border-box; width: 64px; height: 86px; background: var(--tile); color: var(--ink); border: 3px solid #000;
-  box-shadow: 0 6px 0 var(--tile-back), 0 6px 0 3px #000; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-family: var(--kai); font-weight: 700; line-height: .95; padding: 0; }
-.tile .n { font-size: 26px; } .tile .s { font-size: 32px; } .tile .h { font-size: 46px; }
-.tile.back { background: var(--tile-back); color: var(--ink-on-wood); cursor: pointer; font-family: var(--vt); font-weight: 400; font-size: 22px; box-shadow: 0 6px 0 var(--tile), 0 6px 0 3px #000; }
-.tile.back:hover { background: #26a073; }
-.tile.back:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-.tile.mini { width: 30px; height: 40px; border-width: 2px; box-shadow: 0 3px 0 var(--tile-back), 0 3px 0 2px #000; flex: none; }
-.tile.mini .n { font-size: 12px; } .tile.mini .s { font-size: 15px; } .tile.mini .h { font-size: 21px; }
+.tile { display: block; width: 64px; height: 88px; image-rendering: pixelated; image-rendering: crisp-edges; filter: drop-shadow(3px 3px 0 rgba(0,0,0,.45)); flex: none; }
+.tile.mini { width: 32px; height: 44px; filter: drop-shadow(2px 2px 0 rgba(0,0,0,.3)); }
+.tileb { all: unset; position: relative; display: block; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.tileb span { position: absolute; left: 0; right: 0; top: 34px; text-align: center; font-family: var(--vt); font-size: 22px; color: #fbeedd; text-shadow: 2px 2px 0 #000; }
+.tileb:hover .tile { filter: drop-shadow(3px 3px 0 rgba(0,0,0,.45)) brightness(1.1); }
+.tileb:active { transform: translate(2px, 2px); }
+.tileb:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 .flip { animation: flip .3s steps(5) both; }
 @keyframes flip { from { transform: scaleX(0); } to { transform: none; } }
-.wallrow { display: flex; justify-content: center; gap: 5px; }
-.wallrow i { width: 14px; height: 18px; border: 2px solid #000; background: var(--tile-back); box-shadow: 0 2px 0 #000; }
-.wallrow i.on { background: var(--tile); }
+.wallrow { display: flex; justify-content: center; gap: 6px; }
+.wallrow .tile.wall { width: 16px; height: 22px; filter: drop-shadow(2px 2px 0 rgba(0,0,0,.35)); }
 .q { font-size: 28px; line-height: 1.08; margin: 0; color: var(--ink); text-wrap: balance; }
 .toast { min-height: 1.2em; margin: 0; text-align: center; font-size: 20px; color: var(--amber); }
 .sets { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
@@ -372,16 +368,69 @@ function say(el, who, line) {
   n.className = "who"; n.textContent = T(W.names[who]); p.textContent = line; d.appendChild(n); d.appendChild(p); el.appendChild(d);
 }
 
-/* ---------- tiles ---------- */
+/* ---------- tiles: pixel art on a 32×44 grid, like the town's sprites (ivory face, jade back, black outline) ---------- */
+var TW = 32, TH = 44, TS = 2, tileCache = {};
+var TC = { ink: "#1d130d", face: "#fbf6e9", hi: "#ffffff", shade: "#e3d6b8", jade: "#1f8a62", jadeHi: "#3bb184", jadeLo: "#156b4b", red: "#c8303a", green: "#2a7a3a", greenHi: "#5cb36c", greenLo: "#1b5426", blue: "#2a5aa8", pink: "#f29bb0", gold: "#e8b84a" };
 var NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
-var SUIT = { b: ["条", "條", "var(--green)"], c: ["饼", "餅", "var(--blue)"], m: ["万", "萬", "var(--red)"] };
-var HCOL = { "中": "var(--red)", "發": "var(--green)", "白": "var(--blue)", "春": "var(--red)" };
-function tileHTML(qi, cls) {
-  var q = Q[qi], trad = li() === 2;
-  if (q.s === "h") return '<span class="tile ' + (cls || "") + '" aria-hidden="true"><span class="h" style="color:' + (HCOL[q.t] || "var(--ink)") + '">' + (q.t === "東" && !trad && li() === 1 ? "东" : q.t === "發" && li() === 1 ? "发" : q.t) + "</span></span>";
-  var su = SUIT[q.s];
-  return '<span class="tile ' + (cls || "") + '" aria-hidden="true"><span class="n">' + NUM[q.t] + '</span><span class="s" style="color:' + su[2] + '">' + (trad ? su[1] : su[0]) + "</span></span>";
+function px(g, x, y, c, w, h) { g.fillStyle = c; g.fillRect(x, y, w || 1, h || 1); }
+function shell(g, back) {   /* outline, the face (or the back) and the jade layer under it */
+  px(g, 1, 0, TC.ink, TW - 2, TH); px(g, 0, 1, TC.ink, TW, TH - 2);
+  if (back) {
+    px(g, 1, 1, TC.jade, TW - 2, TH - 9); px(g, 2, 1, TC.jadeHi, TW - 4, 1); px(g, 1, 2, TC.jadeHi, 1, TH - 11);
+    for (var y = 4; y < TH - 10; y += 6) for (var x = 4 + ((y / 6) % 2) * 3; x < TW - 3; x += 6) { px(g, x, y, TC.jadeHi); px(g, x - 1, y + 1, TC.jadeLo); px(g, x + 1, y + 1, TC.jadeLo); px(g, x, y + 2, TC.jadeHi); }
+    px(g, 1, TH - 8, TC.ink, TW - 2, 1); px(g, 1, TH - 7, TC.face, TW - 2, 6); px(g, 2, TH - 7, TC.hi, TW - 4, 1); px(g, 1, TH - 2, TC.shade, TW - 2, 1);
+  } else {
+    px(g, 1, 1, TC.face, TW - 2, TH - 9); px(g, 2, 1, TC.hi, TW - 4, 1); px(g, 1, 2, TC.hi, 1, TH - 11); px(g, TW - 2, 2, TC.shade, 1, TH - 11); px(g, 1, TH - 9, TC.shade, TW - 2, 1);
+    px(g, 1, TH - 8, TC.ink, TW - 2, 1); px(g, 1, TH - 7, TC.jade, TW - 2, 6); px(g, 2, TH - 7, TC.jadeHi, TW - 4, 1); px(g, 1, TH - 2, TC.jadeLo, TW - 2, 1);
+  }
 }
+function disc(g, cx, cy, r) {   /* a dot of the circles suit: blue ring, ivory inside, red heart */
+  for (var y = -r; y <= r; y++) for (var x = -r; x <= r; x++) {
+    var d = Math.sqrt(x * x + y * y); if (d > r + .35) continue;
+    var c = d > r - 1.15 ? TC.blue : r >= 5 && d > r - 2.3 ? TC.face : r >= 5 && d > r - 3.4 ? TC.green : r >= 4 && d < 1.3 ? TC.red : r < 4 && d < .9 ? TC.face : r >= 4 ? TC.face : TC.blue;
+    px(g, Math.round(cx + x), Math.round(cy + y), c);
+  }
+}
+function stalk(g, x, y, h, red) {   /* a bamboo stalk, 4 wide, with its nodes */
+  var b = red ? TC.red : TC.green, hi = red ? "#e86a6a" : TC.greenHi, lo = red ? "#8a1f26" : TC.greenLo;
+  px(g, x, y, b, 4, h); px(g, x, y, hi, 1, h); px(g, x + 3, y, lo, 1, h);
+  [0, Math.floor(h / 2), h - 1].forEach(function (k) { px(g, x, y + k, lo, 4, 1); });
+}
+var BIRD = ["......gg........", ".....gGGg.......", "....gGkGGg......", "....gGGGGgr.....", ".....gGGGgrr....", "......gGGGg.....", ".....gGGGGGg....", "....gGGbbGGGg...", "...gGGbbbbGGGg..", "...gGbbrrbbGGg..", "....gbbrrrbbg...", ".....gbbbbbg.gg.", "......gggggggGg.", ".......r..r..gg.", "......rr.rr.....", "................"];
+function bird(g, ox, oy) { var C = { g: TC.greenLo, G: TC.green, k: TC.ink, r: TC.red, b: TC.blue }; BIRD.forEach(function (row, y) { for (var x = 0; x < row.length; x++) if (C[row[x]]) px(g, ox + x, oy + y, C[row[x]]); }); }
+function blossom(g, cx, cy) { [[0, -3], [3, -1], [2, 3], [-2, 3], [-3, -1]].forEach(function (p) { px(g, cx + p[0] - 1, cy + p[1] - 1, TC.pink, 3, 3); }); px(g, cx - 1, cy - 1, TC.gold, 3, 3); px(g, cx, cy, TC.red); px(g, cx + 6, cy + 5, TC.greenLo, 1, 5); px(g, cx + 3, cy + 6, TC.greenLo, 3, 1); }
+var SANS_FONT = '"Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Noto Sans CJK SC",sans-serif';
+var GLYPH_FONT = '"Noto Serif CJK TC","Songti TC","STSong","SimSun","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",serif';
+function glyph(g, ch, cx, cy, size, col, font) {   /* a character drawn small, then snapped to whole pixels so it reads as pixel art */
+  var o = document.createElement("canvas"); o.width = TW; o.height = TH; var q = o.getContext("2d");
+  q.font = "900 " + size + "px " + (font || GLYPH_FONT); q.textAlign = "center"; q.textBaseline = "middle"; q.fillStyle = "#000"; q.fillText(ch, cx, cy + 1);
+  var d = q.getImageData(0, 0, TW, TH).data; g.fillStyle = col;
+  for (var y = 0; y < TH; y++) for (var x = 0; x < TW; x++) if (d[(y * TW + x) * 4 + 3] > 115) g.fillRect(x, y, 1, 1);
+}
+var CIRC = { 1: [[16, 17, 10]], 2: [[16, 10, 6], [16, 26, 6]], 3: [[9, 9, 4], [16, 18, 4], [23, 27, 4]], 4: [[10, 11, 5], [22, 11, 5], [10, 25, 5], [22, 25, 5]],
+  5: [[9, 9, 4], [23, 9, 4], [16, 18, 4], [9, 27, 4], [23, 27, 4]], 6: [[10, 8, 4], [22, 8, 4], [10, 18, 4], [22, 18, 4], [10, 28, 4], [22, 28, 4]],
+  7: [[8, 6, 3], [16, 9, 3], [24, 12, 3], [10, 20, 4], [22, 20, 4], [10, 29, 4], [22, 29, 4]], 8: [[10, 6, 3], [22, 6, 3], [10, 14, 3], [22, 14, 3], [10, 22, 3], [22, 22, 3], [10, 30, 3], [22, 30, 3]] };
+var BAMB = { 2: [[14, 4, 13], [14, 20, 13]], 3: [[14, 4, 13], [8, 20, 13], [20, 20, 13]], 4: [[9, 4, 13], [19, 4, 13], [9, 20, 13], [19, 20, 13]],
+  5: [[6, 4, 13], [22, 4, 13], [14, 12, 13, 1], [6, 20, 13], [22, 20, 13]], 6: [[6, 4, 13], [14, 4, 13], [22, 4, 13], [6, 20, 13], [14, 20, 13], [22, 20, 13]],
+  7: [[14, 3, 9, 1], [6, 15, 8], [14, 15, 8], [22, 15, 8], [6, 25, 8], [14, 25, 8], [22, 25, 8]], 8: [[4, 4, 13], [11, 4, 13], [17, 4, 13], [24, 4, 13], [4, 20, 13], [11, 20, 13, 1], [17, 20, 13, 1], [24, 20, 13]] };
+var HCOL = { "中": TC.red, "發": TC.green, "春": TC.red };
+function drawTile(g, q) {
+  shell(g, false);
+  if (q.s === "c") CIRC[q.t].forEach(function (d) { disc(g, d[0], d[1], d[2]); });
+  else if (q.s === "b") { if (q.t === 1) bird(g, 8, 10); else BAMB[q.t].forEach(function (b) { stalk(g, b[0], b[1], b[2], b[3]); }); }
+  else if (q.s === "m") { glyph(g, NUM[q.t], 16, 11, 15, TC.ink, SANS_FONT); glyph(g, "萬", 16, 27, 18, TC.red, SANS_FONT); }
+  else if (q.t === "白") { px(g, 7, 6, TC.blue, 18, 2); px(g, 7, 30, TC.blue, 18, 2); px(g, 7, 6, TC.blue, 2, 26); px(g, 23, 6, TC.blue, 2, 26); px(g, 10, 9, TC.blue, 12, 1); px(g, 10, 28, TC.blue, 12, 1); px(g, 10, 9, TC.blue, 1, 20); px(g, 21, 9, TC.blue, 1, 20); }
+  else if (q.t === "春") { blossom(g, 13, 11); glyph(g, "春", 16, 27, 15, TC.red); }
+  else glyph(g, q.t, 16, 18, 24, HCOL[q.t] || TC.ink);
+}
+function tileURL(key, draw) {
+  if (tileCache[key]) return tileCache[key];
+  var c = document.createElement("canvas"); c.width = TW; c.height = TH; var g = c.getContext("2d"); draw(g);
+  var big = document.createElement("canvas"); big.width = TW * TS; big.height = TH * TS; var b = big.getContext("2d"); b.imageSmoothingEnabled = false; b.drawImage(c, 0, 0, TW * TS, TH * TS);
+  return (tileCache[key] = big.toDataURL("image/png"));
+}
+function tileHTML(qi, cls) { return '<img class="tile ' + (cls || "") + '" src="' + tileURL(qi, function (g) { drawTile(g, Q[qi]); }) + '" alt="" aria-hidden="true">'; }
+function backURL() { return tileURL("back", function (g) { shell(g, true); }); }
 
 /* ---------- screens ---------- */
 var cur = "home", toast = "", flip = false, line = null, recv = null;
@@ -422,8 +471,8 @@ function linksSVG() {
 }
 function renderPlay() {
   var n = found(), q = S.drawn != null ? Q[S.drawn] : null;
-  var wall = $("wall"); wall.innerHTML = PAIRS.map(function (_, i) { return '<i class="' + (i < n ? "on" : "") + '"></i>'; }).join(""); wall.setAttribute("aria-label", t("pairsLeft", { n: 6 - n }));
-  var mid = q ? tileHTML(S.drawn, flip ? "flip" : "") : '<button class="tile back" id="drawBtn" type="button">' + esc(t("draw")) + "</button>";
+  var wall = $("wall"); wall.innerHTML = PAIRS.map(function (_, i) { return '<img class="tile wall' + (i < n ? " on" : "") + '" src="' + (i < n ? tileURL("plain", function (g) { shell(g, false); }) : backURL()) + '" alt="">'; }).join(""); wall.setAttribute("aria-label", t("pairsLeft", { n: 6 - n }));
+  var mid = q ? tileHTML(S.drawn, flip ? "flip" : "") : '<button class="tileb" id="drawBtn" type="button"><img class="tile" src="' + backURL() + '" alt=""><span>' + esc(t("draw")) + "</span></button>";
   $("felt").innerHTML = linksSVG() + [0, 1, 2, 3].map(function (i) {
     var on = S.sel.indexOf(i) >= 0;
     return '<button class="btn seat s' + i + '" type="button" data-seat="' + i + '"' + (q ? ' aria-pressed="' + on + '"' : " disabled") + '><span class="w">' + esc(windChar(i)) + '</span><span class="n">' + esc(nm(i)) + "</span></button>";
@@ -483,8 +532,8 @@ function manual(text) {
   var n = $("sendNote"); n.textContent = ""; n.appendChild(ta); ta.select(); return false;
 }
 function send() {
-  var text = shareText();
-  var c = window.FBShare && FBShare.card({ text: text, app: t("title"), mascots: ["yuzu", "miso", "mantou"], fallback: function () { return copy(text); } }); if (c) return c;   /* the share card */
+  var text = shareText(), link = home() + "#h=" + handCode();
+  var c = window.FBShare && FBShare.card({ text: t("cardLine") + " " + link, app: t("title"), mascots: ["yuzu", "miso", "mantou"], fallback: function () { return copy(text); } }); if (c) return c;   /* the share card */
   if (navigator.share) return navigator.share({ text: text }).then(function () { return true; }, function (e) { return e && e.name === "AbortError" ? false : copy(text); });
   return copy(text);
 }
