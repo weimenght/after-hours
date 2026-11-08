@@ -526,7 +526,7 @@
     });
     w.addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (e.target === w) return w.remove(); if (!b) return;
-      if (b.dataset.a === "copy") { var u = link(), why = window.FBG && FBG.invite ? FBG.invite("train") : ""; if (navigator.share) navigator.share({ title: "Sleeper Car No. " + String(CAR).padStart(2, "0"), text: why, url: u }).catch(function () {}); else if (navigator.clipboard) navigator.clipboard.writeText((why ? why + " " : "") + u).then(function () { b.textContent = T.copied; }); }
+      if (b.dataset.a === "copy") { var u = link(), why = window.FBG && FBG.invite ? FBG.invite("train") : ""; if (window.FBShare && FBShare.card({ text: why, url: u, look: /[?&]app=1/.test(location.search) ? "" : "town", place: "train" })) { w.remove(); return; } if (navigator.share) navigator.share({ title: "Sleeper Car No. " + String(CAR).padStart(2, "0"), text: why, url: u }).catch(function () {}); else if (navigator.clipboard) navigator.clipboard.writeText((why ? why + " " : "") + u).then(function () { b.textContent = T.copied; }); }
       if (b.dataset.a === "close") w.remove();
       if (b.dataset.a === "leave") { leave(); w.remove(); }
     });

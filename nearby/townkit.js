@@ -27,6 +27,7 @@
   function note(text, icon) { try { if (window.FBG && FBG.note) { FBG.note({ icon: icon || "✦", text: text, now: true }); return; } } catch (e) {} }
   var COPIED = ["Link copied. Send it to them.", "链接已复制，发给 TA 吧。", "連結已複製，傳給 TA 吧。", "Enlace copiado. Envíaselo.", "Enllaç copiat. Envia-l'hi."];
   function share(title, text, url) {
+    if (window.FBShare && FBShare.card({ text: text, url: url, look: "town" })) return;   /* the share card, in the town's look */
     if (navigator.share) return navigator.share({ title: title, text: text, url: url }).catch(function () {});
     if (navigator.clipboard) return navigator.clipboard.writeText(text + " " + url).then(function () { note(t(COPIED), "↗"); }).catch(function () {});
   }

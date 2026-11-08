@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=b27a14c602"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=b3cad94fcc" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=147b41361d"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=931e0e9f27" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>The Plaza · Nearby</title>
 <meta name="description" content="The square in the middle of Nearby: a fountain, benches, pigeons. Toss a coin and make a wish; keep it to yourself or let it float for the town to read.">
@@ -530,7 +530,8 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
     var url = window.FBApps ? FBApps.link("flowers", "#bq=" + b64(o)) : location.origin + "/nearby/plaza/#bq=" + b64(o), text = t("shareT");
     try { if (window.FBApps && FBApps.trace) FBApps.trace("flowers", o, "sent"); } catch (e) {}
     show(null);
-    if (navigator.share) navigator.share({ title: t("h1"), text: text, url: url }).catch(function () {});
+    if (window.FBShare && FBShare.card({ text: text, url: url, look: "town", place: "plaza", mascots: ["mantou"] })) {}
+    else if (navigator.share) navigator.share({ title: t("h1"), text: text, url: url }).catch(function () {});
     else if (navigator.clipboard) navigator.clipboard.writeText(text + " " + url).then(function () { note(t("copied"), "↗"); }).catch(function () {});
     setTimeout(function () { note(t("real"), "🌼"); }, 2500);
   };
