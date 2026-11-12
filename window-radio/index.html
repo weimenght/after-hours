@@ -102,6 +102,8 @@
     .screen:has(> .frame) > .frame { grid-column:1; grid-row:1 / span 30; align-self:center; width:100%; max-width:none; margin:0; }
     .screen:has(> .frame) > :not(.frame) { grid-column:2; margin-bottom:14px; }
   }
+  .row.who { flex-direction:column; align-items:stretch; gap:12px; margin-top:8px; }
+  #first .btn { margin-top:10px; } #first #firstB { color:var(--soft); font-size:14px; }
 </style>
 </head>
 <body>
@@ -110,7 +112,12 @@
 </svg>
 <header id="head"><span class="brand"></span></header>
 <main id="app">
-  <section class="screen" id="sMood">
+  <section class="screen" id="sWho">
+    <h1 id="whoQ"></h1>
+    <p class="sub" id="whoSub"></p>
+    <div class="row who"><button class="btn" id="whoWith" type="button"></button><button class="btn ghost" id="whoAlone" type="button"></button></div>
+  </section>
+  <section class="screen" id="sMood" hidden>
     <p class="ctx" id="ctxLine"></p>
     <h1 id="moodQ"></h1>
     <p class="sub" id="moodSub"></p>
@@ -124,6 +131,7 @@
   </section>
   <section class="screen" id="sPlayer" hidden>
     <div class="got" id="got" hidden><p class="gotT" id="gotT"></p><p id="gotB"></p></div>
+    <div class="got" id="first" hidden><p class="gotT" id="firstT"></p><p id="firstB"></p><button class="btn" id="firstSend" type="button"></button></div>
     <div class="frame"><canvas id="scene" role="img"></canvas></div>
     <p class="tapeno" id="tapeNo"></p>
     <h1 id="tapeTitle"></h1>
@@ -532,7 +540,7 @@ const WICON={
 const svg=(inner,fill)=>`<svg viewBox="0 0 48 48" fill="none" stroke="#3a2a40" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${fill?`<circle cx="24" cy="24" r="18" fill="${fill}"/>`:''}${inner.replace(/class="f"/g,'fill="#3a2a40"')}</svg>`;
 
 /* ---------- screens ---------- */
-function show(id){['sMood','sWeather','sPlayer','sDone'].forEach(s=>$(s).hidden=s!==id);S.screen=id;document.body.classList.toggle('mid',id==='sWeather');window.scrollTo(0,0)}
+function show(id){['sWho','sMood','sWeather','sPlayer','sDone'].forEach(s=>$(s).hidden=s!==id);S.screen=id;document.body.classList.toggle('mid',id==='sWeather');window.scrollTo(0,0)}
 function ctxLine(){const d=new Date(),f=festivalFor(d);return[dayName(d.getDay()),Tr(W.times[timeBlock(hourNow())]),festName(f)].filter(Boolean).join(' · ')}
 function dayName(i){return W.days[li()][i]}
 function tapeTitle(c){const o=c.useFest?Tr(W.fobj[c.fid]):Tr(W.obj[c.objIdx]);const s=F(W.wp[c.weather],{o});return li()===3||li()===4?s.charAt(0).toUpperCase()+s.slice(1):s}
@@ -549,6 +557,8 @@ function renderText(){
   const i=li();document.documentElement.lang=LANGS[i];document.title=Tr(W.app);
   if(HD)HD.paint();
   const nm=Tr(W.app),sp=nm.lastIndexOf(' '),nmEl=HD?HD.el.querySelector('.ahh-nm'):null;if(nmEl)nmEl.innerHTML=i===1||i===2?esc(nm.slice(0,2))+'<i>'+esc(nm.slice(2))+'</i>':esc(nm.slice(0,sp+1))+'<i>'+esc(nm.slice(sp+1))+'</i>';
+  $('whoQ').textContent=Tr(W.whoQ);$('whoSub').textContent=Tr(W.whoSub);$('whoWith').textContent=Tr(W.whoWith);$('whoAlone').textContent=Tr(W.whoAlone);
+  $('firstT').textContent=Tr(S.sent?W.sentT:W.firstT);$('firstB').textContent=Tr(W.firstB);$('firstSend').textContent='↗ '+Tr(W.share);
   $('ctxLine').textContent=ctxLine();$('moodQ').textContent=Tr(W.moodQ);$('moodSub').textContent=Tr(W.moodSub);
   $('weatherQ').textContent=Tr(W.weatherQ);$('weatherSub').textContent=Tr(W.weatherSub);$('wBack').textContent=Tr(W.back);
   $('moodGrid').innerHTML=MOODS.map(m=>`<button class="pick" type="button" data-m="${m}" aria-pressed="${S.mood===m}">${svg(FACE[m],FACEC[m])}<span>${esc(Tr(W.moods[m]))}</span></button>`).join('');
@@ -573,6 +583,7 @@ function renderPlayer(){
   if(c.shared)chips.push(`<span class="chip">${esc(Tr(W.weathers[c.weather]))}</span>`,`<span class="chip">${esc(Tr(W.moods[c.mood]))}</span>`);
   else chips.push(`<button class="chip" type="button" data-go="sWeather">${esc(Tr(W.weathers[c.weather]))}</button>`,`<button class="chip" type="button" data-go="sMood">${esc(Tr(W.moods[c.mood]))}</button>`);
   $('got').hidden=!c.shared;$('mine').hidden=!c.shared;$('shareLink').hidden=true;
+  $('first').hidden=!!c.shared||!S.withSome;$('firstSend').hidden=!!S.sent;$('firstT').textContent=Tr(S.sent?W.sentT:W.firstT);   // with someone: the tape is sent before it's played
   $('chips').innerHTML=chips.join('');
 }
 function renderPlayBtn(){const b=$('play');b.setAttribute('aria-label',Tr(S.playing?W.pause:W.play));
@@ -605,14 +616,18 @@ $('share').onclick=async()=>{
   catch(e){const f=$('shareLink');f.value=url;f.hidden=false;f.focus();f.select();toast(Tr(W.copyIt))}
 };
 $('mine').onclick=()=>{
-  if(S.playing)pausePlay();resetTape();S.shared=null;S.side='A';cfg=null;S.remaining=segMs();
+  if(S.playing)pausePlay();resetTape();S.shared=null;S.withSome=false;S.sent=false;S.side='A';cfg=null;S.remaining=segMs();
   try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
-  renderText();show('sMood');
+  renderText();show('sWho');
 };
 function arrive(){const sh=readShare();if(!sh)return false;
   if(S.playing)pausePlay();resetTape();S.shared=sh;S.side=sh.s;S.remaining=segMs();cfg=tape();renderText();show('sPlayer');prerecord(cfg);return true}
 addEventListener('hashchange',arrive);
 
+/* the first question (the owner, Nov 12): alone, or with someone? With someone, the window opens with "Send it to them first" */
+$('whoWith').onclick=()=>{S.withSome=true;S.sent=false;show('sMood')};
+$('whoAlone').onclick=()=>{S.withSome=false;S.sent=false;show('sMood')};
+$('firstSend').onclick=()=>{S.sent=true;$('share').click();setTimeout(()=>{if(cfg)renderPlayer()},600)};
 function enterPlayer(){cfg=tape();renderPlayer();show('sPlayer');if(S.playing)load(cfg);else prerecord(cfg)}
 let returnToPlayer=false;
 $('moodGrid').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;S.mood=b.dataset.m;renderText();
@@ -870,7 +885,7 @@ function draw(now){
 requestAnimationFrame(draw);
 
 /* ---------- start ---------- */
-S.remaining=segMs();renderText();if(!arrive())show('sMood');
+S.remaining=segMs();renderText();if(!arrive())show('sWho');
 setInterval(()=>{if(S.screen==='sMood')$('ctxLine').textContent=ctxLine()},60e3);
 window.WR={S,cfg:()=>cfg,build:buildCfg,record,au,endIn:ms=>{endAt=Date.now()+ms;tick()},track:()=>cur};   // test hook
 })();

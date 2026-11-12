@@ -227,6 +227,7 @@ textarea:focus, input:focus { outline: 3px solid var(--amber); outline-offset: 1
     <div class="card">
       <h2 data-t="doneT"></h2>
       <p style="margin:0;font-size:24px;line-height:1.15" id="doneGo"></p>
+      <button class="btn wide" type="button" id="tellGo" hidden style="margin-top:12px"></button>
     </div>
     <div class="stack">
       <button class="btn pri lg wide" type="button" id="putDown" data-t="putDown"></button>
@@ -617,10 +618,10 @@ function finish() {
   var e = { d: draft.d, m: draft.m, mn: draft.mn, r: draft.r, t: draft.t, b: draft.b, th: th };
   var any = e.m != null || e.mn || e.r || e.t || e.b || th.length;
   if (any) putE(e); else delE(e.d);
-  doneName = (th[0] && th[0].w) || "";
+  doneName = (th[0] && th[0].w) || ""; doneWhat = (th[0] && th[0].x) || "";
   show(from === "road" ? "road" : "done");
 }
-var doneName = "";
+var doneName = "", doneWhat = "";
 /* ---------- taking the road along (take.js, shared with Little Things): { app, v, road: { name, entries } } in a link's #, a QR or a file ---------- */
 var pending = null;
 function takeObj() { return { app: "along-the-way", v: 1, road: { name: S.name || "", entries: S.entries } }; }
@@ -658,7 +659,15 @@ function renderTake() {
     qr.innerHTML = svg ? svg + "<p>" + esc(t("scan")) + "</p>" : "<p>" + esc(t("tooBig")) + "</p>";
   });
 }
-function renderDone() { sceneDone($("scDone")); $("doneGo").textContent = doneName ? t("doneGo", { n: doneName }) : t("doneGoAny"); }
+function renderDone() {
+  sceneDone($("scDone")); $("doneGo").textContent = doneName ? t("doneGo", { n: doneName }) : t("doneGoAny");
+  /* the nudge becomes an act (the owner, Nov 12): a ready line for the person named, sent in the visitor's own messages (FBC.tell; nothing goes through a server) */
+  var b = $("tellGo"), can = !!(doneName && window.FBC && FBC.tell); b.hidden = !can; if (!can) return;
+  b.textContent = t("tellBtn", { n: doneName });
+  b.onclick = function () { FBC.tell({ px: 1, title: t("tellBtn", { n: doneName }).replace(/\s*↗$/, ""), choices: [
+    { label: t("tellThanks"), text: doneWhat ? t("tellThanksX", { x: doneWhat.replace(/[.。!！\s]+$/, "") }) : t("tellThanks0") },
+    { label: t("tellMeet"), text: t("tellMeetX") } ] }); };
+}
 
 function renderRoad() {
   $("goTake").hidden = !S.entries.length;
@@ -902,7 +911,7 @@ render();
 function takeFromHash() { if (window.FBTake && /[#&]take=/.test(location.hash)) FBTake.fromHash().then(function (o) { var r = readTake(o); if (r) arrive(r); else { show("road"); $("roadNote").textContent = t("takeBad"); } }); }
 takeFromHash(); addEventListener("hashchange", takeFromHash);   /* also when the link is opened while the app is already open */
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (cur === "home") renderHome(); });
-window.AW = { W: W, li: li, sleeps: sleeps, merge: merge, readTake: readTake, takeObj: takeObj, S: S, show: show, build: function () { return buildPages(S.entries, S.name); } };
+window.AW = { done: function (n, x) { doneName = n || ""; doneWhat = x || ""; show("done"); }, W: W, li: li, sleeps: sleeps, merge: merge, readTake: readTake, takeObj: takeObj, S: S, show: show, build: function () { return buildPages(S.entries, S.name); } };
 })();
 </script>
 </body>

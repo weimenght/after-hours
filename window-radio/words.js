@@ -80,6 +80,13 @@ window.WR_W = {
     ["Do", "Re♭", "Re", "Mi♭", "Mi", "Fa", "Sol♭", "Sol", "La♭", "La", "Si♭", "Si"],
     ["Do", "Re♭", "Re", "Mi♭", "Mi", "Fa", "Sol♭", "Sol", "La♭", "La", "Si♭", "Si"]
   ],
+  whoQ: ["Listening alone, or with someone?", "一个人听，还是和谁一起听？", "一個人聽，還是和誰一起聽？", "¿Escuchas a solas o con alguien?", "Escoltes a soles o amb algú?"],
+  whoSub: ["With someone, you send the tape first, then you both press play.", "和人一起听的话，先把磁带发过去，再一起按播放。", "和人一起聽的話，先把磁帶傳過去，再一起按播放。", "Con alguien, primero envías la cinta y luego le dais al play a la vez.", "Amb algú, primer envies la cinta i després premeu play alhora."],
+  whoWith: ["With someone", "和人一起", "和人一起", "Con alguien", "Amb algú"],
+  whoAlone: ["Just me", "就我自己", "就我自己", "Solo yo", "Només jo"],
+  firstT: ["Send it to them first.", "先发给对方。", "先傳給對方。", "Envíasela primero.", "Envia-l'hi primer."],
+  firstB: ["Then press play at the same time. Better still, in the same room.", "然后同时按播放。在同一个房间里更好。", "然後同時按播放。在同一個房間裡更好。", "Luego dadle al play a la vez. Mejor aún, en la misma habitación.", "Després premeu play alhora. Encara millor, a la mateixa habitació."],
+  sentT: ["Sent? Now press play together.", "发了吗？现在一起按播放。", "傳了嗎？現在一起按播放。", "¿Enviada? Ahora dadle al play juntos.", "Enviada? Ara premeu play junts."],
   same: ["Same picks on the same day make the same tape. Ask someone nearby to press play with you.", "同一天、同样的选择，会放出同一盘磁带。叫身边的人和你一起按播放吧。", "同一天、同樣的選擇，會放出同一盤磁帶。叫身邊的人和你一起按播放吧。", "Las mismas respuestas el mismo día dan la misma cinta. Pide a alguien cerca que le dé al play contigo.", "Les mateixes respostes el mateix dia fan la mateixa cinta. Demana a algú que tinguis a prop que premi play amb tu."],
   share: ["Send this tape", "把这盘磁带发给别人", "把這盤磁帶傳給別人", "Enviar esta cinta", "Envia aquesta cinta"],
   shareText: ["I'm playing “{t}” on Window Radio. Press play with me?", "我在窗边电台放《{t}》。一起按播放吧？", "我在窗邊電台放《{t}》。一起按播放吧？", "Estoy escuchando «{t}» en Radio de la Ventana. ¿Le das al play conmigo?", "Estic escoltant «{t}» a Ràdio de la Finestra. Hi poses play amb mi?"],
