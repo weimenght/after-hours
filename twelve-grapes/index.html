@@ -31,11 +31,8 @@
   html:lang(zh) body, html:lang(zh-Hant) body { font-size:17px; line-height:1.5; }
   .wrap { width:100%; max-width:620px; margin:0 auto; flex:1; display:grid; align-content:start; gap:14px;
     padding:max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left)); }
-  header { display:flex; align-items:center; gap:10px; }
-  .brand { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
-  .brand svg { width:28px; height:28px; flex:none; }
-  .brand h1 { margin:0; font:12px/1.4 var(--sign); letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  html:lang(zh) .brand h1, html:lang(zh-Hant) .brand h1 { font:700 18px/1.2 var(--pix); letter-spacing:.1em; }
+  header { --ahh-bg:var(--panel); --ahh-ink:var(--ink); --ahh-line:var(--line); --ahh-name:var(--sign); }
+  html:lang(zh) .ahh-nm, html:lang(zh-Hant) .ahh-nm { font:700 18px/1.2 var(--pix); letter-spacing:.1em; }
   .stage { border:3px solid var(--line); box-shadow:4px 4px 0 var(--line); background:#14101e; }
   #room { display:block; width:100%; height:auto; aspect-ratio:320/200; image-rendering:pixelated; }
   .course { font:8px/1 var(--sign); color:#f3ead8; background:#1a1410; padding:8px 10px 7px; letter-spacing:.08em; }
@@ -87,9 +84,6 @@
   details summary { cursor:pointer; font:9px/2.2 var(--sign); letter-spacing:.05em; }
   html:lang(zh) details summary, html:lang(zh-Hant) details summary { font:700 16px/2 var(--pix); }
   .note { margin:0; color:var(--mut); font-size:18px; }
-  .langmenu { position:absolute; right:16px; top:58px; z-index:30; background:var(--panel); border:3px solid var(--line); box-shadow:4px 4px 0 var(--line); display:flex; flex-direction:column; min-width:150px; }
-  .langmenu button { font:20px/1.2 var(--pix); color:var(--ink); background:none; border:0; text-align:left; padding:10px 14px; min-height:44px; cursor:pointer; }
-  .langmenu button[aria-checked="true"] { background:var(--amber); color:#1a1410; }
   footer { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px; padding:14px 16px max(18px, env(safe-area-inset-bottom)); font-size:17px; color:var(--mut); }
   footer a { color:inherit; display:inline-flex; align-items:center; gap:5px; }
   .pxi svg { width:14px; height:14px; display:block; }
@@ -100,11 +94,7 @@
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="brand"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path fill="#1a1410" d="M7 0h2v2h3v1h1v2h1v4h-1v2h-1v2h-1v1h-2v1H7v-1H5v-1H4v-2H3V9H2V5h1V3h1V2h3z"/><path fill="#6e4420" d="M7 1h2v2H7z"/><path fill="#8ab83a" d="M4 4h3v3H4zM8 4h3v3H8zM6 7h3v3H6zM10 7h2v3h-2zM3 7h2v2H3zM5 10h2v2H5zM9 10h2v2H9zM7 12h2v2H7z"/><path fill="#d8f08a" d="M4 4h1v1H4zM8 4h1v1H8zM6 7h1v1H6zM10 7h1v1h-1zM5 10h1v1H5zM9 10h1v1H9zM7 12h1v1H7z"/><path fill="#c8303a" d="M11 2h2v2h-2z"/></svg><h1 id="appName">Twelve Grapes</h1></div>
-    <button class="btn sm" id="snd" type="button"></button>
-    <button class="btn sm" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false"><span id="langLbl">EN</span></button>
-  </header>
+  <header id="head"><div class="brand"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path fill="#1a1410" d="M7 0h2v2h3v1h1v2h1v4h-1v2h-1v2h-1v1h-2v1H7v-1H5v-1H4v-2H3V9H2V5h1V3h1V2h3z"/><path fill="#6e4420" d="M7 1h2v2H7z"/><path fill="#8ab83a" d="M4 4h3v3H4zM8 4h3v3H8zM6 7h3v3H6zM10 7h2v3h-2zM3 7h2v2H3zM5 10h2v2H5zM9 10h2v2H9zM7 12h2v2H7z"/><path fill="#d8f08a" d="M4 4h1v1H4zM8 4h1v1H8zM6 7h1v1H6zM10 7h1v1h-1zM5 10h1v1H5zM9 10h1v1H9zM7 12h1v1H7z"/><path fill="#c8303a" d="M11 2h2v2h-2z"/></svg><span>Twelve Grapes</span></div></header>
   <div class="stage"><canvas id="room" width="320" height="200" role="img"></canvas><div class="course" id="course"></div></div>
   <section id="panel" class="panel" aria-live="polite">
     <div class="who"><canvas id="face" width="32" height="32" aria-hidden="true"></canvas><b id="name"></b></div>
@@ -171,7 +161,6 @@ function doorSnd() { tone(660, .25, "triangle", .12); tone(520, .4, "triangle", 
 function pop() { if (!audio()) return; var n = (AC.sampleRate * .35) | 0, b = AC.createBuffer(1, n, AC.sampleRate), d = b.getChannelData(0);
   for (var i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3); var s = AC.createBufferSource(), g = AC.createGain(); g.gain.value = .22; s.buffer = b; s.connect(g); g.connect(AC.destination); s.start(); }
 function gulp() { tone(300, .08, "sine", .1); tone(240, .1, "sine", .08, .07); }
-$("snd").addEventListener("click", function () { soundOn = !soundOn; try { localStorage.setItem("tg_snd", soundOn ? "1" : "0"); } catch (e) {} chrome(); if (soundOn) tone(523, .3, "sine", .12); });
 
 /* ---------- the room (320×200, the town's sprites) ---------- */
 var cv = $("room"), C = cv.getContext("2d"); C.imageSmoothingEnabled = false;
@@ -457,23 +446,18 @@ function door() {
 function doorLook() { say("popo", W.doorIn); summary(load() || keepYear()); rowEl(true); btn(W.b.again, again, "pri"); }
 
 /* ---------- language, sound, footer ---------- */
-var menu = null;
-function closeLang() { if (menu) { menu.remove(); menu = null; $("langBtn").setAttribute("aria-expanded", "false"); } }
-$("langBtn").addEventListener("click", function (e) {
-  e.stopPropagation(); if (menu) return closeLang();
-  menu = document.createElement("div"); menu.className = "langmenu"; menu.setAttribute("role", "menu");
-  LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i];
-    b.addEventListener("click", function () { if (window.FBL) FBL.set(l); closeLang(); repaint(); }); menu.appendChild(b); });
-  document.body.appendChild(menu); $("langBtn").setAttribute("aria-expanded", "true"); menu.querySelector("[aria-checked=true]").focus();
-});
-document.addEventListener("click", function (e) { if (menu && !menu.contains(e.target)) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLang(); });
+/* the after-hours header (handoff/DESIGN.md §3): name · ? three steps · ⋯ sound, language, privacy */
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { px: 1, btn: "btn sm", icon: $("head").querySelector("svg").outerHTML, name: function () { return T(W.app); },
+  home: function () { scrollTo({ top: 0, behavior: "smooth" }); },
+  sound: { get: function () { return soundOn; }, set: function (v) { soundOn = v; try { localStorage.setItem("tg_snd", soundOn ? "1" : "0"); } catch (e) {} if (soundOn) tone(523, .3, "sine", .12); } },
+  steps: [
+    ["It's New Year's Eve at Popo's table. Eat a grape for each month and keep one good thing from it.", "跨年夜，在婆婆的饭桌边。每个月吃一颗葡萄，留下那个月的一件好事。", "跨年夜，在婆婆的飯桌邊。每個月吃一顆葡萄，留下那個月的一件好事。", "Es Nochevieja en la mesa de Popo. Come una uva por mes y guarda una cosa buena de cada uno.", "És Cap d'Any a la taula de la Popo. Menja un gra per mes i guarda'n una cosa bona de cadascun."],
+    ["Fill the chairs with who was with you, and who you miss. Each gets one real thing for this week.", "把椅子坐满：陪你的人，和你想念的人。每个人都有这周要做的一件真事。", "把椅子坐滿：陪你的人，和你想念的人。每個人都有這週要做的一件真事。", "Llena las sillas con quien estuvo contigo y a quien echas de menos. Cada uno tiene algo de verdad para esta semana.", "Omple les cadires amb qui hi va ser i a qui trobes a faltar. Cadascú té una cosa de debò per a aquesta setmana."],
+    ["Tape three small wishes to the door, then wait for the twelve chimes. Then phone down.", "在门上贴三个小愿望，等十二声钟响。然后放下手机。", "在門上貼三個小願望，等十二聲鐘響。然後放下手機。", "Pega tres deseos pequeños en la puerta y espera las doce campanadas. Luego, el móvil fuera.", "Enganxa tres desitjos petits a la porta i espera les dotze campanades. Després, el mòbil fora."]
+  ] }) : null;
 function chrome() {
   var i = li(); document.documentElement.lang = LANGS[i];
-  $("appName").textContent = T(W.app); document.title = T(W.app);
-  $("langLbl").textContent = SHORT[i]; $("langBtn").setAttribute("aria-label", T(W.lang) + ": " + LNAMES[i]);
-  var sb = $("snd"), ic = icon(soundOn ? "snd" : "mute"); sb.innerHTML = ic ? '<span class="pxi">' + ic + "</span>" : esc(T(soundOn ? W.sndOn : W.sndOff));
-  sb.setAttribute("aria-label", T(soundOn ? W.sndOn : W.sndOff)); sb.title = T(soundOn ? W.sndOn : W.sndOff); sb.setAttribute("aria-pressed", String(soundOn));
+  if (HD) HD.paint(); document.title = T(W.app);
   cv.setAttribute("aria-label", T(W.room));
   var _k = function (k, d) { return window.FBC && FBC.W && FBC.W[k] ? FBC.t(FBC.W[k]) : d; };
   var _x = "<span>" + esc(_k("fDevice", T(W.device))) + '</span><a href="https://www.after-hours.work/?fbl=' + LANGS[i] + '" target="_blank" rel="noopener">' + esc(_k("fAh", T(W.ah))) + "</a>";

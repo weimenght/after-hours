@@ -39,7 +39,9 @@ a{color:var(--red)}
 /* top bar: airmail stripe under it */
 .top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:repeating-linear-gradient(-45deg,var(--red) 0 10px,transparent 10px 16px,var(--blue) 16px 26px,transparent 26px 32px);opacity:.85}
-.top .wrap{display:flex;align-items:center;gap:8px;min-height:62px;padding-top:env(safe-area-inset-top)}
+.top .wrap{display:flex;align-items:center;gap:8px;min-height:56px;padding-top:env(safe-area-inset-top);--ahh-bg:var(--panel);--ahh-ink:var(--ink);--ahh-line:var(--line);--ahh-name:var(--serif)}
+.top .ahh-nm{font-weight:400;letter-spacing:-.005em}
+.top .ahh-b{border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 17px var(--sans);cursor:pointer;padding:0}.top .ahh-b:hover{border-color:var(--red)}
 .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-decoration:none;color:inherit}
 .brand svg{flex:none;width:36px;height:36px}
 .brand b{font:400 clamp(24px,5.4vw,30px)/1 var(--serif);letter-spacing:.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -48,10 +50,6 @@ a{color:var(--red)}
 .ib svg{width:18px;height:18px;flex:none}
 .ib .dot{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px var(--panel)}
 @media (max-width:560px){.ib .lbl{display:none}.ib{padding:0}}
-.rel{position:relative}
-.langm{position:absolute;right:0;top:calc(100% + 6px);display:grid;min-width:160px;padding:6px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);z-index:30}
-.langm button{text-align:left;min-height:42px;padding:0 12px;border:0;border-radius:10px;background:none;font:500 15px var(--sans)}
-.langm button[aria-current=true]{background:var(--bg2);font-weight:700}
 
 /* hero */
 .hero{padding:26px 0 6px}
@@ -255,12 +253,7 @@ details summary{cursor:pointer;margin-top:10px;color:var(--ink2);font-size:14px}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <a class="brand" href="./" aria-label="Say Hello"><svg viewBox="0 0 36 36" aria-hidden="true"><g transform="rotate(-6 18 18)"><rect x="4" y="7" width="28" height="21" rx="2" fill="#fcf8ef" stroke="#1d2436" stroke-width="1.6"/><path d="M4.8 8.2 18 18.5 31.2 8.2" fill="none" stroke="#1d2436" stroke-width="1.6" stroke-linejoin="round"/><rect x="22" y="10" width="7" height="8" rx=".6" fill="#c23b26"/></g><circle cx="11" cy="27" r="5" fill="#c23b26"/><path d="M8.6 26.6c.9-1.6 3.4-1.6 4.4.1" fill="none" stroke="#fcf8ef" stroke-width="1.3" stroke-linecap="round"/></svg><b data-i="name">Say Hello</b></a>
-  <button class="ib" id="howB" type="button" data-ia="how"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><circle cx="12" cy="17.5" r=".6" fill="currentColor"/></svg></button>
-  <div class="rel"><button class="ib" id="langB" type="button" data-ia="lang" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="lbl" id="langL">EN</span></button></div>
-  <button class="ib" id="mineB" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="1.5"/><path d="m3.5 7 8.5 6.5L20.5 7"/></svg><span class="lbl" data-i="mine">My postcards</span><span class="dot" id="mineDot" hidden></span></button>
-</div></header>
+<header class="top"><div class="wrap" id="headW"><a class="brand" href="./"><svg viewBox="0 0 36 36" aria-hidden="true"><g transform="rotate(-6 18 18)"><rect x="4" y="7" width="28" height="21" rx="2" fill="#fcf8ef" stroke="#1d2436" stroke-width="1.6"/><path d="M4.8 8.2 18 18.5 31.2 8.2" fill="none" stroke="#1d2436" stroke-width="1.6" stroke-linejoin="round"/><rect x="22" y="10" width="7" height="8" rx=".6" fill="#c23b26"/></g><circle cx="11" cy="27" r="5" fill="#c23b26"/><path d="M8.6 26.6c.9-1.6 3.4-1.6 4.4.1" fill="none" stroke="#fcf8ef" stroke-width="1.3" stroke-linecap="round"/></svg><b>Say Hello</b></a></div></header>
 
 <main class="wrap" id="main">
   <!-- writing -->
@@ -930,7 +923,7 @@ window.PCScenes = (function () {
   /* ---------- my postcards: what you sent and what came to you, on this device, never counted ---------- */
   var tab = "sent";
   function due() { var n = new Date(); return jget("postcard_waiting").filter(function (x) { return x && new Date(x.open_at) <= n; }); }
-  function paintDot() { $("#mineDot").hidden = !due().length; }
+  function paintDot() { if (HD) HD.paint(); }
   function mine() {
     var sent = jget("postcard_sent"), recv = jget("postcard_waiting").concat(jget("postcard_box")), now = new Date();
     var seen = {}; recv = recv.filter(function (x) { if (!x || seen[x.id]) return false; seen[x.id] = 1; return true; });
@@ -1002,6 +995,10 @@ window.PCScenes = (function () {
   }
 
   /* ---------- words on the page ---------- */
+  /* the after-hours header (handoff/DESIGN.md §3): name home · ? how it works · ⋯ my records (a dot when something waits), language, the keychain, privacy */
+  var HD = window.FBC && FBC.head ? FBC.head($("#headW"), { icon: $("#headW svg").outerHTML, name: function () { return t("name"); },
+    home: function () { location.href = "./"; }, help: welcome, items: function () { return [{ label: t("mine"), dot: (function () { try { return due().length > 0; } catch (e) { return false; } })(), on: function () { tab = due().length ? "got" : tab; mine(); } }]; },
+    device: function () { var s = sheet(keysBlock()); bindKeys(s); } }) : null;
   function paintWords() {
     document.documentElement.lang = lang(); document.title = t("docTitle");
     $$("[data-i]").forEach(function (e) { if (STR[e.dataset.i]) e.textContent = t(e.dataset.i); });
@@ -1009,9 +1006,8 @@ window.PCScenes = (function () {
     $$("[data-ip]").forEach(function (e) { e.placeholder = t(e.dataset.ip); });
     var tg = t("tag"), dot = tg.search(/[.。]/);
     $("#tagH").innerHTML = dot > 0 && lang().indexOf("zh") !== 0 ? esc(tg.slice(0, dot + 1)) + " <em>" + esc(tg.slice(dot + 1).trim()) + "</em>" : esc(tg);
-    $("#langL").textContent = SHORT[LANGS.indexOf(lang())];
-    $("#mineB").setAttribute("aria-label", t("mine"));
-    $("#ahA").href = "https://www.after-hours.work/?fbl=" + lang();
+    if (HD) HD.paint();
+    var ahA = $("#ahA"); if (ahA) ahA.href = "https://www.after-hours.work/?fbl=" + lang();
     var fx = $("#foot"); if (window.FBC && FBC.foot && !fx.querySelector(".fbf-row")) FBC.foot(fx, { extra: fx.innerHTML });   // the suite's one footer; Nearby and After hours on the line under it
     paintDue();
     if (!reading) { paintFace("", card); paintChoices(); paintWhen(); left(); } else if (got) paintRead();
@@ -1025,16 +1021,6 @@ window.PCScenes = (function () {
   }
   function setLang(l) { if (window.FBL && FBL.set) FBL.set(l); else lsSet("wm_preferred_lang", l); paintWords(); var s = $(".scrim"); if (s && s._redo) { var r = s._redo; close(); r(); } }
   addEventListener("fbl:lang", paintWords);
-  function closeLang() { var m = $(".langm"); if (m) m.remove(); $("#langB").setAttribute("aria-expanded", "false"); }
-  $("#langB").onclick = function (e) {
-    e.stopPropagation(); if ($(".langm")) return closeLang();
-    var m = document.createElement("div"); m.className = "langm"; m.setAttribute("role", "menu");
-    m.innerHTML = LANGS.map(function (l, i) { return '<button type="button" role="menuitem" data-l="' + l + '" aria-current="' + (l === lang()) + '" lang="' + l + '">' + NAMES[i] + "</button>"; }).join("");
-    this.parentNode.appendChild(m); this.setAttribute("aria-expanded", "true"); m.querySelector("[aria-current=true]").focus();
-    m.onclick = function (ev) { var b = ev.target.closest("[data-l]"); if (b) { closeLang(); setLang(b.dataset.l); } };
-  };
-  document.addEventListener("click", function (e) { if (!e.target.closest(".langm,#langB")) closeLang(); });
-  $("#howB").onclick = welcome; $("#mineB").onclick = function () { tab = due().length ? "got" : tab; mine(); };
 
   /* arriving with a keychain link: the keys go on this device, and what this key sent comes back to the list */
   var keysIn = false;

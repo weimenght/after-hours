@@ -38,7 +38,9 @@ a{color:var(--accent)}
 
 /* top bar */
 .top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;gap:8px;min-height:60px;padding-top:env(safe-area-inset-top)}
+.top .wrap{display:flex;align-items:center;gap:8px;min-height:56px;padding-top:env(safe-area-inset-top);--ahh-bg:var(--card);--ahh-ink:var(--ink);--ahh-line:var(--line);--ahh-name:var(--serif)}
+.top .ahh-nm{font-weight:600;letter-spacing:-.005em}
+.top .ahh-b{border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 17px var(--sans);cursor:pointer;padding:0}.top .ahh-b:hover{border-color:var(--accent)}
 .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-decoration:none;color:inherit}
 .brand svg{flex:none;width:34px;height:34px}
 .brand b{font:600 clamp(19px,4.6vw,24px)/1.1 var(--serif);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -243,21 +245,12 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px;padding:8px 0;mi
 .foot.fbf-k{gap:2px 0;padding-top:16px}.foot.fbf-k a{font-size:inherit;padding:3px 0;text-decoration:none}.foot.fbf-k .fbf-x a{text-decoration:underline}   /* the suite's one footer row sets the size (the owner, Nov 6) */
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));z-index:80;max-width:min(92vw,460px);transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:12px 18px;border-radius:14px;background:var(--ink);color:var(--bg);font:500 15px/1.4 var(--sans);box-shadow:0 12px 30px -10px rgba(0,0,0,.5);transition:.25s}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-.langm{position:absolute;right:0;top:calc(100% + 6px);display:grid;min-width:160px;padding:6px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);z-index:30}
-.langm button{text-align:left;min-height:42px;padding:0 12px;border:0;border-radius:10px;background:none;font:500 15px var(--sans)}
-.langm button[aria-current=true]{background:var(--bg2);font-weight:700}
-.rel{position:relative}
 .skel{height:var(--row);border-radius:10px;background:linear-gradient(90deg,var(--bg2),var(--card),var(--bg2));background-size:200% 100%;animation:sh 1.4s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <a class="brand" href="./" aria-label="Borrowed Pages"><svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="30" width="30" height="3" rx="1" fill="#8a5a33"/><rect x="5" y="9" width="6" height="21" rx="1" fill="#7c2513"/><rect x="5" y="12" width="6" height="1.5" fill="#d9a94e"/><rect x="12" y="5" width="7" height="25" rx="1" fill="#1e3a5f"/><rect x="12" y="8" width="7" height="1.5" fill="#d9a94e"/><rect x="20" y="11" width="5" height="19" rx="1" fill="#2f4a2a"/><rect x="24.5" y="8" width="6" height="22" rx="1" fill="#8a5a1e" transform="rotate(12 27 30)"/></svg><b data-i="name">Borrowed Pages</b></a>
-  <button class="ib" id="howB" type="button" data-ia="how"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><circle cx="12" cy="17.5" r=".6" fill="currentColor"/></svg></button>
-  <div class="rel"><button class="ib" id="langB" type="button" data-ia="lang" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="lbl" id="langL">EN</span></button></div>
-  <button class="ib" id="mineB" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></svg><span class="lbl" data-i="mine">My shelf</span><span class="dot" id="mineDot" hidden></span></button>
-</div></header>
+<header class="top"><div class="wrap" id="headW"><a class="brand" href="./"><svg viewBox="0 0 34 34" aria-hidden="true"><rect x="2" y="30" width="30" height="3" rx="1" fill="#8a5a33"/><rect x="5" y="9" width="6" height="21" rx="1" fill="#7c2513"/><rect x="5" y="12" width="6" height="1.5" fill="#d9a94e"/><rect x="12" y="5" width="7" height="25" rx="1" fill="#1e3a5f"/><rect x="12" y="8" width="7" height="1.5" fill="#d9a94e"/><rect x="20" y="11" width="5" height="19" rx="1" fill="#2f4a2a"/><rect x="24.5" y="8" width="6" height="22" rx="1" fill="#8a5a1e" transform="rotate(12 27 30)"/></svg><b>Borrowed Pages</b></a></div></header>
 
 <main class="wrap" id="main">
   <section class="hero">
@@ -326,15 +319,18 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px;padding:8px 0;mi
   /* ---------- five languages (the same choice as the rest of FREE//BUILDER) ---------- */
   function lang() { var l = (window.FBL && FBL.get && FBL.get()) || lsGet("wm_preferred_lang") || (navigator.language || "en"); if (/^zh-(tw|hk|mo|hant)/i.test(l)) l = "zh-Hant"; else if (/^zh/i.test(l)) l = "zh"; else l = l.slice(0, 2); return LANGS.indexOf(l) >= 0 ? l : "en"; }
   function t(k, v) { var row = STR[k], s = row ? (row[LANGS.indexOf(lang())] || row[0]) : k; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
+  /* the after-hours header (handoff/DESIGN.md §3): name home · ? how it works · ⋯ my records (a dot when something waits), language, the keychain, privacy */
+  var HD = window.FBC && FBC.head ? FBC.head($("#headW"), { icon: $("#headW svg").outerHTML, name: function () { return t("name"); },
+    home: function () { location.href = "./"; }, help: welcome, items: function () { return [{ label: t("mine"), dot: (function () { try { return waitingAsks().length > 0; } catch (e) { return false; } })(), on: myShelf }]; },
+    device: function () { var s = sheet(keysBlock()); bindKeys(s); } }) : null;
   function paintWords() {
     document.documentElement.lang = lang(); document.title = t("docTitle");
     $$("[data-i]").forEach(function (e) { if (STR[e.dataset.i]) e.textContent = t(e.dataset.i); });
     $$("[data-ia]").forEach(function (e) { e.setAttribute("aria-label", t(e.dataset.ia)); e.title = t(e.dataset.ia); });
     $$("[data-ip]").forEach(function (e) { e.placeholder = t(e.dataset.ip); });
     $("#tagH").innerHTML = esc(t("tag")).replace(/^(\S+\s\S+)/, function (m) { return lang().indexOf("zh") === 0 ? m : "<em>" + m + "</em>"; });
-    $("#langL").textContent = SHORT[LANGS.indexOf(lang())];
-    $("#mineB").setAttribute("aria-label", t("mine"));
-    $("#ahA").href = "https://www.after-hours.work/?fbl=" + lang();
+    if (HD) HD.paint();
+    var ahA = $("#ahA"); if (ahA) ahA.href = "https://www.after-hours.work/?fbl=" + lang();
     var fx = $("#foot"); if (window.FBC && FBC.foot && !fx.querySelector(".fbf-row")) FBC.foot(fx, { extra: fx.innerHTML });   // the suite's one footer (the owner, Nov 5); Nearby and After hours on the line under it
     roomTabs();
   }
@@ -389,7 +385,7 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px;padding:8px 0;mi
     return rpc("book_mine", { p_secret: k }).then(function (j) { mine = j; paintMine(); render(); }).catch(function () { mine = null; paintMine(); });
   }
   function waitingAsks() { var a = []; if (mine && mine.books) mine.books.forEach(function (b) { (b.asks || []).forEach(function (q) { a.push({ q: q, b: b }); }); }); return a; }
-  function paintMine() { var n = waitingAsks().length; $("#mineDot").hidden = !n; $("#mineB").setAttribute("aria-label", t("mine") + (n ? " · " + t("waiting") : "")); }
+  function paintMine() { if (HD) HD.paint(); }
   function isMine(b) { return !!(mine && mine.books && mine.books.some(function (x) { return x.id === b.id; })); }
   function myAsk(b) { return mine && mine.asks && mine.asks.filter(function (x) { return x.book === b.id && x.status === "open"; })[0]; }
   function friendly(x) {
@@ -479,7 +475,7 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px;padding:8px 0;mi
     return s.querySelector(".sheet");
   }
   function close() { var s = $(".scrim"); if (s) s.remove(); document.body.style.overflow = ""; if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {} if (/[?&]book=/.test(location.search)) try { history.replaceState(null, "", location.pathname); } catch (e) {} }
-  addEventListener("keydown", function (e) { if (e.key === "Escape") { if ($(".langm")) closeLang(); else close(); } });
+  addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
   function bad(el) { el.setAttribute("aria-invalid", "true"); el.focus(); el.addEventListener("input", function () { el.removeAttribute("aria-invalid"); }, { once: true }); }
   function busy(f, on) { $$("button", f).forEach(function (b) { if (!b.classList.contains("x")) b.disabled = on; }); }
   function confirmTwice(btn) { if (btn.dataset.armed) return true; btn.dataset.armed = "1"; var o = btn.textContent; btn.textContent = t("sure"); setTimeout(function () { delete btn.dataset.armed; btn.textContent = o; }, 3500); return false; }
@@ -665,18 +661,9 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px;padding:8px 0;mi
   }
 
   /* language menu */
-  function closeLang() { var m = $(".langm"); if (m) m.remove(); $("#langB").setAttribute("aria-expanded", "false"); }
-  $("#langB").onclick = function (e) {
-    e.stopPropagation(); if ($(".langm")) return closeLang();
-    var m = document.createElement("div"); m.className = "langm"; m.setAttribute("role", "menu");
-    m.innerHTML = LANGS.map(function (l, i) { return '<button type="button" role="menuitem" data-l="' + l + '" aria-current="' + (l === lang()) + '" lang="' + l + '">' + NAMES[i] + "</button>"; }).join("");
-    this.parentNode.appendChild(m); this.setAttribute("aria-expanded", "true"); m.querySelector("[aria-current=true]").focus();
-    m.onclick = function (ev) { var b = ev.target.closest("[data-l]"); if (b) { closeLang(); setLang(b.dataset.l); } };
-  };
-  document.addEventListener("click", function (e) { if (!e.target.closest(".langm,#langB")) closeLang(); });
 
   /* wiring */
-  $("#howB").onclick = welcome; $("#mineB").onclick = myShelf; $("#lendB").onclick = function () { lendForm(); }; if ($("#privB")) $("#privB").onclick = privacy;
+  $("#lendB").onclick = function () { lendForm(); }; if ($("#privB")) $("#privB").onclick = privacy;
   $("#rooms").onclick = function (e) { var b = e.target.closest("[data-room]"); if (!b) return; room = b.dataset.room; roomTabs(); render(); };
   $("#fFree").onclick = function () { fFree = !fFree; this.setAttribute("aria-pressed", String(fFree)); render(); };
   $("#fNote").onclick = function () { fNote = !fNote; this.setAttribute("aria-pressed", String(fNote)); render(); };
