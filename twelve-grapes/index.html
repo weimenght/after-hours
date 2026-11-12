@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=c536b8738a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=943e4327ff"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Twelve Grapes</title>
 <meta name="description" content="New Year's Eve at Popo's table: twelve grapes for twelve months, a chair for everyone you care about, three small red papers on the door. Kept on your own device.">
@@ -295,6 +295,9 @@ function intro(arrived) {
   btn(W.b.sit, function () { go(introWei); }, "pri");
   btn(W.b.invite, function (b) { share(T(W.invite), location.origin + location.pathname + "#with=1", b,
     function () { $("aside").hidden = false; $("aside").innerHTML = rich(T(W.inviteSent)); }, function () { $("aside").hidden = false; $("aside").innerHTML = rich(T(W.inviteCopied)); }); });
+  if (arrived && window.FBC && FBC.tell) btn(W.tellB, function () {   /* answers go in their own messages, never through a server */
+    FBC.tell({ choices: [{ label: T(W.tIn), text: T(W.tInL) }, { label: T(W.tCall), text: T(W.tCallL) }, { label: T(W.tNot), text: T(W.tNotL) }] });
+  });
 }
 function introWei() {
   var h = new Date().getHours();

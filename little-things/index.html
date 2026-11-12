@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=c536b8738a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=943e4327ff"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Little Things</title>
 <meta name="description" content="Popo's jar of little offline things: one at a time, in her kitchen, for a fuller life away from the screen. Kept on your own device.">
@@ -171,6 +171,14 @@ var W = {
   first: ["Take the first paper", "拿第一张纸条", "拿第一張紙條", "Coger el primer papel", "Agafar el primer paper"],
   takeOne: ["Take a paper", "拿一张纸条", "拿一張紙條", "Coger un papel", "Agafar un paper"],
   notToday: ["Not today", "今天不了", "今天不了", "Hoy no", "Avui no"],
+  /* the friend who sent the paper hears back in their own messages (FBC.tell), never through a server */
+  tellF: ["Tell {f}", "告诉{f}", "告訴{f}", "Díselo a {f}", "Digues-ho a {f}"],
+  tIn: ["I'm in", "我也做", "我也做", "Me apunto", "M'hi apunto"],
+  tInL: ["I'm in: {x}. Let's both do it this week.", "我也做：{x}。这周我们一起做。", "我也做：{x}。這週我們一起做。", "Me apunto: {x}. Hagámoslo los dos esta semana.", "M'hi apunto: {x}. Fem-ho tots dos aquesta setmana."],
+  tTogether: ["Do it together?", "一起做？", "一起做？", "¿Juntos?", "Junts?"],
+  tTogetherL: ["Got your paper: {x}. Want to do it together? When are you free?", "收到你的纸条：{x}。要不要一起做？你什么时候有空？", "收到你的紙條：{x}。要不要一起做？你什麼時候有空？", "Me llegó tu papel: {x}. ¿Lo hacemos juntos? ¿Cuándo puedes?", "M'ha arribat el teu paper: {x}. Ho fem junts? Quan pots?"],
+  tLater: ["Not today", "今天不行", "今天不行", "Hoy no", "Avui no"],
+  tLaterL: ["Not today, but I kept your paper: {x}. Soon.", "今天不行，不过纸条我收着了：{x}。很快。", "今天不行，不過紙條我收著了：{x}。很快。", "Hoy no, pero me guardo tu papel: {x}. Pronto.", "Avui no, però em guardo el teu paper: {x}. Aviat."],
   fold: ["Into the jar", "放进罐子", "放進罐子", "Al tarro", "Al pot"],
   line: ["A line of your own for the paper, if you like", "想的话，在纸条上写一句自己的话", "想的話，在紙條上寫一句自己的話", "Una línea tuya para el papel, si quieres", "Una línia teva per al paper, si vols"],
   tomorrow: ["See you tomorrow, Popo", "明天见，婆婆", "明天見，婆婆", "Hasta mañana, Popo", "Fins demà, Popo"],
@@ -1221,6 +1229,10 @@ function friendThing(t, from) {
   if (!asleep() && !sleeps("mei") && Math.random() < .5) say("mei", MEI_DUO, { small: true });
   btn(icon("heart") + esc(T(W.did)), function () { didIt(t); }, "pri");
   btn(esc(T(W.notToday)), function () { notToday(t); }, "quiet");
+  if (window.FBC && FBC.tell && from) btn(esc(T(W.tellF).split("{f}").join(f)), function () {   /* answers go in their own messages */
+    var x = T(t.n);
+    FBC.tell({ px: true, choices: [{ label: T(W.tIn), text: T(W.tInL).split("{x}").join(x) }, { label: T(W.tTogether), text: T(W.tTogetherL).split("{x}").join(x) }, { label: T(W.tLater), text: T(W.tLaterL).split("{x}").join(x) }] });
+  }, "quiet");
   mode = "friend";
 }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=c536b8738a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=943e4327ff"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Paw Reading</title>
 <meta name="description" content="Miso and Yuzu's stall from Nearby: one card a day from the Nearby deck, and it asks one thing of you, somewhere real. Draw with someone and you both get the same card. Kept on your own device.">
@@ -156,6 +156,14 @@ var W = {
   pocketSub: ["Tomorrow the cats will have another.", "明天猫咪还会给你一张。", "明天貓咪還會給你一張。", "Mañana las gatas tendrán otra.", "Demà les gates en tindran una altra."],
   look: ["Look at it again", "再看一眼", "再看一眼", "Mírala otra vez", "Mira-la un altre cop"],
   withBtn: ["Draw with someone", "和谁一起抽", "和誰一起抽", "Saca con alguien", "Treu amb algú"],
+  /* the friend who sent the draw hears back in their own messages (FBC.tell), never through a server */
+  tellF: ["Tell {from}", "告诉{from}", "告訴{from}", "Díselo a {from}", "Digues-ho a {from}"],
+  tOn: ["I'm on it", "我今天就做", "我今天就做", "Me pongo", "M'hi poso"],
+  tOnL: ["Drew my card: {card}. I'm doing it today. You?", "抽到了：{card}。我今天就做。你呢？", "抽到了：{card}。我今天就做。你呢？", "Ya tengo mi carta: {card}. Hoy lo hago. ¿Y tú?", "Ja tinc la meva carta: {card}. Avui ho faig. I tu?"],
+  tTogether: ["Do it together?", "一起做？", "一起做？", "¿Juntos?", "Junts?"],
+  tTogetherL: ["Same day, same cats. Want to do ours together? When are you free?", "同一天，同一对猫。要不要一起做？你什么时候有空？", "同一天，同一對貓。要不要一起做？你什麼時候有空？", "Mismo día, mismos gatos. ¿Lo hacemos juntos? ¿Cuándo puedes?", "Mateix dia, mateixos gats. Ho fem junts? Quan pots?"],
+  tTomorrow: ["Tomorrow", "明天吧", "明天吧", "Mañana", "Demà"],
+  tTomorrowL: ["Drew my card, but today's full. Tomorrow?", "抽到了，不过今天排满了。明天？", "抽到了，不過今天排滿了。明天？", "Ya tengo mi carta, pero hoy no llego. ¿Mañana?", "Ja tinc la meva carta, però avui no arribo. Demà?"],
   withTo: ["Same card for {to}, same day. Send it and do it together.", "给{to}同一张牌，同一天。发过去，一起去做。", "給{to}同一張牌，同一天。傳過去，一起去做。", "La misma carta para {to}, el mismo día. Mándasela y hacedlo juntos.", "La mateixa carta per a {to}, el mateix dia. Envia-la i feu-ho junts."],
   withHead: ["Same card, same day. Send it to someone and do it together.", "同一张牌，同一天。发给一个人，一起去做。", "同一張牌，同一天。傳給一個人，一起去做。", "La misma carta, el mismo día. Mándasela a alguien y hacedlo juntos.", "La mateixa carta, el mateix dia. Envia-la a algú i feu-ho junts."],
   withName: ["From", "署名", "署名", "De", "De"],
@@ -331,6 +339,10 @@ function reveal(fresh, say) {
   btn(W.withBtn, function () { go(withSomeone); }, "pri", r2, "↗");   // with someone first (the owner, Nov 12); on your own is the quiet one
   btn(W.pocketBtn, function () { P.pocket(true); go(pocketed); }, "", r2, "✋");
   if (theirCard) theirsBlock();
+  if (friendFrom && window.FBC && FBC.tell) lk([T(W.tellF, { from: friendFrom })], function () {   /* answers go in their own messages */
+    var card = P.cardName(P.cardOf(v.i), li());
+    FBC.tell({ px: true, choices: [{ label: T(W.tOn), text: T(W.tOnL, { card: card }) }, { label: T(W.tTogether), text: T(W.tTogetherL) }, { label: T(W.tTomorrow), text: T(W.tTomorrowL) }] });
+  }, acts);
   el("p", "sub", esc(T(W.tomorrow)), panel);
 }
 function pocketed() {
@@ -344,7 +356,7 @@ function pocketed() {
   lk(W.look, function () { P.pocket(false); go(reveal); }, r);
   morning(panel);
 }
-var theirCard = null, toName = "";   /* toName: FBApps.go("fortune", {to}) from another app brings a name in #to= */
+var theirCard = null, toName = "", friendFrom = "";   /* toName: FBApps.go("fortune", {to}) from another app brings a name in #to= */
 function theirsBlock() {
   var t = theirCard, c = P.cardOf(t.i), box = el("div", "theirs", null, panel);
   el("img", null, null, box).src = P.img(t.i);
@@ -496,7 +508,7 @@ var TO = /[#&]to=([^&]*)/.exec(location.hash); if (TO) { try { toName = decodeUR
 var A = P.unpack(location.hash);
 if (A) {
   try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) {}
-  var mine = P.today(), from = A.from || T(W.someone);
+  var mine = P.today(), from = A.from || T(W.someone); friendFrom = from;
   if (!A.fresh) { if (mine) { go(mine.p ? pocketed : reveal); toast(T(W.old, { d: niceDay(A.d) })); } else { arrival = A; go(idle); } }
   else if (!mine) { P.deal({ i: A.i, from: A.from }).then(function () { go(function () { reveal(true, T(W.arrive, { from: from })); }); }); }
   else if (mine.i === A.i) go(function () { reveal(false, T(W.arriveSame, { from: from })); });

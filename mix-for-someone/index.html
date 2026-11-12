@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=c536b8738a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=943e4327ff"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mix for Someone</title>
 <meta name="description" content="Drinks from the House book at Next Door in Nearby, zero-proof too. Pick one, mix it for someone, or add your own to the book.">
@@ -803,7 +803,7 @@ function shareText(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { toast(t("copied")); }).catch(function () { prompt("", text); });
   else prompt("", text);
 }
-$("invite").onclick = function () { var n = clean($("whoName").value, 24); S.who = n; save(); var d = F(drink, "name"); shareText(n ? t("inviteTextN", { n: n, d: d }) : t("inviteText", { d: d })); };
+$("invite").onclick = function () { var n = clean($("whoName").value, 24); S.who = n; save(); var d = F(drink, "name"); shareText((n ? t("inviteTextN", { n: n, d: d }) : t("inviteText", { d: d })) + "\n" + askLink(d)); };
 $("shareBtn").onclick = function () { shareText(t("shareText", { d: F(drink, "name"), p: drink.pours.map(function (p) { return amount(p) + " " + T(ING[p.id].name); }).join(", "), u: location.origin + location.pathname })); };
 
 /* ---------- wiring ---------- */
@@ -831,6 +831,21 @@ $("putDown").onclick = function () { sceneDark($("scDark")); $("darkLine").textC
 function wakeUp() { $("dark").hidden = true; show("home"); }
 $("dark").onclick = wakeUp; $("dark").onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") wakeUp(); };
 render();
+
+/* ---------- an invitation opened from its link: the friend answers in their own messages (FBC.tell), never through a server ---------- */
+function u64(x) { return btoa(unescape(encodeURIComponent(x))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+function d64(x) { x = x.replace(/-/g, "+").replace(/_/g, "/"); while (x.length % 4) x += "="; return decodeURIComponent(escape(atob(x))); }
+function askLink(d) { return location.origin + location.pathname + "#ask=" + u64(JSON.stringify({ d: String(d).slice(0, 60), f: String(lsGet("fb_nick") || "").slice(0, 24) })); }
+function readAsk() {
+  var m = /[#&]ask=([A-Za-z0-9_-]+)/.exec(location.hash || ""); if (!m) return null;
+  try { var o = JSON.parse(d64(m[1])); return o && o.d ? { d: String(o.d).slice(0, 60), f: String(o.f || "").slice(0, 24) } : null; } catch (e) { return null; }
+}
+function answerAsk(a) {
+  if (!a || !window.FBC || !FBC.tell) return;
+  var said = t("inviteText", { d: a.d });
+  FBC.tell({ px: true, title: t("askT"), lede: a.f ? a.f + ": " + said : said, choices: [{ label: t("aComing"), text: t("aComingL") }, { label: t("aMid"), text: t("aMidL") }, { label: t("aNot"), text: t("aNotL") }] });
+}
+var ASK = readAsk(); if (ASK) { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} setTimeout(function () { answerAsk(ASK); }, 500); }
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { foot(); });
 window.MX = { W: W, HOUSE: HOUSE, ING: ING, S: S, M: M, show: show, open: open, house: house, suggest: suggest, profile: profile, mixColor: mixColor };
 })();

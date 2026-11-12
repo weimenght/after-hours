@@ -94,6 +94,15 @@
     nextOne: ["Book the next one", "订下一次", "訂下一次", "Reservar la próxima", "Reservar la propera"],
     bookedNext: ["Booked. {p} will see it in their own time.", "订好了。{p}会看到自己那边的时间。", "訂好了。{p}會看到自己那邊的時間。", "Reservada. {p} la verá en su hora.", "Reservada. {p} la veurà a la seva hora."],
     theyBooked: ["{p} booked the next one: {when}, your time.", "{p}订了下一次：你那边 {when}。", "{p}訂了下一次：你那邊 {when}。", "{p} ha reservado la próxima: {when}, tu hora.", "{p} ha reservat la propera: {when}, la teva hora."],
+    /* the one who got the booking answers in their own messages (FBC.tell), never through a server */
+    tellB: ["Tell {p}", "告诉{p}", "告訴{p}", "Díselo a {p}", "Digues-ho a {p}"],
+    tellBA: ["Tell them", "告诉对方", "告訴對方", "Díselo", "Digues-l'hi"],
+    tSee: ["See you then", "到时候见", "到時候見", "Nos vemos", "Ens veiem"],
+    tSeeL: ["Got the next one: {when}. See you then.", "下一次收到了：{when}。到时候见。", "下一次收到了：{when}。到時候見。", "Me llegó la próxima: {when}. Nos vemos.", "M'ha arribat la propera: {when}. Ens veiem."],
+    tMove: ["Can we move it?", "能改时间吗？", "能改時間嗎？", "¿La cambiamos?", "La canviem?"],
+    tMoveL: ["Got your booking for {when}. Could we move it a little?", "收到你订的{when}。能稍微改个时间吗？", "收到你訂的{when}。能稍微改個時間嗎？", "Me llegó tu reserva para {when}. ¿Podemos moverla un poco?", "M'ha arribat la teva reserva per a {when}. La podem moure una mica?"],
+    tCant: ["Can't make it", "去不了", "去不了", "No puedo", "No puc"],
+    tCantL: ["I can't make {when}, sorry. Another night?", "{when}我不行，抱歉。换一个晚上？", "{when}我不行，抱歉。換一個晚上？", "No puedo {when}, lo siento. ¿Otra noche?", "No puc {when}, ho sento. Una altra nit?"],
     see: ["See it", "看看", "看看", "Verla", "Veure-la"],
     start: ["Back to the start", "回到开头", "回到開頭", "Volver al inicio", "Tornar a l'inici"],
     handoff: ["Between dinners: Handoff", "两顿饭之间：Handoff", "兩頓飯之間：Handoff", "Entre cenas: Handoff", "Entre sopars: Handoff"],
@@ -478,7 +487,12 @@
     if (!p || !/^\d{6,9}$/.test(String(p.w)) || !B) return;
     var nb = keep({ c: B.c, w: +p.w, z: String(p.z || "").slice(0, 48), n: String(p.n || "").slice(0, 20), d: T.DISH[p.d] ? p.d : (B.d || ""), by: 0, o: String(p.n || "").slice(0, 20), oz: String(p.z || "").slice(0, 48) });
     var bx = el("div", "tc-booked-note"); bx.appendChild(el("p", "", w("theyBooked", { p: nb.n || w("date"), when: fmt(when(nb), null) })));
-    var r = el("div", "tc-acts"); r.appendChild(btn("tc-btn sm", "cal", w("ics"), function () { ics(nb); })); r.appendChild(btn("tc-btn sm ghost", null, w("see"), function () { T.leave(); booked(nb); })); bx.appendChild(r);
+    var r = el("div", "tc-acts"); r.appendChild(btn("tc-btn sm", "cal", w("ics"), function () { ics(nb); })); r.appendChild(btn("tc-btn sm ghost", null, w("see"), function () { T.leave(); booked(nb); }));
+    if (window.FBC && FBC.tell) r.appendChild(btn("tc-btn sm ghost", null, nb.n ? w("tellB", { p: nb.n }) : w("tellBA"), function () {   /* answers go in their own messages */
+      var v = { when: fmt(when(nb), null) };
+      FBC.tell({ title: nb.n ? w("tellB", { p: nb.n }) : w("tellBA"), choices: [{ label: w("tSee"), text: w("tSeeL", v) }, { label: w("tMove"), text: w("tMoveL", v) }, { label: w("tCant"), text: w("tCantL", v) }] });
+    }));
+    bx.appendChild(r);
     var m = $("tcMain"); m.insertBefore(bx, m.firstChild); try { bx.scrollIntoView({ block: "nearest" }); } catch (e) {}
   }
 

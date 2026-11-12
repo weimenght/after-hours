@@ -484,6 +484,14 @@ window.MX_W = {
 "↗ Invítale",
 "↗ Convida'l"
 ],
+/* a friend who got the invitation answers in their own messages (FBC.tell), never through a server */
+"askT": ["Come over for one?", "来喝一杯吗？", "來喝一杯嗎？", "¿Vienes a tomar una?", "Véns a fer-ne una?"],
+"aComing": ["On my way", "这就来", "這就來", "Voy para allá", "Hi vaig"],
+"aComingL": ["On my way! Save me a glass.", "这就来！给我留一杯。", "這就來！給我留一杯。", "¡Voy para allá! Guárdame un vaso.", "Hi vaig! Guarda'm una copa."],
+"aMid": ["A bit later", "晚点到", "晚點到", "Un poco más tarde", "Una mica més tard"],
+"aMidL": ["I'll come a bit later. What time works?", "我晚点到，几点合适？", "我晚點到，幾點合適？", "Llego un poco más tarde. ¿A qué hora te va bien?", "Arribo una mica més tard. A quina hora et va bé?"],
+"aNot": ["Not tonight", "今晚不行", "今晚不行", "Esta noche no", "Aquesta nit no"],
+"aNotL": ["Not tonight. Mix me one another time?", "今晚不行，改天给我调一杯？", "今晚不行，改天給我調一杯？", "Esta noche no. ¿Me preparas uno otro día?", "Aquesta nit no. Me'n prepares un altre dia?"],
 "inviteText": [
 "Come over? I'm mixing {d}.",
 "过来吗？我在调{d}。",

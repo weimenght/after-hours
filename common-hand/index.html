@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=c536b8738a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=943e4327ff"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Common Hand</title>
 <meta name="description" content="A ten-minute warm-up for a mahjong table of four: draw a tile, read it out, and find something in common for every pair at the table. One phone in the middle, then phones down and deal.">
@@ -209,6 +209,7 @@ input::placeholder { color: #a08a70; }
     <div class="card"><ul class="sets" id="rsets"></ul></div>
     <div class="say" id="sayRecv"></div>
     <button class="btn pri lg wide" id="dealOwn" type="button" data-t="dealOwn"></button>
+    <button class="btn quiet wide" id="tellRecv" type="button" data-t="tellRecv"></button>
   </section>
 
   <footer id="foot"></footer>
@@ -680,6 +681,9 @@ $("wash").onclick = function () { sfx("wash"); S.names = S.names.map(function (x
 $("reseat").onclick = function () { S.drawn = null; S.sel = []; S.pairs = {}; S.deck = shuffled(); line = null; toast = ""; show("home"); };
 $("again").onclick = function () { S = fresh(S.names); line = null; toast = ""; $("sendNote").textContent = ""; show("play"); };
 $("send").onclick = send;
+$("tellRecv").onclick = function () {   /* answers go in their own messages, never through a server */
+  if (window.FBC && FBC.tell) FBC.tell({ px: true, choices: [{ label: t("tSmile"), text: t("tSmileL") }, { label: t("tSeat"), text: t("tSeatL") }, { label: t("tMine"), text: t("tMineL") }] });
+};
 $("dealOwn").onclick = function () { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} recv = null; line = null; show(S.screen === "play" && found() < 6 ? "play" : "home"); };
 $("putDown").onclick = function () { sceneDark($("scDark")); $("darkLine").textContent = t("lights"); $("dark").hidden = false; };
 function wakeUp() { $("dark").hidden = true; }

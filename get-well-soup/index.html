@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=c536b8738a"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=943e4327ff"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Get Well Soup</title>
 <meta name="description" content="Someone's got a cold? Put a pot on for them. They pick the one thing that would help, and you bring it to the door.">
@@ -304,7 +304,10 @@ var B = {
   tell: function () {
     var txt = F(W.reply, { f: pot.f, o: O(pick, "p") });
     var sent = function (ok) { if (ok) { chose(pot.id, pick); show("rest"); } };
-    on("tellGo", null, function () { share(txt).then(sent); });
+    on("tellGo", null, function () {   /* the answer goes in their own messages, by text on a phone (FBC.tell); no server */
+      if (window.FBC && FBC.tell) FBC.tell({ choices: [{ label: F(W.tellBtn, { f: pot.f }), text: txt, done: function () { sent(true); } }] });
+      else share(txt).then(sent);
+    });
     on("tellCp", null, function () { copy(txt).then(sent); });
     on("again", null, function () { chose(pot.id, null); show("choose"); });
   },

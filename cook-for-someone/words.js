@@ -228,6 +228,14 @@ window.CF_W = {
 "↗ Invítale a comer",
 "↗ Convida'l a menjar"
 ],
+/* a friend who got the invitation answers in their own messages (FBC.tell), never through a server */
+"askT": ["Come and eat?", "来吃饭吗？", "來吃飯嗎？", "¿Vienes a comer?", "Véns a menjar?"],
+"aComing": ["I'm coming", "我来", "我來", "Voy", "Vinc"],
+"aComingL": ["I'm coming! What time should I be there?", "我来！几点到？", "我來！幾點到？", "¡Voy! ¿A qué hora llego?", "Vinc! A quina hora hi he de ser?"],
+"aMid": ["I'll bring something", "我带点东西", "我帶點東西", "Llevo algo", "Porto alguna cosa"],
+"aMidL": ["Count me in. I'll bring something: dessert or drinks?", "算我一个。我带点东西过去：甜点还是饮料？", "算我一個。我帶點東西過去：甜點還是飲料？", "Cuenta conmigo. Llevo algo: ¿postre o bebida?", "Compta amb mi. Porto alguna cosa: postres o beure?"],
+"aNot": ["Not tonight", "今晚不行", "今晚不行", "Esta noche no", "Aquesta nit no"],
+"aNotL": ["Not tonight, but cook it for me another time?", "今晚不行，改天再做给我吃？", "今晚不行，改天再做給我吃？", "Esta noche no, pero ¿me lo cocinas otro día?", "Aquesta nit no, però me'l cuines un altre dia?"],
 "inviteText": [
 "I'm cooking {d} tonight. Come and eat?",
 "我今晚做{d}。来吃吗？",
