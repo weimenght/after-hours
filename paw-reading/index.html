@@ -328,8 +328,8 @@ function reveal(fresh, say) {
     if (gg.k === "minute") btn(W.goMinute, function () { go(minute); }, "", r1, "⏱");
   }
   var r2 = el("div", "row", null, acts);
-  btn(W.pocketBtn, function () { P.pocket(true); go(pocketed); }, "pri", r2, "✋");
-  btn(W.withBtn, function () { go(withSomeone); }, "", r2, "↗");
+  btn(W.withBtn, function () { go(withSomeone); }, "pri", r2, "↗");   // with someone first (the owner, Nov 12); on your own is the quiet one
+  btn(W.pocketBtn, function () { P.pocket(true); go(pocketed); }, "", r2, "✋");
   if (theirCard) theirsBlock();
   el("p", "sub", esc(T(W.tomorrow)), panel);
 }
