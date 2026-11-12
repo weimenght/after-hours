@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=147b41361d"></script>
+  <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=022cf7e65b"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="page-title">WEI MENG — After hours: small things, made for the people between us</title>
   <meta name="description" content="What Wei Meng makes after work: Little Things, Nearby, Home Ground, Handoff and Vocab. Small, free things built on one idea: people aren't the means, people are the point.">
@@ -203,6 +203,15 @@
     .letter .wy-sig { font:italic 400 20px/1 'Instrument Serif', Georgia, serif; color:var(--mut); margin:4px 0 0; }
     .letter .wy-story { color:var(--lamp); text-decoration:none; border-bottom:1px solid rgba(242,163,58,.4); }
     .letter .wy-story:hover { border-bottom-color:currentColor; }
+    /* the letter is long: it reads inside its own window, the end of it fading until you get there (Nov 10, the owner) */
+    .letter .lt-scroll { max-height:min(26em, 58vh); overflow-y:auto; overscroll-behavior:contain; padding-right:14px; margin-right:-14px; scrollbar-width:thin; scrollbar-color:rgba(242,163,58,.35) transparent;
+      -webkit-mask-image:linear-gradient(#000 calc(100% - 64px), transparent); mask-image:linear-gradient(#000 calc(100% - 64px), transparent); transition:-webkit-mask-image .3s; }
+    .letter .lt-scroll.end { -webkit-mask-image:none; mask-image:none; }
+    .letter .lt-scroll:focus-visible { outline:2px solid rgba(242,163,58,.5); outline-offset:6px; border-radius:6px; }
+    .letter .lt-scroll::-webkit-scrollbar { width:6px; } .letter .lt-scroll::-webkit-scrollbar-thumb { background:rgba(242,163,58,.35); border-radius:6px; }
+    .letter .lt-more { display:flex; align-items:center; gap:8px; margin:12px 0 0; font:400 12px/1 'Space Mono', monospace; letter-spacing:.06em; color:var(--mut); transition:opacity .3s; white-space:nowrap; }
+    .letter .lt-more::before { content:""; width:18px; height:1px; background:currentColor; opacity:.6; }
+    .letter.read .lt-more { opacity:0; }
     .how { list-style:none; margin:22px 0 0; padding:0; display:grid; gap:12px; counter-reset:h; }
     @media (min-width:760px) { .how { grid-template-columns:repeat(3,1fr); } }
     .how li { display:flex; flex-direction:column; gap:6px; padding:18px 20px 20px; border-radius:22px; background:rgba(27,24,38,.72); border:1px solid var(--line); }
@@ -250,7 +259,7 @@ img{filter:none}
         <svg viewBox="0 0 24 24" class="markg" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg>
         <em>after-hours</em>
       </a>
-      <div class="top-r"><a class="back" href="/app/" id="ah-app">The works <span aria-hidden="true">→</span></a>
+      <div class="top-r"><a class="ah-try" href="/app/" id="ah-app"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="9" y="6" width="2.6" height="2.6" rx=".6" fill="currentColor"/><rect x="12.4" y="6" width="2.6" height="2.6" rx=".6" fill="currentColor"/><rect x="9" y="9.6" width="2.6" height="2.6" rx=".6" fill="currentColor"/><rect x="12.4" y="9.6" width="2.6" height="2.6" rx=".6" fill="#F2A33A"/><path d="M10.5 18.3h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="ah-try-l">Try the after-hours phone</span><span class="ah-try-s">Try it</span></a>
         <a class="back" href="https://www.wei-meng.org/portfolio/"><span data-i18n="backHome">Portfolio</span> <span aria-hidden="true">→</span></a>
         <button type="button" class="lang" onclick="cycleLanguage()" aria-label="Switch language"><span id="lang-btn-label">EN</span></button>
       </div>
@@ -262,9 +271,13 @@ img{filter:none}
       <h1 id="hero-h" class="dh hero-h reveal" data-i18n-html="heroTitle">People aren't the means. <br class="hb">People are the <span class="accent-word">point</span>.</h1>
       <div class="letter reveal" aria-labelledby="wy-h">
         <p class="eyebrow" id="wy-h" data-i18n="wyS">Why I do all this</p>
-        <p data-i18n="wyA">One day I couldn't move. Not even a little.</p><p data-i18n="wyB">I made a new rule for living: whatever I did had one purpose, to make today work. It forced me to live in the moment. It forced me to go to my friends. It forced me to see what matters.</p><p data-i18n="wyD">Every week I met my friend D. We ran together, ate together afterwards, and she told me her little discoveries in the hutongs. Her energy for life became mine, a little at a time.</p><p data-i18n="wy1">By day I design learning for teams. Again and again I see the same thing: what changes people isn't the content, it's the moment two of them actually talk.</p><p data-i18n="wy2">Screens are getting very good at keeping us. I keep asking the opposite question: can a screen send us back to each other, a little warmer than before?</p><p data-i18n="wy3">So after work I build small things to find out. A jar that sends you to cook for someone. A town that sends you off with “go and see someone you love”. A way for two people in different cities to share a morning.</p><p data-i18n="wyE">And the person I love lives seven hours away. The subject no one taught me, I'm learning now on purpose.</p><p data-i18n="wy4">And I want to explore how AI can serve that purpose: not to keep us on the screen, but to bring us back to where we should be. I build them with AI as a tool; the people they're for are the point.</p><p data-i18n="wyC">We don't live alone; we live with people.</p><p class="wy-last" data-i18n="wy5">If one of them makes you call someone, it did its job.</p><p class="wy-sig">— Wei · <a class="wy-story" href="https://www.wei-meng.org/story/"><span data-i18n="wyStory">The whole story</span> →</a></p>
+        <div class="lt-scroll" id="lt-scroll" tabindex="0" role="region" aria-labelledby="wy-h">
+        <p data-i18n="wyA">One day I couldn't move. Not even a little.</p><p data-i18n="wyB">I made a new rule for living: whatever I did had one purpose, to make today work. It forced me to live in the moment. It forced me to go to my friends. It forced me to see what matters.</p><p data-i18n="wyD">Every week I met my friend D. We ran together, ate together afterwards, and she told me her little discoveries in the hutongs. Her energy for life became mine, a little at a time.</p><p data-i18n="wy1">By day I design learning for teams. Again and again I see the same thing: what changes people isn't the content, it's the moment two of them actually talk.</p><p data-i18n="wy2">Screens are getting very good at keeping us. I keep asking the opposite question: can a screen send us back to each other, a little warmer than before?</p><p data-i18n="wy3">So after work I build small things to find out. A jar that sends you to cook for someone. A town that sends you off with “go and see someone you love”. A way for two people in different cities to share a morning.</p><p data-i18n="wyE">And the person I love lives seven hours away. The subject no one taught me, I'm learning now on purpose.</p><p data-i18n="wy4">And I want to explore how AI can serve that purpose: not to keep us on the screen, but to bring us back to where we should be. I build them with AI as a tool; the people they're for are the point.</p><p data-i18n="wyC">We don't live alone; we live with people.</p><p class="wy-last" data-i18n="wy5">If one of them makes you call someone, it did its job.</p><p class="wy-sig">— Wei Meng · <a class="wy-story" href="https://www.wei-meng.org/story/"><span data-i18n="wyStory">The whole story</span> →</a></p>
+        </div>
+        <p class="lt-more" aria-hidden="true" data-i18n="ltMore">Scroll to read on</p>
       </div>
     </section>
+    <script>(function(){var b=document.getElementById("lt-scroll");if(!b)return;var L=b.closest(".letter");function f(){var e=b.scrollTop+b.clientHeight>=b.scrollHeight-4;b.classList.toggle("end",e);if(e)L.classList.add("read");if(b.scrollHeight<=b.clientHeight+4)L.classList.add("read")}b.addEventListener("scroll",f,{passive:true});addEventListener("resize",f);setTimeout(f,60);document.fonts&&document.fonts.ready.then(f)})()</script>
 
     <section class="sec wrap" aria-labelledby="how-h">
       <div class="head reveal">
@@ -318,6 +331,7 @@ img{filter:none}
   "heroTitle": "People aren't the means. <br class=\"hb\">People are the <span class=\"accent-word\">point</span>.",
   "heroDesc": "After work I make small, free things that try to take that seriously: a jar, a card a day, a few flowers for someone, a house of books to borrow, a home your people build together, a table for New Year's Eve, a walk at the same time, a town, a train window, a table for two far apart, a way to stay close, a few words in someone else's language. None of them want more of your time. They'd rather you spent it with someone.",
   "wyS": "Why I do all this",
+  "ltMore": "Scroll to read on",
   "wy1": "By day I design learning for teams. Again and again I see the same thing: what changes people isn't the content, it's the moment two of them actually talk.",
   "wy2": "Screens are getting very good at keeping us. I keep asking the opposite question: can a screen send us back to each other, a little warmer than before?",
   "wy3": "So after work I build small things to find out. A jar that sends you to cook for someone. A town that sends you off with “go and see someone you love”. A way for two people in different cities to share a morning.",
@@ -515,6 +529,7 @@ img{filter:none}
   "heroTitle": "人不是手段，<br class=\"hb\">人本身就是<span class=\"accent-word\">意义</span>。",
   "heroDesc": "下班后，我做一些小小的、免费的东西，认真对待这件事：一个罐子、每天一张牌、几枝送人的花、一栋可以借书的房子、一个家人朋友一起盖的家园、一张跨年的饭桌、一次同一时间的散步、一座小镇、一扇火车窗、一张隔着远方的双人桌、一种保持亲近的方式、几句别人语言里的话。它们都不想多占你的时间，只希望你把时间花在某个人身上。",
   "wyS": "我为什么做这些",
+  "ltMore": "往下滑，继续读",
   "wy1": "白天，我为团队设计学习。我一再看到同一件事：真正改变人的，不是内容，而是两个人真正开口聊起来的那一刻。",
   "wy2": "屏幕越来越擅长把我们留住。我一直在问反过来的问题：屏幕能不能把我们送回彼此身边，比之前更暖一点？",
   "wy3": "所以下班后，我做一些小东西去找答案。一个让你去为某人做饭的罐子。一座送你出门时说“去见你爱的人”的小镇。一种让身处两座城市的两个人共享一个早晨的方式。",
@@ -712,6 +727,7 @@ img{filter:none}
   "heroTitle": "Las personas no son el medio. <br class=\"hb\">Son lo que <span class=\"accent-word\">importa</span>.",
   "heroDesc": "Después del trabajo hago cosas pequeñas y gratuitas que intentan tomárselo en serio: un tarro, una carta al día, unas flores para alguien, una casa de libros para pedir prestados, un rincón que construyen los tuyos, una mesa para Nochevieja, un paseo a la misma hora, un pueblo, una ventanilla de tren, una mesa para dos a distancia, una forma de seguir cerca, unas palabras en el idioma de otra persona. Ninguna quiere más de tu tiempo. Prefieren que lo pases con alguien.",
   "wyS": "Por qué hago todo esto",
+  "ltMore": "Desliza para seguir leyendo",
   "wy1": "De día diseño aprendizaje para equipos. Una y otra vez veo lo mismo: lo que cambia a la gente no es el contenido, es el momento en que dos personas hablan de verdad.",
   "wy2": "Las pantallas son cada vez mejores reteniéndonos. Yo sigo haciéndome la pregunta contraria: ¿puede una pantalla devolvernos los unos a los otros, un poco más cálidos que antes?",
   "wy3": "Así que después del trabajo hago cosas pequeñas para averiguarlo. Un tarro que te manda a cocinar para alguien. Un pueblo que te despide con «ve a ver a alguien que quieras». Una forma de que dos personas en ciudades distintas compartan una mañana.",
@@ -908,6 +924,7 @@ img{filter:none}
   "heroTitle": "人不是手段，<br class=\"hb\">人本身就是<span class=\"accent-word\">意義</span>。",
   "heroDesc": "下班後，我做一些小小的、免費的東西，認真對待這件事：一個罐子、每天一張牌、幾枝送人的花、一棟可以借書的房子、一個家人朋友一起蓋的家園、一張跨年的飯桌、一次同一時間的散步、一座小鎮、一搧火車窗、一張隔著遠方的雙人桌、一種保持親近的方式、幾句別人語言裡的話。它們都不想多佔你的時間，只希望你把時間花在某個人身上。",
   "wyS": "我為什麼做這些",
+  "ltMore": "往下滑，繼續讀",
   "wy1": "白天，我為團隊設計學習。我一再看到同一件事：真正改變人的，不是內容，而是兩個人真正開口聊起來的那一刻。",
   "wy2": "螢幕越來越擅長把我們留住。我一直在問反過來的問題：螢幕能不能把我們送回彼此身邊，比之前更暖一點？",
   "wy3": "所以下班後，我做一些小東西去找答案。一個讓你去為某人做飯的罐子。一座送你出門時說“去見你愛的人”的小鎮。一種讓身處兩座城市的兩個人共享一個早晨的方式。",
@@ -1104,6 +1121,7 @@ img{filter:none}
   "heroTitle": "Les persones no són el mitjà. <br class=\"hb\">Són el que <span class=\"accent-word\">importa</span>.",
   "heroDesc": "Després de la feina faig coses petites i gratuïtes que intenten prendre-s'ho seriosament: un pot, una carta al dia, unes flors per a algú, una casa de llibres per demanar en préstec, un racó que construeixen els teus, una taula per a Cap d'Any, un passeig a la mateixa hora, un poble, una finestra de tren, una taula per a dos a distància, una manera de seguir a prop, unes paraules en la llengua d'una altra persona. Cap no vol més del teu temps. Prefereixen que el passis amb algú.",
   "wyS": "Per què faig tot això",
+  "ltMore": "Llisca per continuar llegint",
   "wy1": "De dia dissenyo aprenentatge per a equips. Una vegada i una altra veig el mateix: el que canvia la gent no és el contingut, és el moment en què dues persones parlen de debò.",
   "wy2": "Les pantalles són cada cop millors retenint-nos. Jo continuo fent-me la pregunta contrària: pot una pantalla tornar-nos els uns als altres, una mica més càlids que abans?",
   "wy3": "Així que després de la feina faig coses petites per esbrinar-ho. Un pot que t'envia a cuinar per a algú. Un poble que t'acomiada amb «ves a veure algú que estimis». Una manera que dues persones en ciutats diferents comparteixin un matí.",
@@ -1330,5 +1348,13 @@ img{filter:none}
     })();
   </script>
   <script src="/pets.js?v=f7f83d10" defer></script>
-<style>@media(max-width:520px){.top-r .back:not(#ah-app){display:none}}@media(max-width:374px){#ah-app{font-size:0;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--line);border-radius:50%}#ah-app::before{content:"";width:5px;height:5px;border-radius:1.5px;background:currentColor;box-shadow:7px 0 currentColor,0 7px currentColor,7px 7px currentColor;transform:translate(-3.5px,-3.5px)}}</style><script>(function(){var W={en:"The works",zh:"作品","zh-Hant":"作品",es:"Las obras",ca:"Les obres"};function p(){var a=document.getElementById("ah-app");if(!a)return;var l=document.documentElement.lang||"en";a.firstChild.nodeValue=(W[l]||W[l.slice(0,2)]||W.en)+" "}p();new MutationObserver(p).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]})})()</script></body>
+<style>.top-r .back{display:none}
+.ah-try{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px 0 13px;border-radius:999px;background:#F2A33A;color:#1A1420;font:600 13.5px/1 'Space Mono',ui-monospace,monospace;letter-spacing:.01em;text-decoration:none;box-shadow:0 0 0 0 rgba(242,163,58,.45);transition:transform .2s,box-shadow .3s,background .2s;animation:ahTry 3.2s ease-in-out 1.2s 2}
+.ah-try:hover{background:#F6B65B;transform:translateY(-1px);box-shadow:0 6px 20px -6px rgba(242,163,58,.7)}
+.ah-try:focus-visible{outline:2px solid #F6B65B;outline-offset:3px}
+.ah-try svg{flex:none}.ah-try-s{display:none}
+@keyframes ahTry{0%,100%{box-shadow:0 0 0 0 rgba(242,163,58,0)}40%{box-shadow:0 0 0 8px rgba(242,163,58,.18)}}
+@media(max-width:560px){.ah-try-l{display:none}.ah-try-s{display:inline}.ah-try{padding:0 14px 0 11px;height:38px}}
+@media(max-width:400px){.ah-try-s{display:none}.ah-try{width:38px;padding:0;justify-content:center}}
+@media(prefers-reduced-motion:reduce){.ah-try{animation:none;transition:none}}</style><script>(function(){var W={en:["Try the after-hours phone","Try it"],zh:["试试 after-hours 手机","试试"],"zh-Hant":["試試 after-hours 手機","試試"],es:["Prueba el teléfono after-hours","Pruébalo"],ca:["Prova el telèfon after-hours","Prova-ho"]};function p(){var a=document.getElementById("ah-app");if(!a)return;var l=document.documentElement.lang||"en",w=W[l]||W[l.slice(0,2)]||W.en;a.querySelector(".ah-try-l").textContent=w[0];a.querySelector(".ah-try-s").textContent=w[1];a.setAttribute("aria-label",w[0])}p();new MutationObserver(p).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]})})()</script></body>
 </html>
