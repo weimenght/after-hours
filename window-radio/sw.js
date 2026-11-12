@@ -1,10 +1,10 @@
 /* Window Radio: works offline once opened. Keeps only what this app needs to draw itself (its own folder, the kit, the fonts),
    always asks the network first and falls back to the copy it kept. Never touches anything off the site; sends nothing. */
-var V = "wr-4";
+var V = "wr-5";
 var OWN = /^\/(window-radio|fbkit|fonts)\//;
 self.addEventListener("install", function (e) {
   self.skipWaiting();
-  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js?v=4", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"]); }).catch(function () {}));
+  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js?v=5", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"]); }).catch(function () {}));
 });
 self.addEventListener("activate", function (e) {
   e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("wr-") === 0 && k !== V; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); }));

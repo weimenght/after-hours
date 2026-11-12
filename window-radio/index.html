@@ -164,7 +164,7 @@
   </section>
 </main>
 <footer id="foot" class="np"></footer>
-<script src="./words.js?v=4"></script>
+<script src="./words.js?v=5"></script>
 <script>
 (()=>{
 "use strict";
@@ -543,7 +543,20 @@ const svg=(inner,fill)=>`<svg viewBox="0 0 48 48" fill="none" stroke="#3a2a40" s
 function show(id){['sWho','sMood','sWeather','sPlayer','sDone'].forEach(s=>$(s).hidden=s!==id);S.screen=id;document.body.classList.toggle('mid',id==='sWeather');window.scrollTo(0,0)}
 function ctxLine(){const d=new Date(),f=festivalFor(d);return[dayName(d.getDay()),Tr(W.times[timeBlock(hourNow())]),festName(f)].filter(Boolean).join(' · ')}
 function dayName(i){return W.days[li()][i]}
-function tapeTitle(c){const o=c.useFest?Tr(W.fobj[c.fid]):Tr(W.obj[c.objIdx]);const s=F(W.wp[c.weather],{o});return li()===3||li()===4?s.charAt(0).toUpperCase()+s.slice(1):s}
+/* the tape's name: one of many titles, chosen by the tape's own seed (so side B has its own, and a sent tape keeps its name):
+   the festival's when there is one, otherwise the weather, the hour, the mood, the animal on the desk, the season, or the old "Rain on the Kettle" kind */
+function tapeTitle(c){
+  const N=W.names,r=mulberry((c.seed^0x2f6b5)>>>0),asleep=['evening','night','late'].includes(c.tb)||c.weather==='storm',pool=[];
+  const add=(list,wt)=>{if(list&&list.length)pool.push([list,wt])};
+  if(c.fid)add(N.fest[c.fid],60);
+  add(N.weather[c.weather==='sun'&&asleep?'clearnight':c.weather],22);add(N.time[c.tb],22);add(N.mood[c.mood],14);add(N.pet[asleep?'asleep':'awake'],14);add(N.season[c.season],10);
+  pool.push(['place',18]);
+  let x=r()*pool.reduce((a,p)=>a+p[1],0),list=pool[pool.length-1][0];for(const p of pool){if((x-=p[1])<0){list=p[0];break}}
+  let s;
+  if(list==='place'){const o=c.fid&&W.fobj[c.fid]&&r()<.5?Tr(W.fobj[c.fid]):Tr(W.obj[Math.floor(r()*W.obj.length)]);s=F(W.wp[c.weather],{o})}
+  else s=F(list[Math.floor(r()*list.length)],{p:Tr(W.pets[c.pet])});
+  return li()===3||li()===4||li()===0?s.charAt(0).toUpperCase()+s.slice(1):s;
+}
 
 /* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ language, privacy */
 const HD=window.FBC&&FBC.head?FBC.head($('head'),{icon:'<img src="./icon.svg" alt="">',name:()=>Tr(W.app),home:function () { scrollTo({ top: 0, behavior: "smooth" }); },steps:[
@@ -887,7 +900,7 @@ requestAnimationFrame(draw);
 /* ---------- start ---------- */
 S.remaining=segMs();renderText();if(!arrive())show('sWho');
 setInterval(()=>{if(S.screen==='sMood')$('ctxLine').textContent=ctxLine()},60e3);
-window.WR={S,cfg:()=>cfg,build:buildCfg,record,au,endIn:ms=>{endAt=Date.now()+ms;tick()},track:()=>cur};   // test hook
+window.WR={S,cfg:()=>cfg,build:buildCfg,record,title:c=>tapeTitle(c),au,endIn:ms=>{endAt=Date.now()+ms;tick()},track:()=>cur};   // test hook
 })();
 if("serviceWorker" in navigator&&window.isSecureContext)addEventListener("load",function(){navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(function(){})});
 </script>
