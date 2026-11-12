@@ -413,7 +413,20 @@ html.framed .eadds{top:14px;left:22px}
 /* Put the phone down (the owner, Nov 8: more elegant, more intuitive): no button in a corner, a slide at the foot of the
    screen, the old slide to unlock turned round. It takes a deliberate thumb; a tap only nudges the moon; Enter does it. */
 .now-h .down{display:none}
-.rest{flex:none;margin:8px -4px 10px}
+.rest{flex:none;margin:8px -4px calc(14px + env(safe-area-inset-bottom))}
+html.framed .rest{margin-bottom:24px}
+.dock{display:none!important}
+.more{position:relative;width:36px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.more svg{width:18px;height:18px}
+.more.has::after{content:"";position:absolute;top:3px;right:4px;width:8px;height:8px;border-radius:50%;background:#E0604A;box-shadow:0 0 0 2px rgba(37,30,49,.9)}
+html.inapp .more{visibility:hidden}
+.fold.xtra{align-items:flex-start;justify-content:flex-end}
+.fold.xtra .fpanel{max-width:300px;margin-top:calc(46px + env(safe-area-inset-top));border-radius:24px;transform-origin:100% 0}
+.xlang{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.xlang button{padding:6px 10px;border-radius:999px;font:500 12.5px/1 var(--sans);color:var(--paper);opacity:.7}
+.xlang button[aria-pressed="true"]{opacity:1;background:rgba(242,163,58,.18);color:var(--lamp)}
+html.light .xlang button{color:#2A2230}
+html.light .xlang button[aria-pressed="true"]{color:#8A5410}
 .home.edit .rest{visibility:hidden}
 .rtrack{position:relative;height:44px;border-radius:999px;background:rgba(236,230,218,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 .rtx{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 16px 0 48px;font:500 14.5px/1 var(--sans);letter-spacing:.01em;white-space:nowrap;color:transparent;background:linear-gradient(90deg,rgba(236,230,218,.42) 0,rgba(236,230,218,.42) 40%,#fff 50%,rgba(236,230,218,.42) 60%,rgba(236,230,218,.42) 100%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;animation:rshine 3.6s linear infinite;pointer-events:none}
@@ -534,7 +547,7 @@ html.editing .top .mark,html.editing .top .clock{visibility:hidden}
 .wsheet .list{margin:4px 0 12px}
 .wsheet h3{margin:0 0 4px;font:400 22px/1.2 var(--serif)}
 .wsheet .hint{margin:0 0 12px;font:12px/1.4 var(--mono);color:var(--dim)}
-.home.edit #lang,.home.edit .down{visibility:hidden}
+html.editing #more,.home.edit .down{visibility:hidden}
 .home.edit .grid{touch-action:none}
 .home.edit .grid .tile{animation:jig .32s ease-in-out infinite alternate;cursor:grab}
 .home.edit .grid .tile:nth-child(2n){animation-delay:-.16s;animation-direction:alternate-reverse}
@@ -699,7 +712,8 @@ html.desk #grid .tile b{font-size:12.5px}
 html.desk #stack{grid-area:stack;flex-direction:column;gap:12px;margin:0;padding:0 0 18px;overflow-x:hidden;overflow-y:auto;scroll-snap-type:none;align-self:stretch}
 html.desk #stack>.w{flex:none}
 html.desk #sdots{display:none}
-html.desk #rest{display:none}
+html.desk #rest{grid-area:dock;justify-self:center;width:300px;margin:10px 0 22px}
+html.desk .fold.xtra .fpanel{margin-top:50px}
 html.desk .dock .dsep{display:block;align-self:stretch;width:1px;margin:6px -4px;background:var(--line)}
 .dock .dsep{display:none}
 html.desk .dock .dmoon .ico{box-shadow:0 0 18px rgba(242,163,58,.18)}
@@ -763,7 +777,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
    <span class="clock" id="clock"></span>
    <a class="mark" href="/" aria-label="after-hours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg>after-hours</a>
    <button class="chip ntb" id="ntb" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></button>
-   <button class="chip" id="lang" type="button" data-fb-shell aria-label="Language">EN</button>
+   <button class="chip more" id="more" type="button" data-fb-shell aria-label="More"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.9" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/><circle cx="19" cy="12" r="1.9" fill="currentColor"/></svg></button>
   </div>
 
   <section class="moment" id="moment" aria-label="moment" hidden></section>
@@ -1061,15 +1075,10 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
       a.href = p[4]; a.style.setProperty("--g", p[5]); a.title = p[3][li()] || p[3][0]; a.setAttribute("data-k", k); a.draggable = false; g.appendChild(a);
     });
     var rows = Math.max(4, Math.ceil(g.children.length / 4)); g.style.gridTemplateRows = "repeat(" + rows + ",1fr)"; g.dataset.rows = rows;
-    var d = $("dock"); d.innerHTML = "";
-    /* the dock (the owner, Nov 12: the phone's extras leave the home screen): The moment · Extras · Settings. Phone, Messages,
-       Mail, Camera and the Store live in Extras, one tap away; a dot on Extras says something came in. */
-    var mb = el("button", "tile", '<span class="ico"><span class="clip momi">' + ((window.FBC && FBC.logo && FBC.logo("ah")) || "") + "</span></span><b>" + esc(w("aMoment")) + "</b>"); mb.type = "button"; mb.setAttribute("aria-label", w("moAsk")); mb.onclick = function () { if (!editing) { sfx("pop"); moment(); } }; d.appendChild(mb);
-    var xb = el("button", "tile", '<span class="ico fico' + (xDot() ? " pdot" : "") + '"><span class="clip"><span class="fgrid x2">' + XTRA.slice(0, 4).map(function (x) { return "<i>" + sysIcon(x[0]) + "</i>"; }).join("") + "</span></span></span><b>" + esc(w("aXtra")) + "</b>"); xb.type = "button"; xb.id = "xtraB"; xb.setAttribute("aria-label", w("aXtra")); xb.onclick = function () { if (!editing) openExtras(); }; d.appendChild(xb);
-    var sb = el("button", "tile", '<span class="ico"><span class="clip">' + sysIcon("set") + "</span></span><b>" + esc(w("aSet")) + "</b>"); sb.type = "button"; sb.setAttribute("aria-label", w("aSet")); sb.onclick = function () { if (!editing) open("set"); }; d.appendChild(sb);
-    /* on a computer, Close the screen is the dock's last item after a divider, like the Trash on a Mac (the owner, Nov 8):
-       a mouse needs no slide, and it keeps one shape at the foot of the screen */
-    if (DESK) { d.appendChild(el("i", "dsep")); var mo = el("button", "tile dmoon", '<span class="ico"><span class="clip">' + ICONS.moon + "</span></span><b>" + esc(w("down")) + "</b>"); mo.type = "button"; mo.title = w("down"); mo.setAttribute("aria-label", w("down")); mo.onclick = function () { if (!editing) $("out").click(); }; d.appendChild(mo); }
+    /* no dock (the owner, Nov 12: one place for each thing): the moment is asked on the "now" widget, the slide is alone at the
+       foot, and Messages, Mail, Phone, Camera, the Store, Settings and the language sit behind the top bar's ⋯, like in every app;
+       a dot on ⋯ says something came in. */
+    moreDot();
     decorate();
   }
   /* edit mode: a long press (≈ half a second, finger still) starts it; drag moves an icon, − removes it, Done (or Esc, or a tap on
@@ -1157,17 +1166,21 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var back = f.a.filter(function (k) { return !inFolder(k); }); o.splice.apply(o, [Math.max(0, Math.min(i, o.length)), 0].concat(back)); saveLayout({ o: o, x: L.x, n: L.n }); paintHome(); sfx("pop"); toast(w("fdGone"));
   }
   var openF = null;
-  var XTRA = [["phone", "aPhone", 1], ["msg", "aMsg", 2], ["mail", "aMail", 3], ["cam", "aCam", 4], ["store", "aStore", 0]];
+  var XTRA = [["msg", "aMsg", 2], ["mail", "aMail", 3], ["phone", "aPhone", 1], ["cam", "aCam", 4], ["store", "aStore", 0], ["set", "aSet", 0]];
   function xDot() { return !!(dots[2] || dots[3] || dots[4] || askDot()); }
-  function openExtras() {   // the folder's own panel, holding the phone's extras
-    openF = "__x"; var fo = $("fold"), pn = $("fpanel"); pn.innerHTML = ""; fo.classList.remove("edit");
-    pn.appendChild(el("h2", "fname", esc(w("aXtra")))); var ap = el("div", "fapps"); pn.appendChild(ap);
+  function moreDot() { var m = $("more"); if (m) { m.classList.toggle("has", xDot()); m.setAttribute("aria-label", w("aXtra")); m.title = w("aXtra"); } }
+  function openExtras() {   // the ⋯ panel: the phone's own things, and the language
+    openF = "__x"; var fo = $("fold"), pn = $("fpanel"); pn.innerHTML = ""; fo.classList.remove("edit"); fo.classList.add("xtra");
+    var ap = el("div", "fapps"); pn.appendChild(ap);
     XTRA.forEach(function (x) { var b = el("button", "tile", '<span class="ico' + ((x[0] === "msg" && askDot()) || (x[2] && dots[x[2]]) ? " pdot" : "") + '"><span class="clip">' + sysIcon(x[0]) + "</span></span><b>" + esc(w(x[1])) + "</b>"); b.type = "button";
-      b.onclick = function () { openF = null; fo.classList.remove("on"); open(x[0]); }; ap.appendChild(b); });
+      b.onclick = function () { openF = null; fo.classList.remove("on", "xtra"); open(x[0]); }; ap.appendChild(b); });
+    var lg = el("div", "xlang"); lg.setAttribute("role", "group"); lg.setAttribute("aria-label", w("sLang"));
+    L.forEach(function (code, i) { var b = el("button", "", esc(LN[i])); b.type = "button"; b.setAttribute("aria-pressed", i === li() ? "true" : "false"); b.onclick = function (e) { e.stopPropagation(); setLang(i); openExtras(); }; lg.appendChild(b); });
+    pn.appendChild(lg);
     fo.classList.add("on"); sfx("pop");
   }
   function openFolder(id, naming) {
-    var f = folder(id); if (!f) return; openF = id; var fo = $("fold"), pn = $("fpanel"); pn.innerHTML = ""; fo.classList.toggle("edit", editing);
+    var f = folder(id); if (!f) return; openF = id; var fo = $("fold"), pn = $("fpanel"); pn.innerHTML = ""; fo.classList.remove("xtra"); fo.classList.toggle("edit", editing);
     var nm2 = el("input", "fname"); nm2.value = fname(f); nm2.maxLength = 24; nm2.setAttribute("aria-label", w("fdName")); nm2.placeholder = w("fdNew");
     nm2.oninput = function () { var F = folders(), g = F.filter(function (x) { return x.id === id; })[0]; if (g) { g.n = nm2.value.trim().slice(0, 24); saveFolders(F); } };
     nm2.onkeydown = function (e) { if (e.key === "Enter") nm2.blur(); }; pn.appendChild(nm2);
@@ -1202,7 +1215,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var bt = el("div", "fbtns"), ok = el("button", "pill", esc(w("eDone"))); ok.type = "button"; ok.onclick = function () { var g = folder(id); if (g && !g.a.length) { saveFolders(folders().filter(function (x) { return x.id !== id; })); closeFolder(); paintHome(); return; } openFolder(id); }; bt.appendChild(ok); pn.appendChild(bt);
     pn.scrollTop = 0;
   }
-  function closeFolder() { var id = openF; openF = null; $("fold").classList.remove("on"); var f = id && folder(id); if (f && !f.a.length) { saveFolders(folders().filter(function (x) { return x.id !== id; })); } paintHome(); }
+  function closeFolder() { var id = openF; openF = null; $("fold").classList.remove("on", "xtra"); var f = id && folder(id); if (f && !f.a.length) { saveFolders(folders().filter(function (x) { return x.id !== id; })); } paintHome(); }
   $("fold").addEventListener("click", function (e) { e.stopPropagation(); if (e.target === $("fold")) closeFolder(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && openF) { e.stopImmediatePropagation(); closeFolder(); } }, true);
   $("fadd").onclick = function (e) { e.stopPropagation(); var id = newFolder([], null); paintHome(); folderPick(id); openF = id; $("fold").classList.toggle("edit", editing); $("fold").classList.add("on"); };
@@ -1588,7 +1601,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   function surStep(g, W, H, ts) {
     var b = SURB; if (!SURS) { if (b) b.style.display = "none"; return; }
     var now = performance.now(), p = Math.max(0, (now - SURS.t0) / SURS.d), S = SUR[SURS.k]; if (p >= 1) { SURS = null; if (b) b.style.display = "none"; return; }
-    var sc = $("screen"), k = sc.clientWidth / W, gy = H - 4; try { gy = Math.floor(($("dock").getBoundingClientRect().top - sc.getBoundingClientRect().top) / k) - 2; } catch (e) {}
+    var sc = $("screen"), k = sc.clientWidth / W, gy = H - 4; try { gy = Math.floor(($("rest").getBoundingClientRect().top - sc.getBoundingClientRect().top) / k) - 2; } catch (e) {}
     S.draw.call(S, g, W, H, p, gy, ts);
     if (!b) { b = SURB = el("button", "surb"); b.type = "button"; b.onclick = function () { if (SURS) { toast(surLine(), 6500); SURS.d = Math.min(SURS.d, performance.now() - SURS.t0 + 2500); } }; sc.appendChild(b); }
     var q = S.pos.call(S, p, W, H, gy); b.style.display = "block"; b.style.transform = "translate(" + (q[0] * k - 32).toFixed(0) + "px," + (q[1] * k - 32).toFixed(0) + "px)"; b.setAttribute("aria-label", surLine());
@@ -1853,8 +1866,8 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
       if (dx >= max * .86) { at(max); sfx("pop"); if (navigator.vibrate) try { navigator.vibrate(10); } catch (er) {} setTimeout(function () { $("out").click(); }, 140); setTimeout(function () { K.classList.add("back"); at(0); }, 900); }
       else { K.classList.add("back"); at(0); } }
     K.addEventListener("pointerup", end); K.addEventListener("pointercancel", end);
-    K.addEventListener("click", function (e) { e.preventDefault(); if (e.detail === 0) { $("out").click(); return; } if (!moved) { K.classList.remove("nudge"); void K.offsetWidth; K.classList.add("nudge"); } moved = false; });
-    T.addEventListener("click", function (e) { if (e.target === T || e.target === X) { K.classList.remove("nudge"); void K.offsetWidth; K.classList.add("nudge"); } });
+    K.addEventListener("click", function (e) { e.preventDefault(); if (e.detail === 0 || (DESK && !moved)) { $("out").click(); return; } if (!moved) { K.classList.remove("nudge"); void K.offsetWidth; K.classList.add("nudge"); } moved = false; });
+    T.addEventListener("click", function (e) { if (e.target === T || e.target === X) { if (DESK) { $("out").click(); return; } K.classList.remove("nudge"); void K.offsetWidth; K.classList.add("nudge"); } });
   })();
   (function () {   // hold a widget to choose the widgets (the owner, Nov 8); a swipe never does
     var t = null, x0 = 0, y0 = 0, held = false;
@@ -2622,8 +2635,8 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   /* ── painting ── */
   function paintHome() { quote(); var t = now(), lit = {}; t.forEach(function (x) { if (x.k) lit[x.k] = 1; }); grid(lit); widgets(); ntDots(); }
   function paint() {
-    document.documentElement.lang = loc(); $("lang").textContent = SH[li()];
-    $("out").textContent = w("down"); $("momB").textContent = w("moAsk"); $("restT").textContent = w("rest"); $("out2").setAttribute("aria-label", w("down")); $("on").textContent = w("on"); $("bye").innerHTML = byeLine(); $("wide").textContent = w("wide");
+    document.documentElement.lang = loc(); moreDot();
+    $("out").textContent = w("down"); $("momB").textContent = w("moAsk"); $("restT").textContent = DESK ? w("down") : w("rest"); $("out2").setAttribute("aria-label", w("down")); $("on").textContent = w("on"); $("bye").innerHTML = byeLine(); $("wide").textContent = w("wide");
     qa("[data-w]").forEach(function (e) { e.textContent = w(e.getAttribute("data-w")); });
     theme(); paintHome(); sky(); wall(); fx(); clock(); fit();
     if (cur && RENDER[cur]) { var v = qa(".view.on", $("a-" + cur))[0]; RENDER[cur](); if (v) view(cur, v.getAttribute("data-v")); if (cur === "set") view("set", "list"); }
@@ -2756,7 +2769,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   $("momB").onclick = function () { sfx("pop"); moment(); };
   $("out").onclick = function () { downed = true; $("bye").innerHTML = byeLine(); powerOff(function () { home(); $("lock").classList.add("on"); clock(); }); };
   $("on").onclick = function () { powerOn(function () { sfx("up"); $("lock").classList.remove("on"); paint(); }); };
-  $("lang").onclick = function () { setLang((li() + 1) % L.length); };
+  $("more").onclick = function (e) { e.stopPropagation(); if (!editing) openExtras(); };
   window.addEventListener("fbl:lang", paint); window.addEventListener("fbllang", paint);
   window.addEventListener("resize", fit);
   if (window.ResizeObserver) new ResizeObserver(function () { fit(); }).observe($("stack"));
@@ -2828,7 +2841,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var b = $("banner"); b.innerHTML = ""; b.appendChild(avatar(k)); b.appendChild(el("span", "tx", "<b>" + esc(nm(k)) + "<small>" + esc(label) + "</small></b><span class=\"pv\">" + esc(plain(text)) + "</span>"));
     b.onclick = function () { b.classList.remove("on"); fn(); }; b.classList.add("on"); clearTimeout(bannerT); bannerT = setTimeout(function () { b.classList.remove("on"); }, 6500);
   }
-  function dockDot(n, on) { dots[n] = !!on; var d = document.querySelector("#xtraB .ico"); if (d) d.classList.toggle("pdot", xDot()); }   // the dot sits on Extras now
+  function dockDot(n, on) { dots[n] = !!on; moreDot(); }   // the dot sits on the top bar's ⋯ now
   function msgDot(on) { dockDot(2, on); }
   function ping(type) {
     if (pinged) return false;
