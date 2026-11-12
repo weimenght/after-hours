@@ -961,12 +961,24 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     if (F && F.sleeps) return F.sleeps(x.hrs, H);
     return { wei: H < 6 || (H >= 12 && H < 14), mei: H >= 2 && H < 12, popo: H >= 21 || H < 5, cats: H >= 23 || H < 5, mantou: H >= 22 || H < 6 }[x.hrs];
   }
+  function catHead(g, k, x, y, px, z) {   // a cat's face on a 15×14 grid, in the town's own colours
+    var F = FW(), P = (F && F.PETS && F.PETS[k]) || (k === "miso" ? { b: "#231b17", d: "#3a2f29", belly: "#3a2f29", e: "#f2c94c", nose: "#c98272" } : { b: "#e8913a", d: "#b8641f", belly: "#f6e3c4", e: "#7fb069", nose: "#c98272", stripe: 1 });
+    function R(c, r) { g.fillStyle = c; g.fillRect(x + r[0] * px, y + r[1] * px, r[2] * px, r[3] * px); }
+    R(P.b, [0, 0, 4, 4]); R(P.b, [11, 0, 4, 4]); R(P.nose, [1, 1, 2, 2]); R(P.nose, [12, 1, 2, 2]); R(P.b, [0, 3, 15, 9]); R(P.b, [1, 12, 13, 2]);
+    if (P.stripe) { R(P.d, [6, 3, 3, 1]); R(P.d, [5, 5, 1, 1]); R(P.d, [9, 5, 1, 1]); R(P.belly, [4, 9, 7, 5]); }
+    if (z) { R(P.stripe ? P.d : "#6a5a50", [2, 7, 4, 1]); R(P.stripe ? P.d : "#6a5a50", [9, 7, 4, 1]); }
+    else { R(P.e, [2, 6, 4, 3]); R(P.e, [9, 6, 4, 3]); R("#000", [4, 6, 1, 3]); R("#000", [11, 6, 1, 3]); R("#fff", [2, 6, 1, 1]); R("#fff", [9, 6, 1, 1]); }
+    R(P.nose, [7, 9, 1, 1]); R(P.stripe ? P.d : "#6a5a50", [6, 10, 1, 1]); R(P.stripe ? P.d : "#6a5a50", [8, 10, 1, 1]);
+  }
   function avatar(k, size) {
     var box = el("span", "av"); if (size) box.style.width = box.style.height = size + "px";
     if (k === "wm") { box.innerHTML = '<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#1E1830"/><path fill="#ECE6DA" fill-rule="evenodd" d="M7.6 4.2h8.8a3.4 3.4 0 0 1 3.4 3.4v8.8a3.4 3.4 0 0 1-3.4 3.4H7.6a3.4 3.4 0 0 1-3.4-3.4V7.6a3.4 3.4 0 0 1 3.4-3.4ZM7.8 5.8a2 2 0 0 0-2 2v3.5h5.5V5.8Zm4.9 0v5.5h5.5V7.8a2 2 0 0 0-2-2Zm-6.9 6.9v3.5a2 2 0 0 0 2 2h3.5v-5.5Zm6.9 0v5.5h3.5a2 2 0 0 0 2-2v-3.5Z"/><rect x="13.4" y="13.4" width="4.1" height="4.1" rx=".9" fill="#F2A33A"/></svg>';   /* filled shapes, no strokes: no hairline at any size (Nov 8) */ return box; }
     var c = document.createElement("canvas"), g; c.width = 32; c.height = 32; g = c.getContext("2d");
     g.fillStyle = (WHO[k] || {}).bg || "#222"; g.fillRect(0, 0, 32, 32);
-    if (k === "miso" || k === "yuzu") { var F = FW(); if (F && F.drawPet) { try { F.drawPet(g, k, 16, 25, 1.5, { asleep: asleep(k) }); } catch (e) {} } else bust(g, k, 0, 0, 1); }
+    if (k === "miso" || k === "yuzu" || k === "cats") {   // the cats as faces, like Mantou's (the owner, Nov 13): one big head, or both for Miso & Yuzu
+      c.width = c.height = 64; g.fillStyle = (WHO[k] || {}).bg || "#222"; g.fillRect(0, 0, 64, 64); var z = asleep(k);
+      if (k === "cats") { catHead(g, "yuzu", 31, 7, 2, z); catHead(g, "miso", 3, 22, 2, z); } else catHead(g, k, 10, 11, 3, z);
+    }
     else bust(g, k, 0, k === "mantou" || k === "cats" ? 0 : 2, 1, { asleep: asleep(k) });
     box.appendChild(c); return box;
   }
@@ -2792,14 +2804,14 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     air: { h: "mantou", q: [["alone", ["fs", "fs_alone"], ["lt", "lt_alone"]], ["with", ["ww", "ww_with"], ["co", "co_with"]]] }
   };
   function momentMode() { return get("ah_app_moment") !== "0"; }   // the owner, Nov 12: the moment is the way in for everyone; the phone is one tap behind it (off in Settings)
-  function moAv(h) { return avatar(h === "cats" ? (Math.random() < .5 ? "miso" : "yuzu") : h, 52); }
+  function moAv(h) { return avatar(h, 52); }   // the quiet door is both cats
   function moLine(h) { var k = h === "cats" ? "miso" : h; return w((asleep(k) ? "moZ_" : "moL_") + h); }
   function moSay(t) { return esc(t).replace(/\*([^*]+)\*/g, "<em>$1</em>"); }
   function moment(door, ans) {
     var m = $("moment"); m.hidden = false; m.innerHTML = ""; var box = el("div", "mo"); m.appendChild(box); m.scrollTop = 0;
     if (!door) {
       box.appendChild(el("h1", "", esc(w("moT_" + part())))); box.appendChild(el("p", "msub", esc(w("moSub"))));
-      Object.keys(MO).forEach(function (d) { var b = el("button", "mdoor"); b.type = "button"; b.appendChild(avatar(MO[d].h === "cats" ? "miso" : MO[d].h, 42)); b.appendChild(el("span", "t", esc(w("moD_" + d)))); b.appendChild(el("i", "", "›")); b.onclick = function () { sfx("pop"); moment(d); }; box.appendChild(b); });
+      Object.keys(MO).forEach(function (d) { var b = el("button", "mdoor"); b.type = "button"; b.appendChild(avatar(MO[d].h, 42)); b.appendChild(el("span", "t", esc(w("moD_" + d)))); b.appendChild(el("i", "", "›")); b.onclick = function () { sfx("pop"); moment(d); }; box.appendChild(b); });
     } else {
       var D = MO[door], hd = el("div", "mhost"); hd.appendChild(moAv(D.h)); hd.appendChild(el("div", "", "<small>" + esc(w("moD_" + door)) + "</small><p>" + moSay(moLine(D.h)) + "</p>")); box.appendChild(hd);
       var an = el("div", "mans"); D.q.forEach(function (q) { var b = el("button", "", esc(w("moA_" + q[0]))); b.type = "button"; b.setAttribute("aria-pressed", ans === q[0] ? "true" : "false"); b.onclick = function () { sfx("pop"); moment(door, q[0]); }; an.appendChild(b); }); box.appendChild(an);
