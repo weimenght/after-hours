@@ -1166,8 +1166,8 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var back = f.a.filter(function (k) { return !inFolder(k); }); o.splice.apply(o, [Math.max(0, Math.min(i, o.length)), 0].concat(back)); saveLayout({ o: o, x: L.x, n: L.n }); paintHome(); sfx("pop"); toast(w("fdGone"));
   }
   var openF = null;
-  var XTRA = [["msg", "aMsg", 2], ["mail", "aMail", 3], ["phone", "aPhone", 1], ["cam", "aCam", 4], ["store", "aStore", 0], ["set", "aSet", 0]];
-  function xDot() { return !!(dots[2] || dots[3] || dots[4] || askDot()); }
+  var XTRA = [["msg", "aMsg", 2], ["store", "aStore", 0], ["set", "aSet", 0]];   /* Phone, Mail and Camera left the panel (the owner, Nov 13); their screens stay for links that open them */
+  function xDot() { return !!(dots[2] || askDot()); }
   function moreDot() { var m = $("more"); if (m) { m.classList.toggle("has", xDot()); m.setAttribute("aria-label", w("aXtra")); m.title = w("aXtra"); } }
   function openExtras() {   // the ⋯ panel: the phone's own things, and the language
     openF = "__x"; var fo = $("fold"), pn = $("fpanel"); pn.innerHTML = ""; fo.classList.remove("edit"); fo.classList.add("xtra");
