@@ -1681,7 +1681,8 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     hero.innerHTML = '<span class="sfi">' + appIcon(fk) + '</span><span class="sft"><small>' + esc(w("stFeat")) + "</small><b>" + esc(pname(fk)) + "</b><span>" + esc(fp[3][li()] || fp[3][0]) + "</span></span>";
     hero.onclick = function () { storeApp(fk); }; c.appendChild(hero);
     c.appendChild(el("p", "sec", esc(w("stAll")))); var l = el("div", "list");
-    P.slice().sort(function (a, b) { return pname(a[1]).localeCompare(pname(b[1]), loc()); }).forEach(function (p) { var r = el("div", "row srow");   // A to Z in the visitor's language (the owner, Nov 10) r.innerHTML = '<span class="sic">' + appIcon(p[1]) + '</span><span class="tx"><b>' + esc(pname(p[1])) + "</b><small>" + esc(p[3][li()] || p[3][0]) + "</small></span>";
+    P.slice().sort(function (a, b) { return pname(a[1]).localeCompare(pname(b[1]), loc()); }).forEach(function (p) { var r = el("div", "row srow");   /* A to Z in the visitor's language (the owner, Nov 10) */
+      r.innerHTML = '<span class="sic">' + appIcon(p[1]) + '</span><span class="tx"><b>' + esc(pname(p[1])) + "</b><small>" + esc(p[3][li()] || p[3][0]) + "</small></span>";
       r.appendChild(getBtn(p[1])); r.onclick = function (e) { if (!e.target.closest(".pill")) storeApp(p[1]); }; l.appendChild(r); });
     c.appendChild(l);
   };
