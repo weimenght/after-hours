@@ -416,6 +416,9 @@ html.framed .eadds{top:14px;left:22px}
 .rest{flex:none;margin:8px -4px calc(14px + env(safe-area-inset-bottom))}
 html.framed .rest{margin-bottom:24px}
 .dock{display:none!important}
+.pbub{padding:6px 6px 10px}
+.pbub canvas{display:block;width:180px;height:240px;border-radius:14px;image-rendering:pixelated}
+.pbub span{display:block;padding:8px 8px 0;max-width:180px}
 .lbub b{font-weight:600}
 .lbub .achip{margin-bottom:4px}
 .tchips{display:inline-flex;gap:6px;pointer-events:auto}
@@ -781,7 +784,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
    <span class="clock" id="clock"></span>
    <a class="mark" href="/" aria-label="after-hours"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg>after-hours</a>
    <button class="chip ntb" id="ntb" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></button>
-   <span class="tchips" data-fb-shell><button class="chip tc" id="tMsg" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H11l-4.5 3.5v-3.5a2 2 0 0 1-2-2z"/></svg></button><button class="chip tc" id="tStore" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5 5.5 4.5h13L20 9.5"/><path d="M4 9.5a2.67 2.67 0 0 0 5.33 0 2.67 2.67 0 0 0 5.34 0 2.67 2.67 0 0 0 5.33 0"/><path d="M5.5 12.5v7h13v-7"/><path d="M10 19.5v-4h4v4"/></svg></button><button class="chip tc" id="tSet" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg></button></span>
+   <span class="tchips" data-fb-shell><button class="chip tc" id="tMsg" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H11l-4.5 3.5v-3.5a2 2 0 0 1-2-2z"/></svg></button><button class="chip tc" id="tStore" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5 5.5 4.5h13L20 9.5"/><path d="M4 9.5a2.67 2.67 0 0 0 5.33 0 2.67 2.67 0 0 0 5.34 0 2.67 2.67 0 0 0 5.33 0"/><path d="M5.5 12.5v7h13v-7"/><path d="M10 19.5v-4h4v4"/></svg></button><button class="chip tc" id="tSet" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></span>
   </div>
 
   <section class="moment" id="moment" aria-label="moment" hidden></section>
@@ -2110,7 +2113,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var c = $("threads"); c.innerHTML = ""; var l = el("div", "list"); l.style.marginTop = "6px";
     THREADS.filter(function (th) { return dripHas("t:" + th.k) || EXTRA[th.k] || letters(th.k).length; }).sort(function (a, b) { return (EXTRA[b.k] ? 1 : 0) - (EXTRA[a.k] ? 1 : 0) || lastAt(b.k) - lastAt(a.k); }).forEach(function (th) {
       var r = el("button", "row"); r.type = "button"; r.appendChild(avatar(th.k));
-      var ex = EXTRA[th.k], last = ex && ex.length ? ex[ex.length - 1] : null, ls = letters(th.k), ll = ls.length ? "e_" + ls[ls.length - 1].k + "_s" : null;
+      var ex = EXTRA[th.k], last = ex && ex.length ? ex[ex.length - 1] : null, ls = letters(th.k), ll = ls.length ? ls[ls.length - 1].s : null;
       r.appendChild(el("span", "tx", "<b>" + esc(nm(th.k)) + "</b><small>" + esc(plain(w(last ? last.w : ll || th.m[th.m.length - 1]))) + "</small>"));
       r.appendChild(el("span", "rt", esc(last ? hm(last.at) : stamp(lastAt(th.k) ? new Date(lastAt(th.k)) : ago(th.d[0], th.d[1], th.d[2]))))); if (last) r.lastChild.style.color = "var(--lamp)"; r.onclick = function () { thread(th.k); }; l.appendChild(r);
     }); c.appendChild(l);
@@ -2148,10 +2151,19 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   var EXTRA = {};   /* texts that arrived this visit (pings), shown after the thread under their time */
   /* the letters about the works come as texts now (the owner, Nov 13: Messages carries the orientation, the news of the apps and
      the word to Wei Meng; Mail left the phone): each one that has arrived sits in its sender's thread, under the day it came */
-  function letters(k) { return MAIL.filter(function (m) { return m.who === k && dripHas("m:" + m.k); }).sort(function (a, b) { return dripAt("m:" + a.k) - dripAt("m:" + b.k); }); }
-  function lastAt(k) { var a = dripAt("t:" + k); letters(k).forEach(function (m) { a = Math.max(a, dripAt("m:" + m.k)); }); return a; }
-  function letterBubs(k, t) { letters(k).forEach(function (m) { var at = dripAt("m:" + m.k); if (at) t.appendChild(el("div", "when", esc(stamp(new Date(at)))));
-    t.appendChild(el("div", "bub lbub", (PK[m.k] ? chips("{app:" + m.k + "}") + "<br>" : "") + "<b>" + esc(w("e_" + m.k + "_s")) + "</b><br>" + chips(w("e_" + m.k + "_b")).replace(/\n/g, "<br>"))); }); }
+  /* photos come as pictures in Messages too (the owner, Nov 13): each from whoever is in it or took it */
+  var SHOT_FROM = ["wei", "mei", "popo", "cats", "cats", "mantou", "mei", "wei", "mantou", "wei", "mei", "cats"];
+  function shotFrom(i) { return SHOT_FROM[i] || ["wei", "mei", "popo"][i % 3]; }
+  function letters(k) {
+    var o = MAIL.filter(function (m) { return m.who === k && dripHas("m:" + m.k); }).map(function (m) { return { m: m, at: dripAt("m:" + m.k), s: "e_" + m.k + "_s" }; });
+    SHOTS.forEach(function (sh, i) { if (shotFrom(i) === k && dripHas("p:" + i)) o.push({ p: i, at: dripAt("p:" + i), s: sh[0] }); });
+    return o.sort(function (a, b) { return a.at - b.at; });
+  }
+  function lastAt(k) { var a = dripAt("t:" + k); letters(k).forEach(function (x) { a = Math.max(a, x.at); }); return a; }
+  function letterBubs(k, t) { letters(k).forEach(function (x) { if (x.at) t.appendChild(el("div", "when", esc(stamp(new Date(x.at)))));
+    if (x.m) { var m = x.m; t.appendChild(el("div", "bub lbub", (PK[m.k] ? chips("{app:" + m.k + "}") + "<br>" : "") + "<b>" + esc(w("e_" + m.k + "_s")) + "</b><br>" + chips(w("e_" + m.k + "_b")).replace(/\n/g, "<br>"))); return; }
+    var sh = SHOTS[x.p], b = el("div", "bub pbub"), cv = document.createElement("canvas"); cv.width = 120; cv.height = 160; cv.setAttribute("role", "img"); cv.setAttribute("aria-label", w(sh[0])); b.appendChild(cv); paintShot(cv, x.p, 40);
+    b.appendChild(el("span", "", esc(w(sh[0])) + (sh[2] && PK[sh[2]] ? "<br>" + chips("{app:" + sh[2] + "}") : ""))); t.appendChild(b); }); }
   function extraBubs(k, t) { letterBubs(k, t); var x = EXTRA[k]; if (!x || !x.length) { t.scrollTop = t.scrollHeight; return; } t.appendChild(el("div", "when", esc(hm(x[0].at)))); x.forEach(function (m) { t.appendChild(el("div", "bub", chips(w(m.w)))); }); t.scrollTop = t.scrollHeight; }
   function picks(t) {
     var box = el("div", "picks"); ["pk1", "pk2", "pk3", "pk4", "pkAll"].forEach(function (pk, i) { var b = el("button", "", esc(w(pk))); b.type = "button"; b.style.animationDelay = (i * .07) + "s";
@@ -2237,7 +2249,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     if (once || h < 7 || h >= 23 || Date.now() - (D.last || 0) < 6 * 36e5) return;
     var next = dripQ().rest.filter(function (x) { return !(x.split(",")[0] in D.got); })[0]; if (!next) return;
     var now = Date.now(); next.split(",").forEach(function (id) { D.got[id] = now; }); D.last = now; put("ah_drip", JSON.stringify(D));
-    if (next[0] !== "p") setTimeout(function () { dockDot(2, true); }, 1500);   // a text or a letter: the dot on Messages; photos arrive quietly
+    setTimeout(function () { dockDot(2, true); }, 1500);   // a text, a letter or a photo: the dot on Messages
   }
   function fromLine(m) { return w(WHO[m.who].n) + " " + w("eFrom") + " " + (m.k === "nb" ? w("nNextDoor") : pname(m.k)); }
   RENDER.mail = function () {
