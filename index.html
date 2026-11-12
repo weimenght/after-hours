@@ -44,7 +44,7 @@
     .top-r { display:flex; align-items:center; gap:14px; flex:none; }
     .back { font:400 12px 'Space Mono', monospace; color:var(--mut); text-decoration:none; white-space:nowrap; }
     .back:hover { color:var(--cream); }
-    .lang { height:32px; min-width:44px; padding:0 12px; border-radius:999px; border:1px solid rgba(244,236,221,.22); background:transparent; color:var(--cream); font:700 11px 'Space Mono', monospace; cursor:pointer; }
+    .lang { height:36px; min-width:44px; padding:0 12px; border-radius:999px; border:1px solid rgba(244,236,221,.22); background:transparent; color:var(--cream); font:700 11px 'Space Mono', monospace; cursor:pointer; }
     .lang:hover { border-color:var(--lamp); color:var(--lamp); }
     .lang:focus-visible, .go:focus-visible, .why:focus-visible, .jump a:focus-visible, .sub-d:focus-visible { outline:2px solid var(--lamp); outline-offset:3px; }
 
@@ -1479,12 +1479,12 @@ img{filter:none}
   </script>
   <script src="/pets.js?v=a5e40a85" defer></script>
 <style>.top-r .back{display:none}
-.ah-try{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px 0 13px;border-radius:999px;background:#F2A33A;color:#1A1420;font:600 13.5px/1 'Space Mono',ui-monospace,monospace;letter-spacing:.01em;text-decoration:none;box-shadow:0 0 0 0 rgba(242,163,58,.45);transition:transform .2s,box-shadow .3s,background .2s;animation:ahTry 3.2s ease-in-out 1.2s 2}
+.ah-try{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px 0 13px;border-radius:999px;background:#F2A33A;color:#1A1420;font:600 13.5px/1 'Space Mono',ui-monospace,monospace;letter-spacing:.01em;text-decoration:none;box-shadow:0 0 0 0 rgba(242,163,58,.45);transition:transform .2s,box-shadow .3s,background .2s;animation:ahTry 3.2s ease-in-out 1.2s 2}
 .ah-try:hover{background:#F6B65B;transform:translateY(-1px);box-shadow:0 6px 20px -6px rgba(242,163,58,.7)}
 .ah-try:focus-visible{outline:2px solid #F6B65B;outline-offset:3px}
 .ah-try svg{flex:none}.ah-try-s{display:none}
 @keyframes ahTry{0%,100%{box-shadow:0 0 0 0 rgba(242,163,58,0)}40%{box-shadow:0 0 0 8px rgba(242,163,58,.18)}}
-@media(max-width:560px){.ah-try-l{display:none}.ah-try-s{display:inline}.ah-try{padding:0 14px 0 11px;height:38px}}
-@media(max-width:400px){.ah-try-s{display:none}.ah-try{width:38px;padding:0;justify-content:center}}
+@media(max-width:560px){.ah-try-l{display:none}.ah-try-s{display:inline}.ah-try{padding:0 14px 0 11px;height:36px}}
+@media(max-width:400px){.ah-try-s{display:none}.ah-try{width:36px;padding:0;justify-content:center}}
 @media(prefers-reduced-motion:reduce){.ah-try{animation:none;transition:none}}</style><script>(function(){var W={en:["Try the after-hours phone","Try it"],zh:["试试 after-hours 手机","试试"],"zh-Hant":["試試 after-hours 手機","試試"],es:["Prueba el teléfono after-hours","Pruébalo"],ca:["Prova el telèfon after-hours","Prova-ho"]};function p(){var a=document.getElementById("ah-app");if(!a)return;var l=document.documentElement.lang||"en",w=W[l]||W[l.slice(0,2)]||W.en;a.querySelector(".ah-try-l").textContent=w[0];a.querySelector(".ah-try-s").textContent=w[1];a.setAttribute("aria-label",w[0])}p();new MutationObserver(p).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]})})()</script></body>
 </html>
