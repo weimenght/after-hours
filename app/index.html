@@ -2583,11 +2583,9 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var seg = el("div", "seg"); L.forEach(function (code, i) { var b = el("button", "", esc(LN[i])); b.type = "button"; b.setAttribute("aria-pressed", i === li() ? "true" : "false"); b.onclick = function () { setLang(i); }; seg.appendChild(b); }); lg.appendChild(seg); l.appendChild(lg);
     l.appendChild(srow(w("sSnd1"), w("sSnd1H"), tog(sndOn() || get("fb_sound") !== "0", function (v) { put("ah_app_snd", v ? null : "0"); put("fb_sound", v ? "1" : "0"); if (v) { ac(); setTimeout(function () { sfx("text"); }, 60); } else ringOff(); }))); c.appendChild(l);
     acct(c);   // the account sits right under You, where people look for it (the owner, Nov 7)
-    c.appendChild(el("p", "sec", esc(w("sLook")))); l = el("div", "list"); l.appendChild(lookPick()); c.appendChild(l);
     c.appendChild(el("p", "sec", esc(w("sHome")))); l = el("div", "list");
     l.appendChild(srow(w("sMoment"), w("sMomentT"), tog(momentMode(), function (v) { put("ah_app_moment", v ? "1" : "0"); })));
     var dt = el("details", "wgd"), sm = el("summary", "row", '<span class="tx"><b>' + esc(w("wgT")) + "</b><small>" + esc(w("wgHint")) + '</small></span><span class="chev">›</span>'), wl = el("div"); dt.appendChild(sm); dt.appendChild(wl); wgRows(wl); dt.open = !!RENDER.set.wg; dt.ontoggle = function () { RENDER.set.wg = dt.open; }; l.appendChild(dt);
-    var rs = el("button", "row", '<span class="tx"><b class="lnk">' + esc(w("sRestore")) + "</b><small>" + esc(w("eHint")) + "</small></span>"); rs.type = "button"; rs.onclick = function () { restoreLayout(); RENDER.set(); toast(w("sRestored")); }; l.appendChild(rs);
     var ib = null; if (installEv) { ib = el("button", "pill", esc(w("sInstallGo"))); ib.type = "button"; ib.style.cssText = "padding:9px 14px;min-height:0;font-size:13px"; ib.onclick = function () { installEv.prompt(); installEv = null; ib.remove(); }; }
     if (ib) l.appendChild(srow(w("sInstall"), w("sInstallHint"), ib)); c.appendChild(l);
     c.appendChild(el("p", "sec", esc(w("sPrivacy")))); l = el("div", "list");
