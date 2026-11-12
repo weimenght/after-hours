@@ -18,7 +18,7 @@ window.PB_W = {
   on: ["on", "开", "開", "sí", "sí"], off: ["off", "关", "關", "no", "no"],
   lang: ["Language", "语言", "語言", "Idioma", "Idioma"],
   privacy: ["Your privacy", "你的隐私", "你的隱私", "Tu privacidad", "La teva privadesa"],
-  h1: ["Help everyone's things find their way home.", "帮大家的东西各回各家。", "幫大家的東西各回各家。", "Ayuda a que las cosas de todos vuelvan a su sitio.", "Ajuda que les coses de tothom tornin al seu lloc."],
+  h1: ["Help everyone's things find their way home. Tap anyone in the room.", "帮大家的东西各回各家。点房间里的谁都行。", "幫大家的東西各回各家。點房間裡的誰都行。", "Ayuda a que las cosas de todos vuelvan a su sitio. Toca a quien quieras.", "Ajuda que les coses de tothom tornin al seu lloc. Toca qui vulguis."],
   h2: ["Pick one real spot, and one song.", "挑一个真实的角落，再挑一首歌。", "挑一個真實的角落，再挑一首歌。", "Elige un rincón de verdad y una canción.", "Tria un racó de debò i una cançó."],
   h3: ["Tidy it, with someone if you can. Then put the phone down.", "去收拾它，最好叫上一个人。然后放下手机。", "去收拾它，最好叫上一個人。然後放下手機。", "Ordénalo, con alguien si puedes. Luego deja el móvil.", "Endreça'l, amb algú si pots. Després deixa el mòbil."],
   gotIt: ["Got it", "知道了", "知道了", "Entendido", "Entesos"],
@@ -26,7 +26,7 @@ window.PB_W = {
   /* home: whoever is up says hello (everyone keeps the town's hours) */
   homeLines: {
     popo: ["Aiya, so messy today! Never mind lah. One thing at a time, everything go home.", "哎呀，今天好乱啊！没关系啦。一样一样来，东西都回家。", "哎呀，今日好亂呀！唔緊要啦。一樣一樣嚟，啲嘢全部歸位。", "¡Aiya, hoy muy desorden! No pasa nada. Una cosa cada vez, todo vuelve a casa.", "Aiya, quin desordre avui! No passa res. Una cosa cada vegada, i tot torna a casa."],
-    wei: ["*steps over a sock* Nine things out of place. Give me a hand?", "*跨过一只袜子* 九样东西不在原位。搭把手？", "*跨過一隻襪子* 九樣東西不在原位。搭把手？", "*pasa por encima de un calcetín* Nueve cosas fuera de su sitio. ¿Me echas una mano?", "*passa per sobre d'un mitjó* Nou coses fora de lloc. Em dones un cop de mà?"],
+    wei: ["*steps over something* A few things out of place. Give me a hand?", "*跨过地上的什么东西* 好几样东西不在原位。搭把手？", "*跨過地上的什麼東西* 好幾樣東西不在原位。搭把手？", "*pasa por encima de algo* Unas cuantas cosas fuera de su sitio. ¿Me echas una mano?", "*passa per sobre d'alguna cosa* Unes quantes coses fora de lloc. Em dones un cop de mà?"],
     mei: ["Okay, nobody panic. It's basically a game. A very small, very boring game. Kidding.", "好，大家别慌。这基本上是个游戏。一个很小、很无聊的游戏。开玩笑的。", "好，大家別慌。這基本上是個遊戲。一個很小、很無聊的遊戲。開玩笑的。", "Vale, que nadie se agobie. Es básicamente un juego. Uno muy pequeño y muy aburrido. Es broma.", "D'acord, que ningú s'estressi. És bàsicament un joc. Un de molt petit i molt avorrit. És broma."],
     cats: ["*Miso sits on the one clean cushion and stares at you*", "*Miso 坐在唯一干净的那个靠垫上，盯着你看*", "*Miso 坐在唯一乾淨的那個靠墊上，盯著你看*", "*Miso se sienta en el único cojín ordenado y te mira fijamente*", "*En Miso s'asseu a l'únic coixí endreçat i et mira fixament*"],
     note: ["Late already. Tidy tomorrow lah. Go sleep!", "这么晚了。明天再收拾啦。快去睡！", "咁夜喇。聽日先執啦。快啲去瞓！", "Ya muy tarde. Ordenas mañana. ¡A dormir!", "Ja és molt tard. Endreça demà. Cap a dormir!"]
@@ -34,7 +34,7 @@ window.PB_W = {
 
   /* the room */
   hint: ["Tap a thing to send it home.", "点一样东西，送它回家。", "點一樣東西，送它回家。", "Toca una cosa para mandarla a su sitio.", "Toca una cosa per enviar-la al seu lloc."],
-  roomA: ["The living room after a long day: things scattered on the floor, a sock on the lamp. Popo in her armchair, Wei and Mei on the sofa, Miso on top of the bookshelf, Yuzu asleep in the laundry basket, Mantou by his bed.", "忙了一天后的客厅：东西散了一地，台灯上挂着一只袜子。婆婆坐在扶手椅上，Wei 和 Mei 坐在沙发上，Miso 趴在书架顶上，Yuzu 在脏衣篮里睡着了，馒头站在他的窝旁边。", "忙了一天後的客廳：東西散了一地，檯燈上掛著一隻襪子。婆婆坐在扶手椅上，Wei 和 Mei 坐在沙發上，Miso 趴在書架頂上，Yuzu 在髒衣籃裡睡著了，饅頭站在他的窩旁邊。", "El salón después de un día largo: cosas por el suelo y un calcetín en la lámpara. Popo en su sillón, Wei y Mei en el sofá, Miso encima de la estantería, Yuzu dormida en el cesto de la ropa y Mantou junto a su cama.", "La sala després d'un dia llarg: coses per terra i un mitjó al llum. La Popo a la butaca, en Wei i la Mei al sofà, en Miso dalt de la prestatgeria, la Yuzu adormida a la cistella de la roba i en Mantou al costat del seu llit."],
+  roomA: ["The living room after a long day, things scattered about. Popo in her armchair, Wei and Mei on the sofa, Miso on top of the bookshelf, Yuzu asleep in the laundry basket, Mantou by his bed. Tap anyone and they'll say something.", "忙了一天后的客厅，东西散了一地。婆婆坐在扶手椅上，Wei 和 Mei 坐在沙发上，Miso 趴在书架顶上，Yuzu 在脏衣篮里睡着了，馒头在他的窝旁边。点谁，谁就会说话。", "忙了一天後的客廳，東西散了一地。婆婆坐在扶手椅上，Wei 和 Mei 坐在沙發上，Miso 趴在書架頂上，Yuzu 在髒衣籃裡睡著了，饅頭在他的窩旁邊。點誰，誰就會說話。", "El salón después de un día largo, con cosas por todas partes. Popo en su sillón, Wei y Mei en el sofá, Miso encima de la estantería, Yuzu dormida en el cesto de la ropa y Mantou junto a su cama. Toca a cualquiera y dirá algo.", "La sala després d'un dia llarg, amb coses per tot arreu. La Popo a la butaca, en Wei i la Mei al sofà, en Miso dalt de la prestatgeria, la Yuzu adormida a la cistella de la roba i en Mantou al costat del seu llit. Toca qualsevol i dirà alguna cosa."],
   sends: ["{x} → {p}", "{x} → {p}", "{x} → {p}", "{x} → {p}", "{x} → {p}"],
   asleepLine: ["*fast asleep* It goes back anyway, quietly.", "*睡得正香* 东西还是悄悄放回去了。", "*睡得正香* 東西還是悄悄放回去了。", "*duerme a pierna suelta* Vuelve a su sitio igual, sin hacer ruido.", "*dorm com un tronc* Torna al seu lloc igualment, sense fer soroll."],
   ITEMS: [
@@ -47,7 +47,7 @@ window.PB_W = {
     { id: "record", who: "wei", n: ["Wei's record", "Wei 的唱片", "Wei 的唱片", "el disco de Wei", "el disc d'en Wei"], p: ["the middle shelf", "书架中间那层", "書架中間那層", "el estante del medio", "el prestatge del mig"],
       l: ["*slides it in next to the jazz* That's its spot. Always has been.", "*把唱片插回爵士乐旁边* 它就该在这儿，一直都是。", "*把唱片插回爵士樂旁邊* 它就該在這兒，一直都是。", "*lo mete junto al jazz* Ese es su sitio. Siempre lo ha sido.", "*el posa al costat del jazz* Aquest és el seu lloc. Sempre ho ha estat."] },
     { id: "sock", who: "wei", n: ["Wei's sock", "Wei 的袜子", "Wei 的襪子", "el calcetín de Wei", "el mitjó d'en Wei"], p: ["the laundry basket", "脏衣篮", "髒衣籃", "el cesto de la ropa", "la cistella de la roba"],
-      l: ["One sock. On the lamp. *looks at Mantou* The other one's a mystery.", "一只袜子，挂在台灯上。*看了看馒头* 另一只是个谜。", "一隻襪子，掛在檯燈上。*看了看饅頭* 另一隻是個謎。", "Un calcetín. En la lámpara. *mira a Mantou* El otro es un misterio.", "Un mitjó. Al llum. *mira en Mantou* L'altre és un misteri."] },
+      l: ["One sock. *looks at Mantou* The other one's a mystery.", "一只袜子。*看了看馒头* 另一只是个谜。", "一隻襪子。*看了看饅頭* 另一隻是個謎。", "Un calcetín. *mira a Mantou* El otro es un misterio.", "Un mitjó. *mira en Mantou* L'altre és un misteri."] },
     { id: "book", who: "mei", n: ["Mei's book", "Mei 的书", "Mei 的書", "el libro de Mei", "el llibre de la Mei"], p: ["the top shelf", "书架最上层", "書架最上層", "el estante de arriba", "el prestatge de dalt"],
       l: ["My book! I was literally at the good part.", "我的书！我刚好看到最精彩的地方。", "我的書！我剛好看到最精彩的地方。", "¡Mi libro! Estaba literalmente en la mejor parte.", "El meu llibre! Estava literalment a la millor part."] },
     { id: "scarf", who: "mei", n: ["Mei's scarf", "Mei 的围巾", "Mei 的圍巾", "la bufanda de Mei", "la bufanda de la Mei"], p: ["the coat hook", "挂衣钩", "掛衣鉤", "el perchero", "el penjador"],
@@ -55,8 +55,120 @@ window.PB_W = {
     { id: "ball", who: "mantou", n: ["Mantou's ball", "馒头的球", "饅頭的球", "la pelota de Mantou", "la pilota d'en Mantou"], p: ["his bed", "他的窝", "他的窩", "su cama", "el seu llit"],
       l: ["*drops into his bed with the ball, tail going like a fan*", "*叼着球趴进窝里，尾巴摇得像扇子*", "*叼著球趴進窩裡，尾巴搖得像扇子*", "*se echa en su cama con la pelota, moviendo la cola como un abanico*", "*s'estira al llit amb la pilota, movent la cua com un ventall*"] },
     { id: "mouse", who: "miso", n: ["Miso's toy mouse", "Miso 的玩具老鼠", "Miso 的玩具老鼠", "el ratón de juguete de Miso", "el ratolí de joguina d'en Miso"], p: ["his basket", "他的猫篮", "他的貓籃", "su cesta", "la seva cistella"],
-      l: ["*pretends not to care. Checks it's there anyway.*", "*假装不在乎，还是偷偷看了一眼在不在*", "*假裝不在乎，還是偷偷看了一眼在不在*", "*finge que le da igual. Igualmente comprueba que está ahí.*", "*fa veure que no li importa. Igualment comprova que hi és.*"] }
+      l: ["*pretends not to care. Checks it's there anyway.*", "*假装不在乎，还是偷偷看了一眼在不在*", "*假裝不在乎，還是偷偷看了一眼在不在*", "*finge que le da igual. Igualmente comprueba que está ahí.*", "*fa veure que no li importa. Igualment comprova que hi és.*"] },
+    { id: "slipper", who: "popo", n: ["Popo's slipper", "婆婆的拖鞋", "婆婆的拖鞋", "la zapatilla de Popo", "la sabatilla de la Popo"], p: ["her armchair", "她的扶手椅", "她的扶手椅", "su sillón", "la seva butaca"],
+      l: ["One slipper only? The other one Mantou take already.", "只有一只？另一只早被馒头叼走啦。", "得一隻？另一隻俾饅頭咬咗走啦。", "¿Solo una? La otra ya se lleva Mantou.", "Només una? L'altra ja se la va endur en Mantou."] },
+    { id: "teacup", who: "popo", n: ["Popo's teacup", "婆婆的茶杯", "婆婆的茶杯", "la taza de Popo", "la tassa de la Popo"], p: ["the windowsill", "窗台", "窗台", "el alféizar", "l'ampit"],
+      l: ["Tea cold already. Never mind, I drink anyway.", "茶都凉了。没关系，我照喝。", "啲茶凍晒。唔緊要，照飲。", "Té ya frío. No pasa nada, yo bebo igual.", "El te ja s'ha refredat. No passa res, me'l beuré igualment."] },
+    { id: "notebook", who: "wei", n: ["Wei's notebook", "Wei 的笔记本", "Wei 的筆記本", "la libreta de Wei", "la llibreta d'en Wei"], p: ["the side table", "小茶几", "小茶几", "la mesita", "la tauleta"],
+      l: ["*tucks it by the lamp* Half my recipes are in there. The other half are wrong.", "*把它放回台灯旁边* 我一半的配方都在里面。另一半是错的。", "*把它放回檯燈旁邊* 我一半的配方都在裡面。另一半是錯的。", "*la deja junto a la lámpara* La mitad de mis recetas están ahí. La otra mitad está mal.", "*la deixa al costat del llum* La meitat de les meves receptes hi són. L'altra meitat estan malament."] },
+    { id: "polish", who: "mei", n: ["Mei's nail polish", "Mei 的指甲油", "Mei 的指甲油", "el pintaúñas de Mei", "el pintaungles de la Mei"], p: ["the windowsill", "窗台", "窗台", "el alféizar", "l'ampit"],
+      l: ["Glitter, obviously. That one's my best one.", "亮片的，当然。那瓶是我最好的。", "亮片的，當然。那瓶是我最好的。", "Con purpurina, obvio. Es mi favorito.", "Amb purpurina, és clar. És el meu preferit."] },
+    { id: "phones", who: "mei", n: ["Mei's headphones", "Mei 的耳机", "Mei 的耳機", "los cascos de Mei", "els auriculars de la Mei"], p: ["the arm of the sofa", "沙发扶手", "沙發扶手", "el brazo del sofá", "el braç del sofà"],
+      l: ["I literally looked everywhere. Except the floor. Fair.", "我真的到处都找过了。除了地上。好吧。", "我真的到處都找過了。除了地上。好吧。", "Los busqué literalmente por todas partes. Menos en el suelo. Justo.", "Els he buscat literalment per tot arreu. Menys a terra. Just."] },
+    { id: "lead", who: "mantou", n: ["Mantou's lead", "馒头的牵绳", "饅頭的牽繩", "la correa de Mantou", "la corretja d'en Mantou"], p: ["the door handle", "门把手", "門把手", "el pomo de la puerta", "el pom de la porta"],
+      l: ["*stares at the lead on the door. Then at you. Then at the lead.*", "*盯着门上的牵绳。再盯着你。再盯着牵绳。*", "*盯著門上的牽繩。再盯著你。再盯著牽繩。*", "*mira la correa en la puerta. Luego a ti. Luego a la correa.*", "*mira la corretja de la porta. Després a tu. Després a la corretja.*"] },
+    { id: "bone", who: "mantou", n: ["Mantou's chew bone", "馒头的磨牙骨头", "饅頭的磨牙骨頭", "el hueso de Mantou", "l'os d'en Mantou"], p: ["his bed", "他的窝", "他的窩", "su cama", "el seu llit"],
+      l: ["*sniffs it to make sure it's still his, then lies on it*", "*闻了闻确认还是自己的，然后趴在上面*", "*聞了聞確認還是自己的，然後趴在上面*", "*lo huele para asegurarse de que sigue siendo suyo y se tumba encima*", "*l'ensuma per assegurar-se que encara és seu i s'hi estira a sobre*"] },
+    { id: "feather", who: "miso", n: ["Miso's feather toy", "Miso 的逗猫羽毛", "Miso 的逗貓羽毛", "la pluma de juguete de Miso", "la ploma de joguina d'en Miso"], p: ["his basket", "他的猫篮", "他的貓籃", "su cesta", "la seva cistella"],
+      l: ["*attacks it once, to be sure it's dead*", "*扑上去咬了一口，确认它已经死了*", "*撲上去咬了一口，確認它已經死了*", "*la ataca una vez, para asegurarse de que está muerta*", "*l'ataca un cop, per assegurar-se que és morta*"] },
+    { id: "fish", who: "yuzu", n: ["Yuzu's toy fish", "Yuzu 的玩具鱼", "Yuzu 的玩具魚", "el pez de juguete de Yuzu", "el peix de joguina de la Yuzu"], p: ["the cats' basket", "猫篮", "貓籃", "la cesta de los gatos", "la cistella dels gats"],
+      l: ["*a paw comes out of the laundry, pats the fish once, goes back in*", "*一只爪子从脏衣篮里伸出来，拍了拍鱼，又缩回去了*", "*一隻爪子從髒衣籃裡伸出來，拍了拍魚，又縮回去了*", "*una pata sale del cesto de la ropa, da una palmadita al pez y vuelve a entrar*", "*una pota surt de la cistella de la roba, toca el peix i torna a entrar*"] }
   ],
+
+  /* tap anyone in the room: a: awake, z: asleep (everyone keeps the town's hours); Yuzu is always asleep in the laundry */
+  TAP: {
+    popo: { a: [
+      ["Eat already or not? Eat first, tidy after lah.", "吃饭了没有？先吃饭，再收拾啦。", "食咗飯未呀？食完先執啦。", "¿Ya comes o no? Primero comer, después ordenar.", "Ja has menjat? Primer menjar, després endreçar."],
+      ["Aiya, don't throw away! Maybe useful one.", "哎呀，别扔！说不定有用的嘛。", "哎呀，咪掉呀！可能有用㗎。", "¡Aiya, no tiras! Quizás útil.", "Aiya, no ho llencis! Potser serà útil."],
+      ["Josep always say: everything got a drawer. Then he lose the drawer.", "Josep 以前老说：每样东西都有个抽屉。然后他把抽屉弄丢了。", "Josep 以前成日話：樣樣嘢都有個櫃桶。跟住佢連櫃桶都唔見埋。", "Josep siempre dice: todo tiene un cajón. Luego él pierde el cajón.", "En Josep sempre deia: tot té un calaix. Després perdia el calaix."],
+      ["Wear socks! Floor cold.", "穿袜子！地上凉。", "着襪呀！地下凍。", "¡Ponte calcetines! Suelo frío.", "Posa't mitjons! El terra és fred."]
+    ], z: [
+      ["*asleep in the armchair, glasses on her head*", "*在扶手椅上睡着了，眼镜还架在头上*", "*在扶手椅上睡著了，眼鏡還架在頭上*", "*dormida en el sillón, con las gafas en la cabeza*", "*adormida a la butaca, amb les ulleres al cap*"],
+      ["*snores, very politely*", "*很有礼貌地打着呼*", "*很有禮貌地打著呼*", "*ronca, muy educadamente*", "*ronca, molt educadament*"]
+    ] },
+    wei: { a: [
+      ["*polishes a glass that's already clean* Habit.", "*擦一个本来就干净的杯子* 习惯了。", "*擦一個本來就乾淨的杯子* 習慣了。", "*frota un vaso que ya está limpio* Costumbre.", "*frega un got que ja és net* Costum."],
+      ["Whoever tidies, I make the drinks. That's the deal.", "谁收拾，我就给谁调饮料。说好了。", "誰收拾，我就給誰調飲料。說好了。", "Quien ordena, yo le preparo algo de beber. Ese es el trato.", "Qui endreci, jo li preparo una beguda. Aquest és el tracte."],
+      ["*finds a coaster in his pocket and slides it under your cup*", "*从口袋里摸出一个杯垫，垫在你的杯子下面*", "*從口袋裡摸出一個杯墊，墊在你的杯子下面*", "*encuentra un posavasos en el bolsillo y lo pone bajo tu taza*", "*troba un sotagot a la butxaca i te'l posa sota la tassa*"],
+      ["Rule of the bar: if you pick it up, you put it back. Same here.", "酒吧的规矩：拿起来的，就放回去。这里也一样。", "酒吧的規矩：拿起來的，就放回去。這裡也一樣。", "Regla del bar: si lo coges, lo devuelves. Aquí igual.", "Regla del bar: si ho agafes, ho tornes. Aquí igual."]
+    ], z: [
+      ["*asleep sitting up, still holding a cloth*", "*坐着睡着了，手里还攥着抹布*", "*坐著睡著了，手裡還攥著抹布*", "*dormido sentado, aún con el trapo en la mano*", "*adormit assegut, encara amb el drap a la mà*"],
+      ["*mumbles a cocktail recipe in his sleep*", "*梦里还在念一个鸡尾酒配方*", "*夢裡還在念一個雞尾酒配方*", "*murmura una receta de cóctel en sueños*", "*murmura una recepta de còctel en somnis*"]
+    ] },
+    mei: { a: [
+      ["I'm not messy. I'm a visual organiser.", "我不乱。我只是视觉型整理者。", "我不亂。我只是視覺型整理者。", "No soy desordenada. Soy organizadora visual.", "No soc desordenada. Soc organitzadora visual."],
+      ["If I tidy, I pick the music. Okay, I'm picking the music.", "我收拾的话，音乐我来挑。好，我来挑了。", "我收拾的話，音樂我來挑。好，我來挑了。", "Si ordeno, elijo la música. Vale, la elijo yo.", "Si endreço, tria la música jo. D'acord, la trio jo."],
+      ["In New York my room was the size of this sofa. Tidying took one song.", "在纽约，我的房间就这张沙发那么大。收拾一首歌就够了。", "在紐約，我的房間就這張沙發那麼大。收拾一首歌就夠了。", "En Nueva York mi cuarto era del tamaño de este sofá. Ordenarlo duraba una canción.", "A Nova York la meva habitació era de la mida d'aquest sofà. Endreçar-la durava una cançó."],
+      ["*pretends to tidy, actually texting* I'm multitasking.", "*假装在收拾，其实在发消息* 我在一心二用。", "*假裝在收拾，其實在發訊息* 我在一心二用。", "*finge ordenar, en realidad escribe mensajes* Estoy haciendo dos cosas a la vez.", "*fa veure que endreça, en realitat escriu missatges* Faig dues coses alhora."]
+    ], z: [
+      ["*asleep, phone still glowing on her chest*", "*睡着了，手机还在胸口亮着*", "*睡著了，手機還在胸口亮著*", "*dormida, con el móvil aún encendido en el pecho*", "*adormida, amb el mòbil encara encès al pit*"],
+      ["*without opening her eyes* Five more minutes.", "*眼睛都没睁* 再五分钟。", "*眼睛都沒睜* 再五分鐘。", "*sin abrir los ojos* Cinco minutos más.", "*sense obrir els ulls* Cinc minuts més."]
+    ] },
+    miso: { a: [
+      ["*knocks a pen off the shelf, keeps looking at you*", "*把一支笔从书架上拍下去，一直盯着你*", "*把一支筆從書架上拍下去，一直盯著你*", "*tira un boli de la estantería sin dejar de mirarte*", "*fa caure un bolígraf de la prestatgeria sense deixar de mirar-te*"],
+      ["*yawns, showing every tooth*", "*打了个哈欠，露出所有牙齿*", "*打了個哈欠，露出所有牙齒*", "*bosteza enseñando todos los dientes*", "*bada i ensenya totes les dents*"],
+      ["*slow blink. You've been approved.*", "*慢慢眨了一下眼。你通过了。*", "*慢慢眨了一下眼。你通過了。*", "*parpadeo lento. Aprobado.*", "*parpelleig lent. Aprovat.*"],
+      ["*watches you tidy from up high, like a foreman*", "*在高处看着你收拾，像个工头*", "*在高處看著你收拾，像個工頭*", "*te mira ordenar desde arriba, como un capataz*", "*et mira endreçar des de dalt, com un capatàs*"]
+    ], z: [
+      ["*a black loaf on the top shelf. Breathing.*", "*书架顶上的一条黑面包。在呼吸。*", "*書架頂上的一條黑麵包。在呼吸。*", "*una barra de pan negra en lo alto de la estantería. Respira.*", "*una barra de pa negra dalt de la prestatgeria. Respira.*"]
+    ] },
+    yuzu: { a: [
+      ["*purrs from inside the warm laundry*", "*从暖暖的脏衣篮里传来呼噜声*", "*從暖暖的髒衣籃裡傳來呼嚕聲*", "*ronronea desde dentro de la ropa calentita*", "*ronroneja des de dins de la roba calenteta*"],
+      ["*one ear turns towards you. The rest of her stays asleep.*", "*一只耳朵转向你，其余部分继续睡*", "*一隻耳朵轉向你，其餘部分繼續睡*", "*una oreja se gira hacia ti. El resto sigue dormido.*", "*una orella es gira cap a tu. La resta continua dormint.*"],
+      ["*stretches one paw out of the basket, then pulls it back in*", "*从篮子里伸出一只爪子，又缩了回去*", "*從籃子裡伸出一隻爪子，又縮了回去*", "*saca una pata del cesto y la vuelve a meter*", "*treu una pota de la cistella i la torna a ficar*"]
+    ], out: [
+      ["*rolls over on the rug, belly up. It's a trap.*", "*在地毯上翻了个身，肚皮朝上。这是陷阱。*", "*在地毯上翻了個身，肚皮朝上。這是陷阱。*", "*se da la vuelta en la alfombra, panza arriba. Es una trampa.*", "*es gira a la catifa, panxa enlaire. És una trampa.*"]
+    ] },
+    mantou: { a: [
+      ["*brings you a sock. Not his. Very proud.*", "*叼来一只袜子。不是他的。非常骄傲。*", "*叼來一隻襪子。不是他的。非常驕傲。*", "*te trae un calcetín. No es suyo. Muy orgulloso.*", "*et porta un mitjó. No és seu. Molt orgullós.*"],
+      ["*wags so hard his whole back half wags*", "*尾巴摇得太用力，整个后半身都在摇*", "*尾巴搖得太用力，整個後半身都在搖*", "*mueve la cola tan fuerte que se le mueve media espalda*", "*mou la cua tan fort que se li mou mig cos*"],
+      ["*Woof!* (He means: is it walk time?)", "*汪！*（意思是：是不是该散步了？）", "*汪！*（意思是：是不是該散步了？）", "*¡Guau!* (Quiere decir: ¿es hora de pasear?)", "*Bup!* (Vol dir: és hora de passejar?)"],
+      ["*sits on the thing you were about to pick up*", "*一屁股坐在你正要捡的东西上*", "*一屁股坐在你正要撿的東西上*", "*se sienta encima de lo que ibas a recoger*", "*s'asseu a sobre del que anaves a recollir*"]
+    ], z: [
+      ["*asleep in his bed, paws running after something*", "*在窝里睡着了，爪子还在梦里追着什么跑*", "*在窩裡睡著了，爪子還在夢裡追著什麼跑*", "*dormido en su cama, las patas corren detrás de algo*", "*adormit al llit, les potes corren darrere d'alguna cosa*"],
+      ["*one eye opens, sees it isn't food, closes*", "*睁开一只眼，看见不是吃的，又闭上了*", "*睜開一隻眼，看見不是吃的，又閉上了*", "*abre un ojo, ve que no es comida, lo cierra*", "*obre un ull, veu que no és menjar, el tanca*"]
+    ] }
+  },
+  /* tap the window: what's out there today (the town's weather for this visit) */
+  WX: {
+    clear: { popo: ["Clear sky. Open window lah, let the room breathe a bit.", "天很清。开窗啦，让房间透透气。", "天好清。開窗啦，等間屋透下氣。", "Cielo limpio. Abre ventana, la casa respira un poco.", "Cel clar. Obre la finestra, que la casa respiri una mica."],
+      wei: ["*opens the window a crack* Good air for tidying.", "*把窗推开一条缝* 收拾正好透透气。", "*把窗推開一條縫* 收拾正好透透氣。", "*abre la ventana un poco* Buen aire para ordenar.", "*obre una mica la finestra* Bon aire per endreçar."],
+      cats: ["*Miso stares out of the window at nothing. Very important nothing.*", "*Miso 盯着窗外的空气。非常重要的空气。*", "*Miso 盯著窗外的空氣。非常重要的空氣。*", "*Miso mira por la ventana a la nada. Una nada muy importante.*", "*En Miso mira per la finestra el no-res. Un no-res molt important.*"] },
+    rain: { popo: ["Raining. Good. Nobody go out, everybody tidy.", "下雨了。好。谁都别出去，大家一起收拾。", "落雨喇。好。冇人出街，個個執屋。", "Llueve. Bien. Nadie sale, todos ordenan.", "Plou. Bé. Ningú surt, tothom endreça."],
+      wei: ["*puts a towel by the door for wet shoes*", "*在门口铺了条毛巾给湿鞋子*", "*在門口鋪了條毛巾給濕鞋子*", "*pone una toalla junto a la puerta para los zapatos mojados*", "*posa una tovallola a la porta per a les sabates mullades*"],
+      cats: ["*both cats watch the drops race down the glass*", "*两只猫盯着雨滴在玻璃上赛跑*", "*兩隻貓盯著雨滴在玻璃上賽跑*", "*los dos gatos miran las gotas correr por el cristal*", "*els dos gats miren les gotes córrer pel vidre*"] },
+    fog: { popo: ["So foggy. Like Hong Kong in spring. Wear jacket.", "雾好大。像香港的春天。穿外套。", "好大霧。好似香港春天咁。着多件衫。", "Mucha niebla. Como Hong Kong en primavera. Ponte chaqueta.", "Quina boira. Com Hong Kong a la primavera. Posa't la jaqueta."],
+      wei: ["*draws a little house in the misted glass*", "*在起雾的玻璃上画了个小房子*", "*在起霧的玻璃上畫了個小房子*", "*dibuja una casita en el cristal empañado*", "*dibuixa una caseta al vidre entelat*"],
+      cats: ["*Yuzu can't see the birds. Yuzu is offended.*", "*Yuzu 看不见鸟了。Yuzu 很不高兴。*", "*Yuzu 看不見鳥了。Yuzu 很不高興。*", "*Yuzu no ve los pájaros. Yuzu está ofendida.*", "*La Yuzu no veu els ocells. La Yuzu està ofesa.*"] },
+    snow: { popo: ["Snow! Wah. First time I see snow, I was forty.", "下雪了！哇。我第一次见雪的时候，都四十岁了。", "落雪喇！嘩。我第一次見雪，已經四十歲。", "¡Nieve! Wah. Primera vez que yo veo nieve, tengo cuarenta.", "Neu! Wah. La primera vegada que vaig veure la neu, tenia quaranta anys."],
+      wei: ["*puts the kettle on without asking anyone*", "*谁也没问，先把水壶烧上了*", "*誰也沒問，先把水壺燒上了*", "*pone el hervidor sin preguntar a nadie*", "*posa el bullidor sense preguntar a ningú*"],
+      cats: ["*Miso taps the glass at every snowflake*", "*每片雪花飘过，Miso 都要拍一下玻璃*", "*每片雪花飄過，Miso 都要拍一下玻璃*", "*Miso da un toque al cristal con cada copo*", "*En Miso toca el vidre a cada floc*"] },
+    storm: { popo: ["Thunder! Close window. Unplug the TV.", "打雷了！关窗。电视插头拔掉。", "行雷喇！閂窗。電視插頭拔咗佢。", "¡Trueno! Cierra ventana. Desenchufa la tele.", "Trons! Tanca la finestra. Desendolla la tele."],
+      wei: ["*lights a candle, just in case*", "*点了一根蜡烛，以防万一*", "*點了一根蠟燭，以防萬一*", "*enciende una vela, por si acaso*", "*encén una espelma, per si de cas*"],
+      cats: ["*both cats are suddenly under the sofa*", "*两只猫突然都钻到沙发底下去了*", "*兩隻貓突然都鑽到沙發底下去了*", "*de repente los dos gatos están bajo el sofá*", "*de cop els dos gats són sota el sofà*"] }
+  },
+  /* what hangs on the wall today: d is what you see; the line is the person's, if they're up */
+  ART: {
+    clock: { w: "popo", t: ["Josep's clock. Always five minutes slow, like him.", "Josep 的钟。总是慢五分钟，跟他一样。", "Josep 個鐘。成日慢五分鐘，同佢一樣。", "El reloj de Josep. Siempre cinco minutos tarde, como él.", "El rellotge d'en Josep. Sempre cinc minuts endarrere, com ell."],
+      d: ["Josep's old clock. Five minutes slow.", "Josep 的旧钟，慢五分钟。", "Josep 的舊鐘，慢五分鐘。", "El viejo reloj de Josep. Cinco minutos tarde.", "El vell rellotge d'en Josep. Cinc minuts endarrere."] },
+    photo: { w: "popo", t: ["My girls. Before they grow tall and fly away lah.", "我的两个女儿。还没长高、还没飞走的时候啦。", "我兩個女。未大個、未飛走嗰陣啦。", "Mis niñas. Antes de crecer y volar lejos.", "Les meves nenes. Abans de fer-se grans i marxar volant."],
+      d: ["A photo: Popo, Josep and two small girls on a pier.", "一张照片：婆婆、Josep 和两个小女孩站在码头上。", "一張照片：婆婆、Josep 和兩個小女孩站在碼頭上。", "Una foto: Popo, Josep y dos niñas en un muelle.", "Una foto: la Popo, en Josep i dues nenes en un moll."] },
+    hills: { w: "mei", t: ["Popo painted that. Don't tell her I said it's good.", "那是婆婆画的。别告诉她我说画得好。", "那是婆婆畫的。別告訴她我說畫得好。", "Eso lo pintó Popo. No le digas que dije que es bonito.", "Això ho va pintar la Popo. No li diguis que he dit que és bonic."],
+      d: ["A small painting of the hills behind the cabin.", "一幅小画，画的是小屋后面的山。", "一幅小畫，畫的是小屋後面的山。", "Un cuadrito de las colinas detrás de la cabaña.", "Un quadret dels turons de darrere la cabana."] },
+    calendar: { w: "wei", t: ["Mei circled her birthday in three colours. Subtle.", "Mei 用三种颜色圈了她的生日。很低调。", "Mei 用三種顏色圈了她的生日。很低調。", "Mei marcó su cumpleaños en tres colores. Muy discreta.", "La Mei va encerclar el seu aniversari en tres colors. Molt discreta."],
+      d: ["A calendar with one birthday circled three times.", "一本日历，有个生日被圈了三遍。", "一本日曆，有個生日被圈了三遍。", "Un calendario con un cumpleaños rodeado tres veces.", "Un calendari amb un aniversari encerclat tres vegades."] },
+    mirror: { w: "mei", t: ["*checks her hair in the mirror* Okay. Now we can tidy.", "*对着镜子看了看头发* 好了。现在可以收拾了。", "*對著鏡子看了看頭髮* 好了。現在可以收拾了。", "*se mira el pelo en el espejo* Vale. Ahora podemos ordenar.", "*es mira els cabells al mirall* D'acord. Ara podem endreçar."],
+      d: ["A round mirror. The room looks tidier backwards.", "一面圆镜子。房间在镜子里看起来整齐一点。", "一面圓鏡子。房間在鏡子裡看起來整齊一點。", "Un espejo redondo. Al revés, la sala parece más ordenada.", "Un mirall rodó. Del revés, la sala sembla més endreçada."] }
+  },
+  WXD: {   /* when everyone's asleep (2–5) the window is only what you see */
+    clear: ["Stars over the rooftops. Everyone's asleep.", "屋顶上有星星。大家都睡着了。", "屋頂上有星星。大家都睡著了。", "Estrellas sobre los tejados. Todos duermen.", "Estrelles sobre les teulades. Tothom dorm."],
+    rain: ["Rain on the glass. Everyone's asleep.", "雨打在玻璃上。大家都睡着了。", "雨打在玻璃上。大家都睡著了。", "Lluvia en el cristal. Todos duermen.", "Pluja al vidre. Tothom dorm."],
+    fog: ["Fog against the glass. Everyone's asleep.", "雾贴在玻璃上。大家都睡着了。", "霧貼在玻璃上。大家都睡著了。", "Niebla contra el cristal. Todos duermen.", "Boira contra el vidre. Tothom dorm."],
+    snow: ["Snow falling past the window. Everyone's asleep.", "雪从窗外飘过。大家都睡着了。", "雪從窗外飄過。大家都睡著了。", "La nieve cae tras la ventana. Todos duermen.", "La neu cau darrere la finestra. Tothom dorm."],
+    storm: ["Thunder, far off. Somehow everyone's still asleep.", "远处在打雷。不知怎么的，大家还睡着。", "遠處在打雷。不知怎麼的，大家還睡著。", "Truenos a lo lejos. Y aun así todos duermen.", "Trons de lluny. I tot i així tothom dorm."]
+  },
+  windowA: ["The window", "窗户", "窗戶", "La ventana", "La finestra"],
   mischief: {
     miso: ["*Miso knocks {x} off again. Of course.*", "*Miso 又把{x}拍了下来。当然了。*", "*Miso 又把{x}拍了下來。當然了。*", "*Miso vuelve a tirar {x}. Cómo no.*", "*En Miso torna a tirar {x}. Com no.*"],
     mantou: ["*Mantou trots off with {x} again.*", "*馒头又叼着{x}跑了。*", "*饅頭又叼著{x}跑了。*", "*Mantou se vuelve a llevar {x} al trote.*", "*En Mantou se'n torna a endur {x} trotant.*"]

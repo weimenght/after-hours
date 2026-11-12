@@ -79,8 +79,12 @@ body {
 .item:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
 .locked .item { pointer-events: none; }
 @keyframes wob { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
-.hot { all: unset; position: absolute; z-index: 4; cursor: default; -webkit-tap-highlight-color: transparent; }
-.hot.ready { cursor: pointer; animation: glow 1s steps(2) infinite; }
+.hot { all: unset; position: absolute; z-index: 2; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.hot:focus-visible { outline: 2px solid var(--amber); outline-offset: 1px; }
+.hot.ready { z-index: 4; }
+.say.bare { grid-template-columns: 1fr; }
+.say .who:empty { display: none; }
+.hot.ready { animation: glow 1s steps(2) infinite; }
 .hot.ready:focus-visible { outline: 2px solid var(--amber); }
 @keyframes glow { from { box-shadow: 0 0 0 2px rgba(242,163,58,.0); } to { box-shadow: 0 0 0 3px rgba(242,163,58,.9); } }
 .puff { position: absolute; z-index: 6; font-family: var(--px); font-size: 9px; color: #c8303a; pointer-events: none; text-shadow: 1px 1px 0 #fff; animation: puff 1s steps(6) forwards; }
@@ -429,15 +433,15 @@ function face(who) {
 }
 function say(who, line) {
   var box = $("say"); if (!who || !line) { box.hidden = true; return; }
-  box.hidden = false; box.textContent = "";
-  box.appendChild(face(who === "miso" || who === "yuzu" ? "cats" : who));
+  box.hidden = false; box.textContent = ""; box.classList.toggle("bare", who === "room");
+  if (who !== "room") box.appendChild(face(who === "miso" || who === "yuzu" ? "cats" : who));
   var d = document.createElement("div"), nm = W.names[who] ? T(W.names[who]) : "";
   d.innerHTML = '<div class="who">' + esc(nm) + "</div><p>" + acts(line) + "</p>";
   box.appendChild(d);
 }
 
 /* ---------- the things, in pixels (one canvas pixel = one room pixel) ---------- */
-var PAL = { k: "#1a1410", j: "#5a8a70", c: "#cfe6de", p: "#e58c9c", P: "#c8607a", n: "#8a5a32", Y: "#e8b53a", r: "#c8303a", w: "#fbf6ee", B: "#4f7fb0", N: "#2f4f7a", y: "#f0c24b", G: "#c8d84a", g: "#8aa83a", M: "#9a948c" };
+var PAL = { k: "#1a1410", j: "#5a8a70", c: "#bfe3dc", C: "#3f8f8a", p: "#e58c9c", P: "#c8607a", n: "#8a5a32", Y: "#e8b53a", r: "#c8303a", w: "#fbf6ee", B: "#4f7fb0", N: "#2f4f7a", y: "#f0c24b", G: "#c8d84a", g: "#8aa83a", M: "#9a948c" };
 var MAP = {
   glasses: [".jj...jj.", "jccj.jccj", "jccjjjccj", ".jj...jj."],
   knitting: ["n.....n.", ".n.pp.n.", "..pPPp..", ".pPppPp.", ".ppPpPp.", "..pppp.."],
@@ -447,41 +451,143 @@ var MAP = {
   book: ["NBBBBBB", "NBByyBB", "NBBBBBB", "NBBBBBB", "NBBBBBB", "Nwwwwww"],
   scarf: ["rrrrrr", "rwrrwr", "rrrrrr", "...rr.", "...wr.", "...rr.", "...rw.", "...r.r"],
   ball: [".GGG.", "GGwGG", "GwGGg", "GGGgg", ".Ggg."],
-  mouse: [".MM....", "MkMM...", "MMMMMpp", "......p"]
+  mouse: [".MM....", "MkMM...", "MMMMMpp", "......p"],
+  slipper: ["..rrrr.", "rrrrrrr", "nnnnnnn"],
+  teacup: ["wwwww.", "wBwBww", "wwwww.", ".www.."],
+  notebook: ["kkkkkk", "kkkkrk", "kkkkrk", "kkkkrk", "kkkkkk"],
+  polish: [".M.", "MMM", "PPP", "PwP", "PPP"],
+  phones: [".kkkkk.", "k.....k", "k.....k", "pp...pp", "pp...pp"],
+  lead: [".rrr.", "r...r", "r...r", ".rrr.", "..r..", "..r..", ".YYY."],
+  bone: ["w.....w", "wwwwwww", "w.....w"],
+  feather: [".c.", "cCc", "cCc", ".C.", ".n.", ".n."],
+  fish: ["..BBB.B", "BkBBBBB", "..BBB.B"]
 };
 function itemCanvas(id) {
   var m = MAP[id], c = document.createElement("canvas"); c.width = m[0].length; c.height = m.length; var g = c.getContext("2d");
   m.forEach(function (row, y) { for (var x = 0; x < row.length; x++) { var col = PAL[row.charAt(x)]; if (col) { g.fillStyle = col; g.fillRect(x, y, 1, 1); } } });
   return c;
 }
-/* where each thing lies today, and where it lives (room pixels, top-left) */
-var POS = {
-  glasses: { a: [102, 118], h: [125, 55] }, knitting: { a: [58, 115], h: [45, 64] }, keys: { a: [34, 95], h: [148, 23] },
-  record: { a: [132, 116], h: [29, 41] }, sock: { a: [126, 44], h: [24, 95] }, book: { a: [86, 119], h: [8, 24] },
-  scarf: { a: [38, 110], h: [153, 33] }, ball: { a: [120, 113], h: [167, 109] }, mouse: { a: [146, 121], h: [13, 80] }
+/* where each thing lives (room pixels, top-left); hi = up high (Miso can knock it off), soft = Mantou can carry it off */
+var HOME = {
+  glasses: [125, 55, "hi"], knitting: [45, 64, "soft"], keys: [148, 23, "hi"], record: [29, 41, "hi"], sock: [24, 95, "soft"], book: [8, 24, "hi"],
+  scarf: [153, 33, "soft"], ball: [167, 109], mouse: [14, 80], slipper: [150, 106, "soft"], teacup: [78, 38, "hi"], notebook: [135, 53, "hi"],
+  polish: [88, 37, "hi"], phones: [40, 81, "soft"], lead: [167, 44, "soft"], bone: [174, 117], feather: [22, 77], fish: [6, 84]
 };
-var MISCHIEF = [
-  { at: 3, pet: "miso", prefer: ["book", "record"], drop: [42, 104] },
-  { at: 6, pet: "mantou", prefer: ["sock", "scarf", "knitting"], drop: [152, 118] }
-];
+/* where things end up lying around: each visit deals the things out over these */
+var SPOTS = [[102, 118], [58, 115], [34, 95], [132, 116], [126, 44], [86, 119], [38, 108], [118, 113], [146, 121], [72, 121], [170, 15], [4, 4], [140, 100], [32, 118]];
+var GROUPS = { popo: ["glasses", "knitting", "slipper", "teacup"], wei: ["keys", "record", "sock", "notebook"], mei: ["book", "scarf", "polish", "phones"], mantou: ["ball", "lead", "bone"], cats: ["mouse", "feather", "fish"] };
+var MISCHIEF = [ { at: 3, pet: "miso", tag: "hi", drop: [42, 102] }, { at: 6, pet: "mantou", tag: "soft", drop: [150, 119] } ];
+function itemOf(id) { return W.ITEMS.filter(function (x) { return x.id === id; })[0]; }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = (Math.random() * (i + 1)) | 0, x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+function pick(a) { return a[(Math.random() * a.length) | 0]; }
+
+/* ---------- each visit: its own room (wallpaper, rug, sofa, what hangs on the wall, the sill), its own sky and its own mess ---------- */
+var DECO = {
+  wall: [["#e8d3ae", "#e0c89e"], ["#d9e3d0", "#c8d6bc"], ["#f0d6c8", "#e4c2b0"], ["#d8d6ea", "#c7c3df"], ["#efe2b8", "#e2d19c"]],
+  pattern: ["stripe", "dot", "plain", "diamond", "flower"],
+  rug: [["#c8553d", "#e8b53a"], ["#4f7fb0", "#f3ead8"], ["#5f8f5a", "#e8d3ae"], ["#8a6ab0", "#f0c24b"], ["#b5852f", "#5a2a18"]],
+  sofa: [["#5f8f5a", "#3d6440", "#7aa86a", "#4f7f4a"], ["#4f7fb0", "#2f4f7a", "#7aa0cc", "#43699a"], ["#c8553d", "#8a3a28", "#e07a62", "#b04a34"], ["#8a6ab0", "#5a4480", "#a88acc", "#7a5aa0"], ["#c9963f", "#7a5420", "#e0b05a", "#b5852f"]],
+  art: ["clock", "photo", "hills", "calendar", "mirror"],
+  sill: ["plant", "cactus", "flowers", "goldfish"]
+};
+var VKEY = "pb_visit", VIS = null;
+function weatherNow() {
+  var w = window.FBWorld && FBWorld.weather ? FBWorld.weather() : null;
+  if (["clear", "rain", "fog", "snow", "storm"].indexOf(w) < 0) w = pick(["clear", "clear", "rain", "fog", "storm"]);
+  return w;
+}
+function seasonNow() { var s = window.FBWorld && FBWorld.season ? FBWorld.season() : null; if (s) return s; var m = new Date().getMonth(); return m < 2 || m === 11 ? "winter" : m < 5 ? "spring" : m < 8 ? "summer" : "autumn"; }
+function festNow() { try { return window.FBWorld && FBWorld.festival ? FBWorld.festival() : null; } catch (e) { return null; } }
+function deal() {   /* two of Popo's, Wei's and Mei's things, one of Mantou's, one of the cats', and one more of anyone's */
+  var sel = [];
+  [["popo", 2], ["wei", 2], ["mei", 2], ["mantou", 1], ["cats", 1]].forEach(function (g) { sel = sel.concat(shuffle(GROUPS[g[0]]).slice(0, g[1])); });
+  var rest = shuffle(Object.keys(HOME).filter(function (id) { return sel.indexOf(id) < 0; })); sel.push(rest[0]);
+  var at = {}, sp = shuffle(SPOTS); sel.forEach(function (id, i) { at[id] = sp[i].slice(); });
+  return { sel: sel, at: at };
+}
+function visit() {
+  if (VIS) return VIS;
+  try { VIS = JSON.parse(sessionStorage.getItem(VKEY) || "null"); } catch (e) { VIS = null; }
+  if (!VIS || !VIS.d || !VIS.sel || VIS.sel.some(function (id) { return !HOME[id]; })) {
+    VIS = { d: { wall: (Math.random() * DECO.wall.length) | 0, pattern: pick(DECO.pattern), rug: (Math.random() * DECO.rug.length) | 0, rugp: pick(["dots", "stripe", "border"]),
+      sofa: (Math.random() * DECO.sofa.length) | 0, art: pick(DECO.art), sill: pick(DECO.sill) } };
+    var dl = deal(); VIS.sel = dl.sel; VIS.at = dl.at; saveVisit();
+  }
+  return VIS;
+}
+function saveVisit() { try { sessionStorage.setItem(VKEY, JSON.stringify(VIS)); } catch (e) {} }
 
 /* ---------- the living room (192×128) ---------- */
-var room = { items: {}, returns: 0, mdone: {}, busy: false, yuzuOut: false, evening: false, all: false };
-function freshRoom() { room = { items: {}, returns: 0, mdone: {}, busy: false, yuzuOut: false, evening: false, all: false }; W.ITEMS.forEach(function (it) { room.items[it.id] = { home: false, at: POS[it.id].a.slice() }; }); }
+var room = { items: {}, sel: [], returns: 0, mdone: {}, busy: false, yuzuOut: false, evening: false, all: false, hop: null, last: {} };
+function freshRoom(again) {
+  var v = visit();
+  if (again) { var dl = deal(); v.sel = dl.sel; v.at = dl.at; saveVisit(); }
+  room = { items: {}, sel: v.sel.slice(), returns: 0, mdone: {}, busy: false, yuzuOut: false, evening: false, all: false, hop: null, last: {} };
+  room.sel.forEach(function (id) { room.items[id] = { home: false, at: v.at[id].slice() }; });
+}
 function rect(g, c, x, y, w, h) { g.fillStyle = c; g.fillRect(x, y, w, h); }
-function sky(h) { return h >= 7 && h < 17 ? ["#9ccfe0", "#c6e6ef"] : h >= 17 && h < 20 ? ["#e08a5a", "#f2b878"] : h >= 5 && h < 7 ? ["#9a8ab8", "#e8b0a0"] : ["#1c2442", "#2a3458"]; }
-function drawRoom() {
-  var c = $("room"), g = c.getContext("2d"), h = hourNow(), ev = room.evening, dark = h < 6 || h >= 19;
-  g.imageSmoothingEnabled = false;
-  /* wall and floor */
-  rect(g, "#e8d3ae", 0, 0, 192, 76); for (var x = 3; x < 192; x += 8) rect(g, "#e0c89e", x, 0, 1, 74); rect(g, "#c9a77a", 0, 0, 192, 2);
-  rect(g, "#8a5a32", 0, 74, 192, 3); rect(g, "#b98a5a", 0, 77, 192, 51);
-  for (var y = 82; y < 128; y += 6) { rect(g, "#a87a4c", 0, y, 192, 1); for (var x2 = ((y / 6) % 2) * 23; x2 < 192; x2 += 46) rect(g, "#a87a4c", x2, y - 5, 1, 5); }
-  /* window */
-  var s = sky(h); rect(g, "#6b4424", 74, 10, 38, 33); rect(g, s[0], 76, 12, 34, 14); rect(g, s[1], 76, 26, 34, 15);
-  if (h < 6 || h >= 20) { g.fillStyle = "#fbf3e6"; [[80, 15], [96, 18], [104, 14], [88, 22]].forEach(function (p) { g.fillRect(p[0], p[1], 1, 1); }); rect(g, "#f3ead8", 100, 16, 3, 3); }
+function sky(h, wx) {
+  if (wx === "storm") return h >= 6 && h < 19 ? ["#6a7486", "#8a92a2"] : ["#141a2c", "#20263a"];
+  if (wx === "rain" || wx === "snow") return h >= 7 && h < 17 ? ["#9aa8b8", "#b8c4cf"] : h >= 17 && h < 20 ? ["#7a6a7e", "#a88a8a"] : ["#1c2238", "#283048"];
+  return h >= 7 && h < 17 ? ["#9ccfe0", "#c6e6ef"] : h >= 17 && h < 20 ? ["#e08a5a", "#f2b878"] : h >= 5 && h < 7 ? ["#9a8ab8", "#e8b0a0"] : ["#1c2442", "#2a3458"];
+}
+var FRAME = 0, FLASH = 0;
+function hopY(who) { return room.hop && room.hop.w === who && Date.now() < room.hop.until ? -2 : 0; }
+function drawWindow(g, h, wx, se) {
+  var s = sky(h, wx);
+  rect(g, "#6b4424", 74, 10, 38, 33); rect(g, s[0], 76, 12, 34, 14); rect(g, s[1], 76, 26, 34, 15);
+  var night = h < 6 || h >= 20;
+  if (wx === "clear") {
+    if (night) { g.fillStyle = "#fbf3e6"; [[80, 15], [96, 18], [104, 14], [88, 22], [84, 30]].forEach(function (p) { g.fillRect(p[0], p[1], 1, 1); }); rect(g, "#f3ead8", 100, 16, 3, 3); }
+    else if (h >= 7 && h < 17) { rect(g, "#ffe08a", 80, 15, 4, 4); rect(g, "#fff3c4", 81, 16, 2, 2); }
+  }
+  /* a branch of the tree outside, in the season's colours */
+  var leaf = { spring: ["#f2b8c8", "#e88aa6"], summer: ["#5f8f5a", "#7aa86a"], autumn: ["#d9822b", "#e8b53a"], winter: null }[se] || ["#5f8f5a", "#7aa86a"];
+  rect(g, "#5a3a22", 98, 12, 12, 1); rect(g, "#5a3a22", 104, 13, 1, 3); rect(g, "#5a3a22", 101, 13, 1, 2);
+  if (leaf) [[99, 13], [102, 14], [105, 13], [107, 14], [103, 16], [100, 15], [108, 12], [106, 16]].forEach(function (p, i) { rect(g, leaf[i % 2], p[0], p[1], 2, 2); });
+  if (se === "winter" || wx === "snow") rect(g, "#f6f8fb", 98, 11, 12, 1);
+  if (wx === "rain" || wx === "storm") {
+    g.fillStyle = "rgba(220,235,250,.75)";
+    for (var i = 0; i < 14; i++) { var x = 76 + ((i * 7 + FRAME * 3) % 34), y = 12 + ((i * 11 + FRAME * 5) % 27); g.fillRect(x, y, 1, 3); }
+  }
+  if (wx === "snow") {
+    g.fillStyle = "#ffffff";
+    for (var k = 0; k < 16; k++) { var sx = 76 + ((k * 9 + ((FRAME / 2) | 0) + (k % 3)) % 34), sy = 12 + ((k * 13 + FRAME) % 28); g.fillRect(sx, sy, 1, 1); }
+    rect(g, "#f6f8fb", 76, 39, 34, 2);
+  }
+  if (wx === "fog") { g.fillStyle = "rgba(226,228,236,.72)"; g.fillRect(76, 12, 34, 29); g.fillStyle = "rgba(120,130,150,.55)"; [[86, 26, 7, 1], [86, 26, 1, 5], [92, 26, 1, 5], [86, 30, 7, 1], [87, 25, 5, 1], [88, 24, 3, 1]].forEach(function (r) { g.fillRect(r[0], r[1], r[2], r[3]); }); }
+  if (wx === "storm" && FLASH > 0) { g.fillStyle = "rgba(255,255,255,.75)"; g.fillRect(76, 12, 34, 29); }
   rect(g, "#6b4424", 92, 12, 2, 29); rect(g, "#6b4424", 76, 25, 34, 2); rect(g, "#8a5a32", 72, 42, 42, 3);
-  rect(g, "#c8553d", 103, 37, 6, 5); rect(g, "#5f8f5a", 102, 32, 3, 5); rect(g, "#7aa86a", 106, 31, 3, 6); rect(g, "#5f8f5a", 104, 29, 2, 4);
+}
+function drawArt(g, art) {
+  if (art === "clock") { rect(g, "#5a3a22", 120, 11, 16, 16); rect(g, "#f3ead8", 122, 13, 12, 12); rect(g, "#1a1410", 127, 15, 1, 5); rect(g, "#1a1410", 127, 19, 4, 1); rect(g, "#5a3a22", 126, 27, 4, 6); rect(g, "#e8b53a", 127, 31, 2, 2); }
+  else if (art === "photo") { rect(g, "#5a3a22", 118, 12, 20, 16); rect(g, "#d8c8a8", 120, 14, 16, 12); rect(g, "#8a9aa8", 120, 14, 16, 5); [[122, 18, "#6a5a4a"], [126, 19, "#3a2a20"], [130, 20, "#6a5a4a"], [133, 20, "#6a5a4a"]].forEach(function (p) { rect(g, p[2], p[0], p[1], 2, 6); }); }
+  else if (art === "hills") { rect(g, "#e8b53a", 117, 12, 22, 16); rect(g, "#bfe0ea", 119, 14, 18, 12); rect(g, "#7aa86a", 119, 20, 18, 6); rect(g, "#5f8f5a", 123, 18, 8, 3); rect(g, "#8a5a32", 131, 17, 3, 3); rect(g, "#c8303a", 131, 16, 3, 1); }
+  else if (art === "calendar") { rect(g, "#3a2a20", 127, 9, 2, 3); rect(g, "#fbf6ee", 121, 12, 14, 17); rect(g, "#c8303a", 121, 12, 14, 4); for (var y = 18; y < 28; y += 3) for (var x = 123; x < 134; x += 3) rect(g, "#b8a890", x, y, 1, 1); rect(g, "#c8303a", 128, 20, 3, 3); rect(g, "#4f7fb0", 127, 19, 1, 1); rect(g, "#e8b53a", 131, 23, 1, 1); }
+  else if (art === "mirror") { rect(g, "#e8b53a", 120, 11, 16, 18); rect(g, "#cfe6ee", 122, 13, 12, 14); rect(g, "#ffffff", 124, 15, 2, 6); rect(g, "#e8d3ae", 120, 11, 1, 1); rect(g, "#e8d3ae", 135, 11, 1, 1); rect(g, "#e8d3ae", 120, 28, 1, 1); rect(g, "#e8d3ae", 135, 28, 1, 1); }
+}
+function drawSill(g, sill) {
+  if (sill === "plant") { rect(g, "#c8553d", 103, 37, 6, 5); rect(g, "#5f8f5a", 102, 32, 3, 5); rect(g, "#7aa86a", 106, 31, 3, 6); rect(g, "#5f8f5a", 104, 29, 2, 4); }
+  else if (sill === "cactus") { rect(g, "#b5852f", 103, 38, 6, 4); rect(g, "#5f8f5a", 105, 30, 2, 8); rect(g, "#5f8f5a", 103, 33, 2, 1); rect(g, "#5f8f5a", 103, 31, 1, 2); rect(g, "#f2b8c8", 105, 29, 2, 1); }
+  else if (sill === "flowers") { rect(g, "#cfe6ee", 104, 35, 4, 7); rect(g, "#5f8f5a", 105, 30, 1, 6); rect(g, "#5f8f5a", 107, 31, 1, 5); rect(g, "#e88aa6", 104, 28, 3, 3); rect(g, "#f0c24b", 107, 29, 3, 3); }
+  else { rect(g, "#cfe6ee", 102, 34, 8, 8); rect(g, "#e8962f", 104, 37, 3, 2); rect(g, "#e8962f", 103, 36, 1, 1); rect(g, "#ffffff", 108, 35, 1, 1); }
+}
+function drawRoom() {
+  var c = $("room"), g = c.getContext("2d"), h = hourNow(), ev = room.evening, dark = h < 6 || h >= 19, v = visit(), d = v.d, wx = weatherNow(), se = seasonNow(), fest = festNow();
+  var wall = DECO.wall[d.wall] || DECO.wall[0], rug = DECO.rug[d.rug] || DECO.rug[0], sofa = DECO.sofa[d.sofa] || DECO.sofa[0];
+  g.imageSmoothingEnabled = false;
+  /* wall, its paper, the floor */
+  rect(g, wall[0], 0, 0, 192, 76);
+  if (d.pattern === "stripe") for (var x = 3; x < 192; x += 8) rect(g, wall[1], x, 0, 1, 74);
+  else if (d.pattern === "dot") for (var yy = 4; yy < 72; yy += 8) for (var xx = ((yy / 8) % 2) * 4 + 2; xx < 192; xx += 8) rect(g, wall[1], xx, yy, 1, 1);
+  else if (d.pattern === "diamond") for (var y2 = 2; y2 < 72; y2 += 10) for (var x2 = ((y2 / 10) % 2) * 6; x2 < 192; x2 += 12) { rect(g, wall[1], x2 + 2, y2, 1, 1); rect(g, wall[1], x2 + 1, y2 + 1, 3, 1); rect(g, wall[1], x2 + 2, y2 + 2, 1, 1); }
+  else if (d.pattern === "flower") for (var y3 = 5; y3 < 72; y3 += 12) for (var x3 = ((y3 / 12) % 2) * 8 + 3; x3 < 192; x3 += 16) { rect(g, wall[1], x3, y3, 3, 1); rect(g, wall[1], x3 + 1, y3 - 1, 1, 3); }
+  rect(g, "#c9a77a", 0, 0, 192, 2);
+  rect(g, "#8a5a32", 0, 74, 192, 3); rect(g, "#b98a5a", 0, 77, 192, 51);
+  for (var y = 82; y < 128; y += 6) { rect(g, "#a87a4c", 0, y, 192, 1); for (var x4 = ((y / 6) % 2) * 23; x4 < 192; x4 += 46) rect(g, "#a87a4c", x4, y - 5, 1, 5); }
+  drawWindow(g, h, wx, se);
+  drawSill(g, fest === "santjordi" ? "flowers" : d.sill);
+  drawArt(g, d.art);
   /* bookshelf */
   rect(g, "#6b4424", 4, 12, 35, 64); rect(g, "#4a2e18", 6, 14, 31, 60);
   [30, 48, 66].forEach(function (yy) { rect(g, "#6b4424", 4, yy, 35, 2); });
@@ -490,90 +596,140 @@ function drawRoom() {
    [7, 58, 12, 8, "#d8c3a5"], [8, 59, 10, 1, "#a88a62"], [21, 57, 4, 9, "#4f7fb0"], [25, 58, 3, 8, "#c8553d"], [29, 56, 7, 10, "#8a5a32"]].forEach(function (b) { rect(g, b[4], b[0], b[1], b[2], b[3]); });
   /* side table and lamp */
   rect(g, "#6b4424", 120, 58, 22, 3); rect(g, "#6b4424", 122, 61, 2, 15); rect(g, "#6b4424", 138, 61, 2, 15);
-  if (ev || dark) { var rg = g.createRadialGradient(130, 42, 2, 130, 42, 34); rg.addColorStop(0, "rgba(255,226,150,.55)"); rg.addColorStop(1, "rgba(255,226,150,0)"); g.fillStyle = rg; g.fillRect(96, 8, 68, 68); }
-  rect(g, "#3a2a20", 128, 54, 5, 4); rect(g, "#3a2a20", 130, 44, 1, 10); rect(g, "#b5651f", 123, 36, 15, 9); rect(g, ev || dark ? "#ffe08a" : "#f0c24b", 124, 37, 13, 7);
-  /* door and hooks */
+  if (ev || dark || wx === "storm") { var rg = g.createRadialGradient(130, 42, 2, 130, 42, 34); rg.addColorStop(0, "rgba(255,226,150,.55)"); rg.addColorStop(1, "rgba(255,226,150,0)"); g.fillStyle = rg; g.fillRect(96, 8, 68, 68); }
+  rect(g, "#3a2a20", 128, 54, 5, 4); rect(g, "#3a2a20", 130, 44, 1, 10); rect(g, "#b5651f", 123, 36, 15, 9); rect(g, ev || dark || wx === "storm" ? "#ffe08a" : "#f0c24b", 124, 37, 13, 7);
+  /* door, hooks, and an umbrella dripping by the door when it rains */
   rect(g, "#6e4a2e", 165, 21, 25, 56); rect(g, "#9b6f4c", 167, 23, 21, 53); rect(g, "#8a603e", 170, 27, 15, 18); rect(g, "#8a603e", 170, 50, 15, 22); rect(g, "#e8b53a", 168, 49, 2, 2);
   rect(g, "#3a2a20", 145, 21, 14, 2); rect(g, "#3a2a20", 149, 23, 1, 2); rect(g, "#3a2a20", 155, 23, 1, 2);
   rect(g, "#3a2a20", 150, 31, 10, 2); rect(g, "#3a2a20", 155, 33, 1, 2);
+  if (wx === "rain" || wx === "storm") { rect(g, "#2f4f7a", 159, 60, 5, 14); rect(g, "#4f7fb0", 160, 61, 3, 12); rect(g, "#3a2a20", 161, 56, 1, 4); rect(g, "#3a2a20", 160, 74, 3, 1); if ((FRAME >> 2) % 3 === 0) rect(g, "#bfe3f0", 161, 76, 1, 1); rect(g, "#9fc4dc", 157, 76, 9, 1); }
+  if (fest === "midautumn") { rect(g, "#3a2a20", 61, 0, 1, 6); rect(g, "#c8303a", 57, 6, 9, 8); rect(g, "#f2a33a", 59, 8, 5, 4); rect(g, "#e8b53a", 60, 14, 3, 2); }
+  if (fest === "christmas") { rect(g, "#5a3a22", 0, 3, 192, 1); for (var lx = 3; lx < 192; lx += 9) rect(g, ["#c8303a", "#f0c24b", "#5f8f5a", "#4f7fb0"][(lx / 9 + (FRAME >> 3)) % 4 | 0], lx, 4, 2, 2); }
   /* baskets */
   rect(g, "#6e4a2e", 42, 66, 15, 10); rect(g, "#b98b62", 43, 67, 13, 9); for (var k = 45; k < 56; k += 3) rect(g, "#8a603e", k, 67, 1, 9);
   rect(g, "#8a3a28", 6, 82, 24, 9); rect(g, "#c8553d", 7, 83, 22, 7); rect(g, "#f0c24b", 9, 84, 18, 3);
   rect(g, "#a88a62", 4, 96, 28, 28); rect(g, "#e6d3ae", 5, 97, 26, 26);
-  if (!room.yuzuOut) drawPet(g, "yuzu", 18, 104, 1, { asleep: true });
+  if (!room.yuzuOut) drawPet(g, "yuzu", 18, 104 + hopY("yuzu"), 1, { asleep: true });
   rect(g, "#a88a62", 4, 104, 28, 20); rect(g, "#e6d3ae", 5, 105, 26, 18); for (var k2 = 7; k2 < 30; k2 += 4) rect(g, "#c4a87a", k2, 105, 1, 18); rect(g, "#c4a87a", 5, 113, 26, 1);
   /* rug */
-  rect(g, "#e8b53a", 46, 112, 112, 14); rect(g, "#c8553d", 48, 114, 108, 10); for (var k3 = 52; k3 < 154; k3 += 8) rect(g, "#e8b53a", k3, 118, 3, 2);
+  rect(g, rug[1], 46, 112, 112, 14); rect(g, rug[0], 48, 114, 108, 10);
+  if (d.rugp === "dots") for (var k3 = 52; k3 < 154; k3 += 8) rect(g, rug[1], k3, 118, 3, 2);
+  else if (d.rugp === "stripe") for (var k4 = 50; k4 < 154; k4 += 6) rect(g, rug[1], k4, 114, 2, 10);
+  else { rect(g, rug[1], 52, 116, 100, 1); rect(g, rug[1], 52, 121, 100, 1); }
   /* Miso on the bookshelf */
-  drawPet(g, "miso", 22, 12, 1, { asleep: sleeps("miso"), flip: true });
+  drawPet(g, "miso", 22, 12 + hopY("miso"), 1, { asleep: sleeps("miso"), flip: true });
   /* the sofa: Wei and Mei; the armchair: Popo */
-  rect(g, "#3d6440", 44, 81, 76, 14); rect(g, "#5f8f5a", 45, 82, 74, 12); rect(g, "#7aa86a", 45, 82, 74, 2);
+  rect(g, sofa[1], 44, 81, 76, 14); rect(g, sofa[0], 45, 82, 74, 12); rect(g, sofa[2], 45, 82, 74, 2);
   rect(g, "#5a2a18", 128, 79, 38, 16); rect(g, "#c9963f", 129, 80, 36, 14); rect(g, "#e0b05a", 129, 80, 36, 2);
-  drawWei(g, 50, 63, 1, { asleep: sleeps("wei") }); drawMei(g, 84, 65, 1, { asleep: sleeps("mei") }); drawPopo(g, 131, 63, 1, { asleep: sleeps("popo") });
+  if (se === "winter") { rect(g, "#c8303a", 96, 83, 20, 11); for (var kx = 97; kx < 116; kx += 3) rect(g, "#f3ead8", kx, 85, 1, 7); }
+  drawWei(g, 50, 63 + hopY("wei"), 1, { asleep: sleeps("wei") }); drawMei(g, 84, 65 + hopY("mei"), 1, { asleep: sleeps("mei") }); drawPopo(g, 131, 63 + hopY("popo"), 1, { asleep: sleeps("popo") });
   if (sleeps("wei")) zzz(g, 72, 66); if (sleeps("mei")) zzz(g, 106, 68); if (sleeps("popo")) zzz(g, 160, 64);
-  rect(g, "#3d6440", 40, 93, 84, 18); rect(g, "#4f7f4a", 41, 94, 82, 16); rect(g, "#3d6440", 40, 86, 6, 25); rect(g, "#3d6440", 118, 86, 6, 25); rect(g, "#5f8f5a", 41, 87, 4, 23); rect(g, "#5f8f5a", 119, 87, 4, 23);
+  rect(g, sofa[1], 40, 93, 84, 18); rect(g, sofa[3], 41, 94, 82, 16); rect(g, sofa[1], 40, 86, 6, 25); rect(g, sofa[1], 118, 86, 6, 25); rect(g, sofa[0], 41, 87, 4, 23); rect(g, sofa[0], 119, 87, 4, 23);
   rect(g, "#5a2a18", 125, 93, 44, 18); rect(g, "#b5852f", 126, 94, 42, 16); rect(g, "#5a2a18", 125, 86, 6, 25); rect(g, "#5a2a18", 163, 86, 6, 25); rect(g, "#c9963f", 126, 87, 4, 23); rect(g, "#c9963f", 164, 87, 4, 23);
   rect(g, "#2a1a10", 43, 110, 3, 2); rect(g, "#2a1a10", 118, 110, 3, 2); rect(g, "#2a1a10", 128, 110, 3, 2); rect(g, "#2a1a10", 163, 110, 3, 2);
   /* Mantou's bed and Mantou */
   rect(g, "#2f4f7a", 160, 110, 31, 13); rect(g, "#4f7fb0", 161, 111, 29, 11); rect(g, "#c6d8ee", 163, 113, 25, 5);
-  if (sleeps("mantou")) drawPet(g, "mantou", 176, 119, 1, { asleep: true, flip: true }); else drawPet(g, "mantou", 176, 112, 1, { flip: true });
-  if (room.yuzuOut) drawPet(g, "yuzu", 108, 125, 1, { asleep: true });
-  /* evening: the lamp's warmth over everything */
+  if (sleeps("mantou")) drawPet(g, "mantou", 176, 119 + hopY("mantou"), 1, { asleep: true, flip: true }); else drawPet(g, "mantou", 176, 112 + hopY("mantou"), 1, { flip: true });
+  if (room.yuzuOut) drawPet(g, "yuzu", 108, 125 + hopY("yuzu"), 1, { asleep: true });
+  /* the light: the lamp's warmth once the room settles, the night, a grey day, a flash */
   if (ev) { g.fillStyle = "rgba(255,170,90,.12)"; g.fillRect(0, 0, 192, 128); }
   else if (dark) { g.fillStyle = "rgba(20,16,40,.18)"; g.fillRect(0, 0, 192, 128); }
+  else if (wx === "rain" || wx === "fog" || wx === "storm") { g.fillStyle = "rgba(60,70,90,.08)"; g.fillRect(0, 0, 192, 128); }
+  if (FLASH > 0) { g.fillStyle = "rgba(255,255,255,.12)"; g.fillRect(0, 0, 192, 128); }
+}
+/* rain, snow and a storm move; nothing else does, so the room only redraws while it's weather that falls */
+var ANIM = null;
+function animate() {
+  clearInterval(ANIM); var wx = weatherNow();
+  if (["rain", "snow", "storm"].indexOf(wx) < 0 && festNow() !== "christmas") return;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  ANIM = setInterval(function () {
+    if (document.hidden || !$("go").hidden || !$("dark").hidden) return;
+    FRAME++; if (FLASH > 0) FLASH--; else if (wx === "storm" && Math.random() < .012) { FLASH = 2; setTimeout(function () { sfx("thunder"); }, 500); }
+    drawRoom();
+  }, 140);
 }
 function pctL(x) { return (x / 192 * 100) + "%"; } function pctT(y) { return (y / 128 * 100) + "%"; }
-function place(el, xy, w) { el.style.left = pctL(xy[0]); el.style.top = pctT(xy[1]); if (w != null) el.style.width = pctL(w); }
+function place(el, xy, w, h) { el.style.left = pctL(xy[0]); el.style.top = pctT(xy[1]); if (w != null) el.style.width = pctL(w); if (h != null) el.style.height = pctT(h); }
+/* who and what can be tapped, in room pixels: [x, y, w, h] */
+function hotRect(k) {
+  if (k === "yuzu") return room.yuzuOut ? [99, 113, 19, 12] : [8, 92, 20, 14];
+  if (k === "mantou") return sleeps("mantou") ? [163, 109, 27, 12] : [165, 97, 23, 17];
+  return { popo: [131, 63, 32, 30], wei: [50, 63, 32, 30], mei: [84, 65, 32, 28], miso: [12, 1, 20, 12], window: [74, 10, 38, 33], art: [117, 9, 22, 22] }[k];
+}
+var HOTS = ["popo", "wei", "mei", "miso", "yuzu", "mantou", "window", "art"];
 function buildItems() {
   var st = $("stage"); st.querySelectorAll(".item, .hot, .puff").forEach(function (n) { n.remove(); });
-  W.ITEMS.forEach(function (it) {
-    var b = document.createElement("button"), r = room.items[it.id]; b.type = "button"; b.className = "item " + (r.home ? "home" : "loose");
-    b.dataset.id = it.id; b.style.animationDelay = (Math.random() * 1.4).toFixed(2) + "s";
-    b.appendChild(itemCanvas(it.id)); place(b, r.home ? POS[it.id].h : r.at, MAP[it.id][0].length);
-    b.onclick = function () { sendHome(it); }; st.appendChild(b);
+  room.sel.forEach(function (id) {
+    var b = document.createElement("button"), r = room.items[id]; b.type = "button"; b.className = "item " + (r.home ? "home" : "loose");
+    b.dataset.id = id; b.style.animationDelay = (Math.random() * 1.4).toFixed(2) + "s";
+    b.appendChild(itemCanvas(id)); place(b, r.home ? HOME[id] : r.at, MAP[id][0].length);
+    b.onclick = function () { sendHome(itemOf(id)); }; st.appendChild(b);
   });
-  var y = document.createElement("button"); y.type = "button"; y.className = "hot"; y.id = "yuzuHot"; place(y, [8, 92], 20); y.style.height = pctT(14); y.tabIndex = -1;
-  y.onclick = liftYuzu; st.appendChild(y);
+  HOTS.forEach(function (k) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "hot"; b.dataset.k = k; if (k === "yuzu") b.id = "yuzuHot";
+    var r = hotRect(k); place(b, r, r[2], r[3]); b.onclick = function () { poke(k); }; st.appendChild(b);
+  });
   labelItems();
 }
 function labelItems() {
-  W.ITEMS.forEach(function (it) { var b = $("stage").querySelector('.item[data-id="' + it.id + '"]'); if (b) b.setAttribute("aria-label", T(it.n) + " → " + T(it.p)); });
-  var y = $("yuzuHot"); if (y) y.setAttribute("aria-label", t("yuzuA"));
+  room.sel.forEach(function (id) { var it = itemOf(id), b = $("stage").querySelector('.item[data-id="' + id + '"]'); if (b) b.setAttribute("aria-label", T(it.n) + " → " + T(it.p)); });
+  HOTS.forEach(function (k) {
+    var b = $("stage").querySelector('.hot[data-k="' + k + '"]'); if (!b) return;
+    b.setAttribute("aria-label", k === "window" ? t("windowA") : k === "art" ? T(W.ART[visit().d.art].d) : k === "yuzu" && room.all && !room.yuzuOut ? t("yuzuA") : T(W.names[k]));
+    var r = hotRect(k); place(b, r, r[2], r[3]);
+  });
   $("room").setAttribute("aria-label", t("roomA"));
+}
+/* tap anyone: a line of their own (asleep, they stay asleep), never the same twice in a row */
+function line(k, pool) {
+  var last = room.last[k], i = (Math.random() * pool.length) | 0;
+  if (pool.length > 1 && i === last) i = (i + 1) % pool.length;
+  room.last[k] = i; return T(pool[i]);
+}
+function poke(k) {
+  if (k === "yuzu" && cur === "room" && room.all && !room.yuzuOut) { liftYuzu(); return; }
+  if (k === "window") { var wk = W.WX[weatherNow()] ? weatherNow() : "clear", s = speaker(W.WX[wk], ["popo", "wei", "cats"]); if (s) say(s.w, s.t); else say("room", T(W.WXD[wk])); sfx("tap"); return; }
+  if (k === "art") { var a = W.ART[visit().d.art]; if (!sleeps(a.w)) say(a.w, T(a.t)); else say("room", T(a.d)); sfx("tap"); return; }
+  var tp = W.TAP[k], pool = k === "yuzu" ? (room.yuzuOut ? tp.out : tp.a) : (sleeps(k) && tp.z ? tp.z : tp.a);
+  say(k, line(k, pool));
+  room.hop = { w: k, until: Date.now() + 260 }; drawRoom(); setTimeout(drawRoom, 280);
+  sfx(k === "mantou" ? (sleeps("mantou") ? "snore" : "woof") : k === "miso" || k === "yuzu" ? (sleeps(k) || k === "yuzu" ? "purr" : "meow") : "tap");
 }
 function puff(xy) { var p = document.createElement("div"); p.className = "puff"; p.textContent = "♥"; place(p, [xy[0] + 2, xy[1] - 6]); $("stage").appendChild(p); setTimeout(function () { p.remove(); }, 1000); }
 function sendHome(it) {
-  var r = room.items[it.id]; if (r.home || room.busy || cur !== "room") return;
-  r.home = true; var b = $("stage").querySelector('.item[data-id="' + it.id + '"]'); b.className = "item home"; place(b, POS[it.id].h);
+  var r = room.items[it.id]; if (!r || r.home || room.busy || cur !== "room") return;
+  r.home = true; var b = $("stage").querySelector('.item[data-id="' + it.id + '"]'); b.className = "item home"; place(b, HOME[it.id]);
   sfx("home", room.returns); room.returns++;
   $("roomStatus").textContent = t("sends", { x: T(it.n), p: T(it.p) });
   say(it.who, sleeps(it.who) ? t("asleepLine") : T(it.l));
-  setTimeout(function () { puff(POS[it.id].h); }, 650);
+  setTimeout(function () { puff(HOME[it.id]); }, 650);
   var m = null, target = null;
   MISCHIEF.forEach(function (mm) {
     if (m || room.mdone[mm.pet] || room.returns < mm.at || sleeps(mm.pet)) return;
-    mm.prefer.forEach(function (id) { if (!target && room.items[id].home && id !== it.id) target = id; });
+    shuffle(room.sel).forEach(function (id) { if (!target && id !== it.id && room.items[id].home && HOME[id][2] === mm.tag && itemOf(id).who !== mm.pet) target = id; });
     if (target) m = mm;
   });
   if (m) {
     room.busy = true; room.mdone[m.pet] = 1; $("stage").classList.add("locked");
     setTimeout(function () {
-      var tr = room.items[target], tb = $("stage").querySelector('.item[data-id="' + target + '"]'), ti = W.ITEMS.filter(function (x) { return x.id === target; })[0];
+      var tr = room.items[target], tb = $("stage").querySelector('.item[data-id="' + target + '"]');
       tr.home = false; tr.at = m.drop.slice(); tb.className = "item loose"; place(tb, tr.at); sfx("tumble");
-      say(m.pet, fill(T(W.mischief[m.pet]), { x: T(ti.n) })); $("roomStatus").textContent = "";
+      room.hop = { w: m.pet, until: Date.now() + 400 }; drawRoom(); setTimeout(drawRoom, 420);
+      say(m.pet, fill(T(W.mischief[m.pet]), { x: T(itemOf(target).n) })); $("roomStatus").textContent = "";
       room.busy = false; $("stage").classList.remove("locked");
     }, 1700);
     return;
   }
-  if (W.ITEMS.every(function (x) { return room.items[x.id].home; })) { room.busy = true; setTimeout(almost, 1500); }
+  if (room.sel.every(function (id) { return room.items[id].home; })) { room.busy = true; setTimeout(almost, 1500); }
 }
 function almost() {
   room.all = true; room.busy = false; $("roomQ").textContent = t("almost"); $("roomStatus").textContent = "";
-  var y = $("yuzuHot"); y.classList.add("ready"); y.tabIndex = 0; y.focus({ preventScroll: true });
+  var y = $("yuzuHot"); y.classList.add("ready"); y.setAttribute("aria-label", t("yuzuA")); y.focus({ preventScroll: true });
 }
 function liftYuzu() {
   var y = $("yuzuHot"); if (!y.classList.contains("ready")) return;
-  y.classList.remove("ready"); y.tabIndex = -1; room.yuzuOut = true; room.evening = true; drawRoom(); sfx("settle");
+  y.classList.remove("ready"); room.yuzuOut = true; room.evening = true; drawRoom(); labelItems(); sfx("settle");
   $("roomQ").textContent = t("settled");
   var s = speaker(W.settleLines); say(s && s.w, s && s.t);
   setTimeout(function () { $("turnBtn").hidden = false; $("turnBtn").focus({ preventScroll: true }); }, 700);
@@ -590,6 +746,11 @@ function sfx(kind, n) {
   else if (kind === "tumble") { tone(a, t0, 330, .12, .05, "square"); tone(a, t0 + .1, 247, .16, .04, "square"); }
   else if (kind === "settle" || kind === "chime") [784, 988, 1175, 1568].forEach(function (f, i) { tone(a, t0 + i * .26, f, .9, .045, "sine"); });
   else if (kind === "tap") tone(a, t0, 660, .08, .04);
+  else if (kind === "meow") { var o = a.createOscillator(), g = a.createGain(); o.type = "sine"; o.frequency.setValueAtTime(700, t0); o.frequency.linearRampToValueAtTime(980, t0 + .12); o.frequency.linearRampToValueAtTime(620, t0 + .34); g.gain.setValueAtTime(.0001, t0); g.gain.linearRampToValueAtTime(.05, t0 + .05); g.gain.exponentialRampToValueAtTime(.0001, t0 + .4); o.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0 + .45); }
+  else if (kind === "purr") for (var pi = 0; pi < 8; pi++) tone(a, t0 + pi * .07, 70, .06, .05, "sawtooth");
+  else if (kind === "woof") { tone(a, t0, 240, .09, .07, "square"); tone(a, t0 + .02, 180, .1, .05, "square"); }
+  else if (kind === "snore") { tone(a, t0, 90, .5, .03, "sawtooth"); }
+  else if (kind === "thunder") { for (var ti = 0; ti < 6; ti++) tone(a, t0 + ti * .09, 50 + Math.random() * 30, .5, .04, "sawtooth"); }
 }
 
 /* ---------- screens ---------- */
@@ -774,7 +935,7 @@ $("moreBtn").onclick = function (e) { e.stopPropagation(); if (!$("moreMenu").hi
 document.addEventListener("click", function (e) { if (!e.target.closest || !e.target.closest(".hdr")) closeMore(); });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeMore(); if (!$("helpSheet").hidden) closeHelp(); } });
 addEventListener("fbl:lang", function () { render(); });
-$("startBtn").onclick = function () { sfx("tap"); freshRoom(); buildItems(); show("room"); };
+$("startBtn").onclick = function () { sfx("tap"); if (room.returns || room.all) { freshRoom(true); buildItems(); } show("room"); };
 $("turnBtn").onclick = function () { show("spot"); };
 $("whoseOk").onclick = function () { show("time"); };
 document.querySelectorAll("[data-len]").forEach(function (b) { b.onclick = function () { sfx("tap"); S.len = b.getAttribute("data-len"); save(); if (S.len === "song") { cueI = (Math.random() * W.CUES.length) | 0; show("song"); } else show("invite"); }; });
@@ -812,7 +973,7 @@ if ("serviceWorker" in navigator && window.isSecureContext) addEventListener("lo
 });
 
 /* ---------- start ---------- */
-freshRoom(); buildItems();
+freshRoom(false); buildItems(); animate();
 recv = readInvite();
 var g0 = S.go, alive = g0 && (g0.l === "ten" ? g0.end > Date.now() - 60000 : Date.now() - g0.at < 45 * 60000);
 if (recv) show("recv", false);
@@ -820,7 +981,7 @@ else if (alive) { show("home", false); openGo(); if (g0.l === "ten" && g0.end <=
 else { if (g0) { S.go = null; save(); } show("home", false); }
 if (!S.seen && !recv && !alive) setTimeout(openHelp, 400);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { render(); });
-window.PB = { W: W, state: function () { return S; }, room: function () { return room; }, show: show, screen: function () { return cur; }, send: function (id) { var it = W.ITEMS.filter(function (x) { return x.id === id; })[0]; if (it) sendHome(it); }, lift: liftYuzu, go: function () { return S.go; } };
+window.PB = { W: W, state: function () { return S; }, room: function () { return room; }, show: show, screen: function () { return cur; }, send: function (id) { var it = itemOf(id); if (it) sendHome(it); }, lift: liftYuzu, poke: poke, visit: function () { return visit(); }, go: function () { return S.go; } };
 })();
 </script>
 </body>
