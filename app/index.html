@@ -469,6 +469,8 @@ html.desk .moment h1{font-size:44px}
    screen"), beside the widgets; one at a time; drag it by its bar; ↗ opens the full page; Esc or ✕ closes it */
 .win{position:fixed;z-index:110;top:72px;right:36px;width:430px;height:min(880px,calc(100vh - 96px));display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:var(--ink2);border:1px solid var(--line);box-shadow:0 30px 80px -20px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.25);animation:winin .22s cubic-bezier(.2,.8,.2,1)}
 .win[hidden]{display:none}
+.win:not(.front){box-shadow:0 18px 50px -24px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.25)}.win:not(.front) .wbar{opacity:.72}.win:not(.front) .wbar b{font-weight:500}
+.win.shut{animation:winout .16s ease-in forwards}@keyframes winout{to{opacity:0;transform:translateY(8px) scale(.985)}}
 @keyframes winin{from{opacity:0;transform:translateY(10px) scale(.985)}}
 .wbar{flex:none;display:flex;align-items:center;gap:10px;height:46px;padding:0 10px 0 12px;cursor:grab;user-select:none;-webkit-user-select:none;border-bottom:1px solid var(--line);background:rgba(27,22,36,.92)}
 .wbar:active{cursor:grabbing}
@@ -762,7 +764,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   </div>
 
   <section class="moment" id="moment" aria-label="moment" hidden></section>
-  <div class="win" id="win" role="dialog" aria-modal="false" hidden><div class="wbar" id="wbar"><span class="wi" id="wi"></span><b id="wt"></b><span class="sp"></span><a class="wfull" id="wfull" href="/" target="_top"></a><button class="wx" id="wx" type="button" aria-label="Close">✕</button></div><iframe id="wf" title="app" allow="wake-lock; clipboard-write; web-share; autoplay; microphone; camera"></iframe></div>
+  <template id="winT"><div class="win" role="dialog" aria-modal="false"><div class="wbar"><span class="wi"></span><b></b><span class="sp"></span><a class="wfull" href="/" target="_top"></a><button class="wx" type="button" aria-label="Close">✕</button></div><iframe title="app" allow="wake-lock; clipboard-write; web-share; autoplay; microphone; camera"></iframe></div></template>
   <main class="home" id="home">
    <div class="stack" id="stack" aria-label="widgets">
    <section class="now w" id="wNow" aria-live="polite"><div class="now-h"><h2 id="nowH"></h2><button class="momb" id="momB" type="button"></button><button class="down" id="out" type="button"></button></div><button class="quote" id="quote" type="button"></button><div class="qrow"><small id="qby"></small><a class="qapp" id="qapp" href="/"></a></div><ul id="nowL"></ul></section>
@@ -2654,30 +2656,62 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     T.push(setTimeout(function () { rs.forEach(function (r, i) { if (i !== 3) r.classList.remove("lit"); }); }, 1050));   // the window settles to one lit pane, as in the mark
     T.push(setTimeout(finish, 2250));   // the one lit pane stays a while (the owner, Nov 9)
   }
-  /* the window (computer only) */
-  var WIN = { k: null, drag: null };
+  /* the windows (computer only; the owner, Nov 12: a few apps at the same time). Each app opens in its own small
+     window, side by side from the right while they fit and then a little cascade; up to four, the one used longest ago
+     closes for a fifth. Opening an app that's already open brings its window to the front. A click inside one (or on
+     its bar) brings it forward; Esc closes the front one; drag a window by its bar. */
+  var WIN = { list: [], z: 110, drag: null, MAX: 4, W: 430, GAP: 16 };
   function appOf(href) {   // the work a link goes to, by its address on this site
     try { var u = new URL(href, location.href); if (u.origin !== location.origin || /^\/app\//.test(u.pathname)) return null; } catch (e) { return null; }
     var best = null, bl = 0; P.forEach(function (p) { try { var a = new URL(p[4], location.href).pathname; if (a !== "/" && u.pathname.indexOf(a) === 0 && a.length > bl) { best = p[1]; bl = a.length; } } catch (e) {} }); return best;
   }
-  function winOpen(k, href) {
-    var W0 = $("win"), f = $("wf"); WIN.k = k; $("wi").innerHTML = appIcon(k); $("wt").textContent = pname(k);
-    var fl = $("wfull"); fl.href = href; fl.textContent = w("winFull"); $("wx").setAttribute("aria-label", w("winClose"));
-    if (f.getAttribute("src") !== href) f.setAttribute("src", href);
-    W0.hidden = false; sfx("pop");
+  function winFront(o) {
+    if (!o) return; WIN.list.forEach(function (x) { x.el.classList.toggle("front", x === o); });
+    o.el.style.zIndex = ++WIN.z; o.t = Date.now();
   }
-  function winClose() { var W0 = $("win"); if (W0.hidden) return; W0.hidden = true; $("wf").setAttribute("src", "about:blank"); WIN.k = null; }
+  function winTop() { var t = null; WIN.list.forEach(function (x) { if (!t || +x.el.style.zIndex > +t.el.style.zIndex) t = x; }); return t; }
+  function winSlot() {   // the first place no open window holds: side by side while they fit, then a cascade
+    var used = WIN.list.map(function (x) { return x.slot; }), i = 0; while (used.indexOf(i) >= 0) i++;
+    return i;
+  }
+  function winPlace(o) {
+    var fit = Math.max(1, Math.floor((innerWidth - 60) / (WIN.W + WIN.GAP))), i = o.slot, el = o.el;
+    if (i < fit) { el.style.right = (36 + i * (WIN.W + WIN.GAP)) + "px"; el.style.top = "72px"; el.style.height = ""; }
+    else { var c = i - fit + 1; el.style.right = (36 + (fit - 1) * (WIN.W + WIN.GAP) + c * 34) + "px"; el.style.top = (72 + c * 30) + "px"; el.style.height = "min(880px, calc(100vh - " + (96 + c * 30) + "px))"; }
+    el.style.left = "auto";
+  }
+  function winOpen(k, href) {
+    var o = WIN.list.filter(function (x) { return x.k === k; })[0];
+    if (o) { if (o.f.getAttribute("src") !== href) o.f.setAttribute("src", href); o.full.href = href; winFront(o); sfx("pop"); return; }
+    if (WIN.list.length >= WIN.MAX) { var old = WIN.list.slice().sort(function (a, b) { return a.t - b.t; })[0]; winClose(old, true); }
+    var el = $("winT").content.firstElementChild.cloneNode(true); document.body.appendChild(el);
+    o = { k: k, el: el, f: el.querySelector("iframe"), full: el.querySelector(".wfull"), bar: el.querySelector(".wbar"), slot: winSlot(), t: Date.now() };
+    el.querySelector(".wi").innerHTML = appIcon(k); el.querySelector("b").textContent = pname(k); el.setAttribute("aria-label", pname(k));
+    o.full.href = href; o.full.textContent = w("winFull"); el.querySelector(".wx").setAttribute("aria-label", w("winClose"));
+    el.querySelector(".wx").onclick = function () { winClose(o); };
+    el.addEventListener("pointerdown", function () { winFront(o); }, true);
+    o.bar.addEventListener("pointerdown", function (e) { if (e.target.closest("a,button")) return; var r = el.getBoundingClientRect(); WIN.drag = { o: o, x: e.clientX - r.left, y: e.clientY - r.top }; WIN.list.forEach(function (x) { x.f.style.pointerEvents = "none"; }); try { o.bar.setPointerCapture(e.pointerId); } catch (x) {} });
+    o.bar.addEventListener("pointermove", function (e) { if (!WIN.drag || WIN.drag.o !== o) return; el.style.right = "auto"; el.style.left = Math.max(8, Math.min(innerWidth - 120, e.clientX - WIN.drag.x)) + "px"; el.style.top = Math.max(8, Math.min(innerHeight - 60, e.clientY - WIN.drag.y)) + "px"; });
+    o.bar.addEventListener("pointerup", wEnd); o.bar.addEventListener("pointercancel", wEnd);
+    WIN.list.push(o); winPlace(o); o.f.setAttribute("src", href); winFront(o); sfx("pop");
+  }
+  function wEnd() { WIN.drag = null; WIN.list.forEach(function (x) { x.f.style.pointerEvents = ""; }); }
+  function winClose(o, quiet) {
+    o = o || winTop(); if (!o) return;
+    WIN.list = WIN.list.filter(function (x) { return x !== o; });
+    o.f.setAttribute("src", "about:blank"); o.el.classList.add("shut"); setTimeout(function () { o.el.remove(); }, quiet ? 0 : 170);
+    winFront(winTop());
+  }
+  addEventListener("blur", function () { setTimeout(function () {   // a click inside an app's page: bring its window forward
+    var a = document.activeElement; if (a && a.tagName === "IFRAME") WIN.list.forEach(function (x) { if (x.f === a && !x.el.classList.contains("front")) winFront(x); });
+  }, 0); });
   document.addEventListener("click", function (e) {
     if (!DESK || e.defaultPrevented || editing || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    var a = e.target.closest && e.target.closest("a[href]"); if (!a || a.closest("#win") || a.target === "_blank") return;
+    var a = e.target.closest && e.target.closest("a[href]"); if (!a || a.closest(".win") || a.target === "_blank") return;
     var k = appOf(a.href); if (!k) return; e.preventDefault(); winOpen(k, a.href);
   });
-  $("wx").onclick = winClose;
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("win").hidden) winClose(); });
-  $("wbar").addEventListener("pointerdown", function (e) { if (e.target.closest("a,button")) return; var W0 = $("win"), r = W0.getBoundingClientRect(); WIN.drag = { x: e.clientX - r.left, y: e.clientY - r.top }; $("wf").style.pointerEvents = "none"; try { $("wbar").setPointerCapture(e.pointerId); } catch (x) {} });
-  $("wbar").addEventListener("pointermove", function (e) { if (!WIN.drag) return; var W0 = $("win"); W0.style.right = "auto"; W0.style.left = Math.max(8, Math.min(innerWidth - 120, e.clientX - WIN.drag.x)) + "px"; W0.style.top = Math.max(8, Math.min(innerHeight - 60, e.clientY - WIN.drag.y)) + "px"; });
-  function wEnd() { WIN.drag = null; $("wf").style.pointerEvents = ""; }
-  $("wbar").addEventListener("pointerup", wEnd); $("wbar").addEventListener("pointercancel", wEnd);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && WIN.list.length) winClose(); });
+  addEventListener("resize", function () { WIN.list.forEach(function (x) { if (x.el.style.left === "auto" || !x.el.style.left) winPlace(x); }); });
   /* ── the moment ── */
   var MO = {
     lonely: { h: "popo", q: [["now", ["lt", "lt_now"], ["wr", "wr_now"]], ["later", ["co", "co_later"], ["cf", "cf_later"]]] },
