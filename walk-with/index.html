@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Walk With</title>
 <meta name="description" content="Two people, one corner, twenty minutes, same clock time. Pick a time, name a corner, send one link. Then put the phone away.">
@@ -26,7 +26,10 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { background:var(--paper); color:var(--ink); }
   body { font:19px/1.4 var(--body); -webkit-tap-highlight-color:transparent; background-image:radial-gradient(var(--dot) 1px, transparent 1px); background-size:6px 6px; }
-  header { max-width:380px; margin:0 auto; padding:10px 16px 0; display:flex; justify-content:flex-end; position:relative; }
+  header { --ahh-bg:var(--field); --ahh-ink:var(--ink); --ahh-line:var(--line); --ahh-name:var(--hand); max-width:380px; margin:0 auto; padding:max(4px, env(safe-area-inset-top)) 16px 0; }
+  header .ahh-nm { font-size:28px; font-weight:700; }
+  header .ahh-b { width:44px; height:44px; padding:0; font:700 22px/1 var(--hand); color:var(--ink); background:var(--field); border:2.5px solid var(--ink); border-radius:255px 14px 225px 14px/14px 225px 14px 255px; box-shadow:2px 2px 0 var(--ink); cursor:pointer; }
+  header .ahh-b svg { width:18px; height:18px; }
   #app { max-width:380px; margin:0 auto; padding:0 16px; }
   .screen { min-height:calc(100vh - 44px); min-height:calc(100dvh - 44px); display:flex; flex-direction:column; justify-content:center; gap:18px; padding:16px 0 32px; animation:in .35s ease; }
   body.bare .screen { min-height:100vh; min-height:100dvh; }
@@ -81,7 +84,6 @@
   .note { font-size:16px; color:var(--soft); min-height:1.4em; }
   .err { color:#b14a24; }
   .spacer { flex:1; }
-  #langBtn { font:600 15px var(--body); color:var(--soft); background:none; border:1.5px solid currentColor; border-radius:999px; padding:4px 11px; cursor:pointer; }
   .langmenu { position:absolute; right:16px; top:42px; z-index:5; background:var(--field); border:2px solid var(--ink); border-radius:12px; padding:6px; display:flex; flex-direction:column; box-shadow:3px 3px 0 var(--ink); }
   .langmenu button { font:16px var(--body); color:var(--ink); background:none; border:0; text-align:left; padding:8px 12px; border-radius:8px; cursor:pointer; }
   .langmenu button[aria-checked=true] { background:var(--paper2); }
@@ -98,7 +100,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2.6"/></filter>
 </svg>
-<header><button id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false"><span id="langLbl">EN</span></button></header>
+<header id="head"></header>
 <main id="app"></main>
 <footer id="foot" class="np"></footer>
 <div id="testbar" hidden></div>
@@ -336,20 +338,15 @@ function render(force) { var sc = screenOf();
 }
 
 /* ---------- language, footer ---------- */
-var menu = null;
-function closeLang() { if (menu) { menu.remove(); menu = null; $("langBtn").setAttribute("aria-expanded", "false"); } }
-$("langBtn").addEventListener("click", function (e) {
-  e.stopPropagation(); if (menu) return closeLang();
-  menu = document.createElement("div"); menu.className = "langmenu"; menu.setAttribute("role", "menu"); document.querySelector("header").appendChild(menu);
-  LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i]; menu.appendChild(b);
-    b.addEventListener("click", function () { if (window.FBL) FBL.set(l); closeLang(); render(true); }); });
-  $("langBtn").setAttribute("aria-expanded", "true"); menu.querySelector("[aria-checked=true]").focus();
-});
-document.addEventListener("click", function (e) { if (menu && !menu.contains(e.target)) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLang(); });
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ language, privacy */
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { icon: '<img src="./icon.svg" alt="">', name: function () { return T(W.app); }, home: function () { scrollTo({ top: 0, behavior: "smooth" }); }, steps: [
+  ["Pick a day, a time and a corner you both know.", "选一天、一个时间、一个你们都知道的街角。", "選一天、一個時間、一個你們都知道的街角。", "Elige un día, una hora y una esquina que conozcáis los dos.", "Tria un dia, una hora i una cantonada que coneixeu tots dos."],
+  ["Send the link. They say they'll be there.", "把链接发过去。对方说会到。", "把連結傳過去。對方說會到。", "Envía el enlace. Te dirán que allí estarán.", "Envia l'enllaç. Et diran que hi seran."],
+  ["At the time, phones away: twenty minutes walking together.", "时间一到，收起手机：一起走二十分钟。", "時間一到，收起手機：一起走二十分鐘。", "A la hora, móviles fuera: veinte minutos caminando juntos.", "A l'hora, mòbils guardats: vint minuts caminant junts."]
+] }) : null;
 function chrome() {
   var i = li(); document.documentElement.lang = LANGS[i]; document.title = T(W.app);
-  $("langLbl").textContent = SHORT[i]; $("langBtn").setAttribute("aria-label", T(W.lang) + ": " + LNAMES[i]);
+  if (HD) HD.paint();
   var _k = function (k, d) { return window.FBC && FBC.W && FBC.W[k] ? FBC.t(FBC.W[k]) : d; };
   var _x = "<span>" + esc(_k("fLink", T(W.device))) + '</span><a href="https://www.after-hours.work/?fbl=' + LANGS[i] + '" target="_blank" rel="noopener">' + esc(_k("fAh", T(W.ah))) + "</a>";
   if (window.FBC && FBC.foot) FBC.foot($("foot"), { px: 1, extra: _x });   // the suite's one footer; this app's note and After hours on the line under it

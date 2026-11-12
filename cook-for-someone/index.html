@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cook for Someone</title>
 <meta name="description" content="Family recipes from Popo's recipe box at Next Door in Nearby. Pick one, cook it for someone, or leave your own family's recipe in the box.">
@@ -40,7 +40,9 @@ body {
   padding-block: 12px 24px; -webkit-font-smoothing: none;
 }
 #app { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.top { --ahh-bg: var(--paper); --ahh-ink: var(--ink); --ahh-line: var(--line); }
+.top .ahh-ic img { width: 100%; height: 100%; image-rendering: pixelated; }
+html:lang(zh) .top .ahh-nm, html:lang(zh-Hant) .top .ahh-nm { font: 700 18px/1.2 var(--vt); letter-spacing: .1em; }
 .brand { font-family: var(--px); font-size: 11px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
 .screen { display: flex; flex-direction: column; gap: 14px; }
 .scene { width: 100%; aspect-ratio: 160 / 96; max-width: 100%; display: block; image-rendering: pixelated; border: 3px solid var(--line); box-shadow: var(--drop); background: #2a1c30; }
@@ -163,10 +165,7 @@ textarea:focus, input:focus { outline: 3px solid var(--amber); outline-offset: 1
 </head>
 <body>
 <div id="app">
-  <div class="top">
-    <span class="brand" id="brand">Cook for Someone</span>
-    <div class="langm"><button class="btn small" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false">EN</button><div class="menu" id="langMenu" role="menu" hidden></div></div>
-  </div>
+  <header class="top" id="head"><span class="brand">Cook for Someone</span></header>
 
   <!-- home: Popo's kitchen -->
   <section class="screen" data-s="home">
@@ -539,6 +538,13 @@ var toastT = 0;
 function toast(msg) { var e = $("toast"); e.textContent = msg; e.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { e.hidden = true; }, Math.min(9000, 2600 + msg.length * 45)); }
 
 /* ---------- screens ---------- */
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ records, language, privacy */
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { px: 1, btn: "btn small", icon: '<img src="./icon.svg" alt="">', name: function () { return t("title"); },
+  home: function () { show("home"); }, steps: [
+  ["Tell Popo who you're cooking for.", "告诉婆婆你要做给谁吃。", "告訴婆婆你要煮給誰吃。", "Dile a Popo para quién cocinas.", "Digues-li a la Popo per a qui cuines."],
+  ["She hands you one recipe card, from a neighbour's family or her own.", "她递给你一张菜谱卡，邻居家的，或者她自己的。", "她遞給你一張食譜卡，鄰居家的，或者她自己的。", "Te da una ficha de receta, de la familia de un vecino o de la suya.", "Et dona una fitxa de recepta, de la família d'un veí o de la seva."],
+  ["Cook it, ask them over and put the phone down. You can leave a recipe of your own too.", "做出来，请他们过来，放下手机。你也可以留下一份自己家的菜谱。", "煮出來，請他們過來，放下手機。你也可以留下一份自己家的食譜。", "Cocínala, invítales y deja el móvil. También puedes dejar una receta tuya.", "Cuina-la, convida'ls i deixa el mòbil. També pots deixar-hi una recepta teva."]
+], items: function () { return [{ label: t("box"), on: function () { $("goBox").click(); } }, { label: t("kept"), on: function () { $("goKept").click(); } }]; } }) : null;
 var cur = "home", card = null, lastTag = null, back = "home", seen = [];
 function show(s) {
   cur = s; document.querySelectorAll("[data-s]").forEach(function (el) { el.hidden = el.getAttribute("data-s") !== s; });
@@ -548,7 +554,7 @@ function render() {
   document.documentElement.lang = LANGS[li()];
   document.title = t("title");
   document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
-  $("brand").textContent = t("title"); $("langBtn").textContent = SHORT[li()]; $("langBtn").setAttribute("aria-label", t("lang")); foot();
+  if (HD) HD.paint(); foot();
   $("q").placeholder = t("search");
   ({ home: renderHome, pick: renderPick, card: renderCard, done: renderDone, box: renderBox, leave: renderLeave, thanks: renderThanks, kept: renderKept })[cur]();
 }
@@ -711,15 +717,7 @@ $("invite").onclick = function () {
 $("shareBtn").onclick = function () { shareText(t("shareText", { d: F(card, "dish"), w: F(card, "whose") || t("from", { n: F(card, "nick") || "?" }), u: location.origin + location.pathname })); };
 
 /* ---------- wiring ---------- */
-function closeLang() { $("langMenu").hidden = true; $("langBtn").setAttribute("aria-expanded", "false"); }
-$("langBtn").onclick = function (e) {
-  e.stopPropagation(); var m = $("langMenu"); if (!m.hidden) { closeLang(); return; }
-  m.textContent = ""; LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i];
-    b.onclick = function () { if (window.FBL) FBL.set(l); else document.documentElement.lang = l; closeLang(); render(); }; m.appendChild(b); });
-  m.hidden = false; $("langBtn").setAttribute("aria-expanded", "true"); m.firstChild.focus();
-};
-document.addEventListener("click", function (e) { if (!e.target.closest || !e.target.closest(".langm")) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeLang(); if (!$("dark").hidden) wakeUp(); } });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!$("dark").hidden) wakeUp(); } });
 addEventListener("fbl:lang", function () { render(); });
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 function foot() {

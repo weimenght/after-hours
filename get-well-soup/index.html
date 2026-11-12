@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Get Well Soup</title>
 <meta name="description" content="Someone's got a cold? Put a pot on for them. They pick the one thing that would help, and you bring it to the door.">
@@ -26,7 +26,10 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { background:var(--paper); color:var(--ink); }
   body { font:19px/1.4 var(--body); -webkit-tap-highlight-color:transparent; background-image:radial-gradient(var(--dot) 1px, transparent 1px); background-size:6px 6px; }
-  header { max-width:380px; margin:0 auto; padding:10px 16px 0; display:flex; justify-content:flex-end; position:relative; }
+  header { --ahh-bg:var(--field); --ahh-ink:var(--ink); --ahh-line:var(--ink); --ahh-name:var(--hand); max-width:380px; margin:0 auto; padding:max(4px, env(safe-area-inset-top)) 16px 0; }
+  header .ahh-nm { font-size:28px; font-weight:700; }
+  header .ahh-b { width:44px; height:44px; padding:0; font:700 22px/1 var(--hand); color:var(--ink); background:var(--field); border:2.5px solid var(--ink); border-radius:255px 14px 225px 14px/14px 225px 14px 255px; box-shadow:2px 2px 0 var(--ink); cursor:pointer; }
+  header .ahh-b svg { width:18px; height:18px; }
   #app { max-width:380px; margin:0 auto; padding:0 16px; }
   .screen { min-height:calc(100vh - 44px); min-height:calc(100dvh - 44px); display:flex; flex-direction:column; justify-content:center; gap:16px; padding:12px 0 28px; animation:in .35s ease; }
   body.mid footer { display:none; }
@@ -80,7 +83,6 @@
   .zz text { animation:zz 3s ease-in-out infinite; } .zz text:nth-child(2) { animation-delay:1s; }
   @keyframes zz { 0%,100% { opacity:.2; transform:translateY(0); } 50% { opacity:1; transform:translateY(-4px); } }
   @media (prefers-reduced-motion: reduce) { .screen, .steam path, .zz text { animation:none; } .steam path { opacity:.7; } }
-  #langBtn { font:600 15px var(--body); color:var(--soft); background:none; border:1.5px solid currentColor; border-radius:999px; padding:4px 11px; cursor:pointer; }
   .langmenu { position:absolute; right:16px; top:42px; z-index:5; background:var(--field); border:2px solid var(--ink); border-radius:12px; padding:6px; display:flex; flex-direction:column; box-shadow:3px 3px 0 var(--ink); }
   .langmenu button { font:16px var(--body); color:var(--ink); background:none; border:0; text-align:left; padding:8px 12px; border-radius:8px; cursor:pointer; }
   .langmenu button[aria-checked=true] { background:var(--paper2); }
@@ -92,7 +94,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
 </svg>
-<header><button id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false"><span id="langLbl">EN</span></button></header>
+<header id="head"></header>
 <main id="app"></main>
 <footer id="foot" class="np"></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -309,20 +311,15 @@ function show(sc) {
 }
 
 /* ---------- language, footer ---------- */
-var menu = null;
-function closeLang() { if (menu) { menu.remove(); menu = null; $("langBtn").setAttribute("aria-expanded", "false"); } }
-$("langBtn").addEventListener("click", function (e) {
-  e.stopPropagation(); if (menu) return closeLang();
-  menu = document.createElement("div"); menu.className = "langmenu"; menu.setAttribute("role", "menu"); document.querySelector("header").appendChild(menu);
-  LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i]; menu.appendChild(b);
-    b.addEventListener("click", function () { if (window.FBL) FBL.set(l); closeLang(); redraw(); }); });
-  $("langBtn").setAttribute("aria-expanded", "true"); menu.querySelector("[aria-checked=true]").focus();
-});
-document.addEventListener("click", function (e) { if (menu && !menu.contains(e.target)) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLang(); });
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ language, privacy */
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { icon: '<img src="./icon.svg" alt="">', name: function () { return T(W.app); }, home: function () { scrollTo({ top: 0, behavior: "smooth" }); }, steps: [
+  ["Someone you know has a cold. Write their name and yours, and a short note.", "认识的人感冒了。写上他们的名字、你的名字，再写一句话。", "認識的人感冒了。寫上他們的名字、你的名字，再寫一句話。", "Alguien que conoces está resfriado. Escribe su nombre, el tuyo y una nota corta.", "Algú que coneixes està refredat. Escriu el seu nom, el teu i una nota curta."],
+  ["Choose what you'd really bring: soup, tissues and honey, something to watch, a quiet call. Send the link.", "选你真的会带去的：汤、纸巾和蜂蜜、可以看的东西、一通安静的电话。把链接发过去。", "選你真的會帶去的：湯、紙巾和蜂蜜、可以看的東西、一通安靜的電話。把連結傳過去。", "Elige lo que de verdad llevarías: sopa, pañuelos y miel, algo que ver, una llamada tranquila. Envía el enlace.", "Tria el que de debò portaries: sopa, mocadors i mel, alguna cosa per mirar, una trucada tranquil·la. Envia l'enllaç."],
+  ["They lift the lid and pick one. Then you bring it.", "对方掀开锅盖，挑一样。然后你送过去。", "對方掀開鍋蓋，挑一樣。然後你送過去。", "Levantan la tapa y eligen una. Luego tú se la llevas.", "Aixequen la tapa i en trien una. Després tu l'hi portes."]
+] }) : null;
 function chrome() {
   var i = li(); document.documentElement.lang = LANGS[i]; document.title = T(W.app);
-  $("langLbl").textContent = SHORT[i]; $("langBtn").setAttribute("aria-label", T(W.lang) + ": " + LNAMES[i]);
+  if (HD) HD.paint();
   var _k = function (k, d) { return window.FBC && FBC.W && FBC.W[k] ? FBC.t(FBC.W[k]) : d; };
   var _x = "<span>" + esc(_k("fLink", T(W.device))) + '</span><a href="https://www.after-hours.work/?fbl=' + LANGS[i] + '" target="_blank" rel="noopener">' + esc(_k("fAh", T(W.ah))) + "</a>";
   if (window.FBC && FBC.foot) FBC.foot($("foot"), { px: 0, extra: _x });   // the suite's one footer; this app's promise and After hours on the line under it

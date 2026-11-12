@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+    <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
     <!-- Pinch-zoom stays allowed (accessibility). interactive-widget lets Android shrink the layout when the keyboard opens. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="color-scheme" content="dark light">
@@ -91,6 +91,9 @@
         .wrap { width: 100%; max-width: 28rem; margin: 0 auto; padding-left: 1rem; padding-right: 1rem; }
         @media (min-width: 380px) { .wrap { padding-left: 1.25rem; padding-right: 1.25rem; } }
 
+        .topbar.ahh { min-height: 0; --ahh-bg: #151b29; --ahh-ink: #fff; --ahh-line: rgba(255,255,255,.16); --ahh-name: inherit; }
+        .topbar .ahh-nm { font-size: 18px; font-weight: 300; letter-spacing: -.01em; }
+        .topbar .ahh-ic img { border-radius: 6px; }
         .topbar {
             flex: 0 0 auto;
             display: flex;
@@ -318,6 +321,7 @@
            ink text; the partner's sky still colours the background (lighter).
            ------------------------------------------------------------------ */
         @media (prefers-color-scheme: light) {
+            .topbar.ahh { --ahh-bg: #fbf8f2; --ahh-ink: #1b2233; --ahh-line: rgba(20,30,50,.14); }
             :root { color-scheme: light; }
             html { background: #eef2f8; }
             html body#app-body { background-color: #eef2f8; color: #1b2333; }
@@ -361,41 +365,8 @@
 <div id="shell" class="app-shell">
 
     <!-- TOP BAR -->
-    <nav class="topbar wrap">
-        <div class="relative">
-            <button id="lang-btn" type="button" onclick="toggleLangMenu(event)" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-menu"
-                    class="h-10 pl-3 pr-2.5 rounded-full glass-subtle text-[12px] font-medium flex items-center gap-1.5 active:scale-95 transition">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-4 h-4 opacity-70" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-                <span id="lang-current">EN</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3 h-3 opacity-50" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <div id="lang-menu" role="menu" class="hidden absolute left-0 top-full mt-2 min-w-[10.5rem] rounded-2xl solid-panel py-1.5 z-50">
-                <button role="menuitemradio" data-lang="en" lang="en" onclick="pickLang('en')" class="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 flex items-center justify-between gap-3">English<span class="check opacity-0">✓</span></button>
-                <button role="menuitemradio" data-lang="zh-CN" lang="zh-CN" onclick="pickLang('zh-CN')" class="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 flex items-center justify-between gap-3">简体中文<span class="check opacity-0">✓</span></button>
-                <button role="menuitemradio" data-lang="zh-TW" lang="zh-TW" onclick="pickLang('zh-TW')" class="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 flex items-center justify-between gap-3">繁體中文<span class="check opacity-0">✓</span></button>
-                <button role="menuitemradio" data-lang="es" lang="es" onclick="pickLang('es')" class="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 flex items-center justify-between gap-3">Español<span class="check opacity-0">✓</span></button>
-                <button role="menuitemradio" data-lang="ca" lang="ca" onclick="pickLang('ca')" class="w-full text-left px-4 py-2.5 text-sm hover:bg-white/10 flex items-center justify-between gap-3">Català<span class="check opacity-0">✓</span></button>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-1.5">
-            <button id="install-btn" type="button" onclick="installApp()" class="hidden icon-btn glass-subtle opacity-80 hover:opacity-100" data-i18n-aria="install" data-i18n-title="install">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
-            </button>
-            <div id="nav-user-controls" class="hidden flex items-center gap-1.5">
-                <a id="tc-link" href="https://www.after-hours.work/two-candles/" class="icon-btn glass-subtle opacity-80 hover:opacity-100" data-i18n-aria="dateNight" data-i18n-title="dateNight">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 11v9M16 11v9M6 20h12"/><path d="M8 4.5c1 1.3 1 2.6 0 3.8-1-1.2-1-2.5 0-3.8zM16 4.5c1 1.3 1 2.6 0 3.8-1-1.2-1-2.5 0-3.8z"/></svg>
-                </a>
-                <script>/* Two Candles: its own app once it's out, the town's table on its own (no door) till then. FBApps lives in /fbkit/fb.js */ try { if (window.FBApps) document.getElementById("tc-link").href = FBApps.href("table"); } catch (e) {}</script>
-                <button type="button" onclick="openTimeline()" class="icon-btn glass-subtle opacity-80 hover:opacity-100" data-i18n-aria="timeline" data-i18n-title="timeline">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-                </button>
-                <button type="button" onclick="openEditModal()" class="icon-btn glass-subtle opacity-80 hover:opacity-100" data-i18n-aria="editAccount" data-i18n-title="editAccount">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 19.5c1.2-3.3 3.9-5 7-5s5.8 1.7 7 5"/></svg>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <nav class="topbar wrap" id="hoTop"></nav>
+    <span id="install-btn" class="hidden" hidden></span><span id="nav-user-controls" class="hidden" hidden></span>
 
     <!-- ================================================================= -->
     <!-- SCREEN 1: AUTHENTICATION                                          -->
@@ -1390,6 +1361,26 @@
             return 'en';
         }
 
+        /* the after-hours header (handoff/DESIGN.md §3): name · ? three steps · ⋯ timeline, dinner together, account, install, language, privacy */
+        var HD = window.FBC && FBC.head ? FBC.head($('hoTop'), { btn: 'icon-btn glass-subtle', icon: '<img src="./icon.svg" alt="">', name: function () { return t('appTitle'); },
+            home: function () { try { $('app-main').scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {} },
+            lang: function (l) { setLang({ 'en': 'en', 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'es': 'es', 'ca': 'ca' }[l] || 'en'); },
+            items: function () {
+                var l = [], u = null; try { u = currentUser; } catch (e) {}
+                if (u) {
+                    l.push({ label: t('timeline'), on: openTimeline });
+                    l.push({ label: t('dateNight'), on: function () { location.href = window.FBApps ? FBApps.href('table') : 'https://www.after-hours.work/two-candles/'; } });
+                    l.push({ label: t('editAccount'), on: openEditModal });
+                }
+                if (!$('install-btn').classList.contains('hidden')) l.push({ label: t('install'), on: installApp });
+                return l;
+            },
+            steps: [
+                ["Sign in, then pair with the one person you share it with.", "登录，然后和你要分享的那个人配对。", "登入，然後和你要分享的那個人配對。", "Entra y empareja con la persona con quien lo compartes.", "Entra i aparella't amb la persona amb qui ho comparteixes."],
+                ["See each other's time, weather and mood at a glance, and leave a capsule for when they wake.", "一眼看到对方的时间、天气和心情，给醒来的他们留一个胶囊。", "一眼看到對方的時間、天氣和心情，給醒來的他們留一個膠囊。", "Mira de un vistazo la hora, el tiempo y el ánimo del otro, y deja una cápsula para cuando despierte.", "Mira d'un cop d'ull l'hora, el temps i l'ànim de l'altre, i deixa una càpsula per quan es desperti."],
+                ["When your days overlap, it says so. That's the time to call.", "你们醒着的时间重叠时，它会告诉你。那就是打电话的时候。", "你們醒著的時間重疊時，它會告訴你。那就是打電話的時候。", "Cuando vuestros días coinciden, te lo dice. Ese es el momento de llamar.", "Quan els vostres dies coincideixen, t'ho diu. Aquest és el moment de trucar."]
+            ] }) : null;
+
         function setLang(lang) {
             currentLang = lang;
             lsSet('handoff_lang', lang);
@@ -1402,7 +1393,7 @@
                 b.classList.toggle('text-amber-300', on);
                 b.querySelector('.check').classList.toggle('opacity-0', !on);
             });
-            document.title = t('appTitle');
+            document.title = t('appTitle'); if (HD) HD.paint();
 
             document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
@@ -1426,16 +1417,7 @@
         }
 
         const LANG_SHORT = { 'en': 'EN', 'zh-CN': '简', 'zh-TW': '繁', 'es': 'ES', 'ca': 'CA' };
-        function toggleLangMenu(e) {
-            if (e) e.stopPropagation();
-            const open = $('lang-menu').classList.contains('hidden');
-            show('lang-menu', open);
-            $('lang-btn').setAttribute('aria-expanded', open ? 'true' : 'false');
-            if (open) { const cur = document.querySelector(`#lang-menu [data-lang="${currentLang}"]`); if (cur) cur.focus(); }
-        }
-        function closeLangMenu() { show('lang-menu', false); $('lang-btn').setAttribute('aria-expanded', 'false'); }
-        function pickLang(lang) { closeLangMenu(); setLang(lang); $('lang-btn').focus(); }
-        document.addEventListener('click', e => { if (!e.target.closest('#lang-menu') && !e.target.closest('#lang-btn')) closeLangMenu(); });
+        function closeLangMenu() {}   /* the language lives in the shared header's ⋯ now */
 
         function switchAuthTab(mode) {
             authMode = mode;
@@ -2666,7 +2648,7 @@
 
         document.addEventListener('keydown', e => {
             if (e.key !== 'Escape') return;
-            if (!$('lang-menu').classList.contains('hidden')) closeLangMenu();
+            if ($('lang-menu') && !$('lang-menu').classList.contains('hidden')) closeLangMenu();
             else if (!$('edit-modal').classList.contains('hidden')) closeEditModal();
             else if (!$('timeline-modal').classList.contains('hidden')) closeTimeline();
         });

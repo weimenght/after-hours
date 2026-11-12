@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Window Radio</title>
 <meta name="description" content="Lo-fi from your window. The day, the hour, the sky and your mood write the tape. Play it for one cup of tea, then go find someone to share the pot.">
@@ -28,13 +28,16 @@
   [hidden] { display:none !important; }
   html, body { background:var(--paper); color:var(--ink); }
   body { font:16px/1.5 var(--body); -webkit-tap-highlight-color:transparent; padding-left:env(safe-area-inset-left,0px); padding-right:env(safe-area-inset-right,0px); }
-  header { max-width:380px; margin:0 auto; padding:10px 16px 0; display:flex; justify-content:space-between; align-items:center; position:relative; }
+  header { --ahh-bg:var(--card); --ahh-ink:var(--ink); --ahh-line:var(--line); --ahh-name:var(--hand); max-width:380px; margin:0 auto; padding:max(4px, env(safe-area-inset-top)) 16px 0; }
+  header .ahh-nm { font-size:28px; font-weight:700; }
+  header .ahh-b { width:44px; height:44px; padding:0; font:700 22px/1 var(--hand); color:var(--ink); background:var(--card); border:2.5px solid var(--ink); border-radius:255px 14px 225px 14px/14px 225px 14px 255px; box-shadow:2px 2px 0 var(--ink); cursor:pointer; }
+  header .ahh-b svg { width:18px; height:18px; }
+  header .ahh-nm i { font-style:normal; color:var(--teal); }
   .brand { font:700 26px/1 var(--hand); }
   .brand i { font-style:normal; color:var(--teal); }
   #app { max-width:380px; margin:0 auto; padding:0 16px 20px; }
   button { font:inherit; color:inherit; cursor:pointer; background:none; border:0; }
   button:focus-visible { outline:3px solid var(--teal); outline-offset:3px; }
-  #langBtn { font:600 14px var(--body); color:var(--soft); border:1.5px solid currentColor; border-radius:999px; padding:4px 11px; }
   .langmenu { position:absolute; right:16px; top:42px; z-index:5; background:var(--card); border:2px solid var(--ink); border-radius:12px; padding:6px; display:flex; flex-direction:column; box-shadow:3px 3px 0 var(--ink); }
   .langmenu button { font:16px var(--body); text-align:left; padding:8px 12px; border-radius:8px; }
   .langmenu button[aria-checked=true] { background:var(--paper); }
@@ -96,7 +99,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.6"/></filter>
 </svg>
-<header><span class="brand" id="brand"></span><button id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false"><span id="langLbl">EN</span></button></header>
+<header id="head"><span class="brand"></span></header>
 <main id="app">
   <section class="screen" id="sMood">
     <p class="ctx" id="ctxLine"></p>
@@ -525,23 +528,18 @@ function ctxLine(){const d=new Date(),f=festivalFor(d);return[dayName(d.getDay()
 function dayName(i){return W.days[li()][i]}
 function tapeTitle(c){const o=c.useFest?Tr(W.fobj[c.fid]):Tr(W.obj[c.objIdx]);const s=F(W.wp[c.weather],{o});return li()===3||li()===4?s.charAt(0).toUpperCase()+s.slice(1):s}
 
-let menu=null;
-function closeLang(){if(menu){menu.remove();menu=null;$('langBtn').setAttribute('aria-expanded','false')}}
-$('langBtn').addEventListener('click',e=>{
-  e.stopPropagation();if(menu)return closeLang();
-  menu=document.createElement('div');menu.className='langmenu';menu.setAttribute('role','menu');document.querySelector('header').appendChild(menu);
-  LANGS.forEach((l,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','menuitemradio');b.setAttribute('aria-checked',String(i===li()));b.lang=l;b.textContent=LNAMES[i];menu.appendChild(b);
-    b.addEventListener('click',()=>{if(window.FBL)FBL.set(l);closeLang();renderText()})});
-  $('langBtn').setAttribute('aria-expanded','true');menu.querySelector('[aria-checked=true]').focus();
-});
-document.addEventListener('click',e=>{if(menu&&!menu.contains(e.target))closeLang()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLang()});
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ language, privacy */
+const HD=window.FBC&&FBC.head?FBC.head($('head'),{icon:'<img src="./icon.svg" alt="">',name:()=>Tr(W.app),home:function () { scrollTo({ top: 0, behavior: "smooth" }); },steps:[
+  ["Say how you are, and what it's like outside your window.", "说说你现在怎么样，窗外是什么天气。", "說說你現在怎麼樣，窗外是什麼天氣。", "Di cómo estás y qué tiempo hace al otro lado de la ventana.", "Digues com estàs i quin temps fa a l'altra banda de la finestra."],
+  ["A tape is made for this day and this hour. Play it for a cup, a pot, or until you stop.", "这一天、这个钟点会录出一盘磁带。放一杯茶的时间、一壶茶的时间，或者一直放。", "這一天、這個鐘點會錄出一捲錄音帶。放一杯茶的時間、一壺茶的時間，或者一直放。", "Se graba una cinta para este día y esta hora. Ponla lo que dura una taza, una tetera o hasta que pares.", "Es grava una cinta per a aquest dia i aquesta hora. Posa-la el que dura una tassa, una tetera o fins que paris."],
+  ["Send the tape to someone and press play together. Better still, in the same room.", "把磁带发给一个人，一起按下播放。最好是在同一个房间。", "把錄音帶傳給一個人，一起按下播放。最好是在同一個房間。", "Envía la cinta a alguien y dadle al play a la vez. Mejor aún, en la misma habitación.", "Envia la cinta a algú i premeu play alhora. Encara millor, a la mateixa habitació."]
+]}):null;
 addEventListener('fbl:lang',()=>renderText());
 
 function renderText(){
   const i=li();document.documentElement.lang=LANGS[i];document.title=Tr(W.app);
-  $('langLbl').textContent=SHORT[i];$('langBtn').setAttribute('aria-label',Tr(W.lang)+': '+LNAMES[i]);
-  const nm=Tr(W.app),sp=nm.lastIndexOf(' ');$('brand').innerHTML=i===1||i===2?esc(nm.slice(0,2))+'<i>'+esc(nm.slice(2))+'</i>':esc(nm.slice(0,sp+1))+'<i>'+esc(nm.slice(sp+1))+'</i>';
+  if(HD)HD.paint();
+  const nm=Tr(W.app),sp=nm.lastIndexOf(' '),nmEl=HD?HD.el.querySelector('.ahh-nm'):null;if(nmEl)nmEl.innerHTML=i===1||i===2?esc(nm.slice(0,2))+'<i>'+esc(nm.slice(2))+'</i>':esc(nm.slice(0,sp+1))+'<i>'+esc(nm.slice(sp+1))+'</i>';
   $('ctxLine').textContent=ctxLine();$('moodQ').textContent=Tr(W.moodQ);$('moodSub').textContent=Tr(W.moodSub);
   $('weatherQ').textContent=Tr(W.weatherQ);$('weatherSub').textContent=Tr(W.weatherSub);$('wBack').textContent=Tr(W.back);
   $('moodGrid').innerHTML=MOODS.map(m=>`<button class="pick" type="button" data-m="${m}" aria-pressed="${S.mood===m}">${svg(FACE[m],FACEC[m])}<span>${esc(Tr(W.moods[m]))}</span></button>`).join('');

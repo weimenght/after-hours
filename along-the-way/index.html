@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Along the Way</title>
 <meta name="description" content="A few lines a day: the weather inside, a rose, a thorn and a bud, and who made the day better. Keep the road as a PDF booklet. Kept on your own device.">
@@ -38,7 +38,9 @@ body {
   padding-block: 12px 24px; -webkit-font-smoothing: none;
 }
 #app { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.top { --ahh-bg: var(--paper); --ahh-ink: var(--ink); --ahh-line: var(--line); }
+.top .ahh-ic img { width: 100%; height: 100%; image-rendering: pixelated; }
+html:lang(zh) .top .ahh-nm, html:lang(zh-Hant) .top .ahh-nm { font: 700 18px/1.2 var(--vt); letter-spacing: .1em; }
 .brand { font-family: var(--px); font-size: 11px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
 .screen { display: flex; flex-direction: column; gap: 14px; }
 .scene { width: 100%; aspect-ratio: 160 / 96; max-width: 100%; display: block; image-rendering: pixelated; border: 3px solid var(--line); box-shadow: var(--drop); background: #2a1c30; }
@@ -139,10 +141,7 @@ textarea:focus, input:focus { outline: 3px solid var(--amber); outline-offset: 1
 </head>
 <body>
 <div id="app">
-  <div class="top">
-    <span class="brand" id="brand">Along the Way</span>
-    <div class="langm"><button class="btn small" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false">EN</button><div class="menu" id="langMenu" role="menu" hidden></div></div>
-  </div>
+  <header class="top" id="head"><span class="brand">Along the Way</span></header>
 
   <!-- home -->
   <section class="screen" data-s="home">
@@ -535,6 +534,13 @@ function speak(el, who, line) {
 }
 
 /* ---------- screens ---------- */
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ records, language, take it along, privacy */
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { px: 1, btn: "btn small", icon: '<img src="./icon.svg" alt="">', name: function () { return t("title"); },
+  home: function () { readFields(); show("home"); }, steps: [
+  ["Mei asks how the day was inside: pick a little sky.", "Mei 问你今天心里怎么样：挑一小片天空。", "Mei 問你今天心裡怎麼樣：挑一小片天空。", "Mei te pregunta cómo fue el día por dentro: elige un cielito.", "La Mei et pregunta com ha anat el dia per dins: tria un celet."],
+  ["Popo asks for a rose, a thorn and a bud. Write any of them, or none.", "婆婆问你一朵玫瑰、一根刺、一个花苞。写哪个都行，不写也行。", "婆婆問你一朵玫瑰、一根刺、一個花苞。寫哪個都行，不寫也行。", "Popo te pide una rosa, una espina y un brote. Escribe los que quieras, o ninguno.", "La Popo et demana una rosa, una espina i un brot. Escriu els que vulguis, o cap."],
+  ["Wei asks who made today better. Then go and tell them.", "Wei 问今天是谁让你过得更好。然后去告诉他们。", "Wei 問今天是誰讓你過得更好。然後去告訴他們。", "Wei te pregunta quién te mejoró el día. Luego ve a decírselo.", "En Wei et pregunta qui t'ha millorat el dia. Després ves a dir-l'hi."]
+], items: function () { return [{ label: t("road"), on: function () { readFields(); show("road"); } }]; }, device: function () { readFields(); show("take"); } }) : null;
 var cur = "home", draft = null, from = "home";
 function show(s) {
   cur = s; document.querySelectorAll("[data-s]").forEach(function (el) { el.hidden = el.getAttribute("data-s") !== s; });
@@ -544,7 +550,7 @@ function render() {
   document.documentElement.lang = LANGS[li()];
   document.title = t("title");
   document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
-  $("brand").textContent = t("title"); $("langBtn").textContent = SHORT[li()]; $("langBtn").setAttribute("aria-label", t("lang")); foot();
+  if (HD) HD.paint(); foot();
   if (cur === "home") renderHome(); else if (cur === "mood") renderMood(); else if (cur === "rtb") renderRtb();
   else if (cur === "thanks") renderThanks(); else if (cur === "road") renderRoad(); else if (cur === "pdf") renderPdf(); else if (cur === "done") renderDone();
   else if (cur === "take") renderTake(); else if (cur === "arrive") renderArrive();
@@ -851,15 +857,6 @@ function makeIt() {
 }
 
 /* ---------- wiring ---------- */
-function closeLang() { $("langMenu").hidden = true; $("langBtn").setAttribute("aria-expanded", "false"); }
-$("langBtn").onclick = function (e) {
-  e.stopPropagation(); var m = $("langMenu"); if (!m.hidden) { closeLang(); return; }
-  m.textContent = ""; LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i];
-    b.onclick = function () { readFields(); if (window.FBL) FBL.set(l); else document.documentElement.lang = l; closeLang(); render(); }; m.appendChild(b); });
-  m.hidden = false; $("langBtn").setAttribute("aria-expanded", "true"); m.firstChild.focus();
-};
-document.addEventListener("click", function (e) { if (!e.target.closest || !e.target.closest(".langm")) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLang(); });
 addEventListener("fbl:lang", function () { readFields(); render(); });
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 function foot() {

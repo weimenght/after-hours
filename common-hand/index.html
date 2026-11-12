@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Common Hand</title>
 <meta name="description" content="A ten-minute warm-up for a mahjong table of four: draw a tile, read it out, and find something in common for every pair at the table. One phone in the middle, then phones down and deal.">
@@ -41,7 +41,9 @@ body {
   padding-block: 12px 24px; -webkit-font-smoothing: none;
 }
 #app { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.top { --ahh-bg: var(--paper); --ahh-ink: var(--ink); --ahh-line: var(--line); }
+.top .ahh-ic img { width: 100%; height: 100%; image-rendering: pixelated; }
+html:lang(zh) .top .ahh-nm, html:lang(zh-Hant) .top .ahh-nm { font: 700 18px/1.2 var(--vt); letter-spacing: .1em; }
 .brand { font-family: var(--px); font-size: 11px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
 .screen { display: flex; flex-direction: column; gap: 14px; }
 .scene { width: 100%; aspect-ratio: 160 / 96; max-width: 100%; display: block; image-rendering: pixelated; border: 3px solid var(--line); box-shadow: var(--drop); background: #2a1c30; box-sizing: border-box; }
@@ -147,10 +149,7 @@ input::placeholder { color: #a08a70; }
 </head>
 <body>
 <div id="app">
-  <div class="top">
-    <span class="brand" id="brand">Common Hand</span>
-    <div class="tops"><button class="btn small" id="sndBtn" type="button" aria-pressed="true">♪</button><div class="langm"><button class="btn small" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false">EN</button><div class="menu" id="langMenu" role="menu" hidden></div></div></div>
-  </div>
+  <header class="top" id="head"><span class="brand">Common Hand</span></header>
 
   <!-- home: who's at the table -->
   <section class="screen" data-s="home">
@@ -536,9 +535,16 @@ function sfx(kind) {
   else if (kind === "wash") { for (i = 0; i < 14; i++) clack(a, t + i * .055 + Math.random() * .03, 1700 + Math.random() * 1600, .18 + Math.random() * .2); }
   else if (kind === "hu") { for (i = 0; i < 6; i++) clack(a, t + i * .06, 2200 + i * 180, .4); [523, 659, 784, 1047].forEach(function (f, j) { bell(a, t + .45 + j * .13, f, .13); }); }
 }
-function sndBtn() { var b = $("sndBtn"); b.setAttribute("aria-pressed", String(SND)); b.setAttribute("aria-label", t("sound")); b.title = t("sound"); }
+function sndBtn() {}   /* sound lives in ⋯ now (FBC.head) */
 
 /* ---------- screens ---------- */
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ sound, language, privacy */
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { px: 1, btn: "btn small", icon: '<img src="./icon.svg" alt="">', name: function () { return t("title"); },
+  home: function () { if (cur === "play") { scrollTo({ top: 0, behavior: "smooth" }); return; } show("home"); }, steps: [
+  ["One phone in the middle of the table. Name the four seats.", "一部手机放在桌子中间。写下四个座位的名字。", "一部手機放在桌子中間。寫下四個座位的名字。", "Un móvil en medio de la mesa. Pon nombre a los cuatro asientos.", "Un mòbil al mig de la taula. Posa nom als quatre seients."],
+  ["Draw a tile, read it out, and tap everyone it's true for.", "摸一张牌，大声念出来，点一点说中了谁。", "摸一張牌，大聲唸出來，點一點說中了誰。", "Roba una ficha, léela en voz alta y toca a todos a quienes les pasa.", "Roba una fitxa, llegeix-la en veu alta i toca tothom a qui li passa."],
+  ["When every pair has found something in common, the hand is complete. Then the real game.", "每两个人都找到共同点，这手牌就成了。然后开真正的一局。", "每兩個人都找到共同點，這手牌就成了。然後開真正的一局。", "Cuando cada pareja ha encontrado algo en común, la mano está completa. Luego, la partida de verdad.", "Quan cada parella ha trobat alguna cosa en comú, la mà és completa. Després, la partida de debò."]
+], sound: { get: function () { return SND; }, set: function (v) { SND = v; try { localStorage.setItem("ch_snd", SND ? "1" : "0"); } catch (e) {} if (SND) sfx("tap"); } } }) : null;
 var cur = "home", toast = "", flip = false, line = null, recv = null;
 var MID = { play: 1 };   /* the footer shows everywhere but the table itself */
 function show(s) {
@@ -551,7 +557,7 @@ function render() {
   document.title = t("title");
   document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
   sndBtn();
-  $("brand").textContent = t("title"); $("langBtn").textContent = SHORT[li()]; $("langBtn").setAttribute("aria-label", t("lang"));
+  if (HD) HD.paint();
   $("foot").hidden = !!MID[cur]; foot();
   if (cur === "home") renderHome(); else if (cur === "play") renderPlay(); else if (cur === "done") renderDone(); else if (cur === "recv") renderRecv();
 }
@@ -647,15 +653,6 @@ function send() {
 }
 
 /* ---------- wiring ---------- */
-function closeLang() { $("langMenu").hidden = true; $("langBtn").setAttribute("aria-expanded", "false"); }
-$("langBtn").onclick = function (e) {
-  e.stopPropagation(); var m = $("langMenu"); if (!m.hidden) { closeLang(); return; }
-  m.textContent = ""; LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i];
-    b.onclick = function () { if (window.FBL) FBL.set(l); else document.documentElement.lang = l; closeLang(); render(); }; m.appendChild(b); });
-  m.hidden = false; $("langBtn").setAttribute("aria-expanded", "true"); m.firstChild.focus();
-};
-document.addEventListener("click", function (e) { if (!e.target.closest || !e.target.closest(".langm")) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLang(); });
 addEventListener("fbl:lang", function () { render(); });
 function foot() {
   var f = $("foot"); if (!f || f.hidden) return;
@@ -674,7 +671,6 @@ $("wash").onclick = function () { sfx("wash"); S.names = S.names.map(function (x
 $("reseat").onclick = function () { S.drawn = null; S.sel = []; S.pairs = {}; S.deck = shuffled(); line = null; toast = ""; show("home"); };
 $("again").onclick = function () { S = fresh(S.names); line = null; toast = ""; $("sendNote").textContent = ""; show("play"); };
 $("send").onclick = send;
-$("sndBtn").onclick = function () { SND = !SND; try { localStorage.setItem("ch_snd", SND ? "1" : "0"); } catch (e) {} sndBtn(); if (SND) sfx("tap"); };
 $("dealOwn").onclick = function () { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} recv = null; line = null; show(S.screen === "play" && found() < 6 ? "play" : "home"); };
 $("putDown").onclick = function () { sceneDark($("scDark")); $("darkLine").textContent = t("lights"); $("dark").hidden = false; };
 function wakeUp() { $("dark").hidden = true; }

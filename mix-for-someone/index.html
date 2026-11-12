@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=43ea54d41c"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=449672cabd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mix for Someone</title>
 <meta name="description" content="Drinks from the House book at Next Door in Nearby, zero-proof too. Pick one, mix it for someone, or add your own to the book.">
@@ -40,7 +40,9 @@ body {
   padding-block: 12px 24px; -webkit-font-smoothing: none;
 }
 #app { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.top { --ahh-bg: var(--paper); --ahh-ink: var(--ink); --ahh-line: var(--line); }
+.top .ahh-ic img { width: 100%; height: 100%; image-rendering: pixelated; }
+html:lang(zh) .top .ahh-nm, html:lang(zh-Hant) .top .ahh-nm { font: 700 18px/1.2 var(--vt); letter-spacing: .1em; }
 .brand { font-family: var(--px); font-size: 11px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
 .screen { display: flex; flex-direction: column; gap: 14px; }
 .scene { width: 100%; aspect-ratio: 160 / 96; max-width: 100%; display: block; image-rendering: pixelated; border: 3px solid var(--line); box-shadow: var(--drop); background: #2a1c30; }
@@ -182,10 +184,7 @@ textarea:focus, input:focus { outline: 3px solid var(--amber); outline-offset: 1
 </head>
 <body>
 <div id="app">
-  <div class="top">
-    <span class="brand" id="brand">Mix for Someone</span>
-    <div class="langm"><button class="btn small" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false">EN</button><div class="menu" id="langMenu" role="menu" hidden></div></div>
-  </div>
+  <header class="top" id="head"><span class="brand">Mix for Someone</span></header>
 
   <!-- home: Next Door's counter -->
   <section class="screen" data-s="home">
@@ -618,6 +617,13 @@ var toastT = 0;
 function toast(msg) { var e = $("toast"); e.textContent = msg; e.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { e.hidden = true; }, Math.min(9000, 2600 + msg.length * 45)); }
 
 /* ---------- screens ---------- */
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ records, language, privacy */
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { px: 1, btn: "btn small", icon: '<img src="./icon.svg" alt="">', name: function () { return t("title"); },
+  home: function () { show("home"); }, steps: [
+  ["Tell Wei what the evening's like: bright, strong, long, bitter or zero-proof.", "告诉 Wei 今晚是什么感觉：清爽、浓烈、绵长、带点苦，或者无酒精。", "告訴 Wei 今晚是什麼感覺：清爽、濃烈、綿長、帶點苦，或者無酒精。", "Dile a Wei cómo es la noche: fresca, fuerte, larga, amarga o sin alcohol.", "Digues-li a en Wei com és la nit: fresca, forta, llarga, amarga o sense alcohol."],
+  ["He slides one drink across: what's in it and how to make it.", "他推过来一杯：里面有什么，怎么调。", "他推過來一杯：裡面有什麼，怎麼調。", "Te pasa una copa: qué lleva y cómo se hace.", "Et passa una copa: què porta i com es fa."],
+  ["Mix two, ask someone over and put the phone down. Your own drinks go in the House book.", "调两杯，请个人过来，放下手机。你自己调的可以放进店里的本子。", "調兩杯，請個人過來，放下手機。你自己調的可以放進店裡的本子。", "Prepara dos, invita a alguien y deja el móvil. Tus propias copas van al libro de la casa.", "Prepara'n dues, convida algú i deixa el mòbil. Les teves copes van al llibre de la casa."]
+], items: function () { return [{ label: t("book"), on: function () { $("goBook").click(); } }, { label: t("kept"), on: function () { $("goKept").click(); } }]; } }) : null;
 var cur = "home", drink = null, lastMood = null, back = "home", seen = [];
 function show(s) {
   cur = s; document.querySelectorAll("[data-s]").forEach(function (el) { el.hidden = el.getAttribute("data-s") !== s; });
@@ -627,7 +633,7 @@ function render() {
   document.documentElement.lang = LANGS[li()];
   document.title = t("title");
   document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
-  $("brand").textContent = t("title"); $("langBtn").textContent = SHORT[li()]; $("langBtn").setAttribute("aria-label", t("lang")); foot();
+  if (HD) HD.paint(); foot();
   $("q").placeholder = t("search");
   ({ home: renderHome, pick: renderPick, card: renderCard, done: renderDone, book: renderBook, mix: renderMix, thanks: renderThanks, kept: renderKept })[cur]();
 }
@@ -792,15 +798,7 @@ $("invite").onclick = function () { var n = clean($("whoName").value, 24); S.who
 $("shareBtn").onclick = function () { shareText(t("shareText", { d: F(drink, "name"), p: drink.pours.map(function (p) { return amount(p) + " " + T(ING[p.id].name); }).join(", "), u: location.origin + location.pathname })); };
 
 /* ---------- wiring ---------- */
-function closeLang() { $("langMenu").hidden = true; $("langBtn").setAttribute("aria-expanded", "false"); }
-$("langBtn").onclick = function (e) {
-  e.stopPropagation(); var m = $("langMenu"); if (!m.hidden) { closeLang(); return; }
-  m.textContent = ""; LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i];
-    b.onclick = function () { if (window.FBL) FBL.set(l); else document.documentElement.lang = l; closeLang(); render(); }; m.appendChild(b); });
-  m.hidden = false; $("langBtn").setAttribute("aria-expanded", "true"); m.firstChild.focus();
-};
-document.addEventListener("click", function (e) { if (!e.target.closest || !e.target.closest(".langm")) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeLang(); if (!$("dark").hidden) wakeUp(); } });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!$("dark").hidden) wakeUp(); } });
 addEventListener("fbl:lang", function () { render(); });
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 function foot() {
