@@ -476,6 +476,6 @@
     e.preventDefault(); e.stopPropagation(); sheet();
   }, true);
 
-  window.VK = { say: say, clip: clip, clipId: clipId, clipReady: clipReady, hasVoice: hasVoice, cyToEs: cyToEs, mic: mic, sync: startSync, syncNow: function () { return run(); }, syncing: syncing, importList: importList, parseList: parseList, note: note, room: room, LANGS: LANGS, code: code, idx: idx, t: t, W: W, sheet: sheet, ui: ui, tr: tr, locale: locale };
+  window.VK = { cloud: cloudSheet, say: say, clip: clip, clipId: clipId, clipReady: clipReady, hasVoice: hasVoice, cyToEs: cyToEs, mic: mic, sync: startSync, syncNow: function () { return run(); }, syncing: syncing, importList: importList, parseList: parseList, note: note, room: room, LANGS: LANGS, code: code, idx: idx, t: t, W: W, sheet: sheet, ui: ui, tr: tr, locale: locale };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", paintButtons); else paintButtons();
 })();

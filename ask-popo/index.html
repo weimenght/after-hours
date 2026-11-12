@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=cde86209b5"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=93c83986bb"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ask Popo</title>
 <meta name="description" content="One question a week to ask an older relative in person, and two lines to keep the answer. A small book you can print. Kept on your own device.">
@@ -32,11 +32,8 @@
   html:lang(zh) body, html:lang(zh-Hant) body { font-size:17px; line-height:1.5; }
   .wrap { width:100%; max-width:620px; margin:0 auto; flex:1; display:grid; align-content:start; gap:14px;
     padding:max(14px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left)); }
-  header { display:flex; align-items:center; gap:10px; position:relative; }
-  .brand { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
-  .brand svg { width:28px; height:28px; flex:none; }
-  .brand h1 { margin:0; font:12px/1.4 var(--sign); letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  html:lang(zh) .brand h1, html:lang(zh-Hant) .brand h1 { font:700 18px/1.2 var(--pix); letter-spacing:.1em; }
+  header { --ahh-bg:var(--panel); --ahh-ink:var(--ink); --ahh-line:var(--line); --ahh-name:var(--sign); }
+  html:lang(zh) .ahh-nm, html:lang(zh-Hant) .ahh-nm { font:700 18px/1.2 var(--pix); letter-spacing:.1em; }
   .stage { border:3px solid var(--line); box-shadow:4px 4px 0 var(--line); background:#14101e; }
   #room { display:block; width:100%; height:auto; aspect-ratio:320/200; image-rendering:pixelated; }
   .course { font:8px/1 var(--sign); color:#f3ead8; background:#1a1410; padding:8px 10px 7px; letter-spacing:.08em; }
@@ -78,9 +75,6 @@
   .days .btn { padding:10px 0; min-height:46px; font-size:19px; }
   html:lang(zh) .days .btn, html:lang(zh-Hant) .days .btn { font-size:14px; }
   .quiet { text-align:center; }
-  .langmenu { position:absolute; right:0; top:46px; z-index:30; background:var(--panel); border:3px solid var(--line); box-shadow:4px 4px 0 var(--line); display:flex; flex-direction:column; min-width:150px; }
-  .langmenu button { font:20px/1.2 var(--pix); color:var(--ink); background:none; border:0; text-align:left; padding:10px 14px; min-height:44px; cursor:pointer; }
-  .langmenu button[aria-checked="true"] { background:var(--amber); color:#1a1410; }
   footer { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px; padding:14px 16px max(18px, env(safe-area-inset-bottom)); font-size:17px; color:var(--mut); }
   footer a { color:inherit; display:inline-flex; align-items:center; gap:5px; }
 
@@ -108,7 +102,7 @@
   @media print {
     html, body { background:#fff !important; }
     body { display:block; }
-    header, .stage, .who, #line, .np, footer, .langmenu { display:none !important; }
+    header, .stage, .who, #line, .np, footer, .ahh-menu { display:none !important; }
     .wrap { padding:0; max-width:none; display:block; }
     .panel { border:0; box-shadow:none; padding:0; background:#fff; display:block; }
     .book { border:0; box-shadow:none; padding:0; background:#fff; }
@@ -123,8 +117,7 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="brand"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><use href="#apicon"/></svg><h1 id="appName">Ask Popo</h1></div>
-    <button class="btn sm" id="langBtn" type="button" aria-haspopup="menu" aria-expanded="false"><span id="langLbl">EN</span></button>
+    <div class="brand"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><use href="#apicon"/></svg><span>Ask Popo</span></div>
   </header>
   <div class="stage" id="stage"><canvas id="room" width="320" height="200" role="img"></canvas><div class="course" id="course"></div></div>
   <section id="panel" class="panel" aria-live="polite">
@@ -352,21 +345,18 @@ function book() {
 }
 
 /* ---------- language, footer ---------- */
-var menu = null;
-function closeLang() { if (menu) { menu.remove(); menu = null; $("langBtn").setAttribute("aria-expanded", "false"); } }
-$("langBtn").addEventListener("click", function (e) {
-  e.stopPropagation(); if (menu) return closeLang();
-  menu = el("div", "langmenu", null, document.querySelector("header")); menu.setAttribute("role", "menu");
-  LANGS.forEach(function (l, i) { var b = el("button", null, null, menu); b.type = "button"; b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = LNAMES[i];
-    b.addEventListener("click", function () { if (window.FBL) FBL.set(l); closeLang(); render(); }); });
-  $("langBtn").setAttribute("aria-expanded", "true"); menu.querySelector("[aria-checked=true]").focus();
-});
-document.addEventListener("click", function (e) { if (menu && !menu.contains(e.target)) closeLang(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLang(); });
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? the three steps · ⋯ The Book, Settings, language, privacy */
+var STEPS = [
+  ["Write the name of someone older you'd like to ask, and the day you usually see or call them.", "写下你想问的长辈的名字，和你平常去看他们或给他们打电话的那一天。", "寫下你想問的長輩的名字，和你平常去看他們或給他們打電話的那一天。", "Escribe el nombre de alguien mayor a quien quieras preguntar, y el día que sueles verle o llamarle.", "Escriu el nom d'algú gran a qui vulguis preguntar, i el dia que acostumes a veure'l o trucar-li."],
+  ["Each week there's one question. Ask it in person, at the table or on the phone.", "每周一个问题。当面问，在饭桌边或者电话里。", "每週一個問題。當面問，在飯桌邊或者電話裡。", "Cada semana hay una pregunta. Házsela en persona, en la mesa o por teléfono.", "Cada setmana hi ha una pregunta. Fes-la-hi en persona, a taula o per telèfon."],
+  ["Keep their answer in two lines. The Book gathers them, ready to print.", "用两行记下他们的回答。小书会把它们收在一起，可以打印。", "用兩行記下他們的回答。小書會把它們收在一起，可以列印。", "Guarda su respuesta en dos líneas. El libro las reúne, listo para imprimir.", "Guarda la seva resposta en dues línies. El llibre les aplega, a punt per imprimir."]
+];
+var HD = window.FBC && FBC.head ? FBC.head(document.querySelector("header"), { px: 1, btn: "btn sm", icon: document.querySelector("header svg").outerHTML,
+  name: function () { return T(W.app); }, home: function () { editing = false; go(S.status === "setup" ? setup : home); }, steps: STEPS,
+  items: function () { return S && S.status !== "setup" ? [S.answers.length ? { label: T(W.b.book), on: function () { go(book); } } : null, { label: T(W.b.settings), on: function () { editing = true; go(setup); } }] : []; } }) : null;
 function chrome() {
   var i = li(); document.documentElement.lang = LANGS[i];
-  $("appName").textContent = T(W.app); document.title = view === book && S.name ? F(W.bookTitle, { name: S.name }) : T(W.app);
-  $("langLbl").textContent = SHORT[i]; $("langBtn").setAttribute("aria-label", T(W.lang) + ": " + LNAMES[i]);
+  if (HD) HD.paint(); document.title = view === book && S.name ? F(W.bookTitle, { name: S.name }) : T(W.app);
   cv.setAttribute("aria-label", T(W.room[scene === "quiet" ? "quiet" : scene === "chair" ? "chair" : "table"]));
   var _k = function (k, d) { return window.FBC && FBC.W && FBC.W[k] ? FBC.t(FBC.W[k]) : d; };
   var _x = "<span>" + esc(_k("fDevice", T(W.device))) + '</span><a href="https://www.after-hours.work/?fbl=' + LANGS[i] + '" target="_blank" rel="noopener">' + esc(_k("fAh", T(W.ah))) + "</a>";

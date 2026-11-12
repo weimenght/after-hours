@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=cde86209b5"></script><script src="./vk.js?v=8"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=93c83986bb"></script><script src="./vk.js?v=9"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vocab</title>
 <meta name="description" content="Pick a language to practise: Catalan, Spanish, Cantonese or Chinese idioms. Flashcards, sound and little drills, all kept on your own device.">
@@ -77,7 +77,10 @@
   }
   .lang.mine { box-shadow:0 0 0 2px var(--ink), 0 10px 30px -18px rgba(0,0,0,.35); }
   .mine-tag { position:absolute; right:16px; top:20px; font:800 11px/1 "Figtree", sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); padding:6px 9px; border-radius:999px; background:var(--card); border:1px solid currentColor; }
-  .vk-top { display:flex; align-items:center; justify-content:space-between; margin:-8px -6px 18px; }
+  .vk-top { display:flex; align-items:center; justify-content:space-between; margin:-8px -6px 18px; --ahh-bg:var(--card, #fff); --ahh-ink:var(--text, #1C1917); --ahh-line:var(--border, #E6DCC6); --ahh-name:"Fraunces", Georgia, serif; }
+  .vk-top .ahh-nm { font-size:20px; font-weight:700; letter-spacing:-.01em; }
+  .vk-top .ahh-ic img { border-radius:6px; }
+  .vk-top .ahh-b { width:44px; height:44px; padding:0; border:1px solid var(--border, #E6DCC6); border-radius:999px; background:var(--card, #fff); color:var(--text, #1C1917); font:700 17px/1 var(--font, system-ui); }
   .vk-mark { display:inline-flex; align-items:center; gap:8px; font:700 18px/1 "Fraunces", Georgia, serif; letter-spacing:-.01em; }
   .vk-mark img { border-radius:8px; }
   .icon-btn { width:44px; height:44px; border:0; background:none; border-radius:12px; display:grid; place-items:center; color:var(--muted); cursor:pointer; }
@@ -89,7 +92,7 @@
 </head>
 <body>
 <main>
-  <header class="vk-top"><span class="vk-mark"><img src="./icon.svg" alt="" width="28" height="28">Vocab</span><button class="icon-btn vk-lang" data-vk="lang" type="button" aria-label="Interface language"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.7 3.9 5.9 3.9 9.5s-1.3 6.8-3.9 9.5c-2.6-2.7-3.9-5.9-3.9-9.5S9.4 5.2 12 2.5z"/></svg></button></header>
+  <header class="vk-top" id="vkHead"><span class="vk-mark"><img src="./icon.svg" alt="" width="28" height="28">Vocab</span></header>
   <h1 class="hello" aria-label="Bon dia · Hola · 你好 · Shwmae"><span>Bon dia!</span><span>¡Hola!</span><span>你好！</span><span>Shwmae!</span></h1>
   <p class="sub ask" data-t="ask">Which language would you like to learn?</p>
   <div class="grid">
@@ -159,6 +162,19 @@
   var mine = window.VK && VK.room(), card = mine && document.querySelector('.lang[href="./' + mine + '/"]');
   if (card) { card.classList.add("mine"); var tg = document.createElement("span"); tg.className = "mine-tag"; tg.textContent = W.mine[L]; card.appendChild(tg); }
   if (L === 2) { var w = document.querySelector(".cyw"); if (w) w.textContent = "畫龍點睛"; var n = document.querySelector(".cy .name"); if (n) n.innerHTML = "成語<i>一點通</i>"; }
+})();
+</script>
+<script>
+/* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ language, this device's words on another device (☁), privacy.
+   The rooms keep their own bars for now (each is its own little app). */
+(function () {
+  var h = document.getElementById("vkHead"); if (!h || !window.FBC || !FBC.head) return;
+  FBC.head(h, { btn: "icon-btn", icon: '<img src="./icon.svg" alt="">', name: "Vocab", home: function () { scrollTo({ top: 0, behavior: "smooth" }); },
+    lang: function () { setTimeout(function () { location.reload(); }, 30); }, device: window.VK && VK.cloud ? function () { VK.cloud(); } : null, steps: [
+    ["Pick a language to learn: Catalan, Spanish, Cantonese, Welsh, chengyu, or your own flashcards.", "选一门想学的：加泰罗尼亚语、西班牙语、粤语、威尔士语、成语，或你自己的单词卡。", "選一門想學的：加泰隆尼亞語、西班牙語、粵語、威爾斯語、成語，或你自己的單字卡。", "Elige qué aprender: catalán, español, cantonés, galés, chengyu o tus propias tarjetas.", "Tria què vols aprendre: català, castellà, cantonès, gal·lès, chengyu o les teves pròpies targetes."],
+    ["A few words at a time, out loud. You can hear each one and say it back.", "一次几个词，大声读。每个都能听，也能跟着说。", "一次幾個詞，大聲唸。每個都能聽，也能跟著說。", "Unas pocas palabras cada vez, en voz alta. Puedes oír cada una y repetirla.", "Unes quantes paraules cada cop, en veu alta. Pots sentir-les i repetir-les."],
+    ["Then use one on someone today: a hello, a thank you, a word over dinner.", "然后今天找个人用一用：一声问候、一句谢谢、饭桌上的一个词。", "然後今天找個人用一用：一聲問候、一句謝謝、飯桌上的一個詞。", "Y úsala hoy con alguien: un hola, un gracias, una palabra en la cena.", "I fes-la servir avui amb algú: un hola, un gràcies, una paraula al sopar."]
+  ] });
 })();
 </script>
 </body>

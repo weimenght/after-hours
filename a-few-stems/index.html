@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=cde86209b5"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=93c83986bb"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>A Few Stems · flowers for someone, in a link</title>
 <meta name="description" content="Tie a few stems for someone you love and send them in a link or a picture. Nothing is kept anywhere.">
@@ -38,17 +38,15 @@ a{color:var(--rose)}
 
 /* top bar */
 .top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;gap:8px;min-height:58px;padding-top:env(safe-area-inset-top)}
+.top .wrap{display:flex;align-items:center;gap:8px;min-height:56px;padding-top:env(safe-area-inset-top);--ahh-bg:var(--card);--ahh-ink:var(--ink);--ahh-line:var(--line);--ahh-name:var(--serif)}
+.top .ahh-nm{letter-spacing:-.01em}
+.top .ahh-b{border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 17px var(--sans);cursor:pointer;padding:0}.top .ahh-b:hover{border-color:var(--rose)}
 .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-decoration:none;color:inherit}
 .brand svg{flex:none;width:32px;height:32px}
 .brand b{font:600 clamp(19px,4.6vw,23px)/1.1 var(--serif);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand b i{font-style:italic;font-weight:500;color:var(--rose)}
 .ib{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;min-width:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font:600 14px var(--sans);white-space:nowrap}
 .ib svg{width:18px;height:18px;flex:none}
-.rel{position:relative}
-.langm{position:absolute;right:0;top:calc(100% + 6px);display:grid;min-width:160px;padding:6px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);z-index:30}
-.langm button{text-align:left;min-height:42px;padding:0 12px;border:0;border-radius:10px;background:none;font:500 15px var(--sans)}
-.langm button[aria-current=true]{background:var(--bg2);font-weight:700}
 
 /* the counter: the bouquet on the left (or on top), what you pick on the right */
 .make{display:grid;gap:18px;padding:16px 0 8px}
@@ -146,10 +144,7 @@ h1.tagline em{font-style:italic;color:var(--rose)}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <a class="brand" href="./" id="home"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="24" cy="18" r="8" fill="#c8303a"/><circle cx="24" cy="18" r="4" fill="#8a1a2a"/><circle cx="40" cy="15" r="7.5" fill="#f4c84a"/><circle cx="40" cy="15" r="3.4" fill="#6b3f1e"/><circle cx="33" cy="27" r="7" fill="#f6c0d0"/><circle cx="33" cy="27" r="3" fill="#e890b0"/><path d="M14 30h36L36 58h-8z" fill="#c8a070"/><path d="M14 30h36l-3 4H17z" fill="#a07a4a"/><path d="M27 44h10" stroke="#a8323e" stroke-width="3" stroke-linecap="round"/></svg><b id="nameB">A Few Stems</b></a>
-  <div class="rel"><button class="ib" id="langB" type="button" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span id="langL">EN</span></button></div>
-</div></header>
+<header class="top"><div class="wrap" id="headW"><a class="brand" href="./"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="24" cy="18" r="8" fill="#c8303a"/><circle cx="24" cy="18" r="4" fill="#8a1a2a"/><circle cx="40" cy="15" r="7.5" fill="#f4c84a"/><circle cx="40" cy="15" r="3.4" fill="#6b3f1e"/><circle cx="33" cy="27" r="7" fill="#f6c0d0"/><circle cx="33" cy="27" r="3" fill="#e890b0"/><path d="M14 30h36L36 58h-8z" fill="#c8a070"/><path d="M14 30h36l-3 4H17z" fill="#a07a4a"/><path d="M27 44h10" stroke="#a8323e" stroke-width="3" stroke-linecap="round"/></svg><b>A Few Stems</b></a></div></header>
 
 <main class="wrap" id="main">
   <!-- making a bouquet -->
@@ -507,15 +502,21 @@ h1.tagline em{font-style:italic;color:var(--rose)}
   $("mine").onclick = function () { toMake(null); };
   function nick() { return (lsGet("fb_nick") || "").slice(0, 24); }   /* the suite's one name, read only: nothing here writes it */
 
-  /* ---------- words and the language menu ---------- */
+  /* ---------- the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ language, privacy ---------- */
+  var HD = window.FBC && FBC.head ? FBC.head($("headW"), { icon: $("headW").querySelector("svg").outerHTML, name: function () { return t("name"); }, home: function () { location.href = "./"; }, steps: [
+    ["Pick up to nine stems and a paper, and write who it's for.", "最多挑九枝花，选一张包装纸，写上送给谁。", "最多挑九枝花，選一張包裝紙，寫上送給誰。", "Elige hasta nueve flores y un papel, y escribe para quién es.", "Tria fins a nou flors i un paper, i escriu per a qui és."],
+    ["Send the link, or a picture. You can keep it wrapped until a day you choose.", "发出链接或图片。也可以包起来，到你选的那天才打开。", "發出連結或圖片。也可以包起來，到你選的那天才打開。", "Envía el enlace o una imagen. Puedes dejarlo envuelto hasta el día que elijas.", "Envia l'enllaç o una imatge. Pots deixar-lo embolicat fins al dia que triïs."],
+    ["Better still, give real ones: it finds a florist near them, or near you.", "更好的是，送真的花：它会帮你找对方附近或你附近的花店。", "更好的是，送真的花：它會幫你找對方附近或你附近的花店。", "Mejor aún, regala flores de verdad: busca una floristería cerca de ellos o de ti.", "Encara millor, regala'n de veritat: busca una floristeria a prop seu o teu."]
+  ] }) : null;
+
+  /* ---------- words ---------- */
   function paintWords() {
     document.documentElement.lang = lang(); document.title = t("docTitle");
     [].forEach.call(document.querySelectorAll("[data-i]"), function (e) { e.textContent = t(e.getAttribute("data-i")); });
     [].forEach.call(document.querySelectorAll("[data-ph]"), function (e) { e.placeholder = t(e.getAttribute("data-ph")); });
     $("to").setAttribute("aria-label", t("forL")); $("by").setAttribute("aria-label", t("fromL")); $("msg").setAttribute("aria-label", t("lineL"));
-    $("nameB").textContent = t("name"); $("langB").setAttribute("aria-label", t("lang"));
+    if (HD) HD.paint();
     var tg = t("tag"); $("tagH").innerHTML = zh() ? esc(tg) : esc(tg).replace(/^(\S+\s\S+\s\S+)/, "<em>$1</em>");
-    $("langL").textContent = SHORT[LANGS.indexOf(lang())];
     $("ahA").href = "https://www.after-hours.work/?fbl=" + lang();
     var fx = $("foot"); if (window.FBC && FBC.foot) { if (!fx._x) fx._x = fx.innerHTML; fx.innerHTML = fx._x; [].forEach.call(fx.querySelectorAll("[data-i]"), function (e) { e.textContent = t(e.getAttribute("data-i")); }); fx.querySelector("#ahA").href = "https://www.after-hours.work/?fbl=" + lang(); var inner = fx.innerHTML; fx.innerHTML = ""; FBC.foot(fx, { extra: inner }); }   // the suite's one footer; the app's note and ♥ After hours on the line under it
     if (!$("make").hidden) { buildStems(); redraw(); }
@@ -523,16 +524,7 @@ h1.tagline em{font-style:italic;color:var(--rose)}
   }
   function setLang(l) { if (window.FBL && FBL.set) FBL.set(l); else lsSet("wm_preferred_lang", l); paintWords(); }
   addEventListener("fbl:lang", paintWords);
-  function closeLang() { var m = document.querySelector(".langm"); if (m) m.remove(); $("langB").setAttribute("aria-expanded", "false"); }
-  $("langB").onclick = function (e) {
-    e.stopPropagation(); if (document.querySelector(".langm")) return closeLang();
-    var m = document.createElement("div"); m.className = "langm"; m.setAttribute("role", "menu");
-    m.innerHTML = LANGS.map(function (l, i) { return '<button type="button" role="menuitem" data-l="' + l + '" aria-current="' + (l === lang()) + '" lang="' + l + '">' + NAMES[i] + "</button>"; }).join("");
-    m.onclick = function (ev) { var b = ev.target.closest("button"); if (!b) return; closeLang(); setLang(b.getAttribute("data-l")); };
-    this.parentNode.appendChild(m); this.setAttribute("aria-expanded", "true"); var f = m.querySelector("[aria-current=true]"); if (f) f.focus();
-  };
-  document.addEventListener("click", function (e) { if (!e.target.closest(".langm,#langB")) closeLang(); });
-  addEventListener("keydown", function (e) { if (e.key === "Escape") { closeLang(); closeSheet(); } });
+  addEventListener("keydown", function (e) { if (e.key === "Escape") closeSheet(); });
   var toastT = 0; function toast(s) { var el = $("toast"); el.textContent = s; el.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove("on"); }, 2600); }
   var rz = 0; addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { if (!$("make").hidden) { sizeCanvas(cv); redraw(); } if (G) { sizeCanvas($("gcv")); var early = G.d && today() < G.d; draw($("gcv"), G, early ? { open: 0, tag: t("opens", { d: dayName(G.d, true) }) } : { open: gopen ? 1 : 0 }); } }, 120); });
 

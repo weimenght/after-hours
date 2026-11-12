@@ -124,6 +124,8 @@
   ".tc-ic{width:20px;height:20px;flex:none}",
   ".tc-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(12px,env(safe-area-inset-top)) 0 10px}",
   ".tc-brand{display:inline-flex;align-items:center;gap:8px;color:var(--tc-ink);text-decoration:none}.tc-brand .tc-ic{color:var(--tc-amber);width:24px;height:24px}.tc-brand b{font:600 19px/1 'Fraunces',Georgia,serif;letter-spacing:-.01em}",
+  ".tc-top{--ahh-bg:var(--tc-card);--ahh-ink:var(--tc-ink);--ahh-line:var(--tc-line);padding:env(safe-area-inset-top) 0 0}.tc-top .ahh-ic{color:var(--tc-amber)}.tc-top .ahh-ic svg{width:100%;height:100%}",
+  ".tc-hb{border-radius:999px;border:1px solid var(--tc-line);background:transparent;color:var(--tc-ink);font:600 17px 'Figtree',sans-serif;cursor:pointer;padding:0}.tc-hb:hover{border-color:var(--tc-amber)}",
   ".tc-lang{display:inline-flex;align-items:center;gap:6px;height:40px;min-width:44px;padding:0 12px;border-radius:999px;border:1px solid var(--tc-line);background:transparent;color:var(--tc-ink);font:600 13px 'Figtree',sans-serif;cursor:pointer}",
   ".tc-main{display:flex;flex-direction:column;gap:14px}",
   ".tc-hero{position:relative;border-radius:20px;overflow:hidden;background:#000;box-shadow:var(--tc-shadow)}.tc-hero .tc-stage{border:0!important;box-shadow:none!important;margin:0!important}.tc-hero canvas{display:block;width:100%;height:auto;aspect-ratio:160/96;image-rendering:pixelated}",
@@ -254,18 +256,24 @@
 
   /* ---------- the page ---------- */
   var root = el("div", "tc"); root.id = "tc"; root.setAttribute("data-fbt-skip", "");
-  root.innerHTML = '<header class="tc-top"><a class="tc-brand" href="/two-candles/" target="_top">' + ic("candle") + '<b id="tcName"></b></a>' +
-    '<button type="button" class="tc-lang" data-fbl-btn id="tcLang">' + ic("globe") + '<span data-fbl-label>EN</span></button></header>' +
+  root.innerHTML = '<header class="tc-top" id="tcTop"><a class="tc-brand" href="/two-candles/" target="_top">' + ic("candle") + '<b id="tcName"></b></a></header>' +
     '<main class="tc-main" id="tcMain"></main><p class="tc-live" id="tcLive" role="status" aria-live="polite"></p>' +
     '<footer class="tc-foot" id="tcFoot"><p class="tc-ho" id="tcHo"></p><div id="tcFbf"></div></footer>';
   document.body.appendChild(root);
+  /* the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ language, privacy */
+  var STEPS = [
+    ["Book a table: a day and a time, and one link to send. They see it in their own time zone.", "订一张桌子：选一天、一个时间，发一条链接。对方看到的是自己时区的时间。", "訂一張桌子：選一天、一個時間，發一條連結。對方看到的是自己時區的時間。", "Reserva una mesa: un día, una hora y un enlace para enviar. Lo ven en su propia hora.", "Reserva una taula: un dia, una hora i un enllaç per enviar. Ho veuen a la seva pròpia hora."],
+    ["Before dinner, you each shop for the same recipe.", "饭前，你们照同一份菜谱各自买菜。", "飯前，你們照同一份食譜各自買菜。", "Antes de cenar, cada uno compra lo de la misma receta.", "Abans de sopar, cadascú compra el de la mateixa recepta."],
+    ["At the table, strike a match together, cook and eat. It ends with the candles out and the phone down.", "到了饭桌，一起划火柴、做饭、吃饭。最后吹灭蜡烛，放下手机。", "到了飯桌，一起劃火柴、做飯、吃飯。最後吹熄蠟燭，放下手機。", "En la mesa, encended una cerilla a la vez, cocinad y cenad. Termina con las velas apagadas y el móvil guardado.", "A taula, enceneu un llumí alhora, cuineu i sopeu. S'acaba amb les espelmes apagades i el mòbil desat."]
+  ];
+  var HD = window.FBC && FBC.head ? FBC.head($("tcTop"), { btn: "tc-hb", icon: ic("candle"), name: function () { return w("app"); }, steps: STEPS,
+    home: function () { if (cur === "table") { try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {} return; } home(); }, lang: function () { chrome(); redraw(); } }) : null;
   var stage = T.stage; stage.classList.add("tc-stage");
   var cur = "", B = null, panel = "", lastLive = 0;
 
   function say(m) { var e = $("tcLive"); e.textContent = m; e.classList.add("on"); lastLive = Date.now(); clearTimeout(say._t); say._t = setTimeout(function () { e.classList.remove("on"); }, 4200); }
   function chrome() {
-    var i = li(); de.lang = LANG[i]; $("tcName").textContent = w("app"); document.title = w("app"); try { if (HOST !== window) HOST.document.title = w("app"); } catch (e) {}
-    $("tcLang").setAttribute("aria-label", w("lang"));
+    var i = li(); de.lang = LANG[i]; if (HD) HD.paint(); else $("tcName").textContent = w("app"); document.title = w("app"); try { if (HOST !== window) HOST.document.title = w("app"); } catch (e) {}
     var ho = $("tcHo"); ho.innerHTML = ""; var a = el("a"); a.href = "https://www.after-hours.work/handoff/"; a.target = "_top"; a.innerHTML = esc(T.W.hoff ? T.t("hoff").replace(/\s*↗\s*$/, "") : w("handoff")) + " " + ic("arrow");   /* the town page's own words for it, one source */ ho.appendChild(a);
     var x = "<span>" + esc(w("device")) + '</span><a href="https://www.after-hours.work/?fbl=' + ["en", "zh", "zh-Hant", "es", "ca"][i] + '" target="_blank" rel="noopener">' + ic("heart") + " " + esc(w("ah")) + "</a>";
     if (window.FBC && FBC.foot) FBC.foot($("tcFbf"), { extra: x });

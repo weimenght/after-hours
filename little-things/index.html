@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=cde86209b5"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=93c83986bb"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Little Things</title>
 <meta name="description" content="Popo's jar of little offline things: one at a time, in her kitchen, for a fuller life away from the screen. Kept on your own device.">
@@ -31,11 +31,8 @@
     background-image:radial-gradient(rgba(0,0,0,.035) 1px, transparent 1px); background-size:6px 6px; }
   :lang(zh) body, :lang(zh-Hant) body, html:lang(zh) body, html:lang(zh-Hant) body { font-size:18px; line-height:1.5; }
   .wrap { width:100%; max-width:560px; margin:0 auto; padding:max(12px, env(safe-area-inset-top)) 16px 20px; flex:1; display:flex; flex-direction:column; gap:12px; }
-  header { display:flex; align-items:center; gap:10px; }
-  .brand { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
-  .brand svg { width:28px; height:28px; flex:none; }
-  .brand h1 { margin:0; font:12px/1.4 var(--sign); letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  html:lang(zh) .brand h1, html:lang(zh-Hant) .brand h1 { font:700 18px/1.2 var(--pix); letter-spacing:.1em; }
+  header { --ahh-bg:var(--panel); --ahh-ink:var(--ink); --ahh-line:var(--line); --ahh-name:var(--sign); }
+  html:lang(zh) .ahh-nm, html:lang(zh-Hant) .ahh-nm { font:700 18px/1.2 var(--pix); letter-spacing:.1em; }
   .btn { font:20px/1 var(--pix); color:var(--ink); background:var(--wood); border:3px solid var(--line); border-radius:0; padding:10px 14px; min-height:44px;
     box-shadow:inset -3px -3px 0 rgba(0,0,0,.22), inset 3px 3px 0 rgba(255,255,255,.28), 3px 3px 0 var(--shadow); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; text-align:center; }
   html:lang(zh) .btn, html:lang(zh-Hant) .btn { font-size:17px; }
@@ -121,10 +118,6 @@
   .pocket .qr svg { display:block; max-width:100%; height:auto; background:#fff; border:3px solid var(--line); box-shadow:3px 3px 0 var(--shadow); image-rendering:pixelated; }
   .pocket .qr p { margin:0; font-size:17px; color:var(--muted); text-align:center; }
   .pocket .qr:empty { display:none; }
-  .langmenu { position:absolute; right:16px; top:58px; z-index:30; background:var(--panel); border:3px solid var(--line); box-shadow:4px 4px 0 var(--shadow); display:flex; flex-direction:column; min-width:150px; }
-  .langmenu button { font:20px/1.2 var(--pix); color:var(--ink); background:none; border:0; text-align:left; padding:10px 14px; min-height:44px; cursor:pointer; }
-  .langmenu button[aria-checked="true"] { background:var(--amber); color:#1a1410; }
-  .langmenu button:hover { background:var(--wood); }
   @keyframes pop { from { opacity:0; transform:translateY(6px); } }
   @keyframes fade { from { opacity:0; } }
   @media (prefers-reduced-motion: reduce) { .say, .paper, .sheet { animation:none; } }
@@ -135,10 +128,7 @@
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="brand"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path fill="#000" d="M4 1h8v1h1v3h-1v1h1v1h1v8h-1v1H3v-1H2V7h1V6h1V5H3V2h1z"/><path fill="#c8303a" d="M4 2h8v3H4z"/><path fill="#e8a838" d="M5 3h1v1H5zM8 3h1v1H8zM10 3h1v1h-1z"/><path fill="#cfe7ee" d="M5 6h6v1h1v7H4V7h1z"/><path fill="#fffdf6" d="M5 10h3v2H5z"/><path fill="#f4d04a" d="M8 11h3v2H8z"/><path fill="#f48fb8" d="M6 12h2v1H6z"/><path fill="#fff" d="M5 7h1v2H5z"/></svg><h1 id="appName">Little Things</h1></div>
-    <button class="btn sm quiet" id="langBtn" aria-haspopup="menu" aria-expanded="false"><span class="pxi" id="langIco"></span><span id="langLbl">EN</span></button>
-  </header>
+  <header id="head"><div class="brand"><svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path fill="#000" d="M4 1h8v1h1v3h-1v1h1v1h1v8h-1v1H3v-1H2V7h1V6h1V5H3V2h1z"/><path fill="#c8303a" d="M4 2h8v3H4z"/><path fill="#e8a838" d="M5 3h1v1H5zM8 3h1v1H8zM10 3h1v1h-1z"/><path fill="#cfe7ee" d="M5 6h6v1h1v7H4V7h1z"/><path fill="#fffdf6" d="M5 10h3v2H5z"/><path fill="#f4d04a" d="M8 11h3v2H8z"/><path fill="#f48fb8" d="M6 12h2v1H6z"/><path fill="#fff" d="M5 7h1v2H5z"/></svg><span>Little Things</span></div></header>
   <div class="scene">
     <canvas id="scene" width="160" height="84" role="img" aria-label="Popo's kitchen"></canvas>
     <button class="jarhit" id="jarHit" aria-label="Look in the jar"></button>
@@ -1252,25 +1242,22 @@ function openJar() { lastFocus = document.activeElement; $("jarTitle").textConte
 function closeJar() { sheet.hidden = true; if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {} }
 $("sheetClose").addEventListener("click", closeJar);
 sheet.addEventListener("click", function (e) { if (e.target === sheet) closeJar(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!sheet.hidden) closeJar(); closeLang(); } });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") { if (!sheet.hidden) closeJar(); } });
 $("jarHit").addEventListener("click", function () { if (S.size) openJar(); });
 
-/* ---------------- language ---------------- */
-var menu = null;
-function closeLang() { if (menu) { menu.remove(); menu = null; $("langBtn").setAttribute("aria-expanded", "false"); } }
-$("langBtn").addEventListener("click", function (e) {
-  e.stopPropagation(); if (menu) return closeLang();
-  menu = document.createElement("div"); menu.className = "langmenu"; menu.setAttribute("role", "menu");
-  LANGS.forEach(function (l, i) { var b = document.createElement("button"); b.setAttribute("role", "menuitemradio"); b.setAttribute("aria-checked", String(i === li())); b.lang = l; b.textContent = NAMES[i];
-    b.addEventListener("click", function () { if (window.FBL) FBL.set(l); else try { localStorage.setItem("wm_preferred_lang", l); } catch (x) {} closeLang(); paint(true); }); menu.appendChild(b); });
-  document.body.appendChild(menu); $("langBtn").setAttribute("aria-expanded", "true"); menu.querySelector("[aria-checked=true]").focus();
-});
-document.addEventListener("click", function (e) { if (menu && !menu.contains(e.target)) closeLang(); });
-
+/* ---------------- the after-hours header (handoff/DESIGN.md §3): name home · ? three steps · ⋯ the jar, language, take it along, privacy ---------------- */
+var LT_STEPS = [
+  ["Popo hands you one little thing to do off the screen, a paper from her jar.", "婆婆从罐子里拿出一张纸条：一件屏幕以外的小事。", "婆婆從罐子裡拿出一張紙條：一件螢幕以外的小事。", "Popo te da una cosita que hacer lejos de la pantalla, un papel de su tarro.", "La Popo et dona una coseta per fer lluny de la pantalla, un paper del seu pot."],
+  ["Do it today. If it isn't for today, ask for another, or say not today.", "今天就去做。不合适的话，换一张，或者说今天不行。", "今天就去做。不合適的話，換一張，或者說今天不行。", "Hazla hoy. Si hoy no toca, pide otra o di que hoy no.", "Fes-la avui. Si avui no toca, demana'n una altra o digues que avui no."],
+  ["Done ones go back in the jar as dated notes. Tap the jar to read them.", "做完的会变成写上日期的纸条，放回罐子里。点罐子就能看。", "做完的會變成寫上日期的紙條，放回罐子裡。點罐子就能看。", "Las hechas vuelven al tarro como notas con fecha. Toca el tarro para leerlas.", "Les fetes tornen al pot com a notes amb data. Toca el pot per llegir-les."]
+];
+function takeAlong() { openJar(); setTimeout(function () { var pk = $("pocket"); if (!pk) return; var b = [].slice.call(pk.querySelectorAll("button")).filter(function (x) { return x.textContent === T(W.bTake) || x.textContent === T(W.bBring); })[0]; if (b) { b.click(); try { pk.scrollIntoView({ block: "nearest" }); } catch (e) {} } }, 60); }
+var HD = window.FBC && FBC.head ? FBC.head($("head"), { px: 1, btn: "btn sm quiet", icon: $("head").querySelector("svg").outerHTML, name: function () { return T(W.app); },
+  home: function () { if (!sheet.hidden) closeJar(); scrollTo({ top: 0, behavior: "smooth" }); }, steps: LT_STEPS,
+  items: function () { return S.size ? [{ label: T(W.jar), on: openJar }] : []; }, device: function () { if (S.size) takeAlong(); else openJar(); } }) : null;
 function chrome() {
   var i = li(); document.documentElement.lang = LANGS[i];
-  $("appName").textContent = T(W.app); document.title = T(W.app);
-  $("langLbl").textContent = SHORT[i]; $("langIco").innerHTML = icon("globe"); $("langBtn").setAttribute("aria-label", T(W.lang) + ": " + NAMES[i]);
+  if (HD) HD.paint(); document.title = T(W.app);
   $("jarHit").setAttribute("aria-label", T(W.look)); cv.setAttribute("aria-label", T(W.kitchen)); $("sheetClose").setAttribute("aria-label", T(W.close));
   var _k = function (k, d) { return window.FBC && FBC.W && FBC.W[k] ? FBC.t(FBC.W[k]) : d; };   // the kit's short footnote words (the owner, Nov 6: one short line under the row)
   var _x = "<span>" + esc(syncOn() ? _k("fDeviceSync", T(W.deviceSync)) : _k("fDevice", T(W.device))) + '</span><a href="https://www.after-hours.work/?fbl=' + LANGS[i] + '" target="_blank" rel="noopener">' + esc(_k("fAh", T(W.ah))) + "</a>";
