@@ -663,7 +663,13 @@ function foot() {
   var x = "<span>" + esc(_k("fDevice", t("device"))) + '</span><a href="https://www.after-hours.work/?fbl=' + LANGS[li()] + '" target="_blank" rel="noopener">' + esc(_k("fAh", t("ah"))) + "</a>";
   if (window.FBC && FBC.foot) FBC.foot(f, { px: 1, extra: x }); else f.innerHTML = x;
 }
-if ("serviceWorker" in navigator && window.isSecureContext) addEventListener("load", function () { navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function () {}); });
+/* offline copy; each time the app comes back on screen it asks for a newer version, and a new one reloads the page once (sw.js),
+   so a phone that resumes a page kept for days still moves to the current tiles; the hand in progress is on the device */
+if ("serviceWorker" in navigator && window.isSecureContext) addEventListener("load", function () {
+  navigator.serviceWorker.register("./sw.js", { scope: "./" }).then(function (reg) {
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) reg.update().catch(function () {}); });
+  }).catch(function () {});
+});
 $("wash").onclick = function () { sfx("wash"); S.names = S.names.map(function (x) { return (x || "").trim(); }); if (S.screen !== "play" || found() === 6) { var nms = S.names; S = fresh(nms); } line = null; toast = ""; show("play"); };
 $("reseat").onclick = function () { S.drawn = null; S.sel = []; S.pairs = {}; S.deck = shuffled(); line = null; toast = ""; show("home"); };
 $("again").onclick = function () { S = fresh(S.names); line = null; toast = ""; $("sendNote").textContent = ""; show("play"); };

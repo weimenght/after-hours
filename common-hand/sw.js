@@ -1,13 +1,22 @@
 /* Common Hand: works offline once opened. Keeps only what this app needs to draw itself (its own folder, the kit, the fonts),
    always asks the network first and falls back to the copy it kept. Never touches anything off the site; sends nothing. */
-var V = "ch-2";
+var V = "ch-3";
 var OWN = /^\/(common-hand|fbkit|fonts)\//;
 self.addEventListener("install", function (e) {
   self.skipWaiting();
-  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"]); }).catch(function () {}));
+  /* fetched past the browser's own cache, so a new version never starts from yesterday's files */
+  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"].map(function (u) { return new Request(u, { cache: "reload" }); })); }).catch(function () {}));
 });
 self.addEventListener("activate", function (e) {
-  e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("ch-") === 0 && k !== V; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); }));
+  /* old copies go, and a page still open from an older version is reloaded once, so a phone that kept an old copy
+     (Nov 12: 春 drawn as a plain character) moves to the current one; the hand in progress is kept on the device */
+  e.waitUntil(caches.keys().then(function (ks) {
+    var old = ks.filter(function (k) { return k.indexOf("ch-") === 0 && k !== V; });
+    return Promise.all(old.map(function (k) { return caches.delete(k); })).then(function () { return self.clients.claim(); }).then(function () {
+      if (!old.length) return;
+      return self.clients.matchAll({ type: "window" }).then(function (cs) { cs.forEach(function (c) { if (c.navigate) c.navigate(c.url).catch(function () {}); }); });
+    });
+  }));
 });
 self.addEventListener("fetch", function (e) {
   var r = e.request, u = new URL(r.url);
