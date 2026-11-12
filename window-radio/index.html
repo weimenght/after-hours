@@ -144,7 +144,7 @@
   </section>
 </main>
 <footer id="foot" class="np"></footer>
-<script src="./words.js?v=3"></script>
+<script src="./words.js?v=4"></script>
 <script>
 (()=>{
 "use strict";
@@ -199,9 +199,15 @@ function festName(f){if(!f)return'';if(f.eve)return W.eveSpecial[f.id]?Tr(W.eveS
 /* ---------- music recipe ---------- */
 const CH={I:[0,4,7,11,14],ii:[2,5,9,12,16],iii:[4,7,11,14],IV:[5,9,12,16,19],V:[7,11,14,17,21],vi:[9,12,16,19,23],II7:[2,6,9,12],
   i:[0,3,7,10,14],iv:[5,8,12,15,19],bVI:[8,12,15,19,22],bVII:[10,14,17,20],v:[7,10,14,17],bIII:[3,7,10,14,17],IVd:[5,9,12,15,19]};
-const PROGS={calm:[['I','IV','iii','vi'],['I','vi','IV','V']],okay:[['ii','V','I','vi'],['I','iii','IV','V']],
-  bright:[['IV','V','iii','vi'],['I','vi','ii','V'],['IV','I','II7','V']],tired:[['IV','iii','ii','I'],['I','IV','I','IV']],
-  heavy:[['i','iv','bVI','v'],['i','bVI','bIII','bVII']],restless:[['i','IVd','i','bVII'],['i','IVd','bIII','v']]};
+const PROGS={calm:[['I','IV','iii','vi'],['I','vi','IV','V'],['IV','I','vi','I'],['I','iii','vi','IV']],okay:[['ii','V','I','vi'],['I','iii','IV','V'],['vi','IV','I','V'],['IV','iii','ii','V']],
+  bright:[['IV','V','iii','vi'],['I','vi','ii','V'],['IV','I','II7','V'],['I','V','vi','IV']],tired:[['IV','iii','ii','I'],['I','IV','I','IV'],['vi','IV','vi','IV'],['ii','I','ii','I']],
+  heavy:[['i','iv','bVI','v'],['i','bVI','bIII','bVII'],['i','v','bVI','iv'],['i','bVII','bVI','v']],restless:[['i','IVd','i','bVII'],['i','IVd','bIII','v'],['i','bIII','IVd','bVII']]};
+/* the band: each tape picks a lead, what plays the chords, a bass and a kit, leaning on the mood and the hour; all from the tape's seed, so a sent tape has the same band */
+const BAND={
+  lead:{tired:['felt','box','ep','felt'],calm:['felt','flute','vibes','ep'],okay:['ep','guitar','vibes','felt'],bright:['guitar','vibes','box','ep'],heavy:['ep','felt','flute','ep'],restless:['vibes','guitar','ep','guitar']},
+  comp:{tired:['felt','pad','felt'],calm:['felt','ep','pad'],okay:['ep','guitar','felt'],bright:['guitar','ep','guitar'],heavy:['ep','pad','felt'],restless:['ep','guitar','ep']},
+  kit:{tired:['brush','soft'],calm:['brush','bap','soft'],okay:['bap','rim','brush'],bright:['bap','soft','rim'],heavy:['bap','brush'],restless:['rim','bap']}};
+const pick=(r,a)=>a[Math.floor(r()*a.length)];
 
 let cfg=null;
 function buildCfg(ov){
@@ -220,20 +226,26 @@ function buildCfg(ov){
   const density={tired:.12,calm:.18,okay:.24,bright:.32,heavy:.15,restless:.36}[mood];
   const set=PROGS[progMood];const prog=set[Math.floor(r()*set.length)].map(n=>CH[n]);
   const scale=minor?[0,3,5,7,10]:[0,2,4,7,9];
-  const makeMotif=()=>{const M=[];let deg=4+Math.floor(r()*4);
-    for(let b=0;b<4;b++){const row=new Array(16).fill(null);
-      for(let s=0;s<16;s++){if(s%2===1&&r()>.2)continue;
-        if(r()<density*(s%4===0?1.4:1)){deg+=Math.round((r()-.5)*4);deg=Math.max(3,Math.min(10,deg));
-          const dur=1+Math.floor(r()*3);row[s]={deg,dur};s+=dur-1;}}
+  /* the tune's shape: how it moves (steps or leaps), where it sits on the beat, and the form of each 16 bars */
+  const feel=pick(r,['sparse','flow','syncop','call']),leap=pick(r,[2,3,4]);
+  const makeMotif=lift=>{const M=[];let deg=4+Math.floor(r()*4)+lift;
+    for(let b=0;b<4;b++){const row=new Array(16).fill(null),rest=feel==='call'&&b%2===1;
+      for(let s=0;s<16;s++){if(rest&&s>4)break;
+        const off=s%2===1;if(off&&r()>(feel==='syncop'?.55:.18))continue;
+        const d=density*(feel==='sparse'?.7:feel==='flow'?1.35:1)*(s%4===0?1.4:feel==='syncop'&&(s%4===3||s%4===1)?1.5:1);
+        if(r()<d){deg+=Math.round((r()-.5)*leap);deg=Math.max(2,Math.min(11,deg));
+          const dur=feel==='flow'?1+Math.floor(r()*2):1+Math.floor(r()*3);row[s]={deg,dur};s+=dur-1;}}
       M.push(row);}return M;};
-  const motifs=[makeMotif(),makeMotif()];
+  const motifs=[makeMotif(0),makeMotif(1),makeMotif(-1)],form=pick(r,[[0,0,1,0],[0,1,0,1],[0,1,0,2],[0,0,1,2]]);
+  const pluckFest=['lny','midautumn','dragonboat'].includes(fid);
+  const lead=pluckFest?'zheng':pick(r,BAND.lead[mood]),comp=pick(r,BAND.comp[mood]),bassI=pick(r,['tri','sub','upright']),
+    kit=fid==='christmas'?'bap':tb==='late'?pick(r,['brush','soft']):pick(r,BAND.kit[mood]),arp=r()<.35;
   const objIdx=Math.floor(r()*W.obj.length),useFest=fest&&r()<.6;
-  return{seed,tb,fest,fid,dow,mood,weather,key:48+keyOff,keyOff,bpm,cutoff,density,prog,scale,motifs,
+  return{seed,tb,fest,fid,dow,mood,weather,key:48+keyOff,keyOff,bpm,cutoff,density,prog,scale,motifs,form,lead,comp,bassI,kit,arp,
     half:mood==='tired'||mood==='heavy'||tb==='late',
     drumGain:tb==='late'?.5:tb==='night'?.68:mood==='calm'?.75:.9,
     swing:.16+r()*.14+(dow===5?.06:0),
     pad:['fog','snow'].includes(weather)||['heavy','tired'].includes(mood)||['dongzhi','valentine','midautumn'].includes(fid),
-    pluck:['lny','midautumn','dragonboat'].includes(fid),
     shared:!!ov,d:ymd(now),dnum:now.getDate(),season:seasonOf(now),pet:['miso','yuzu','dog'][hash(seedStr+'|pet')%3],eve:fest&&fest.eve?1:0,objIdx,useFest,tapeNo:pad(now.getMonth()+1)+pad(now.getDate())+'-'+String(seed%1000).padStart(3,'0')};
 }
 
@@ -242,8 +254,8 @@ function buildCfg(ov){
    keeps playing in the background and on silent, and shows on the lock screen. Each tape is BARS bars recorded once (an
    OfflineAudioContext, a few seconds), the reverb's tail folded back onto the start and the steady sounds tuned to whole cycles
    so the loop has no seam; a 16-bit WAV in memory (a blob URL), nothing sent. */
-const SR=24000,BARS=32,TAIL=3;
-let ac=null,rc=null,bus,drumBus,ambBus,lp,drumLp,master,verbSend,wowG,noiseBuf,rr=Math.random,vq=[],LOOP=1;
+const SR=24000,BARS=32,TAIL=3.5;
+let ac=null,rc=null,bus,drumBus,ambBus,lp,drumLp,master,verbSend,wowG,noiseBuf,rr=Math.random,vq=[],LOOP=1,BARLEN=1,IR=null,NZ=null;
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 const quant=f=>Math.max(1,Math.round(f*LOOP))/LOOP;   // whole cycles in a loop, so the seam is smooth
 function graph(){
@@ -252,13 +264,12 @@ function graph(){
   lp=ac.createBiquadFilter();lp.type='lowpass';lp.Q.value=.6;lp.frequency.value=rc.cutoff;
   drumLp=ac.createBiquadFilter();drumLp.type='lowpass';drumLp.frequency.value=rc.cutoff+1600;
   bus=ac.createGain();drumBus=ac.createGain();drumBus.gain.value=rc.drumGain;ambBus=ac.createGain();
-  const conv=ac.createConvolver();const len=Math.floor(ac.sampleRate*2.4),ib=ac.createBuffer(2,len,ac.sampleRate),ir=mulberry(rc.seed^77);
-  for(let c=0;c<2;c++){const d=ib.getChannelData(c);for(let i=0;i<len;i++)d[i]=(ir()*2-1)*Math.pow(1-i/len,2.6)}
+  const conv=ac.createConvolver(),ib=ac.createBuffer(2,IR[0].length,ac.sampleRate);ib.getChannelData(0).set(IR[0]);ib.getChannelData(1).set(IR[1]);
   conv.buffer=ib;verbSend=ac.createGain();verbSend.gain.value=.28;
   bus.connect(lp);bus.connect(verbSend);verbSend.connect(conv);conv.connect(lp);
   drumBus.connect(drumLp);lp.connect(comp);drumLp.connect(comp);comp.connect(master);ambBus.connect(master);master.connect(ac.destination);
-  const wow=ac.createOscillator();wow.frequency.value=quant(.45);wowG=ac.createGain();wowG.gain.value=7;wow.connect(wowG);wow.start(0);wow.stop(LOOP+TAIL);
-  noiseBuf=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate);const nd=noiseBuf.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
+  const wow=ac.createOscillator();wow.frequency.value=Math.max(1,Math.round(.45*BARLEN))/BARLEN;wowG=ac.createGain();wowG.gain.value=7;wow.connect(wowG);wow.start(0);wow.stop(ac.length/ac.sampleRate);   // whole wobbles per bar, so every bar starts in step
+  noiseBuf=ac.createBuffer(1,NZ.length,ac.sampleRate);noiseBuf.getChannelData(0).set(NZ);
 }
 function env(g,t,peak,a,d){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+a+d)}
 function osc(type,f,t,stop){const o=ac.createOscillator();o.type=type;o.frequency.value=f;o.start(t);o.stop(stop);return o}
@@ -272,13 +283,42 @@ function keys(m,t,dur,vel){
   a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(vel*.17,t+.008);a.gain.exponentialRampToValueAtTime(vel*.05,t+.7);a.gain.exponentialRampToValueAtTime(.0001,t+dur+.5);
   c.connect(a);a.connect(bus);
 }
+/* felt piano: a soft hammer, a few partials dying away */
+function felt(m,t,dur,vel){const f=mtof(m),d=Math.min(dur+1.2,3.2);[[1,1],[2,.32],[3,.1],[4.01,.04]].forEach(([r,v],i)=>{const o=osc('sine',f*r,t,t+d+.1),a=ac.createGain();
+  a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(vel*.15*v,t+.006);a.gain.exponentialRampToValueAtTime(.0001,t+d*(1-i*.18));if(i===0)wowG.connect(o.detune);o.connect(a);a.connect(bus)})}
+/* vibraphone: a pure bar with its fourth partial and the motor's slow tremolo */
+function vibes(m,t,dur,vel){const f=mtof(m),a=ac.createGain(),tr=ac.createGain(),l=osc('sine',5.2,t,t+2.6),lg=ac.createGain();lg.gain.value=.3;l.connect(lg);lg.connect(tr.gain);tr.gain.value=.7;
+  const o=osc('sine',f,t,t+2.6),o4=osc('sine',f*4,t,t+.6),a4=ac.createGain();env(a4,t,vel*.025,.002,.4);o4.connect(a4);a4.connect(bus);
+  env(a,t,vel*.14,.004,Math.min(dur+1.4,2.4));o.connect(a);a.connect(tr);tr.connect(bus)}
+/* music box: a little tuned comb, an octave up */
+function box(m,t,vel){bell(m+12,t,.05*vel+.012,1.3,1)}
+/* flute: breathy attack, a slow vibrato */
+function flute(m,t,dur,vel){const f=mtof(m),a=ac.createGain(),l=osc('sine',4.8,t,t+dur+.4),lg=ac.createGain();lg.gain.value=14;l.connect(lg);
+  [[1,1],[2,.16]].forEach(([r,v])=>{const o=osc('sine',f*r,t,t+dur+.4);lg.connect(o.detune);const g=ac.createGain();g.gain.value=v;o.connect(g);g.connect(a)});
+  a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(vel*.12,t+.08);a.gain.setValueAtTime(vel*.12,t+Math.max(.09,dur-.05));a.gain.exponentialRampToValueAtTime(.0001,t+dur+.3);a.connect(bus)}
+/* nylon guitar: a bright pluck whose tone closes as it rings */
+function guitar(m,t,vel){const f=mtof(m),o=osc('triangle',f,t,t+1.6),o2=osc('sine',f*2,t,t+1.6),b=filt('lowpass',2600),a=ac.createGain(),g2=ac.createGain();g2.gain.value=.25;
+  b.frequency.setValueAtTime(2600,t);b.frequency.exponentialRampToValueAtTime(650,t+.35);env(a,t,vel*.2,.003,1.4);o.connect(b);o2.connect(g2);g2.connect(b);b.connect(a);a.connect(bus)}
+/* a warm pad under the chord: two soft voices a few cents apart */
+function padChord(v,t,dur){v.forEach(m=>[-6,6].forEach(dt=>{const o=osc('triangle',mtof(m),t,t+dur+1.4);o.detune.value=dt;const b=filt('lowpass',1100),a=ac.createGain();
+  a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(.016,t+.5);a.gain.setValueAtTime(.016,t+dur);a.gain.exponentialRampToValueAtTime(.0001,t+dur+1.2);o.connect(b);b.connect(a);a.connect(bus)}))}
+/* who plays what */
+function leadNote(c,m,t,dur,vel){({ep:()=>keys(m,t,dur,vel),felt:()=>felt(m,t,dur,vel),vibes:()=>vibes(m,t,dur,vel),box:()=>box(m,t,vel),flute:()=>flute(m,t,dur,vel*.9),guitar:()=>guitar(m,t,vel*1.2),zheng:()=>pluck(m,t,vel*1.6)}[c.lead]||(()=>keys(m,t,dur,vel)))()}
+function compNote(c,m,t,dur,vel){if(c.comp==='felt')felt(m,t,dur,vel*.9);else if(c.comp==='guitar')guitar(m,t,vel*1.1);else keys(m,t,dur,vel)}
 function pluck(m,t,vel){const f=mtof(m),o=osc('triangle',f*1.012,t,t+1.4),a=ac.createGain(),bp=filt('lowpass',3200);
   o.frequency.exponentialRampToValueAtTime(f,t+.06);env(a,t,vel*.22,.004,1.2);o.connect(bp);bp.connect(a);a.connect(bus)}
 function pad_(m,t,dur){[0,7].forEach(dt=>{const o=osc('sine',mtof(m),t,t+dur+2);o.detune.value=dt-3;const a=ac.createGain();
   a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(.022,t+1.4);a.gain.setValueAtTime(.022,t+dur);a.gain.exponentialRampToValueAtTime(.0001,t+dur+1.8);o.connect(a);a.connect(bus)})}
-function bass(m,t,dur){const f=mtof(m),o=osc('triangle',f,t,t+dur+.2),s=osc('sine',f,t,t+dur+.2),a=ac.createGain(),b=filt('lowpass',380);
-  a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(.32,t+.02);a.gain.exponentialRampToValueAtTime(.12,t+dur*.7);a.gain.exponentialRampToValueAtTime(.0001,t+dur+.15);
-  o.connect(b);s.connect(b);b.connect(a);a.connect(bus)}
+function bass(m,t,dur){const f=mtof(m),k=rc?rc.bassI:'tri',a=ac.createGain(),b=filt('lowpass',k==='upright'?520:380);
+  if(k==='sub'){const s=osc('sine',f,t,t+dur+.2);s.connect(b)}
+  else if(k==='upright'){const s=osc('sine',f,t,t+.9),o=osc('triangle',f,t,t+.9);s.frequency.setValueAtTime(f*1.018,t);s.frequency.exponentialRampToValueAtTime(f,t+.05);s.connect(b);o.connect(b);dur=Math.min(dur,.55)}
+  else{const o=osc('triangle',f,t,t+dur+.2),s=osc('sine',f,t,t+dur+.2);o.connect(b);s.connect(b)}
+  a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(k==='sub'?.4:.32,t+.02);a.gain.exponentialRampToValueAtTime(.12,t+dur*.7);a.gain.exponentialRampToValueAtTime(.0001,t+dur+.15);
+  b.connect(a);a.connect(bus)}
+/* brushes: a swish instead of a snare's crack; a rimshot's click; a shaker */
+function swish(t,v=1){const n=noise(t,t+.3),b=filt('bandpass',3200,.6),a=ac.createGain();a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(.11*v,t+.03);a.gain.exponentialRampToValueAtTime(.0001,t+.24);n.connect(b);b.connect(a);a.connect(drumBus)}
+function rim(t,v=1){const o=osc('triangle',1700,t,t+.05),a=ac.createGain();env(a,t,.09*v,.001,.035);o.connect(a);a.connect(drumBus);const n=noise(t,t+.03),b=filt('bandpass',2500,2),a2=ac.createGain();env(a2,t,.06*v,.001,.02);n.connect(b);b.connect(a2);a2.connect(drumBus)}
+function shaker(t,v=1){const n=noise(t,t+.09),b=filt('highpass',5200),a=ac.createGain();a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(.045*v,t+.025);a.gain.exponentialRampToValueAtTime(.0001,t+.075);n.connect(b);b.connect(a);a.connect(drumBus)}
 function kick(t,v=1){const o=osc('sine',120,t,t+.4),a=ac.createGain();o.frequency.exponentialRampToValueAtTime(42,t+.12);env(a,t,.85*v,.003,.32);o.connect(a);a.connect(drumBus)}
 function snare(t,v=1){const n=noise(t,t+.25),b=filt('bandpass',1700,.8),a=ac.createGain();env(a,t,.28*v,.002,.17);n.connect(b);b.connect(a);a.connect(drumBus);
   const o=osc('triangle',190,t,t+.1),a2=ac.createGain();env(a2,t,.12*v,.002,.07);o.connect(a2);a2.connect(drumBus)}
@@ -313,7 +353,8 @@ function playStep(st,t){
   const tt=t+((s%2)?sd*c.swing:0),chord=c.prog[b4];
   const voice=chord.map(i=>{let m=c.key+12+i;while(m>76)m-=12;while(m<55)m+=12;return m}).filter((m,i,a)=>a.indexOf(m)===i).sort((a,b)=>a-b);
   if(s===0){
-    voice.forEach((m,i)=>keys(m,t+i*.014,sd*14,.42+rr()*.12));
+    if(c.comp==='pad')padChord(voice,t,sd*15);
+    else if(!c.arp)voice.forEach((m,i)=>compNote(c,m,t+i*(c.comp==='guitar'?.03:.014),sd*14,.42+rr()*.12));
     bass(c.key-12+(chord[0]%12),t,sd*6);
     if(c.pad)pad_(c.key+(chord[1]%12)+12,t,sd*15);
     if(b4===0&&c.fid==='lny'&&cyc%2===0)gong(t);
@@ -324,16 +365,18 @@ function playStep(st,t){
   if((c.fid==='diwali'||c.fid==='nye'||c.fid==='newyear')&&b4===3&&s>=8&&s<13)bell(c.key+24+c.scale[s-8],t,.016,.7,1);
   if((s===10||s===7&&!c.half)&&rr()<.5)bass(c.key-12+(rr()<.5?chord[0]%12:(chord[2]%12)),tt,sd*3);
   if(s===14&&rr()<.3)bass(c.key-13+(c.prog[(b4+1)%4][0]%12),tt,sd*2);
-  if((s===8||s===11)&&rr()<c.density*1.3)voice.slice(1).forEach((m,i)=>keys(m,tt+i*.01,sd*2,.2));
+  if(c.arp&&c.comp!=='pad'&&s%2===0){const k=s/2,up=[0,1,2,3,2,1,0,1][k%8]%voice.length;compNote(c,voice[up],tt,sd*3,.3)}   // the chord broken into a slow arpeggio
+  else if(c.comp!=='pad'&&(s===8||s===11)&&rr()<c.density*1.3)voice.slice(1).forEach((m,i)=>compNote(c,m,tt+i*.01,sd*2,.2));
   // drums: two bars of intro, and a breath every 16 bars
   if(bar>=2&&bar%16!==15){
-    if(c.half){ if(s===0||(s===11&&rr()<.6))kick(tt); if(s===8)snare(tt,.9); if(s%4===0||(s%4===2&&rr()<.3))(c.fid==='christmas'?jingle:hat)(tt,s%4?.6:1)}
-    else{ if(s===0||s===10||(s===3&&cyc%2===1&&rr()<.5))kick(tt); if(s===4||s===12)snare(tt); if(s===15&&rr()<.15)snare(tt,.3);
-      if(s%2===0||rr()<.12)(c.fid==='christmas'?jingle:hat)(tt,s%4===0?1:s%2?.4:.7)}
+    const k=c.kit,back=k==='brush'?swish:k==='rim'?rim:k==='soft'?(x,v)=>rim(x,(v||1)*.6):snare,tick=c.fid==='christmas'?jingle:k==='soft'?shaker:hat,kv=k==='brush'||k==='soft'?.6:1;
+    if(c.half){ if(s===0||(s===11&&rr()<.6))kick(tt,kv); if(s===8)back(tt,.9); if(s%4===0||(s%4===2&&rr()<.3))tick(tt,s%4?.6:1)}
+    else{ if(s===0||s===10||(s===3&&cyc%2===1&&rr()<.5))kick(tt,kv); if(s===4||s===12)back(tt); if(s===15&&rr()<.15)back(tt,.3);
+      if(k==='brush'?(s%4===2||s%4===0):(s%2===0||rr()<.12))tick(tt,s%4===0?1:s%2?.4:.7)}
   }
   // melody: A A B A
-  const mot=c.motifs[[0,0,1,0][cyc%4]],n=mot[b4][s];
-  if(n&&bar>=1){const m=c.key+12+c.scale[n.deg%5]+12*Math.floor(n.deg/5);c.pluck?pluck(m,tt,.6):keys(m,tt,sd*n.dur,.36);vq.push({t:tt,k:'note'})}
+  const mot=c.motifs[c.form[cyc%4]],n=mot[b4][s];
+  if(n&&bar>=1){const m=c.key+12+c.scale[n.deg%5]+12*Math.floor(n.deg/5);leadNote(c,m,tt,sd*n.dur,.36);vq.push({t:tt,k:'note'})}
   // weather + room
   if(rr()<.08)pop(t+rr()*sd);
   const w=c.weather,night=c.tb==='night'||c.tb==='late';
@@ -353,21 +396,39 @@ function wav(buf,L){
   let o=44;for(let i=0;i<L;i++)for(let c=0;c<ch;c++){const x=Math.max(-1,Math.min(1,d[c][i]*k));v.setInt16(o,x<0?x*32768:x*32767,true);o+=2}
   return new Blob([ab],{type:'audio/wav'});
 }
+/* Recorded one bar at a time (Nov 12, the owner: cacophony on an iPhone in Safari). Each bar is its own little OfflineAudioContext
+   holding only that bar's notes, rendered with a tail and laid into the tape at its place; the steady room sounds are one more pass.
+   The old way paused one long recording every two seconds (suspend/resume) to add the next notes: Chrome stops exactly there,
+   Safari's engine doesn't reliably, so notes that arrived "late" all started at once. Nothing here pauses; it is the same in every browser, and faster. */
 async function record(c){
-  const sd=60/c.bpm/4,N=BARS*16;LOOP=N*sd;
+  const sd=60/c.bpm/4,N=BARS*16;BARLEN=16*sd;LOOP=N*sd;
   const OAC=window.OfflineAudioContext||window.webkitOfflineAudioContext;
-  let O;try{O=new OAC(2,Math.ceil((LOOP+TAIL)*SR),SR)}catch(e){O=new OAC(2,Math.ceil((LOOP+TAIL)*44100),44100)}
-  ac=O;rc=c;rr=mulberry(c.seed);vq=[];
-  graph();startAmbient();
-  /* notes are added a couple of seconds before they sound (suspend/resume), never all at once: every waiting note slows the whole recording */
-  let i=0;const upTo=T=>{while(i<N&&i*sd<T){playStep(16*16+i,i*sd);i++}},CH=2;
-  if(O.suspend){upTo(CH);for(let x=CH;x<LOOP;x+=CH){const X=x;O.suspend(X).then(()=>{ac=O;rc=c;upTo(X+CH);O.resume()})}}
-  else upTo(LOOP);
-  const buf=await new Promise((ok,no)=>{O.oncomplete=e=>ok(e.renderedBuffer);const p=O.startRendering();if(p&&p.then)p.then(ok,no)});
-  const L0=LOOP,ev=vq.map(e=>({t:((e.t%L0)+L0)%L0,k:e.k})).sort((a,b)=>a.t-b.t);vq=[];ac=null;rc=null;
-  const L=Math.round(L0*buf.sampleRate);
-  for(let ch=0;ch<buf.numberOfChannels;ch++){const d=buf.getChannelData(ch);for(let i=0;L+i<d.length;i++)d[i]+=d[L+i]}   // the tail rings on into the next pass
-  return{len:L/buf.sampleRate,ev,blob:wav(buf,L)};
+  const mk=sec=>{try{return new OAC(2,Math.ceil(sec*SR),SR)}catch(e){return new OAC(2,Math.ceil(sec*44100),44100)}};
+  const render=O=>new Promise((ok,no)=>{let done=0;O.oncomplete=e=>{if(!done++)ok(e.renderedBuffer)};const p=O.startRendering();if(p&&p.then)p.then(b=>{if(!done++)ok(b)},no)});
+  let sr=0,out=null,L=0;
+  const lay=(buf,at)=>{if(!out){sr=buf.sampleRate;L=Math.round(LOOP*sr);out=[new Float32Array(L+Math.ceil((TAIL+1)*sr)),new Float32Array(L+Math.ceil((TAIL+1)*sr))]}
+    const o=Math.round(at*sr);for(let ch=0;ch<2;ch++){const d=buf.getChannelData(Math.min(ch,buf.numberOfChannels-1)),T=out[ch];for(let i=0,n=Math.min(d.length,T.length-o);i<n;i++)T[o+i]+=d[i]}};
+  // the reverb's room and a bed of noise, made once for the whole tape
+  {const ir=mulberry(c.seed^77),n=Math.floor(SR*2.4);IR=[0,1].map(()=>{const d=new Float32Array(n);for(let i=0;i<n;i++)d[i]=(ir()*2-1)*Math.pow(1-i/n,2.6);return d});
+   NZ=new Float32Array(SR*2);for(let i=0;i<NZ.length;i++)NZ[i]=Math.random()*2-1}
+  rr=mulberry(c.seed);vq=[];const ev=[];
+  // the room: rain, wind, crickets' bed, a festival's drone; one pass the length of the tape
+  {const O=mk(LOOP+TAIL);ac=O;rc=c;graph();startAmbient();ac=null;lay(await render(O),0)}
+  // the song, a few bars at a time (each bar made in order, so the tape's random choices stay the same)
+  const PER=4;   // bars per piece (4 measured fastest): few enough that each piece holds few notes, enough that the tails don't pile up
+  for(let k=0;k<BARS;k+=PER*2){
+    const jobs=[];
+    for(let j=k;j<Math.min(k+PER*2,BARS);j+=PER){const nb=Math.min(PER,BARS-j),O=mk(nb*BARLEN+TAIL);ac=O;rc=c;vq=[];graph();
+      for(let s2=0;s2<16*nb;s2++)playStep(16*16+j*16+s2,s2*sd);
+      vq.forEach(e=>ev.push({t:e.t+j*BARLEN,k:e.k}));jobs.push([O,j*BARLEN])}
+    ac=null;
+    const bufs=await Promise.all(jobs.map(([O])=>render(O)));
+    bufs.forEach((b,i)=>lay(b,jobs[i][1]));
+  }
+  rc=null;vq=[];IR=null;NZ=null;
+  for(let ch=0;ch<2;ch++){const d=out[ch];for(let i=0;L+i<d.length;i++)d[i]+=d[L+i]}   // the tail rings on into the next pass
+  const evs=ev.map(e=>({t:((e.t%LOOP)+LOOP)%LOOP,k:e.k})).sort((a,b)=>a.t-b.t);
+  return{len:L/sr,ev:evs,blob:wav({numberOfChannels:2,sampleRate:sr,getChannelData:i=>out[i]},L)};
 }
 
 /* ---------- the player: one <audio> element, like a cassette deck ---------- */
@@ -499,7 +560,7 @@ function renderPlayer(){
   const c=cfg;setTimeout(snapCover,400);$('scene').setAttribute('aria-label',F(W.scene,{p:Tr(W.pets[c.pet])}));
   $('tapeNo').textContent=`${Tr(W.tape)} No. ${c.tapeNo} · ${Tr(S.side==='B'?W.sideB:W.side)}`;
   $('tapeTitle').textContent=tapeTitle(c);
-  $('tapeMeta').textContent=F(W.meta,{k:W.keys[li()][c.keyOff],b:c.bpm});
+  $('tapeMeta').textContent=F(W.meta,{k:W.keys[li()][c.keyOff],b:c.bpm,i:Tr(W.inst[c.lead])});
   const chips=[`<span class="chip">${esc(dayName(c.dow))}</span>`,`<span class="chip">${esc(Tr(W.times[c.tb]))}</span>`];
   if(c.fest)chips.push(`<span class="chip">${esc(festName(c.fest))}</span>`);
   if(c.shared)chips.push(`<span class="chip">${esc(Tr(W.weathers[c.weather]))}</span>`,`<span class="chip">${esc(Tr(W.moods[c.mood]))}</span>`);
@@ -654,6 +715,8 @@ function drink(c,t,night){
   if(hot&&!RM){g.strokeStyle='rgba(58,42,64,.35)';g.lineWidth=1.4;const top=S2==='spring'?220:212;for(let i=0;i<2;i++){const ph=(t*.6+i*.5)%1;g.globalAlpha=1-ph;g.beginPath();const bx=178+i*8,by=top-ph*22;
     g.moveTo(bx,by);g.quadraticCurveTo(bx+4,by-5,bx,by-10);g.stroke()}g.globalAlpha=1}
 }
+/* a tail: path() traces it from a root tucked well inside the body (drawn before the body, so the body covers the join); outline, then fur */
+function tailDraw(path,col,w){g.beginPath();path();g.strokeStyle=INK;g.lineWidth=w+2;g.lineCap='round';g.lineJoin='round';g.stroke();g.beginPath();path();g.strokeStyle=col;g.lineWidth=w;g.stroke()}
 /* Miso, Yuzu or Mantou (the town's own colours): up and looking out of the window by day, curled up asleep from the evening */
 function pet(c,t,night,w){
   const P=(window.FBWorld&&FBWorld.PETS&&FBWorld.PETS[c.pet])||{miso:{b:'#231b17',d:'#3a2f29',belly:'#3a2f29'},yuzu:{b:'#e8913a',d:'#b5611d',belly:'#f8dcae',stripe:'#b5611d'},dog:{b:'#e8c48a',w:'#fbf3e2',d:'#b88a4a',collar:'#c8402a'}}[c.pet];
@@ -662,14 +725,14 @@ function pet(c,t,night,w){
   if(asleep){
     if(dog){   // Mantou, curled on his cushion, chin on his paws
       poly(ellPts(272,238,48,7,16));ink('#c8473a',2);
+      tailDraw(()=>{g.moveTo(294,222);g.bezierCurveTo(318,210,312,198,300,206)},P.b,2.6);   // the curly tail, rooted inside his back
       poly(ellPts(278,226,34,13*br,18));ink(P.b,2);poly(ellPts(270,233,20,4,12));ink(P.w,0);
-      g.beginPath();g.moveTo(306,220);g.bezierCurveTo(318,206,302,200,300,212);ink(null,4);g.strokeStyle=P.b;g.lineWidth=2.2;g.stroke();   // the curly tail
       poly(ellPts(244,228,14,11,14));ink(P.b,2);poly(ellPts(234,233,7,5,10));ink(P.w,1.4);g.fillStyle=INK;g.beginPath();g.arc(229,231,1.8,0,7);g.fill();
       poly([[248,219],[258,222],[254,236]]);ink(P.d,1.6);g.beginPath();g.moveTo(252,228);g.lineTo(262,232);g.strokeStyle=P.collar;g.lineWidth=3;g.stroke();
       g.beginPath();g.arc(240,226,2.4,.2,Math.PI-.2);ink(null,1.3);
       poly(ellPts(232,240,8,3,8));ink(P.w,1.4);
     }else{
-      g.beginPath();g.moveTo(306,234);g.quadraticCurveTo(318,214+Math.sin(t*.9)*3,300,212);ink(null,4);g.beginPath();g.moveTo(306,234);g.quadraticCurveTo(318,214+Math.sin(t*.9)*3,300,212);g.strokeStyle=P.b;g.lineWidth=2;g.stroke();
+      const sw=Math.sin(t*.9)*3;tailDraw(()=>{g.moveTo(292,233);g.quadraticCurveTo(320,232,316,218+sw);g.quadraticCurveTo(313,208+sw,302,212)},P.b,2.4);   // wrapped round her, rooted inside
       poly(ellPts(270,229,36,12*br,18));ink(P.b,2);
       poly(ellPts(262,236,20,4*br,12));ink(P.belly,0);
       if(P.stripe){g.beginPath();[[256,219],[268,218],[280,218],[292,221]].forEach(([x,y])=>{g.moveTo(x,y+1);g.lineTo(x+2,y+8)});g.strokeStyle=P.stripe;g.lineWidth=2;g.stroke()}
@@ -687,14 +750,15 @@ function pet(c,t,night,w){
   const look=Math.sin(t*.4)*3,x=268;
   if(dog){
     const wag=Math.sin(t*(S.playing?10:4))*6;
-    g.beginPath();g.moveTo(x+14,232);g.bezierCurveTo(x+30+wag,224,x+22+wag,210,x+16+wag*.6,218);ink(null,4);g.strokeStyle=P.b;g.lineWidth=2.2;g.stroke();
+    tailDraw(()=>{g.moveTo(x+8,228);g.bezierCurveTo(x+30+wag,224,x+22+wag,210,x+16+wag*.6,218)},P.b,2.6);
     poly(ellPts(x,226,24,15,16));ink(P.b,2);poly([[x-14,222],[x+14,222],[x+10,196],[x-10,196]]);ink(P.b,2);
     g.beginPath();g.moveTo(x-11,198);g.lineTo(x+11,198);g.strokeStyle=P.collar;g.lineWidth=3.4;g.stroke();
     poly(ellPts(x+look,184,13,12,14));ink(P.b,2);poly(ellPts(x-12+look,186,5,10,10));ink(P.d,1.6);poly(ellPts(x+12+look,186,5,10,10));ink(P.d,1.6);
     poly(ellPts(x-12,240,7,3,8));ink(P.w,1.4);poly(ellPts(x+12,240,7,3,8));ink(P.w,1.4);
   }else{
     const tw=Math.sin(t*1.3)*4;
-    g.beginPath();g.moveTo(x+16,236);g.bezierCurveTo(x+40,240,x+44,226+tw,x+36,218+tw);ink(null,4.4);g.strokeStyle=P.b;g.lineWidth=2.6;g.stroke();
+    tailDraw(()=>{g.moveTo(x+6,234);g.bezierCurveTo(x+40,242,x+44,226+tw,x+36,218+tw)},P.b,2.6);
+    if(P.stripe){g.strokeStyle=P.stripe;g.lineWidth=1.6;g.beginPath();g.moveTo(x+38,232);g.lineTo(x+41,229);g.moveTo(x+40,224+tw);g.lineTo(x+43,223+tw);g.stroke()}   // Yuzu's tail rings
     poly(ellPts(x,226,22,15,16));ink(P.b,2);poly([[x-13,222],[x+13,222],[x+9,194],[x-9,194]]);ink(P.b,2);
     if(P.stripe){g.strokeStyle=P.stripe;g.lineWidth=2;g.beginPath();[[214],[222],[230]].forEach(([y])=>{g.moveTo(x-12,y);g.quadraticCurveTo(x,y-4,x+12,y)});g.stroke()}
     poly(ellPts(x+look,184,12,11,14));ink(P.b,2);

@@ -69,7 +69,10 @@ window.WR_W = {
   side: ["Side A", "A面", "A面", "Cara A", "Cara A"],
   sideB: ["Side B", "B面", "B面", "Cara B", "Cara B"],
   tape: ["Tape", "磁带", "磁帶", "Cinta", "Cinta"],
-  meta: ["key of {k} · {b} bpm", "{k}调 · 每分钟 {b} 拍", "{k}調 · 每分鐘 {b} 拍", "tono de {k} · {b} bpm", "to de {k} · {b} bpm"],
+  meta: ["key of {k} · {b} bpm · {i}", "{k}调 · 每分钟 {b} 拍 · {i}", "{k}調 · 每分鐘 {b} 拍 · {i}", "tono de {k} · {b} bpm · {i}", "to de {k} · {b} bpm · {i}"],
+  inst: { ep: ["electric piano", "电钢琴", "電鋼琴", "piano eléctrico", "piano elèctric"], felt: ["felt piano", "毛毡钢琴", "毛氈鋼琴", "piano de fieltro", "piano de feltre"],
+    vibes: ["vibraphone", "颤音琴", "顫音琴", "vibráfono", "vibràfon"], box: ["music box", "八音盒", "八音盒", "caja de música", "capsa de música"],
+    flute: ["flute", "长笛", "長笛", "flauta", "flauta"], guitar: ["nylon guitar", "尼龙弦吉他", "尼龍弦吉他", "guitarra de nailon", "guitarra de niló"], zheng: ["zither", "古筝", "古箏", "cítara", "cítara"] },
   keys: [
     ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"],
     ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"],
