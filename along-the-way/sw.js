@@ -1,10 +1,10 @@
 /* Along the Way: works offline once opened. Keeps only what this app needs to draw itself (its own folder, the kit, the fonts),
    always asks the network first and falls back to the copy it kept. Never touches anything off the site; sends nothing. */
-var V = "aw-1";
-var OWN = /^\/(along-the-way|fbkit|fonts)\//;
+var V = "aw-2";
+var OWN = /^\/(along-the-way|fbkit|fonts)\/|^\/little-things\/take\.js$/;
 self.addEventListener("install", function (e) {
   self.skipWaiting();
-  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"]); }).catch(function () {}));
+  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png", "/little-things/take.js"]); }).catch(function () {}));
 });
 self.addEventListener("activate", function (e) {
   e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("aw-") === 0 && k !== V; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); }));

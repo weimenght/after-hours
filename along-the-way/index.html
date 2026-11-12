@@ -131,6 +131,10 @@ textarea:focus, input:focus { outline: 3px solid var(--amber); outline-offset: 1
   .langm .menu button[aria-checked="true"] { color: var(--amber); }
   .langm .menu button:hover, .langm .menu button:focus-visible { background: var(--wood-hi); }
   #foot { padding-top: 6px; color: var(--muted); }
+  .say .wake { margin-top: 8px; background: var(--wood-hi); }
+  .qr { display: grid; justify-items: center; gap: 6px; }
+  .qr svg { max-width: 100%; height: auto; background: #fff; border: 3px solid #000; }
+  .qr p { margin: 0; font-size: 18px; color: var(--ink-soft); text-align: center; }
 </style>
 </head>
 <body>
@@ -233,6 +237,42 @@ textarea:focus, input:focus { outline: 3px solid var(--amber); outline-offset: 1
       <div class="cal" id="cal"></div>
     </div>
     <div id="entries" class="stack"></div>
+    <div class="row" id="takeRow">
+      <button class="btn" type="button" id="goTake" data-t="takeGo"></button>
+      <button class="btn" type="button" id="openFile" data-t="bringFile"></button>
+    </div>
+    <p class="note" id="roadNote" role="status"></p>
+  </section>
+
+  <!-- take the road along: a link, a square to scan, or a file (take.js); nothing is sent anywhere -->
+  <section class="screen" data-s="take" hidden>
+    <div class="row" style="align-items:center">
+      <button class="btn small" type="button" data-to="road" data-t="back" style="flex:none"></button>
+      <h1 data-t="takeT" style="font-size:15px;flex:1"></h1>
+    </div>
+    <div class="card">
+      <p class="hint" data-t="takeQ" style="font-size:20px"></p>
+      <div id="qr" class="qr"></div>
+      <div class="row">
+        <button class="btn pri" type="button" id="sendLink" data-t="sendLink"></button>
+        <button class="btn" type="button" id="saveFile" data-t="saveFile"></button>
+      </div>
+      <p class="note" id="takeNote" role="status"></p>
+    </div>
+  </section>
+
+  <!-- a road arriving from another device -->
+  <section class="screen" data-s="arrive" hidden>
+    <canvas class="scene" id="scArrive" width="160" height="96" role="img" aria-label="Mantou at the garden gate."></canvas>
+    <div class="card">
+      <h2 data-t="arriveT"></h2>
+      <p style="margin:0;font-size:22px" id="arriveLine"></p>
+      <p class="hint" data-t="arriveHow"></p>
+      <div class="row">
+        <button class="btn pri" type="button" id="bringIn" data-t="bring"></button>
+        <button class="btn" type="button" id="notNow" data-t="notNow"></button>
+      </div>
+    </div>
   </section>
 
   <!-- pdf -->
@@ -263,7 +303,8 @@ textarea:focus, input:focus { outline: 3px solid var(--amber); outline-offset: 1
   </div>
 </div>
 
-<script src="./words.js?v=d7f224496d"></script>
+<script src="/little-things/take.js?v=355bbced9f"></script>
+<script src="./words.js?v=2a8a81b94b"></script>
 <script>
 (function () {
 "use strict";
@@ -284,7 +325,8 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
 function dkey(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
 function today() { return dkey(new Date()); }
 function getE(d) { for (var i = 0; i < S.entries.length; i++) if (S.entries[i].d === d) return S.entries[i]; return null; }
-function putE(e) { S.entries = S.entries.filter(function (x) { return x.d !== e.d; }); S.entries.push(e); S.entries.sort(function (a, b) { return a.d < b.d ? -1 : 1; }); save(); }
+function putE(e) { e.u = Date.now(); ins(e); }
+function ins(e) { S.entries = S.entries.filter(function (x) { return x.d !== e.d; }); S.entries.push(e); S.entries.sort(function (a, b) { return a.d < b.d ? -1 : 1; }); save(); }
 function delE(d) { S.entries = S.entries.filter(function (x) { return x.d !== d; }); save(); }
 function fromKey(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
 function fmtDate(k, long) {
@@ -322,7 +364,7 @@ var WEI = [[9,3,14,4,"#1c1917"],[7,5,4,5,"#1c1917"],[21,5,4,5,"#1c1917"],[11,2,1
   [18,10,4,4,"rgba(125,178,168,.3)"],[18,9,4,1,"#e0a043"],[18,14,4,1,"#e0a043"],[17,10,1,4,"#e0a043"],[22,10,1,4,"#e0a043"],[19,10,1,1,"rgba(255,255,255,.8)"],[20,12,1,2,"#1b0f07"],
   [7,10,2,1,"#b9772c"],[23,10,2,1,"#b9772c"],[14,16,4,1,"#a0521d"],[13,19,6,2,"#f5d49a"],
   [11,21,10,2,"#f3ead8"],[15,22,2,2,"#6b3a1b"],[8,23,16,11,"#1c1410"],[12,23,8,10,"#4a2410"],[14,24,4,7,"#f3ead8"],[15,27,2,1,"#e0a043"],[15,30,2,1,"#e0a043"]];
-function drawWei(ctx, x, y, px) { WEI.forEach(R(ctx, x, y, px)); }
+function drawWei(ctx, x, y, px, z) { WEI.forEach(R(ctx, x, y, px)); if (z) shut(ctx, "wei", x, y, px); }
 function dayHash(salt) { var d = new Date(), s = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + ":" + salt, h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967295; }
 function meiLook() { var r = dayHash("mei-hair"); return { hair: r < .34 ? 0 : r < .67 ? 1 : 2, mascara: dayHash("mei-lash") < .55 }; }
 var MEI_BASE = [[7,6,3,11,"#f48fb8"],[22,6,3,11,"#f48fb8"],[8,3,16,5,"#f48fb8"],[11,4,4,1,"#ffc4dc"],[9,8,14,12,"#f6d6b8"],[9,8,1,4,"#eab896"],[22,8,1,4,"#eab896"],
@@ -336,11 +378,12 @@ var MEI_STYLE = [
     body: [[7,22,18,10,"#c8303a"],[14,22,4,10,"#1a1a20"],[7,28,3,4,"#f3ead8"],[22,28,3,4,"#f3ead8"],[10,25,3,2,"#f3ead8"]] },
   { hair: [[3,8,4,6,"#f48fb8"],[2,13,4,5,"#d9679a"],[25,8,4,6,"#f48fb8"],[26,13,4,5,"#d9679a"],[6,8,2,2,"#f6e05a"],[24,8,2,2,"#f6e05a"]], lip: "#ec8aa8",
     body: [[7,22,18,10,"#4a6aa0"],[10,22,3,3,"#3a5888"],[19,22,3,3,"#3a5888"],[13,21,6,1,"#1a1a20"],[16,22,1,1,"#f6e05a"],[15,26,2,1,"#c8d8f0"]] }];
-function drawMei(ctx, x, y, px) {
+function drawMei(ctx, x, y, px, z) {
   var Lk = meiLook(), st = MEI_STYLE[Lk.hair], f = R(ctx, x, y, px);
   st.body.forEach(f); st.hair.forEach(f); MEI_BASE.forEach(f); MEI_EYES.forEach(f);
   if (Lk.mascara) { [[10,12,4,1],[18,12,4,1],[9,12,1,1],[22,12,1,1]].forEach(function (r) { f(r.concat("#1a1018")); }); } else { f([11,12,2,1,"#7a4a5a"]); f([19,12,2,1,"#7a4a5a"]); }
   f([15,18,3,1,st.lip]);
+  if (z) shut(ctx, "mei", x, y, px);
 }
 var POPO = [[7,22,18,10,"#8a2a3a"],[6,25,2,7,"#7a2232"],[24,25,2,7,"#7a2232"],[12,21,8,2,"#f3ead8"],[11,24,10,8,"#efe4c8"],[11,23,1,2,"#efe4c8"],[20,23,1,2,"#efe4c8"],[13,28,6,2,"#dccba4"],[15,22,2,1,"#c8a040"],
   [12,0,8,5,"#d6d2ca"],[13,1,3,1,"#f0ede6"],[11,3,10,1,"#b8b4ac"],[8,4,16,5,"#d6d2ca"],[10,5,4,1,"#f0ede6"],[7,7,3,7,"#c8c4bc"],[22,7,3,7,"#c8c4bc"],[19,1,3,1,"#4aa07a"],[21,0,1,1,"#4aa07a"],
@@ -349,15 +392,32 @@ var POPO = [[7,22,18,10,"#8a2a3a"],[6,25,2,7,"#7a2232"],[24,25,2,7,"#7a2232"],[1
   [17,12,5,1,"#5a8a70"],[17,16,5,1,"#5a8a70"],[17,12,1,5,"#5a8a70"],[21,12,1,5,"#5a8a70"],[18,13,3,3,"#fbf3e6"],[15,13,2,1,"#5a8a70"],
   [10,17,2,1,"#f0a8a0"],[20,17,2,1,"#f0a8a0"],[16,15,1,2,"#e2b08a"],[8,15,1,2,"#4aa07a"],[23,15,1,2,"#4aa07a"],
   [14,18,4,1,"#c07068"],[13,17,1,1,"#c07068"],[18,17,1,1,"#c07068"]];
-function drawPopo(ctx, x, y, px) { var f = R(ctx, x, y, px); POPO.forEach(f); f([12,14,1,1,"#3a2418"]); f([19,14,1,1,"#3a2418"]); f([11,13,1,1,"#e2b890"]); f([20,13,1,1,"#e2b890"]); }
+function drawPopo(ctx, x, y, px, z) { var f = R(ctx, x, y, px); POPO.forEach(f); f([12,14,1,1,"#3a2418"]); f([19,14,1,1,"#3a2418"]); f([11,13,1,1,"#e2b890"]); f([20,13,1,1,"#e2b890"]); if (z) shut(ctx, "popo", x, y, px); }
 function drawDogFace(ctx, x, y, px) {
   var P = PETS.dog, f = function (c, r) { ctx.fillStyle = c; ctx.fillRect(x + r[0] * px, y + r[1] * px, r[2] * px, r[3] * px); };
   f(P.b,[6,4,6,10]); f(P.b,[20,4,6,10]); f(P.d,[7,6,4,7]); f(P.d,[21,6,4,7]); f(P.b,[8,8,16,16]); f(P.b,[6,12,20,10]); f(P.w,[11,16,10,9]); f(P.w,[13,24,6,2]);
   f("#2a1a14",[14,18,4,3]); f("#c98272",[15,22,2,2]); f(P.e,[10,12,3,3]); f(P.e,[19,12,3,3]); f("#fff",[11,12,1,1]); f("#fff",[20,12,1,1]); f(P.collar,[8,26,16,3]); f("#e8c44a",[15,28,2,2]);
 }
-var FACE = { popo: drawPopo, mei: drawMei, wei: drawWei, dog: drawDogFace };
-function catsAsleep() { var h = new Date().getHours(); return h >= 23 || h < 5; }
-function dogAsleep() { var h = new Date().getHours(); return h >= 22 || h < 6; }
+function drawCatsFace(ctx, x, y, px) { drawPet(ctx, "miso", x + 10 * px, y + 28 * px, px, {}); drawPet(ctx, "yuzu", x + 22 * px, y + 31 * px, px, { flip: true }); }
+function drawNote(ctx, x, y, px) { var f = R(ctx, x, y, px); [[6,5,20,24,"#f3ead8"],[6,28,20,1,"#c8b890"],[13,3,6,4,"#c8303a"],[9,11,14,1,"#a08870"],[9,15,12,1,"#a08870"],[9,19,14,1,"#a08870"],[9,23,8,1,"#a08870"]].forEach(f); }
+var FACE = { popo: drawPopo, mei: drawMei, wei: drawWei, dog: drawDogFace, cats: drawCatsFace, note: drawNote };
+/* the town's hours (FBWorld.sleeps, the browser's clock; ?h= sets it for testing): Mei and Wei can be woken for fifteen minutes; nobody wakes Popo */
+function hr() { var q = /[?&]h=([\d.]+)/.exec(location.search); if (q) return (+q[1]) % 24; var d = new Date(); return d.getHours() + d.getMinutes() / 60; }
+var SL = { wei: function (h) { return h < 6 || (h >= 12 && h < 14); }, mei: function (h) { return h >= 2 && h < 12; }, popo: function (h) { return h >= 21 || h < 5; },
+  cats: function (h) { return h >= 23 || h < 5; }, mantou: function (h) { return h >= 22 || h < 6 || (h >= 14 && h < 15.5); } };
+function woke(w) { try { var o = JSON.parse(sessionStorage.getItem("aw_woke") || "{}"); return !!o[w] && Date.now() - o[w] < 9e5; } catch (e) { return false; } }
+function rouse(w) { try { var o = JSON.parse(sessionStorage.getItem("aw_woke") || "{}"); o[w] = Date.now(); sessionStorage.setItem("aw_woke", JSON.stringify(o)); } catch (e) {} }
+function sleeps(w) { var h = hr(), z = window.FBWorld && FBWorld.sleeps ? FBWorld.sleeps(w, h) : SL[w](h); return !!z && !((w === "mei" || w === "wei") && woke(w)); }
+function catsAsleep() { return sleeps("cats"); }
+function dogAsleep() { return sleeps("mantou"); }
+/* eyes shut and a z, drawn over the town's own faces */
+var SHUT = { wei: ["#f5d49a", "#1b0f07", [[11,11,3,3],[19,11,3,3]], [[11,12,3,1],[19,12,3,1]]], mei: ["#f6d6b8", "#3a2a4a", [[10,13,4,3],[18,13,4,3]], [[10,14,4,1],[18,14,4,1]]],
+  popo: ["#fbf3e6", "#3a2418", [[11,13,3,3],[18,13,3,3]], [[11,14,3,1],[18,14,3,1]]] };
+function shut(ctx, who, x, y, px) {
+  var s = SHUT[who], f = R(ctx, x, y, px);
+  s[2].forEach(function (r) { f(r.concat(s[0])); }); s[3].forEach(function (r) { f(r.concat(s[1])); });
+  [[26,1,3,1],[27,2,1,1],[26,3,3,1],[30,0,2,1],[31,-1,1,1]].forEach(function (r) { f(r.concat("#c8c0e8")); });
+}
 
 /* the weather inside: five little skies, 12×12 */
 var MOODC = ["#f6b73c", "#f2d16b", "#b8b4c8", "#6b9ad0", "#6a5a8a"];
@@ -377,7 +437,7 @@ function moodCanvas(i) { var c = document.createElement("canvas"); c.width = 12;
 
 /* ---------- scenes (160×96) ---------- */
 function sky(ctx) {
-  var h = new Date().getHours(), night = h < 6 || h >= 20, dusk = h >= 17 && h < 20;
+  var h = Math.floor(hr()), night = h < 6 || h >= 20, dusk = h >= 17 && h < 20;
   var bands = night ? ["#14101e", "#1c1630", "#241c3c", "#2c2244"] : dusk ? ["#3a2a5a", "#7a3a5a", "#c8604a", "#f0a050"] : ["#6ab0e0", "#8cc4ea", "#b0d8f0", "#d8ecf6"];
   bands.forEach(function (c, i) { ctx.fillStyle = c; ctx.fillRect(0, i * 12, 160, 12); });
   if (night) { ctx.fillStyle = "#fff6d0"; [[12,6],[40,14],[70,4],[100,10],[132,6],[150,18],[24,20],[88,22]].forEach(function (s) { ctx.fillRect(s[0], s[1], 1, 1); }); ctx.fillStyle = "#f6eecc"; ctx.fillRect(128, 8, 8, 8); ctx.fillStyle = bands[0]; ctx.fillRect(131, 7, 6, 6); }
@@ -402,7 +462,7 @@ function path(ctx, y) {
 function lamp(ctx, x, lit) { ctx.fillStyle = "#1a1418"; ctx.fillRect(x, 34, 2, 42); ctx.fillRect(x - 3, 30, 8, 5); ctx.fillStyle = lit ? "#ffd27a" : "#8a8070"; ctx.fillRect(x - 2, 31, 6, 3); if (lit) { ctx.fillStyle = "rgba(255,210,122,.12)"; ctx.fillRect(x - 12, 34, 26, 42); } }
 function counter(ctx, y, top, front) { ctx.fillStyle = top; ctx.fillRect(0, y, 160, 4); ctx.fillStyle = front; ctx.fillRect(0, y + 4, 160, 96 - y - 4); ctx.fillStyle = "#000"; ctx.fillRect(0, y + 4, 160, 1); ctx.fillStyle = "rgba(0,0,0,.18)"; for (var x = 8; x < 160; x += 22) ctx.fillRect(x, y + 8, 1, 96 - y); }
 function room(ctx, wallc, trim) { ctx.fillStyle = wallc; ctx.fillRect(0, 0, 160, 96); ctx.fillStyle = trim; ctx.fillRect(0, 0, 160, 3); }
-function windowBox(ctx, x, y, w, h) { var s = { night: false }; var hh = new Date().getHours(), night = hh < 6 || hh >= 20, dusk = hh >= 17 && hh < 20;
+function windowBox(ctx, x, y, w, h) { var s = { night: false }; var hh = Math.floor(hr()), night = hh < 6 || hh >= 20, dusk = hh >= 17 && hh < 20;
   ctx.fillStyle = night ? "#1c1630" : dusk ? "#c8704a" : "#8cc4ea"; ctx.fillRect(x, y, w, h);
   if (night) { ctx.fillStyle = "#fff6d0"; ctx.fillRect(x + 4, y + 4, 1, 1); ctx.fillRect(x + w - 7, y + 7, 1, 1); }
   ctx.fillStyle = "#3a2214"; ctx.fillRect(x - 2, y - 2, w + 4, 2); ctx.fillRect(x - 2, y + h, w + 4, 2); ctx.fillRect(x - 2, y, 2, h); ctx.fillRect(x + w, y, 2, h); ctx.fillRect(x + (w >> 1) - 1, y, 2, h); ctx.fillRect(x, y + (h >> 1) - 1, w, 2); return s; }
@@ -411,7 +471,7 @@ function sceneHome(c, all) {
   var ctx = c.getContext("2d"); ctx.imageSmoothingEnabled = false; var s = sky(ctx); roofs(ctx, s.night || s.dusk);
   ctx.fillStyle = "#2e4a34"; ctx.fillRect(0, 46, 160, 22);
   ctx.fillStyle = "#3a5a3e"; for (var i = 0; i < 160; i += 6) ctx.fillRect(i, 44 + (i % 4), 4, 4);
-  drawPopo(ctx, 34, 32, 1); drawWei(ctx, 64, 30, 1); drawMei(ctx, 94, 32, 1);
+  drawPopo(ctx, 34, 32, 1, sleeps("popo")); drawWei(ctx, 64, 30, 1, sleeps("wei")); drawMei(ctx, 94, 32, 1, sleeps("mei"));
   wall(ctx, 58); path(ctx, 71); lamp(ctx, 140, s.night || s.dusk);
   var ca = catsAsleep();
   drawPet(ctx, "miso", 16, 58, 1, { asleep: ca }); drawPet(ctx, "yuzu", 128, 58, 1, { asleep: ca, flip: true });
@@ -421,7 +481,7 @@ function sceneHome(c, all) {
 function sceneMood(c) {
   var ctx = c.getContext("2d"); room(ctx, "#3a2a4a", "#2a1e38"); windowBox(ctx, 16, 14, 34, 26);
   ctx.fillStyle = "#4a3a5a"; ctx.fillRect(112, 18, 36, 3); ctx.fillStyle = "#f48fb8"; ctx.fillRect(116, 12, 4, 6); ctx.fillStyle = "#7ad0f0"; ctx.fillRect(124, 13, 5, 5); ctx.fillStyle = "#f6e05a"; ctx.fillRect(134, 10, 6, 8);
-  drawMei(ctx, 64, 30, 1.25);
+  drawMei(ctx, 64, 30, 1.25, sleeps("mei"));
   counter(ctx, 70, "#c8a8d8", "#5a4a6a");
   ctx.fillStyle = "#fbf6ea"; ctx.fillRect(108, 58, 8, 12); ctx.fillStyle = "#8a5a3a"; ctx.fillRect(109, 62, 6, 7); ctx.fillStyle = "#f48fb8"; ctx.fillRect(113, 52, 1, 7);
   drawPet(ctx, "yuzu", 36, 70, 1, { asleep: catsAsleep() });
@@ -429,12 +489,12 @@ function sceneMood(c) {
 function sceneRtb(c) {
   var ctx = c.getContext("2d"); room(ctx, "#5a3a2a", "#3a2418"); windowBox(ctx, 110, 12, 34, 26);
   ctx.fillStyle = "#3a2418"; ctx.fillRect(10, 20, 30, 2); ctx.fillStyle = "#e8d8b8"; ctx.fillRect(12, 14, 6, 6); ctx.fillStyle = "#c8a040"; ctx.fillRect(22, 12, 5, 8); ctx.fillStyle = "#4a7ec0"; ctx.fillRect(30, 15, 7, 5);
-  drawPopo(ctx, 60, 30, 1.25);
+  drawPopo(ctx, 60, 30, 1.25, sleeps("popo"));
   counter(ctx, 70, "#c8a070", "#6a4428");
   ctx.fillStyle = "#cfe8e0"; ctx.fillRect(40, 60, 8, 10); ctx.fillStyle = "#3a7a3a"; ctx.fillRect(43, 52, 1, 9); ctx.fillStyle = "#c8303a"; ctx.fillRect(41, 49, 5, 4); ctx.fillStyle = "#e8505a"; ctx.fillRect(42, 49, 2, 2);
   ctx.fillStyle = "#fbf6ea"; ctx.fillRect(104, 64, 16, 6); ctx.fillStyle = "#4a7ec0"; ctx.fillRect(104, 66, 16, 1); ctx.fillStyle = "#e8b860"; ctx.fillRect(106, 63, 12, 2);
   ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.fillRect(109, 57, 1, 4); ctx.fillRect(113, 55, 1, 5);
-  drawPet(ctx, "miso", 136, 70, 1, { asleep: true, flip: true });
+  drawPet(ctx, "miso", 136, 70, 1, { asleep: sleeps("popo") ? catsAsleep() : true, flip: true });
 }
 function sceneThanks(c) {
   var ctx = c.getContext("2d"); room(ctx, "#2a1c14", "#1a100a");
@@ -442,7 +502,7 @@ function sceneThanks(c) {
   [["#c8303a",12],["#4aa07a",20],["#e8a838",28],["#7ad0f0",38]].forEach(function (b) { ctx.fillStyle = b[0]; ctx.fillRect(b[1], 8, 4, 8); });
   [["#f6e05a",112],["#b8a4e0",122],["#e8913a",134],["#fbf6ea",144]].forEach(function (b) { ctx.fillStyle = b[0]; ctx.fillRect(b[1], 9, 5, 7); });
   ctx.fillStyle = "#f6b73c"; ctx.fillRect(74, 4, 12, 2); ctx.fillStyle = "rgba(246,183,60,.12)"; ctx.fillRect(60, 6, 40, 30);
-  drawWei(ctx, 60, 30, 1.25);
+  drawWei(ctx, 60, 30, 1.25, sleeps("wei"));
   counter(ctx, 70, "#8a5a32", "#3a2214");
   ctx.fillStyle = "#e8dcc2"; ctx.fillRect(92, 68, 10, 2); ctx.fillStyle = "rgba(220,240,255,.7)"; ctx.fillRect(94, 58, 6, 10); ctx.fillStyle = "#f6b73c"; ctx.fillRect(95, 62, 4, 5);
   drawPet(ctx, "dog", 136, 70, 1, { asleep: dogAsleep(), flip: true });
@@ -453,16 +513,25 @@ function sceneDone(c) {
   wall(ctx, 58); ctx.fillStyle = "#5a3a22"; ctx.fillRect(96, 46, 22, 25); ctx.fillStyle = "#3a2214"; ctx.fillRect(96, 46, 22, 2); ctx.fillRect(106, 48, 2, 23); ctx.fillStyle = "#e8c44a"; ctx.fillRect(102, 58, 2, 2);
   path(ctx, 71); lamp(ctx, 132, true);
   drawPet(ctx, "miso", 30, 58, 1, { asleep: true }); drawPet(ctx, "yuzu", 46, 58, 1, { asleep: true, flip: true });
-  drawPet(ctx, "dog", 80, 88, 1.25, {});
-  ctx.fillStyle = "#c8402a"; ctx.fillRect(86, 76, 1, 1); ctx.fillRect(87, 77, 2, 1); ctx.fillRect(89, 78, 1, 4); ctx.fillRect(90, 82, 4, 1); ctx.fillRect(94, 81, 6, 1);
+  var dz = dogAsleep(); drawPet(ctx, "dog", dz ? 104 : 80, 88, 1.25, { asleep: dz });   /* asleep: curled up by the gate, no lead */
+  if (!dz) { ctx.fillStyle = "#c8402a"; ctx.fillRect(86, 76, 1, 1); ctx.fillRect(87, 77, 2, 1); ctx.fillRect(89, 78, 1, 4); ctx.fillRect(90, 82, 4, 1); ctx.fillRect(94, 81, 6, 1); }
 }
 function sceneDark(c) { var ctx = c.getContext("2d"); ctx.fillStyle = "#050308"; ctx.fillRect(0, 0, 66, 48); drawPet(ctx, "miso", 20, 40, 1, { asleep: true }); drawPet(ctx, "yuzu", 38, 40, 1, { asleep: true, flip: true }); drawPet(ctx, "dog", 54, 42, 1, { asleep: true, flip: true }); ctx.fillStyle = "#3a3448"; ctx.fillRect(28, 20, 1, 1); ctx.fillRect(30, 17, 2, 1); ctx.fillRect(33, 13, 3, 1); }
 
-function face(who) { var c = document.createElement("canvas"); c.width = 32; c.height = 32; var g = c.getContext("2d"); FACE[who](g, 0, 0, 1); return c; }
-function say(el, who, name, line) {
-  el.textContent = ""; el.appendChild(face(who));
+function face(who, z) { var c = document.createElement("canvas"); c.width = 32; c.height = 32; var g = c.getContext("2d"); FACE[who](g, 0, 0, 1, z); return c; }
+function say(el, who, name, line, o) {
+  o = o || {}; el.textContent = ""; el.appendChild(face(who, o.asleep));
   var d = document.createElement("div"), n = document.createElement("div"), p = document.createElement("p");
-  n.className = "who"; n.textContent = name; p.textContent = line; d.appendChild(n); d.appendChild(p); el.appendChild(d);
+  n.className = "who"; n.textContent = name; p.textContent = line; d.appendChild(n); d.appendChild(p);
+  if (o.wake) { var b = document.createElement("button"); b.type = "button"; b.className = "btn small wake"; b.textContent = o.wake.label; b.onclick = o.wake.fn; d.appendChild(b); }
+  el.appendChild(d);
+}
+/* whoever asks keeps their hours: asleep and wakeable (Mei, Wei) with a Wake button; Popo is never woken, the cats ask for her, then her note */
+var justWoke = null;
+function speak(el, who, line) {
+  if (!sleeps(who)) { var ln = justWoke === who ? t(who + "Wake") : line(); justWoke = null; say(el, who, T(W.names[who]), ln); return; }
+  if (who === "popo") { if (!catsAsleep()) say(el, "cats", T(W.names.cats), t("catsForPopo")); else say(el, "note", T(W.names.note), t("popoNote")); return; }
+  say(el, who, T(W.names[who]), t(who + "Sleep"), { asleep: true, wake: { label: t(who === "mei" ? "wakeMei" : "wakeWei"), fn: function () { readFields(); rouse(who); justWoke = who; render(); } } });
 }
 
 /* ---------- screens ---------- */
@@ -478,10 +547,16 @@ function render() {
   $("brand").textContent = t("title"); $("langBtn").textContent = SHORT[li()]; $("langBtn").setAttribute("aria-label", t("lang")); foot();
   if (cur === "home") renderHome(); else if (cur === "mood") renderMood(); else if (cur === "rtb") renderRtb();
   else if (cur === "thanks") renderThanks(); else if (cur === "road") renderRoad(); else if (cur === "pdf") renderPdf(); else if (cur === "done") renderDone();
+  else if (cur === "take") renderTake(); else if (cur === "arrive") renderArrive();
 }
 function renderHome() {
   sceneHome($("scHome")); var done = !!getE(today());
-  var l = pick(done ? W.homeDone : W.homeLines); say($("sayHome"), l.w, T(W.names[l.w]), T(l.t));
+  var up = W.homeLines.filter(function (x) { return !sleeps(x.w); }), l;
+  if (done && !sleeps("popo")) { l = pick(W.homeDone); say($("sayHome"), l.w, T(W.names[l.w]), T(l.t)); }
+  else if (done && !sleeps("mei")) say($("sayHome"), "mei", T(W.names.mei), t("homeDoneMei"));
+  else if (!done && up.length) { l = pick(up); say($("sayHome"), l.w, T(W.names[l.w]), T(l.t)); }
+  else if (!catsAsleep()) say($("sayHome"), "cats", T(W.names.cats), t("homeCats"));
+  else say($("sayHome"), "note", T(W.names.note), t("homeNote"));
   $("goToday").textContent = done ? t("todayDone") : t("today");
 }
 function startDraft(d) {
@@ -489,7 +564,7 @@ function startDraft(d) {
   if (!draft.th.length) draft.th.push({ w: "", x: "" });
 }
 function renderMood() {
-  sceneMood($("scMood")); say($("sayMood"), "mei", T(W.names.mei), T(pick(W.meiMood)));
+  sceneMood($("scMood")); speak($("sayMood"), "mei", function () { return T(pick(W.meiMood)); });
   var box = $("moods"); box.textContent = ""; box.setAttribute("aria-label", t("moodQ"));
   t("moods").forEach(function (name, i) {
     var b = document.createElement("button"); b.type = "button"; b.className = "btn mood"; b.setAttribute("aria-pressed", draft.m === i ? "true" : "false");
@@ -501,12 +576,12 @@ function renderMood() {
 }
 function renderMoodSel() { var bs = $("moods").children; for (var i = 0; i < bs.length; i++) bs[i].setAttribute("aria-pressed", draft.m === i ? "true" : "false"); }
 function renderRtb() {
-  sceneRtb($("scRtb")); say($("sayRtb"), "popo", T(W.names.popo), t("popoRtb"));
+  sceneRtb($("scRtb")); speak($("sayRtb"), "popo", function () { return t("popoRtb"); });
   $("fRose").value = draft.r; $("fThorn").value = draft.t; $("fBud").value = draft.b;
   $("fRose").placeholder = t("phRose"); $("fThorn").placeholder = t("phThorn"); $("fBud").placeholder = t("phBud");
 }
 function renderThanks() {
-  sceneThanks($("scThanks")); say($("sayThanks"), "wei", T(W.names.wei), t("weiThanks"));
+  sceneThanks($("scThanks")); speak($("sayThanks"), "wei", function () { return t("weiThanks"); });
   var list = $("thxList"); list.textContent = "";
   draft.th.forEach(function (x, i) {
     var g = document.createElement("div"); g.className = "thx";
@@ -531,9 +606,47 @@ function finish() {
   show(from === "road" ? "road" : "done");
 }
 var doneName = "";
+/* ---------- taking the road along (take.js, shared with Little Things): { app, v, road: { name, entries } } in a link's #, a QR or a file ---------- */
+var pending = null;
+function takeObj() { return { app: "along-the-way", v: 1, road: { name: S.name || "", entries: S.entries } }; }
+function clean(e) {
+  if (!e || typeof e !== "object" || !/^\d{4}-\d\d-\d\d$/.test(e.d)) return null;
+  var str = function (v, n) { return typeof v === "string" ? v.slice(0, n) : ""; };
+  var m = e.m === null || e.m === undefined ? null : (+e.m >= 0 && +e.m <= 4 ? Math.floor(+e.m) : null);
+  var th = (Array.isArray(e.th) ? e.th : []).slice(0, 3).map(function (x) { return { w: str(x && x.w, 30), x: str(x && x.x, 120) }; }).filter(function (x) { return x.w || x.x; });
+  return { d: e.d, m: m, mn: str(e.mn, 60), r: str(e.r, 220), t: str(e.t, 220), b: str(e.b, 220), th: th, u: +e.u || 0 };
+}
+function readTake(o) {
+  if (!o || o.app !== "along-the-way" || !o.road || !Array.isArray(o.road.entries)) return null;
+  var es = o.road.entries.map(clean).filter(Boolean); if (!es.length) return null;
+  es.sort(function (a, b) { return a.d < b.d ? -1 : 1; }); return { name: typeof o.road.name === "string" ? o.road.name.slice(0, 24) : "", entries: es };
+}
+function merge(r) {   /* a day only there is added; a day on both keeps whichever was changed last (local wins a tie) */
+  var ch = false;
+  r.entries.forEach(function (e) { var l = getE(e.d); if (!l || (e.u > (l.u || 0) && JSON.stringify(l) !== JSON.stringify(e))) { ins(e); ch = true; } });
+  if (!S.name && r.name) { S.name = r.name; save(); ch = true; }
+  return ch;
+}
+function arrive(r) { pending = r; show("arrive"); }
+function renderArrive() {
+  if (!pending) { show("home"); return; }
+  sceneDone($("scArrive")); var es = pending.entries, a = fmtDate(es[0].d, true), b = fmtDate(es[es.length - 1].d, true);
+  $("arriveLine").textContent = es[0].d === es[es.length - 1].d ? t("arriveOne", { a: a }) : t("arriveSpan", { a: a, b: b });
+}
+var takeUrl = "";
+function renderTake() {
+  var qr = $("qr"); qr.textContent = ""; $("takeNote").textContent = ""; $("sendLink").disabled = true; takeUrl = "";
+  if (!window.FBTake) { $("takeNote").textContent = t("takeMissing"); return; }
+  FBTake.pack(takeObj()).then(function (z) {
+    takeUrl = location.origin + "/along-the-way/#take=" + z; $("sendLink").disabled = false;
+    var svg = FBTake.qrSvg(takeUrl, t("scan"));
+    qr.innerHTML = svg ? svg + "<p>" + esc(t("scan")) + "</p>" : "<p>" + esc(t("tooBig")) + "</p>";
+  });
+}
 function renderDone() { sceneDone($("scDone")); $("doneGo").textContent = doneName ? t("doneGo", { n: doneName }) : t("doneGoAny"); }
 
 function renderRoad() {
+  $("goTake").hidden = !S.entries.length;
   var cal = $("cal"); cal.textContent = "";
   var now = new Date(); now.setHours(0, 0, 0, 0);
   var start = new Date(now); start.setDate(now.getDate() - 27 - ((now.getDay() + 6) % 7 === 6 ? 0 : 0));
@@ -764,14 +877,26 @@ $("rtbNext").onclick = function () { readFields(); show("thanks"); };
 $("addThx").onclick = function () { if (draft.th.length < 3) { draft.th.push({ w: "", x: "" }); renderThanks(); var i = $("thw" + (draft.th.length - 1)); if (i) i.focus(); } };
 $("keepIt").onclick = finish;
 $("makePdf").onclick = makeIt;
+$("goTake").onclick = function () { show("take"); };
+$("sendLink").onclick = function () { if (takeUrl && window.FBTake) FBTake.send({ title: t("title"), text: t("takeText"), url: takeUrl, done: function (h) { if (h === "copied") $("takeNote").textContent = t("copied"); } }); };
+$("saveFile").onclick = function () { if (window.FBTake) FBTake.save(t("file"), takeObj()); else $("takeNote").textContent = t("takeMissing"); };
+$("openFile").onclick = function () {
+  if (!window.FBTake) { $("roadNote").textContent = t("takeMissing"); return; }
+  FBTake.open().then(function (o) { if (o === undefined) return; var r = readTake(o); if (r) arrive(r); else $("roadNote").textContent = t("takeBad"); });
+};
+$("bringIn").onclick = function () { var ch = pending ? merge(pending) : false; pending = null; show("road"); $("roadNote").textContent = ch ? t("takeDone") : t("takeSame"); };
+$("notNow").onclick = function () { pending = null; show("home"); };
+document.querySelectorAll("[data-to]").forEach(function (b) { b.onclick = function () { show(b.getAttribute("data-to")); }; });
 document.querySelectorAll("[data-back]").forEach(function (b) { b.onclick = function () { readFields(); show(cur === "mood" ? from : cur === "rtb" ? "mood" : "rtb"); }; });
 document.querySelectorAll("[data-home]").forEach(function (b) { b.onclick = function () { show("home"); }; });
-$("putDown").onclick = function () { sceneDark($("scDark")); $("darkLine").textContent = t("lights"); $("dark").hidden = false; };
+$("putDown").onclick = function () { sceneDark($("scDark")); $("darkLine").textContent = dogAsleep() ? t("lightsSleep") : t("lights"); $("dark").hidden = false; };
 function wakeUp() { $("dark").hidden = true; show("home"); }
 $("dark").onclick = wakeUp; $("dark").onkeydown = function (e) { if (e.key === "Enter" || e.key === " " || e.key === "Escape") wakeUp(); };
 render();
+function takeFromHash() { if (window.FBTake && /[#&]take=/.test(location.hash)) FBTake.fromHash().then(function (o) { var r = readTake(o); if (r) arrive(r); else { show("road"); $("roadNote").textContent = t("takeBad"); } }); }
+takeFromHash(); addEventListener("hashchange", takeFromHash);   /* also when the link is opened while the app is already open */
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (cur === "home") renderHome(); });
-window.AW = { W: W, li: li, S: S, show: show, build: function () { return buildPages(S.entries, S.name); } };
+window.AW = { W: W, li: li, sleeps: sleeps, merge: merge, readTake: readTake, takeObj: takeObj, S: S, show: show, build: function () { return buildPages(S.entries, S.name); } };
 })();
 </script>
 </body>
