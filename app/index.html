@@ -39,7 +39,25 @@ html.framed .phone::after{left:auto;right:-11px;top:200px;height:90px}
 .sky{position:absolute;inset:0;z-index:-1;transition:background 1.2s}
 .sky i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.55;animation:tw 4s ease-in-out infinite}
 @keyframes tw{50%{opacity:.12}}
-.day .sky i{display:none}
+.day .sky i,.glow .sky i{display:none}
+#orb{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;transition:left 2s,top 2s}
+#orb.sun{background:#FFE9A6;box-shadow:0 0 0 10px rgba(255,233,166,.22),0 0 46px 18px rgba(255,226,150,.5)}
+#orb.sun.low{background:#FFC27A;box-shadow:0 0 0 10px rgba(255,180,110,.2),0 0 54px 22px rgba(255,160,90,.5)}
+#orb.moon{width:30px;height:30px;margin:-15px 0 0 -15px;background:#EDE7D6;box-shadow:inset -7px -3px 0 rgba(120,112,140,.45),0 0 22px 4px rgba(237,231,214,.22)}
+.cl{position:absolute;left:-40%;width:120px;height:30px;border-radius:30px;background:#fff;opacity:0;animation:cl 150s linear infinite;transition:opacity 2s}
+.cl::before,.cl::after{content:"";position:absolute;border-radius:50%;background:inherit}
+.cl::before{left:18px;top:-16px;width:46px;height:46px}.cl::after{left:54px;top:-10px;width:38px;height:38px}
+html.desk .cl{width:230px;height:56px;border-radius:56px}html.desk .cl::before{left:34px;top:-30px;width:88px;height:88px}html.desk .cl::after{left:104px;top:-20px;width:72px;height:72px}html.desk .cl.st{width:460px;height:22px}
+.cl.st{width:240px;height:13px;border-radius:13px}.cl.st::before,.cl.st::after{display:none}
+.day .cl{opacity:.92}.day .cl.st{opacity:0}
+.glow .cl{opacity:.95}.glow .cl.st{opacity:.85}
+.dawn .cl{background:linear-gradient(180deg,#B79AD6 0%,#F4A9B8 55%,#FFD3A0 100%)}
+.dawn .cl.st{background:linear-gradient(90deg,rgba(255,196,160,0),#FFB7A8 25%,#F58FA8 60%,rgba(190,140,210,0))}
+.dusk .cl{background:linear-gradient(180deg,#7C62B0 0%,#E0688A 50%,#FFB25E 100%)}
+.dusk .cl.st{background:linear-gradient(90deg,rgba(255,170,90,0),#FF9B5E 25%,#E85A7E 60%,rgba(120,90,180,0))}
+@keyframes cl{from{transform:translateX(0)}to{transform:translateX(150vw)}}
+@media (prefers-reduced-motion:reduce){.cl{animation:none;left:14%}.cl+.cl{left:58%}.cl+.cl+.cl{left:36%}}
+.day .tile>b,.glow .tile>b{text-shadow:0 1px 3px rgba(10,24,56,.6)}
 .skyline{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px;z-index:-1;opacity:.9;pointer-events:none}
 /* top row */
 .top{position:absolute;top:0;left:0;right:0;height:calc(44px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 18px 0;display:flex;align-items:center;justify-content:space-between;z-index:50;font:600 14px/1 var(--sans);pointer-events:none}
@@ -712,14 +730,14 @@ html.desk .top{height:42px;padding:0 22px;justify-content:flex-start;gap:16px;ba
 html.desk .mark{display:inline-flex;order:-1}
 html.desk .clock{display:block;margin-left:auto}
 html.desk .skyline{height:220px}
-html.desk .home{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr) auto auto;grid-template-areas:"grid stack" "down down" "dock dock";gap:0 36px;padding:70px max(32px,calc((100vw - 1320px) / 2)) 0}
+html.desk .home{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr) auto auto;grid-template-areas:"grid stack" "grid rest" "down down";gap:0 36px;padding:70px max(32px,calc((100vw - 1320px) / 2)) 0}
 html.desk #grid{grid-area:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));grid-template-rows:none!important;grid-auto-rows:118px;align-content:start;gap:6px;padding:6px 0;overflow-y:auto;scrollbar-width:none}
 html.desk #screen{--ic:64px}
 html.desk #grid .tile b{font-size:12.5px}
-html.desk #stack{grid-area:stack;flex-direction:column;gap:12px;margin:0;padding:0 0 18px;overflow-x:hidden;overflow-y:auto;scroll-snap-type:none;align-self:stretch}
+html.desk #stack{grid-area:stack;flex-direction:column;gap:12px;margin:0;padding:0 0 4px;overflow-x:hidden;overflow-y:auto;scroll-snap-type:none;align-self:stretch}
 html.desk #stack>.w{flex:none}
 html.desk #sdots{display:none}
-html.desk #rest{grid-area:dock;justify-self:center;width:300px;margin:10px 0 22px}
+html.desk #rest{grid-area:rest;margin:12px 0 22px}   /* under the widgets, their width (the owner, Nov 13) */
 html.desk .fold.xtra .fpanel{margin-top:50px}
 html.desk .dock .dsep{display:block;align-self:stretch;width:1px;margin:6px -4px;background:var(--line)}
 .dock .dsep{display:none}
@@ -953,21 +971,30 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
 
   /* ── home ── */
   function sky() {
-    var p = part(), s = $("sky"), night = get("ah_app_sky") === "0", c = night ? ["#120F18", "#1E1830"] : { late: ["#0E0B14", "#17122A"], morn: ["#2A2238", "#6A5468"], aft: ["#241D33", "#4C3E5B"], eve: ["#1A1426", "#43293F"], night: ["#120F18", "#1E1830"] }[p];
-    s.style.background = "linear-gradient(180deg," + c[1] + "," + c[0] + " 64%)";
-    $("screen").classList.toggle("day", !night && (p === "morn" || p === "aft"));
-    if (!s.children.length) for (var i = 0; i < 40; i++) { var st = el("i"); st.style.left = (Math.random() * 100) + "%"; st.style.top = (Math.random() * 55) + "%"; st.style.animationDelay = (Math.random() * 4) + "s"; s.appendChild(st); }
+    /* the sky keeps the hour too (the owner, Nov 13): ink and stars at night with the moon, a pink dawn, a blue day with the sun
+       on its arc and a few slow clouds, an orange dusk; "Sky follows the hour" off keeps the night. */
+    var s = $("sky"), night = get("ah_app_sky") === "0", d0 = new Date(), hr = night ? 0 : (H0 != null ? H0 : d0.getHours() + d0.getMinutes() / 60);
+    var ph = hr < 5 ? "late" : hr < 7 ? "dawn" : hr < 17 ? "day" : hr < 19.5 ? "dusk" : hr < 22 ? "eve" : "night";
+    var c = { late: ["#0E0B14", "#17122A"], dawn: ["#F0A688", "#3A2F5A"], day: ["#B8DCF0", "#3E84CC"], dusk: ["#F4A261", "#4A3C78"], eve: ["#1A1426", "#43293F"], night: ["#120F18", "#1E1830"] }[ph];
+    s.style.background = "linear-gradient(180deg," + c[1] + "," + c[0] + (ph === "day" || ph === "dawn" || ph === "dusk" ? " 88%)" : " 64%)");
+    var sc = $("screen"); sc.classList.toggle("day", ph === "day"); sc.classList.toggle("glow", ph === "dawn" || ph === "dusk"); sc.classList.toggle("dawn", ph === "dawn"); sc.classList.toggle("dusk", ph === "dusk");
+    if (!s.children.length) { for (var i = 0; i < 40; i++) { var st = el("i"); st.style.left = (Math.random() * 100) + "%"; st.style.top = (Math.random() * 55) + "%"; st.style.animationDelay = (Math.random() * 4) + "s"; s.appendChild(st); }
+      var orb = el("b"); orb.id = "orb"; s.appendChild(orb);
+      [[12, 220, -20], [26, 170, -90], [7, 280, -200], [44, 250, -60, 1], [58, 190, -140, 1], [70, 310, -230, 1], [36, 240, -165], [18, 300, -120, 1]].forEach(function (o) { var cl = el("span", o[3] ? "cl st" : "cl"); cl.style.top = o[0] + "%"; cl.style.animationDuration = o[1] + "s"; cl.style.animationDelay = o[2] + "s"; s.appendChild(cl); }); }
+    var up = hr >= 6 && hr < 19, f = up ? (hr - 6) / 13 : ((hr + 24 - 19) % 24) / 11, ob = $("orb");   // the sun by day, the moon by night, on one arc
+    ob.className = up ? (ph === "day" ? "sun" : "sun low") : "moon"; ob.style.left = (8 + f * 84) + "%"; ob.style.top = (40 - Math.sin(f * Math.PI) * 30) + "%";
     /* the windows keep the hour (the owner, Nov 13): each has its own bedtime, so the street fills in the evening, thins after
        ten and by the small hours one window is left, the lit window. The works' windows (one a building, in the work's own
        colour) stay up later than the plain ones. Redrawn when the hour moves. */
-    var sl = $("skyline"), d = new Date(), hr = (H0 != null ? H0 : d.getHours()) + (H0 != null ? 0 : d.getMinutes() / 60);
-    var share = hr < 5 ? .02 : hr < 6.5 ? .08 : hr < 9 ? .3 : hr < 16.5 ? .1 : hr < 18.5 ? .4 : hr < 22 ? .85 : hr < 23 ? .5 : hr < 24 ? .2 : .02, stamp = Math.round(share * 100) + "|" + P.length;
+    var sl = $("skyline"), d = new Date(); if (night) hr = (H0 != null ? H0 : d.getHours() + d.getMinutes() / 60);   // the windows follow the real hour even when the sky stays night
+    var bld = ph === "day" ? "#3A5684" : ph === "dawn" || ph === "dusk" ? "#2A2140" : "#0B0910", glass = ph === "day" ? "#5676A6" : ph === "dawn" || ph === "dusk" ? "#3B3058" : "#17131E";
+    var share = hr < 5 ? .02 : hr < 6.5 ? .08 : hr < 9 ? .3 : hr < 16.5 ? .1 : hr < 18.5 ? .4 : hr < 22 ? .85 : hr < 23 ? .5 : hr < 24 ? .2 : .02, stamp = Math.round(share * 100) + "|" + P.length + "|" + ph;
     if (sl.getAttribute("data-s") !== stamp) { sl.setAttribute("data-s", stamp);
       var h = "", x = 0, k = 0, seed = 7; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-      while (x < 390) { var bw = 22 + rnd() * 26, bh = 40 + rnd() * 90; h += '<rect x="' + x.toFixed(1) + '" y="' + (150 - bh).toFixed(1) + '" width="' + (bw + .5).toFixed(1) + '" height="' + bh.toFixed(1) + '" fill="#0B0910"/>';
+      while (x < 390) { var bw = 22 + rnd() * 26, bh = 40 + rnd() * 90; h += '<rect x="' + x.toFixed(1) + '" y="' + (150 - bh).toFixed(1) + '" width="' + (bw + .5).toFixed(1) + '" height="' + bh.toFixed(1) + '" fill="' + bld + '"/>';
         for (var r = 0; r < 4; r++) for (var q = 0; q < 2; q++) { var wx = x + 5 + q * (bw / 2 - 2), wy = 150 - bh + 8 + r * 14, t = rnd(); if (wy > 140) continue;
           var work = k < P.length && r === ((k * 3) % 4) && q === k % 2, bed = work ? (k === 4 ? 0 : .04 + ((k * 37) % 50) / 100) : .3 + t * .7, lit = bed < share || (work && k === 4);
-          h += '<rect x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" width="5" height="7" fill="' + (lit ? (work ? (k === 4 ? "#F2A33A" : P[k][5]) : "#E9B96A") : "#17131E") + '"' + (lit ? ' opacity="' + (work ? ".85" : ".5") + '"' : "") + "/>"; }
+          h += '<rect x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" width="5" height="7" fill="' + (lit ? (work ? (k === 4 ? "#F2A33A" : P[k][5]) : "#E9B96A") : glass) + '"' + (lit ? ' opacity="' + (work ? ".85" : ".5") + '"' : "") + "/>"; }
         k++; x += bw; }
       sl.innerHTML = h;
     }
