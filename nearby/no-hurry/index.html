@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=ddf0ffa1da"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=372b756ab8" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=5a7651a027"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=7999c9e304" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>No Hurry · Nearby</title>
 <meta name="description" content="A cabin on the high pasture with a big window. Clouds, cows, weather, a candle on the sill.">
@@ -30,7 +30,7 @@ canvas#cv{touch-action:none}
 <h1 class="sr" id="h1">No Hurry</h1>
 <canvas id="cv" role="img" aria-label="A view from a cabin window over a high pasture"></canvas>
 <div class="alb" id="alb" role="dialog" aria-modal="true" aria-labelledby="albT" hidden>
-  <div class="alb-b" tabindex="-1"><h2 id="albT"></h2><canvas id="albC" width="480" height="340" aria-hidden="true"></canvas><small class="alb-ai" id="albAI"></small><p id="albP"></p>
+  <div class="alb-b" tabindex="-1"><h2 id="albT"></h2><canvas id="albC" width="480" height="340" aria-hidden="true"></canvas><small class="alb-ai" id="albAI"></small><p id="albP"></p><div id="albA" hidden></div>
     <div class="alb-n"><button type="button" id="albPrev" class="fbb" aria-label="‹">‹</button><span id="albI"></span><button type="button" id="albNext" class="fbb" aria-label="›">›</button></div></div>
 </div>
 <button class="snd" id="snd" type="button" data-fb-snd aria-pressed="false">🔈</button>
@@ -295,10 +295,18 @@ canvas#cv{touch-action:none}
     if (i === 6) { A(0, 0, Wd, Hd, "#c8b898"); A(26, 30, 22, 14, "#b8905a"); A(26, 30, 22, 2, "#8a6a3a"); A(29, 35, 16, 3, "#e8dcc4"); if (W.drawPet) { W.drawPet(ag, "miso", 32, 32, 1, {}); W.drawPet(ag, "yuzu", 43, 32, 1, { flip: true }); } person(14, 48, "#1a1410", "#e0a043", true); }
     if (i === 7) { A(0, 0, Wd, Hd, "#efe3c8"); for (var d = 4; d < Wd - 4; d += 4) { A(d, 4, 2, 1, "#a89878"); A(d, Hd - 5, 2, 1, "#a89878"); } for (var e = 4; e < Hd - 4; e += 4) { A(4, e, 1, 2, "#a89878"); A(Wd - 5, e, 1, 2, "#a89878"); } }
   }
-  function showPage() { if (AL.classList.contains("box")) return openBox(); var i = L(); document.getElementById("albT").textContent = T.alb[i]; document.getElementById("albP").textContent = PAGES[pg][i]; document.getElementById("albI").textContent = (pg + 1) + " / " + PAGES.length; photo(PAGES[pg][5]); aiLine(PAGES[pg][5] !== "empty"); document.getElementById("albPrev").disabled = pg === 0; document.getElementById("albNext").disabled = pg === PAGES.length - 1; }
+  function showPage() { if (AL.classList.contains("box")) return openBox(); var i = L(); document.getElementById("albT").textContent = T.alb[i]; document.getElementById("albP").textContent = PAGES[pg][i]; document.getElementById("albI").textContent = (pg + 1) + " / " + PAGES.length; photo(PAGES[pg][5]); aiLine(PAGES[pg][5] !== "empty"); told(PAGES[pg][5] === "empty"); document.getElementById("albPrev").disabled = pg === 0; document.getElementById("albNext").disabled = pg === PAGES.length - 1; }
   /* Popo's keepsake box beside the radio: inside, the one framed photo, their wedding */
   function openBox() { loadReal("wedding"); AL.classList.add("box"); AL.hidden = false; var i = L(); document.getElementById("albT").textContent = T.box[i]; document.getElementById("albP").textContent = T.wed[i]; photo("wedding"); aiLine(true); setTimeout(function () { try { AL.querySelector(".alb-b").focus({ preventScroll: true }); } catch (e) {} }, 30); }
   function openAlbum() { loadReal(PAGES[0][5]); AL.classList.remove("box"); pg = 0; AL.hidden = false; showPage(); setTimeout(function () { document.getElementById("albNext").focus(); }, 30); }
+  /* the empty page keeps what somebody told you, from Ask Popo on this phone (device only, nothing sent) */
+  function told(on) {
+    var e = document.getElementById("albA"); e.innerHTML = ""; e.hidden = true; if (!on) return;
+    var a = []; try { a = (JSON.parse(localStorage.getItem("ap_v1") || "null") || {}).answers || []; } catch (x) {}
+    a = a.slice(-3).reverse(); if (!a.length) return;
+    a.forEach(function (r) { var q = document.createElement("blockquote"); q.textContent = "“" + String(r.t || "").slice(0, 280) + "”"; q.style.cssText = "margin:.5em 0;padding:.3em .8em;border-left:3px solid #a89878;font-style:italic"; e.appendChild(q); });
+    e.hidden = false;
+  }
   function aiLine(on) { var e = document.getElementById("albAI"); e.textContent = T.ai[L()]; e.hidden = !on; }   /* said plainly, and quietly */
   function closeAlbum() { AL.hidden = true; clearTimeout(waitT); }
   window.NHAlbum = { open: openAlbum, box: openBox };
