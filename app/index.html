@@ -26,6 +26,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .room p{position:absolute;left:0;right:0;bottom:10px;text-align:center;margin:0;font:12px/1.4 var(--mono);color:var(--dim);letter-spacing:.03em;padding:0 16px}
 /* the phone: on a real phone it fills the screen */
 .phone{position:relative;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:var(--ink)}
+/* a real phone (the owner, Nov 11: the dock was cut off and black showed under it, in the Home Screen app): the screen is the
+   whole window, pinned to its four edges, never a height worked out from vh, which iOS gets wrong when standing alone */
+html:not(.framed):not(.desk) .phone{position:fixed;inset:0;width:auto;height:auto}
 .screen{position:absolute;inset:0;overflow:hidden;isolation:isolate}
 html.framed .phone{width:390px;height:844px;flex:none;border-radius:56px;background:#050407;padding:12px;box-shadow:0 0 0 2px #2E2738,0 0 0 9px #0E0B12,0 40px 90px -20px rgba(0,0,0,.8),0 0 120px -30px rgba(242,163,58,.25);transform-origin:center}
 html.framed .screen{inset:12px;border-radius:44px}
@@ -37,7 +40,7 @@ html.framed .phone::after{left:auto;right:-11px;top:200px;height:90px}
 .sky i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.55;animation:tw 4s ease-in-out infinite}
 @keyframes tw{50%{opacity:.12}}
 .day .sky i{display:none}
-.skyline{position:absolute;left:0;right:0;bottom:0;height:150px;z-index:-1;opacity:.9;pointer-events:none}
+.skyline{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px;z-index:-1;opacity:.9;pointer-events:none}
 /* top row */
 .top{position:absolute;top:0;left:0;right:0;height:calc(44px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 18px 0;display:flex;align-items:center;justify-content:space-between;z-index:50;font:600 14px/1 var(--sans);pointer-events:none}
 .top>*{pointer-events:auto}
@@ -96,6 +99,8 @@ html.framed .home{padding-top:58px}
 .down{font:600 11.5px/1 var(--sans);padding:7px 10px;border-radius:999px;background:var(--lamp);color:var(--ink);white-space:nowrap}
 .quote{display:block;width:100%;text-align:left;margin:10px 0 0;padding:0}
 .quote q{display:block;quotes:"\201C" "\201D";font:italic 400 21px/1.22 var(--serif)}
+/* a new line never moves the icons (the owner, Nov 9): the quote always keeps room for three lines, and never takes more */
+.quote q{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;min-height:calc(3 * 1.22em)}
 .quote q i{font-style:normal;color:var(--dim)}
 .qrow{display:flex;align-items:baseline;gap:12px;margin-top:5px;min-width:0}
 .qrow small{font:11px/1 var(--mono);color:var(--lamp);letter-spacing:.04em;white-space:nowrap}
@@ -117,8 +122,11 @@ html.framed .banner{top:12px}
 .ok svg,.no svg{width:30px;height:30px}
 .now ul{list-style:none;margin:10px 0 0;padding:9px 0 0;border-top:1px solid var(--line);display:grid;gap:4px}
 .now li{font:400 16px/1.25 var(--serif)}
-.now li a{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
-.now li small{font:11px/1 var(--mono);color:var(--dim);white-space:nowrap}
+.now li a{display:flex;justify-content:space-between;gap:10px;align-items:baseline;min-width:0}
+.now li a span{flex:1 1 auto}
+.now ul{grid-template-columns:minmax(0,1fr)}
+.now li{min-width:0}
+.now li small{flex:none;font:11px/1 var(--mono);color:var(--dim);white-space:nowrap}
 .grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:0 4px;padding:10px 0 6px;align-content:center}
 .grid.paged{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
 .grid.paged::-webkit-scrollbar{display:none}
@@ -471,7 +479,7 @@ html.editing .top .mark,html.editing .top .clock{visibility:hidden}
 .home.edit .grid .tile:nth-child(2n){animation-delay:-.16s;animation-direction:alternate-reverse}
 @keyframes jig{from{transform:rotate(-2.2deg)}to{transform:rotate(2.2deg)}}
 .home.edit .grid .tile.drag{animation:none;opacity:.35}
-.wk{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.wk{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
 .wk a{display:flex;flex-direction:column;gap:2px}
 .wk small{font:10.5px/1 var(--mono);color:var(--dim);letter-spacing:.03em}
 .wk span{font:400 18px/1.15 var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -501,7 +509,7 @@ html.editing .top .mark,html.editing .top .clock{visibility:hidden}
 @media (max-height:760px){
   .now{padding:10px 12px;border-radius:20px}
   .quote{margin-top:7px}
-  .quote q{font-size:18px;line-height:1.18;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  .quote q{font-size:18px;line-height:1.18;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;min-height:calc(3 * 1.18em)}
   .now ul{margin-top:8px;padding-top:7px}
   .now li{font-size:15px}
   .grid{padding:6px 0 4px}
@@ -805,7 +813,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   function when(day) {
     var today = ymd(new Date()), tmr = ymd(new Date(Date.now() + 864e5)), yst = ymd(new Date(Date.now() - 864e5));
     if (day === today) return w("today"); if (day === tmr) return w("tomorrow"); if (day === yst) return w("yesterday");
-    try { return new Date(day + "T12:00:00").toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "short" }); } catch (e) { return day; }
+    try { var dd = new Date(day + "T12:00:00"), ah = (dd - Date.now()) / 864e5; return dd.toLocaleDateString(loc(), ah > -6 && ah < 6 ? { weekday: "short" } : { day: "numeric", month: "short" }); } catch (e) { return day; }   // short, so it fits beside its line (Nov 9)
   }
   function ago(days, h, m) { var d = new Date(); d.setDate(d.getDate() - days); d.setHours(h, m, 0, 0); if (d > new Date()) d.setDate(d.getDate() - 1); return d; }
   function stamp(d) { var t = ymd(d); return t === ymd(new Date()) ? hm(d) : days(d) < 7 ? (t === ymd(new Date(Date.now() - 864e5)) ? w("yesterday") : d.toLocaleDateString(loc(), { weekday: "short" })) : d.toLocaleDateString(loc(), { day: "numeric", month: "short" }); }
@@ -1485,11 +1493,13 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   }
   function surPlan() {
     if (!calOn() || RMO) return; var m = /[?&]sur=(\w+)/.exec(location.search), forced = m && SUR[m[1]] ? m[1] : "", day = ymd(new Date());
-    if (!forced && (get("ah_app_sur") === day || Math.random() > .28)) return;
+    /* the owner, Nov 11 ("I don't see it"): the first one comes soon, then about one visit in two, at most once a visit */
+    var first = !get("ah_app_sur"), once = false; try { once = !!sessionStorage.getItem("ah_sur"); } catch (e) {}
+    if (!forced && (once || (!first && Math.random() > .5))) return; try { sessionStorage.setItem("ah_sur", "1"); } catch (e) {}
     setTimeout(function go() {
       if (cur || document.hidden || $("lock").classList.contains("on") || !calOn()) { setTimeout(go, 15000); return; }
       var k = forced || surKind(); put("ah_app_sur", day); SURS = { k: k, t0: performance.now(), d: SUR[k].d, c: Math.random() < .5 ? "miso" : "yuzu" };
-    }, forced ? 1200 : 25000 + Math.random() * 80000);
+    }, forced ? 1200 : first ? 9000 + Math.random() * 6000 : 15000 + Math.random() * 40000);
   }
   function surLine() { return w({ star: "surStar", plane: "surPlane", balloon: "surBalloon", dog: "surDog", cat: "surCat", kite: "surKite", geese: "surGeese", rainbow: "surRainbow" }[SURS.k]).replace("{c}", w(WHO[SURS.c].n)); }
   function surStep(g, W, H, ts) {
@@ -1602,7 +1612,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     hero.innerHTML = '<span class="sfi">' + appIcon(fk) + '</span><span class="sft"><small>' + esc(w("stFeat")) + "</small><b>" + esc(pname(fk)) + "</b><span>" + esc(fp[3][li()] || fp[3][0]) + "</span></span>";
     hero.onclick = function () { storeApp(fk); }; c.appendChild(hero);
     c.appendChild(el("p", "sec", esc(w("stAll")))); var l = el("div", "list");
-    P.forEach(function (p) { var r = el("div", "row srow"); r.innerHTML = '<span class="sic">' + appIcon(p[1]) + '</span><span class="tx"><b>' + esc(pname(p[1])) + "</b><small>" + esc(p[3][li()] || p[3][0]) + "</small></span>";
+    P.slice().sort(function (a, b) { return pname(a[1]).localeCompare(pname(b[1]), loc()); }).forEach(function (p) { var r = el("div", "row srow");   // A to Z in the visitor's language (the owner, Nov 10) r.innerHTML = '<span class="sic">' + appIcon(p[1]) + '</span><span class="tx"><b>' + esc(pname(p[1])) + "</b><small>" + esc(p[3][li()] || p[3][0]) + "</small></span>";
       r.appendChild(getBtn(p[1])); r.onclick = function (e) { if (!e.target.closest(".pill")) storeApp(p[1]); }; l.appendChild(r); });
     c.appendChild(l);
   };
@@ -1844,6 +1854,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     if (id === "msg") msgDot(false);
     if (id === "msg" && introLater) { introLater = false; setTimeout(function () { intro(); }, 200); }
     if (id === "mail") dockDot(3, false);
+    if (id === "cam") dockDot(4, false);
     if (id === "msg" && askDot()) { put("ah_app_dot_seen", "1"); dockDot(2, false); }
     if (NAVING) { try { history.replaceState(history.state, "", "#" + id); } catch (x) {} } else step({ t: "app", id: id, prev: prev }, "#" + id);
   }
@@ -1996,11 +2007,11 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   function plain(t) { return t.replace(/\{app:\w+\}/g, function (m) { return pname(m.slice(5, -1)); }).replace(/\*/g, "").replace(/\s+/g, " ").trim(); }
   RENDER.msg = function () {
     var c = $("threads"); c.innerHTML = ""; var l = el("div", "list"); l.style.marginTop = "6px";
-    THREADS.slice().sort(function (a, b) { return (EXTRA[b.k] ? 1 : 0) - (EXTRA[a.k] ? 1 : 0); }).forEach(function (th) {
+    THREADS.filter(function (th) { return dripHas("t:" + th.k) || EXTRA[th.k]; }).sort(function (a, b) { return (EXTRA[b.k] ? 1 : 0) - (EXTRA[a.k] ? 1 : 0) || dripAt("t:" + b.k) - dripAt("t:" + a.k); }).forEach(function (th) {
       var r = el("button", "row"); r.type = "button"; r.appendChild(avatar(th.k));
       var ex = EXTRA[th.k], last = ex && ex.length ? ex[ex.length - 1] : null;
       r.appendChild(el("span", "tx", "<b>" + esc(nm(th.k)) + "</b><small>" + esc(plain(w(last ? last.w : th.m[th.m.length - 1]))) + "</small>"));
-      r.appendChild(el("span", "rt", esc(last ? hm(last.at) : stamp(ago(th.d[0], th.d[1], th.d[2]))))); if (last) r.lastChild.style.color = "var(--lamp)"; r.onclick = function () { thread(th.k); }; l.appendChild(r);
+      r.appendChild(el("span", "rt", esc(last ? hm(last.at) : stamp(dripAt("t:" + th.k) ? new Date(dripAt("t:" + th.k)) : ago(th.d[0], th.d[1], th.d[2]))))); if (last) r.lastChild.style.color = "var(--lamp)"; r.onclick = function () { thread(th.k); }; l.appendChild(r);
     }); c.appendChild(l);
     fbBox(curTh === "wm");
   };
@@ -2090,6 +2101,37 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   var FROM = { nb: "wei", st: "wei", bp: "wei", hg: "wei", lt: "popo", ap: "popo", aw: "popo", gw: "popo", cf: "popo", mx: "wei", ch: "popo", wr: "cats", tg: "popo", co: "popo", pw: "cats", ww: "mantou", tc: "mei", ho: "mei", sh: "mei", fs: "mei", vo: "mei" };
   var MAIL = (function () { var t = [[0, 8, 12], [0, 7, 3], [1, 21, 40], [1, 18, 5], [1, 9, 30], [2, 20, 14], [2, 12, 2], [3, 19, 45], [3, 10, 20], [4, 22, 1], [5, 17, 33], [6, 11, 11], [7, 20, 50], [9, 9, 9], [12, 18, 0]], o = [];
     P.forEach(function (p, i) { if (W["e_" + p[1] + "_s"]) o.push({ k: p[1], who: FROM[p[1]] || "wei", d: t[i % t.length] }); }); return o; })();
+  /* the post (the owner, Nov 10: "messages, emails and photos shouldn't appear all at once; send them once in a while, in a
+     non-intrusive way"): a new phone starts with a little (Wei Meng's and Popo's threads, two letters, six photos); after that
+     one more thing arrives at most once a visit, at least six hours after the last and only between 7 and 23, a thread, a
+     letter or two photos in turn. The only sign is the dot on its icon. A visitor away for a week gets one thing, not a pile.
+     Kept on this phone (ah_drip: {t0, got: {id: time}}); nothing is sent. */
+  function dripQ() {
+    var T = THREADS.map(function (t) { return "t:" + t.k; }), M = MAIL.map(function (m) { return "m:" + m.k; }), Ph = [];
+    var order = [0, 3, REAL0, REAL0 + 3, 10, REAL0 + 7]; SHOTS.forEach(function (_, i) { if (order.indexOf(i) < 0) order.push(i); });
+    for (var i = 6; i < order.length; i += 2) Ph.push(order.slice(i, i + 2).map(function (x) { return "p:" + x; }).join(","));
+    var first = ["t:wm", "t:popo"].concat(M.slice(0, 2), order.slice(0, 6).map(function (x) { return "p:" + x; })), rest = [];
+    T = T.filter(function (x) { return first.indexOf(x) < 0; }); M = M.slice(2);
+    while (T.length || M.length || Ph.length) { if (T.length) rest.push(T.shift()); if (M.length) rest.push(M.shift()); if (Ph.length) rest.push(Ph.shift()); }
+    return { first: first, rest: rest };
+  }
+  var DRIP = null;
+  function drip() {
+    if (DRIP) return DRIP; var D = js("ah_drip", null), Q = dripQ();
+    if (!D || !D.got) { D = { t0: Date.now(), got: {}, last: Date.now() }; Q.first.forEach(function (id) { D.got[id] = 0; });
+      if (get("ah_app_seen")) { var rd = js("ah_app_read", {}); Object.keys(rd).forEach(function (k) { D.got["m:" + k] = 0; }); ["t:mei", "t:wei"].forEach(function (id) { D.got[id] = 0; }); }   // someone who already had the phone keeps what they read
+      put("ah_drip", JSON.stringify(D)); }
+    DRIP = D; return D;
+  }
+  function dripHas(id) { return id in drip().got; }
+  function dripAt(id) { return drip().got[id] || 0; }
+  function dripTick() {
+    var D = drip(), h = new Date().getHours(), once = false; try { once = !!sessionStorage.getItem("ah_drip_v"); sessionStorage.setItem("ah_drip_v", "1"); } catch (e) {}
+    if (once || h < 7 || h >= 23 || Date.now() - (D.last || 0) < 6 * 36e5) return;
+    var next = dripQ().rest.filter(function (x) { return !(x.split(",")[0] in D.got); })[0]; if (!next) return;
+    var now = Date.now(); next.split(",").forEach(function (id) { D.got[id] = now; }); D.last = now; put("ah_drip", JSON.stringify(D));
+    setTimeout(function () { dockDot(next[0] === "t" ? 2 : next[0] === "m" ? 3 : 4, true); }, 1500);
+  }
   function fromLine(m) { return w(WHO[m.who].n) + " " + w("eFrom") + " " + (m.k === "nb" ? w("nNextDoor") : pname(m.k)); }
   RENDER.mail = function () {
     var l = $("inbox"); l.innerHTML = ""; var seen = js("ah_app_read", {});
@@ -2098,11 +2140,11 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
       r.appendChild(el("span", "tx", "<b>" + esc(nm(m.who)) + "</b><small style=\"color:var(--paper)\">" + esc(w(m.s)) + "</small><small>" + esc(plain(w(m.b))) + "</small>"));
       r.appendChild(el("span", "rt", esc(hm(m.at)))); r.onclick = function () { note(m); }; l.appendChild(r);
     });
-    MAIL.forEach(function (m) {
+    MAIL.filter(function (m) { return dripHas("m:" + m.k); }).sort(function (a, b) { return dripAt("m:" + b.k) - dripAt("m:" + a.k); }).forEach(function (m) {
       var r = el("button", "row"); r.type = "button";
       r.appendChild(el("span", seen[m.k] ? "" : "ap", "")); if (seen[m.k]) r.firstChild.style.width = "9px";
       r.appendChild(el("span", "tx", "<b>" + esc(fromLine(m)) + "</b><small style=\"color:var(--paper)\">" + esc(plain(w("e_" + m.k + "_s"))) + "</small><small>" + esc(plain(w("e_" + m.k + "_b"))) + "</small>"));
-      r.appendChild(el("span", "rt", esc(stamp(ago(m.d[0], m.d[1], m.d[2])))));
+      r.appendChild(el("span", "rt", esc(stamp(dripAt("m:" + m.k) ? new Date(dripAt("m:" + m.k)) : ago(m.d[0], m.d[1], m.d[2])))));
       r.onclick = function () { letter(m); }; l.appendChild(r);
     });
   };
@@ -2254,7 +2296,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   ];
   var REAL0 = SHOTS.length; REAL.forEach(function (m) { SHOTS.push(m); LIVE.push(SHOTS.length - 1); });
   function paintShot(cv, i, t) { var g = cv.getContext("2d"); g.imageSmoothingEnabled = false; g.clearRect(0, 0, 120, 160); try { SHOTS[i][1](g, t || 0); } catch (e) { R(g, "#222", 0, 0, 120, 160); } }
-  function rollList() { var mine = js("ah_cam", []); return mine.map(function (x) { return { i: x.i, at: x.at, mine: 1 }; }).reverse().concat(SHOTS.map(function (_, i) { return { i: i, at: ago(i * 2 + 1, 18 - i % 6, 7 * i % 60).getTime() }; }).sort(function (a, b) { return (b.i >= REAL0) - (a.i >= REAL0); })); }
+  function rollList() { var mine = js("ah_cam", []); return mine.map(function (x) { return { i: x.i, at: x.at, mine: 1 }; }).reverse().concat(SHOTS.map(function (_, i) { return { i: i, at: dripAt("p:" + i) || ago(i * 2 + 1, 18 - i % 6, 7 * i % 60).getTime() }; }).filter(function (x) { return dripHas("p:" + x.i); }).sort(function (a, b) { return b.at - a.at; })); }
   var camI = 0, camT = 0, camRaf = 0, camNext = 0;
   function camStart() { view("cam", "vf"); camI = Math.random() < .7 ? REAL0 + (Math.random() * REAL.length | 0) : LIVE[(Math.random() * LIVE.length) | 0]; camNext = Date.now() + 7000; var cv = $("vf"); (function loop() { camT++; if (Date.now() > camNext) { camI = LIVE[(LIVE.indexOf(camI) + 1) % LIVE.length]; camNext = Date.now() + 7000; } paintShot(cv, camI, camT); camRaf = setTimeout(function () { requestAnimationFrame(loop); }, 90); })(); thumb(); }
   function camStop() { clearTimeout(camRaf); }
@@ -2535,11 +2577,11 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     rs.forEach(function (r) { r.classList.remove("lit"); }); pw.classList.remove("named"); p.className = "pwr go on";
     function finish() { T.forEach(clearTimeout); p.onclick = null; done && done(); var sc = $("screen"); sc.classList.remove("waking"); void sc.offsetWidth; if (!rm) sc.classList.add("waking"); p.classList.add("open"); setTimeout(function () { p.className = "pwr"; sc.classList.remove("waking"); }, 620); }
     p.onclick = finish;   // a tap skips it
-    if (rm || quick) { rs[3].classList.add("lit"); T.push(setTimeout(finish, rm ? 250 : 520)); return; }
+    if (rm || quick) { rs[3].classList.add("lit"); pw.classList.add("named"); T.push(setTimeout(finish, rm ? 600 : 1100)); return; }
     [0, 1, 2, 3].forEach(function (i) { T.push(setTimeout(function () { rs[[0, 1, 3, 2][i]].classList.add("lit"); sfx("key", String(i + 1)); }, 160 + i * 170)); });
     T.push(setTimeout(function () { pw.classList.add("named"); }, 520));
     T.push(setTimeout(function () { rs.forEach(function (r, i) { if (i !== 3) r.classList.remove("lit"); }); }, 1050));   // the window settles to one lit pane, as in the mark
-    T.push(setTimeout(finish, 1350));
+    T.push(setTimeout(finish, 2250));   // the one lit pane stays a while (the owner, Nov 9)
   }
   $("out").onclick = function () { downed = true; $("bye").innerHTML = byeLine(); powerOff(function () { home(); $("lock").classList.add("on"); clock(); }); };
   $("on").onclick = function () { powerOn(function () { sfx("up"); $("lock").classList.remove("on"); paint(); }); };
@@ -2553,6 +2595,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   DESK = innerWidth >= 1024 && innerHeight >= 600; paint(); fit.ready = true; requestAnimationFrame(fit);
   /* a field focused near the bottom can scroll the fixed screen itself; when it lets go, put the screen back */
   document.addEventListener("focusout", function () { setTimeout(function () { var sc = $("screen"); if (sc.scrollTop || sc.scrollLeft) { sc.scrollTop = 0; sc.scrollLeft = 0; } if (window.scrollY) window.scrollTo(0, 0); }, 60); });
+  try { dripTick(); } catch (e) {}
   try { if (!sessionStorage.getItem("ah_boot") && !/[?&](ping|date)=/.test(location.search)) { sessionStorage.setItem("ah_boot", "1"); powerOn(null, !!get("ah_app_seen") && Math.random() < .5); } } catch (e) {}
   var h = /[?&]signed=1/.test(location.search) ? "set" : location.hash.slice(1); if (RENDER[h]) setTimeout(function () { open(h); }, 60);   // ?signed=1: back from the sign-in email, straight to Settings
   else if (/^store=/.test(h)) setTimeout(function () { open("store"); storeApp(decodeURIComponent(h.slice(6))); }, 60);   // after-hours.work's windows open a work's page here
