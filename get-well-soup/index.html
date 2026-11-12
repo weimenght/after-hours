@@ -88,6 +88,15 @@
   .langmenu button[aria-checked=true] { background:var(--paper2); }
   footer { max-width:380px; margin:0 auto; padding:0 16px 24px; font-size:13px; color:var(--soft); text-align:center; }
   footer a { color:inherit; }
+  /* handoff/DESIGN.md §5: phone one column; tablet the same, centred at 560; computer the picture (560) beside the flow (480), 1080 in all; a screen without a picture stays one column of 480 */
+  @media (min-width: 720px) { header, #app, footer { max-width:592px; } }
+  @media (min-width: 1024px) {
+    header, #app, footer { max-width:1112px; }
+    .screen:not(:has(> .scene)) { max-width:480px; margin-left:auto; margin-right:auto; width:100%; }
+    .screen:has(> .scene) { display:grid; grid-template-columns:minmax(0, 560px) minmax(0, 480px); justify-content:space-between; column-gap:40px; row-gap:0; align-content:center; }
+    .screen:has(> .scene) > .scene { grid-column:1; grid-row:1 / span 30; align-self:center; justify-self:center; width:100%; max-width:440px; margin:0; }
+    .screen:has(> .scene) > :not(.scene) { grid-column:2; margin-bottom:14px; }
+  }
 </style>
 </head>
 <body>

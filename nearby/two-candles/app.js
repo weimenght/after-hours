@@ -120,7 +120,7 @@
   "html.tc-app body>header.top,html.tc-app body>main,html.tc-app #toast{display:none!important}",
   ".tc .tc-main{max-width:none;margin:0;padding:0}.tc-col{display:flex;flex-direction:column;gap:14px;min-width:0}",
   ".tc-roombtn{position:absolute;top:10px;right:10px;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;border:0;background:rgba(20,12,18,.55);color:#fbf1de;cursor:pointer;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}.tc-roombtn[aria-pressed=true]{background:#f2b54a;color:#1d130d}",
-  ".tc{max-width:1100px;margin:0 auto;padding:0 16px calc(28px + env(safe-area-inset-bottom));box-sizing:border-box}.tc *{box-sizing:border-box}",
+  ".tc{max-width:1112px;margin:0 auto;padding:0 16px calc(28px + env(safe-area-inset-bottom));box-sizing:border-box}.tc *{box-sizing:border-box}",
   ".tc-ic{width:20px;height:20px;flex:none}",
   ".tc-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(12px,env(safe-area-inset-top)) 0 10px}",
   ".tc-brand{display:inline-flex;align-items:center;gap:8px;color:var(--tc-ink);text-decoration:none}.tc-brand .tc-ic{color:var(--tc-amber);width:24px;height:24px}.tc-brand b{font:600 19px/1 'Fraunces',Georgia,serif;letter-spacing:-.01em}",
@@ -173,10 +173,13 @@
   ".tc-foot{margin-top:28px;padding-top:14px;border-top:1px solid var(--tc-line);font-size:13px;color:var(--tc-mut)}.tc-ho{margin:0 0 10px;text-align:center}.tc-ho a{display:inline-flex;align-items:center;gap:4px;color:var(--tc-ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--tc-line)}.tc-ho .tc-ic{width:14px;height:14px}",
   ".tc-foot .fbf-x{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin-top:6px}.tc-foot .fbf-x a{display:inline-flex;align-items:center;gap:4px}.tc-foot .fbf-x .tc-ic{width:13px;height:13px;color:#E2553F}",
   "html[data-tc=table] .tc-foot{display:none}",
-  "@media (min-width:900px){html[data-tc=table] .tc-main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,1fr);grid-template-areas:'seats seats' 'stage side';align-items:start;gap:16px}html[data-tc=table] .tc-seats{grid-area:seats}html[data-tc=table] #tcStage{grid-area:stage;position:sticky;top:12px}html[data-tc=table] .tc-side{grid-area:side}",
+  "@media (min-width:1024px){html[data-tc=table] .tc-main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,1fr);grid-template-areas:'seats seats' 'stage side';align-items:start;gap:16px}html[data-tc=table] .tc-seats{grid-area:seats}html[data-tc=table] #tcStage{grid-area:stage;position:sticky;top:12px}html[data-tc=table] .tc-side{grid-area:side}",
   "html[data-tc=home] .tc-main{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(360px,1fr);gap:20px;align-items:start}html[data-tc=home] .tc-col:first-child{position:sticky;top:12px}}",
-  "@media (min-width:900px){html[data-tc=booked] .tc-main,html[data-tc=after] .tc-main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}html[data-tc=booked] .tc-hero,html[data-tc=after] .tc-hero{grid-column:1 / -1}}",
+  "@media (min-width:1024px){html[data-tc=booked] .tc-main,html[data-tc=after] .tc-main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}html[data-tc=booked] .tc-hero,html[data-tc=after] .tc-hero{grid-column:1 / -1}}",
   "@media (max-width:380px){.tc-tab{font-size:11px}.tc-tab .tc-ic{width:18px;height:18px}.tc-clock{font-size:21px}}",
+  /* handoff/DESIGN.md §5: tablet one column at 560; computer the picture (560) beside the flow (480) on the home screen, 1080 in all; the table keeps its own wider room */
+  "@media (min-width:720px) and (max-width:1023px){.tc{max-width:592px}}",
+  "@media (min-width:1024px){html[data-tc=home] .tc-main{grid-template-columns:minmax(0,560px) minmax(0,480px);justify-content:space-between;column-gap:40px}}",
   "@media (prefers-reduced-motion:reduce){.tc *,.tc-live{animation:none!important;transition:none!important}}"
   ].join("");
   var st0 = document.createElement("style"); st0.textContent = css; document.head.appendChild(st0);

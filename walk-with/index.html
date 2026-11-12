@@ -94,6 +94,15 @@
   #testbar button { font:inherit; padding:5px 9px; border-radius:6px; border:1px solid #fffaf2; background:transparent; color:#fffaf2; cursor:pointer; }
   #testbar button.on { background:#fffaf2; color:#3b2a20; }
   #testbar span { color:#e7b54a; align-self:center; }
+  /* handoff/DESIGN.md §5: phone one column; tablet the same, centred at 560; computer the picture (560) beside the flow (480), 1080 in all; a screen without a picture stays one column of 480 */
+  @media (min-width: 720px) { header, #app, footer { max-width:592px; } }
+  @media (min-width: 1024px) {
+    header, #app, footer { max-width:1112px; }
+    .screen:not(:has(> .scene)) { max-width:480px; margin-left:auto; margin-right:auto; width:100%; }
+    .screen:has(> .scene) { display:grid; grid-template-columns:minmax(0, 560px) minmax(0, 480px); justify-content:space-between; column-gap:40px; row-gap:0; align-content:center; }
+    .screen:has(> .scene) > .scene { grid-column:1; grid-row:1 / span 30; align-self:center; width:100%; max-width:none; margin:0; }
+    .screen:has(> .scene) > :not(.scene) { grid-column:2; margin-bottom:14px; }
+  }
 </style>
 </head>
 <body>

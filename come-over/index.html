@@ -32,7 +32,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:ra
 button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}
 a{color:var(--accent)}
 :focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:8px}
-.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
+.wrap{position:relative;z-index:1;max-width:1112px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
@@ -94,7 +94,7 @@ a{color:var(--accent)}
 
 /* the invitation */
 .iv{display:grid;gap:18px;padding:32px 0 10px}
-@media (min-width:900px){.iv{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:28px;align-items:start}.iv .inv{position:sticky;top:76px}}
+@media (min-width:1024px){.iv{grid-template-columns:minmax(0,560px) minmax(0,480px);justify-content:space-between;gap:40px;align-items:start}.iv .inv{position:sticky;top:76px}}
 @media (orientation:landscape) and (max-height:500px){.iv .inv{position:static}}
 .inv{position:relative;padding:34px 26px 24px;border-radius:6px;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line);text-align:center;isolation:isolate}
 .inv::before{content:"";position:absolute;inset:9px;border:1.5px solid color-mix(in srgb,var(--accent) 55%,transparent);border-radius:3px;pointer-events:none}
@@ -204,6 +204,9 @@ a{color:var(--accent)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .hop{animation:hop .35s}
 @keyframes hop{30%{transform:translateX(-5px)}60%{transform:translateX(5px)}}
+
+/* handoff/DESIGN.md §5: tablet one column centred at 560; computer the picture (560) beside the flow (480), 1080 in all */
+@media (min-width:720px) and (max-width:1023px){.wrap{max-width:592px}}
 </style>
 </head>
 <body>
