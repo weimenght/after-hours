@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=dde632a0dc"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=cde86209b5"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Come Over · have people round</title>
 <meta name="description" content="Have people over: write the invitation, send the link, see who's coming and what they'll bring. No account; deleted a week after the day.">
@@ -38,7 +38,9 @@ a{color:var(--accent)}
 
 /* top bar */
 .top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;gap:8px;min-height:58px;padding-top:env(safe-area-inset-top)}
+.top .wrap{display:flex;align-items:center;gap:8px;min-height:56px;padding-top:env(safe-area-inset-top);--ahh-bg:var(--card);--ahh-ink:var(--ink);--ahh-line:var(--line);--ahh-name:var(--display)}
+.top .ahh-nm{font-weight:400;font-size:23px;letter-spacing:.005em}.top .ahh-ic svg{border-radius:6px}
+.top .ahh-b{border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 17px var(--sans);cursor:pointer;padding:0}.top .ahh-b:hover{border-color:var(--amber)}
 .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-decoration:none;color:inherit}
 .brand svg{flex:none;width:34px;height:34px;border-radius:9px}
 .brand b{font:400 clamp(22px,5vw,27px)/1 var(--display);letter-spacing:.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -46,10 +48,6 @@ a{color:var(--accent)}
 .ib:hover{border-color:var(--amber)}
 .ib svg{width:18px;height:18px;flex:none}
 @media (max-width:560px){.ib .lbl{display:none}.ib{padding:0}}
-.rel{position:relative}
-.langm{position:absolute;right:0;top:calc(100% + 6px);display:grid;min-width:160px;padding:6px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);z-index:30}
-.langm button{text-align:left;min-height:42px;padding:0 12px;border:0;border-radius:10px;background:none;font:500 15px var(--sans)}
-.langm button[aria-current=true]{background:var(--bg2);font-weight:700}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:999px;border:1px solid var(--line);background:var(--card);font:600 15px var(--sans);text-decoration:none;color:var(--ink);transition:transform .12s,border-color .12s}
@@ -209,12 +207,7 @@ a{color:var(--accent)}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <a class="brand" href="./" id="brandA"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#C8442E"/><path d="M96 252 256 118l160 134" fill="none" stroke="#FBF1E0" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/><path d="M136 230v168h240V230" fill="#FBF1E0"/><rect x="166" y="262" width="64" height="58" rx="8" fill="#F2B24A"/><path d="M268 398V280a38 38 0 0 1 76 0v118z" fill="#F2B24A"/><path d="M268 398V280a38 38 0 0 1 22-34.5L312 262v136z" fill="#4E6B3A"/></svg><b data-i="name">Come Over</b></a>
-  <button class="ib" id="howB" type="button" data-ia="how"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><circle cx="12" cy="17.5" r=".6" fill="currentColor"/></svg></button>
-  <div class="rel"><button class="ib" id="langB" type="button" data-ia="lang" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="lbl" id="langL">EN</span></button></div>
-  <button class="ib" id="mineB" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span class="lbl" data-i="mine">My gatherings</span></button>
-</div></header>
+<header class="top"><div class="wrap" id="headW"><a class="brand" href="./"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#C8442E"/><path d="M96 252 256 118l160 134" fill="none" stroke="#FBF1E0" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/><path d="M136 230v168h240V230" fill="#FBF1E0"/><rect x="166" y="262" width="64" height="58" rx="8" fill="#F2B24A"/><path d="M268 398V280a38 38 0 0 1 76 0v118z" fill="#F2B24A"/><path d="M268 398V280a38 38 0 0 1 22-34.5L312 262v136z" fill="#4E6B3A"/></svg><b>Come Over</b></a></div></header>
 
 <main class="wrap" id="main" aria-live="polite"></main>
 
@@ -244,7 +237,7 @@ a{color:var(--accent)}
     lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
     house: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/></svg>'
   };
-  var code = null, ev, failed = false, ans = null, editingAnswer = false, justSaid = false;
+  var HD = null, code = null, ev, failed = false, ans = null, editingAnswer = false, justSaid = false;
   var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -262,8 +255,7 @@ a{color:var(--accent)}
     if (!code || !ev) document.title = t("docTitle");
     $$("[data-i]").forEach(function (e) { if (STR[e.dataset.i]) e.textContent = t(e.dataset.i); });
     $$("[data-ia]").forEach(function (e) { e.setAttribute("aria-label", t(e.dataset.ia)); e.title = t(e.dataset.ia); });
-    $("#langL").textContent = SHORT[LANGS.indexOf(lang())];
-    $("#mineB").setAttribute("aria-label", t("mine"));
+    if (HD) HD.paint();
     var ah = $("#ahA"); if (ah) ah.href = "https://www.after-hours.work/?fbl=" + lang();
     var fx = $("#foot"); if (window.FBC && FBC.foot && !fx.querySelector(".fbf-row")) FBC.foot(fx, { extra: fx.innerHTML });   // the suite's one footer; Nearby and After hours ↗ on the line under it
   }
@@ -374,7 +366,7 @@ a{color:var(--accent)}
     return s;
   }
   function closeSheet() { var s = $(".scrim"); if (!s) return; var b = s._back; s.remove(); document.body.style.overflow = ""; if (b && b.focus) try { b.focus({ preventScroll: true }); } catch (e) {} }
-  addEventListener("keydown", function (e) { if (e.key === "Escape") { if ($(".langm")) closeLang(); else closeSheet(); } });
+  addEventListener("keydown", function (e) { if (e.key === "Escape") { closeSheet(); } });
 
   function welcome() {
     var s = sheet("<h3>" + esc(t("w_h")) + '</h3><ol class="steps">' + [1, 2, 3].map(function (i) { return "<li><i>" + i + "</i><div><b>" + esc(t("w" + i)) + "</b><span>" + esc(t("w" + i + "s")) + "</span></div></li>"; }).join("") +
@@ -609,20 +601,13 @@ a{color:var(--accent)}
     else if (act === "unanswer") { if (!confirmTwice(a, t("takeBack") + " ?")) return; secret(true).then(function (s) { return rpc("party_forget", { p_secret: s, p_code: code }); }).then(function () { ans = null; return load(); }).catch(function (x) { toast(friendly(x)); }); }
     else if (act === "del") { if (!confirmTwice(a, t("delSure"))) return; secret(true).then(function (s) { return rpc("party_forget", { p_secret: s, p_code: code }); }).then(function () { forgetLocal(code); toast(t("delDone"), 4200); location.hash = ""; }).catch(function (x) { toast(friendly(x)); }); }
   });
-  document.addEventListener("click", function (e) { if (e.target.closest("[data-pv]")) { e.preventDefault(); privacy(); } if (!e.target.closest(".langm,#langB")) closeLang(); });
+  document.addEventListener("click", function (e) { if (e.target.closest("[data-pv]")) { e.preventDefault(); privacy(); } });
 
-  /* language menu */
-  function closeLang() { var m = $(".langm"); if (m) m.remove(); $("#langB").setAttribute("aria-expanded", "false"); }
-  $("#langB").onclick = function (e) {
-    e.stopPropagation(); if ($(".langm")) return closeLang();
-    var m = document.createElement("div"); m.className = "langm"; m.setAttribute("role", "menu");
-    m.innerHTML = LANGS.map(function (l, i) { return '<button type="button" role="menuitem" data-l="' + l + '" aria-current="' + (l === lang()) + '" lang="' + l + '">' + NAMES[i] + "</button>"; }).join("");
-    this.parentNode.appendChild(m); this.setAttribute("aria-expanded", "true"); m.querySelector("[aria-current=true]").focus();
-    m.onclick = function (ev2) { var b = ev2.target.closest("[data-l]"); if (b) { closeLang(); setLang(b.dataset.l); } };
-  };
-  $("#howB").onclick = welcome;
-  $("#mineB").onclick = function () { if (code) location.hash = ""; setTimeout(function () { var y = $("#yours"); if (y) y.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60); };
-  $("#brandA").onclick = function (e) { if (code) { e.preventDefault(); location.hash = ""; } };
+  /* the after-hours header (handoff/DESIGN.md §3): name home · ? how it works · ⋯ My gatherings, language, privacy */
+  function mine() { if (code) location.hash = ""; setTimeout(function () { var y = $("#yours"); if (y) y.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60); }
+  HD = window.FBC && FBC.head ? FBC.head($("#headW"), { icon: $("#headW svg").outerHTML, name: function () { return t("name"); },
+    home: function () { if (code) location.hash = ""; else scrollTo({ top: 0, behavior: "smooth" }); }, help: welcome,
+    items: function () { return [{ label: t("mine"), on: mine }]; } }) : null;
 
   paintWords(); route();
   if (!code && !lsGet("co_seen")) setTimeout(function () { if (!code && !$(".scrim")) welcome(); }, 600);
