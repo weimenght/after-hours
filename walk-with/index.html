@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=5a7651a027"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=9e930e7f88"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Walk With</title>
 <meta name="description" content="Two people, one corner, twenty minutes, same clock time. Pick a time, name a corner, send one link. Then put the phone away.">
@@ -262,7 +262,7 @@ send: function () { return '<section class="screen center">' +
   '<div class="code" aria-label="' + s.id.split("").join(" ") + '">' + s.id + '</div>' +
   '<p class="corner">' + esc(when(s)) + '<br>' + esc(F(W.at, { c: s.c })) + '</p>' +
   '<button type="button" class="btn" id="share">' + esc(T(W.send)) + '</button>' +
-  '<p class="note" id="note" aria-live="polite"></p>' +
+  '<p class="note" id="note" aria-live="polite">' + esc(T(W.replyHint)) + '</p>' +
   '<button type="button" class="btn quiet" id="sent">' + esc(T(W.sent)) + '</button></section>'; },
 invite: function () { return '<section class="screen center">' +
   '<p class="lede">' + esc(s.n ? F(W.inviteFrom, { n: s.n }) : T(W.inviteAnon)) + '</p>' +
@@ -270,11 +270,13 @@ invite: function () { return '<section class="screen center">' +
   '<p class="hand" style="font-size:28px">' + esc(dayLabel(s.at)) + '</p>' +
   '<p class="corner">' + esc(F(W.at, { c: s.c })) + '</p>' +
   '<p class="lede">' + esc(T(W.inviteSub)) + '</p>' +
-  '<div class="spacer"></div><button type="button" class="btn sage" id="yes">' + esc(T(W.illBeThere)) + '</button></section>'; },
+  '<div class="spacer"></div><button type="button" class="btn sage" id="yes">' + esc(T(W.illBeThere)) + '</button>' +
+  '<button type="button" class="link" id="unsure">' + esc(T(W.notSure)) + '</button></section>'; },
 countdown: function () { return '<section class="screen center"><div class="spacer"></div>' +
   '<div class="clock" id="clock" role="timer" aria-label="' + esc(T(W.untilWalk)) + '"></div>' +
   '<p class="corner">' + esc(s.c) + '</p><div class="spacer"></div>' +
-  '<button type="button" class="link faint" id="cancel">' + esc(T(W.notGoing)) + '</button></section>'; },
+  (s.role === "host" ? '<p class="note">' + esc(T(W.replyHint)) + '</p>' : '') +
+  '<button type="button" class="link" id="msg">' + esc(T(W.msgThem)) + '</button></section>'; },
 go: function () { return '<section class="screen center">' + WALKING() +
   '<h1>' + esc(T(W.goTitle)) + '</h1><button type="button" class="btn quiet" id="start">' + esc(T(W.startTimer)) + '</button></section>'; },
 timer: function () { return '<section class="screen center"><div class="mins" id="mins" role="timer" aria-label="' + esc(T(W.minsLeft)) + '"></div></section>'; },
@@ -292,6 +294,18 @@ function share(text, onCopied) {
   if (navigator.share) return navigator.share({ text: text }).catch(function () {});
   if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(function () { if (onCopied) onCopied(); }, function () { window.prompt("", text); });
   window.prompt("", text);
+}
+/* answers between the two of them travel in their own messages (FBC.tell), never through a server */
+function lineWhen(w) {   /* "today at 18:00", "Tuesday at 7:00", "hoy a las 18:00": the day as it sits inside a sentence */
+  var d = dayLabel(w.at); if (li() !== 1 && li() !== 2 && (d === T(W.today) || d === T(W.tomorrow))) d = d.toLowerCase();
+  return F(W.atTime, { d: d, h: w.t });
+}
+function pick(label, line, done) { return { label: T(W[label]), text: F(W[line], { t: lineWhen(s), c: s.c }), done: done }; }
+function join() { s.joined = true; save(); render(true); }
+function tell(choices, quiet) {
+  choices = choices.filter(Boolean);
+  if (window.FBC && FBC.tell) return FBC.tell({ choices: choices, lead: !quiet });
+  var c = choices[0]; share(c.text); if (c.done) c.done();   /* no kit: the share sheet with the first line */
 }
 var B = {
   home: function () { var pick = null, custom = false, day = TIMES.some(function (t) { return ok(0, t); }) ? 0 : 1;
@@ -322,10 +336,18 @@ var B = {
       put(NAMEKEY, n || null); s = { id: newCode(), t: pick, c: c, n: n, at: atFor(day, pick), role: "host", sent: false }; save(); render(true); }); },
   send: function () { on("share", function () { share(F(W.shareText, { t: when(s), c: s.c, link: linkFor(s) }), function () { $("note").textContent = T(W.copied); }); });
     on("sent", function () { s.sent = true; save(); render(true); }); },
-  invite: function () { on("yes", function () { var txt = F(W.replyText, { t: when(s), c: s.c }); s.joined = true; save(); render(true); share(txt); }); },
-  countdown: function () { on("cancel", function () { if (confirm(T(W.confirmCancel))) reset(); }); },
+  invite: function () {
+    on("yes", function () { tell([pick("illBeThere", "yesLine", join)]); });
+    on("unsure", function () { tell([pick("maybe", "maybeLine"), pick("otherDay", "otherDayLine", reset), pick("cant", "cantLine", reset)], true); });
+  },
+  countdown: function () {
+    on("msg", function () {
+      var soon = s.at - Date.now() < 60 * MIN;
+      tell([soon ? pick("late", "lateLine") : pick("stillOn", "stillOnLine"), soon ? pick("here", "hereLine") : null, pick("move", "moveLine"), pick("cancel", "cancelLine", reset)], true);
+    });
+  },
   go: function () { on("start", function () { s.walkStart = Date.now(); save(); render(true); }); },
-  done: function () { on("again", function () { while (s.at <= Date.now()) s.at += 7 * DAY; s.walkStart = null; save(); render(true); });
+  done: function () { on("again", function () { while (s.at <= Date.now()) s.at += 7 * DAY; s.walkStart = null; save(); render(true); tell([pick("again", "againLine")]); });
     on("nope", function () { s.bye = true; save(); render(true); }); },
   bye: function () { on("fresh", reset); }
 };
