@@ -90,10 +90,13 @@
   /* off the screen: once the card is in your pocket the page dims and gets out of the way */
   body.away .stage { filter:saturate(.7) brightness(.85); }
   [hidden] { display:none !important; }
-  @media (min-width: 880px) {
-    .wrap { max-width:1060px; }
-    .main { grid-template-columns:minmax(0, 1.15fr) minmax(0, 1fr); align-items:start; }
-    .stage { position:sticky; top:16px; }
+  /* handoff/DESIGN.md §5: phone one column; tablet the same, centred at 560; computer the scene beside the flow, 560 + 480 in 1080 */
+  @media (min-width: 720px) { .wrap { max-width:592px; } }
+  @media (min-width: 1024px) {
+    .wrap { max-width:1112px; padding-top:max(8px, env(safe-area-inset-top)); }
+    .main { grid-template-columns:minmax(0, 560px) minmax(0, 480px); justify-content:space-between; column-gap:40px; align-items:start; margin-top:12px; }
+    .stage { position:sticky; top:24px; }
+    .panel { max-width:480px; }
   }
   @media (prefers-reduced-motion: reduce) { .flip .in { transition:none; } .btn:active { transform:none; } body { transition:none; } }
 </style>
