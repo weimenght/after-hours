@@ -957,10 +957,17 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     s.style.background = "linear-gradient(180deg," + c[1] + "," + c[0] + " 64%)";
     $("screen").classList.toggle("day", !night && (p === "morn" || p === "aft"));
     if (!s.children.length) for (var i = 0; i < 40; i++) { var st = el("i"); st.style.left = (Math.random() * 100) + "%"; st.style.top = (Math.random() * 55) + "%"; st.style.animationDelay = (Math.random() * 4) + "s"; s.appendChild(st); }
-    var sl = $("skyline"); if (!sl.childNodes.length) {   // fifteen buildings, one lit window each: one per work
+    /* the windows keep the hour (the owner, Nov 13): each has its own bedtime, so the street fills in the evening, thins after
+       ten and by the small hours one window is left, the lit window. The works' windows (one a building, in the work's own
+       colour) stay up later than the plain ones. Redrawn when the hour moves. */
+    var sl = $("skyline"), d = new Date(), hr = (H0 != null ? H0 : d.getHours()) + (H0 != null ? 0 : d.getMinutes() / 60);
+    var share = hr < 5 ? .02 : hr < 6.5 ? .08 : hr < 9 ? .3 : hr < 16.5 ? .1 : hr < 18.5 ? .4 : hr < 22 ? .85 : hr < 23 ? .5 : hr < 24 ? .2 : .02, stamp = Math.round(share * 100) + "|" + P.length;
+    if (sl.getAttribute("data-s") !== stamp) { sl.setAttribute("data-s", stamp);
       var h = "", x = 0, k = 0, seed = 7; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
       while (x < 390) { var bw = 22 + rnd() * 26, bh = 40 + rnd() * 90; h += '<rect x="' + x.toFixed(1) + '" y="' + (150 - bh).toFixed(1) + '" width="' + (bw + .5).toFixed(1) + '" height="' + bh.toFixed(1) + '" fill="#0B0910"/>';
-        for (var r = 0; r < 4; r++) for (var q = 0; q < 2; q++) { var wx = x + 5 + q * (bw / 2 - 2), wy = 150 - bh + 8 + r * 14; if (wy > 140) continue; var lit = k < P.length && r === ((k * 3) % 4) && q === k % 2; h += '<rect x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" width="5" height="7" fill="' + (lit ? P[k][5] : "#17131E") + '"' + (lit ? ' opacity=".85"' : "") + "/>"; }
+        for (var r = 0; r < 4; r++) for (var q = 0; q < 2; q++) { var wx = x + 5 + q * (bw / 2 - 2), wy = 150 - bh + 8 + r * 14, t = rnd(); if (wy > 140) continue;
+          var work = k < P.length && r === ((k * 3) % 4) && q === k % 2, bed = work ? (k === 4 ? 0 : .04 + ((k * 37) % 50) / 100) : .3 + t * .7, lit = bed < share || (work && k === 4);
+          h += '<rect x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" width="5" height="7" fill="' + (lit ? (work ? (k === 4 ? "#F2A33A" : P[k][5]) : "#E9B96A") : "#17131E") + '"' + (lit ? ' opacity="' + (work ? ".85" : ".5") + '"' : "") + "/>"; }
         k++; x += bw; }
       sl.innerHTML = h;
     }
@@ -2797,7 +2804,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   if (window.ResizeObserver) new ResizeObserver(function () { fit(); }).observe($("stack"));
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   document.addEventListener("visibilitychange", function () { if (!document.hidden && !$("lock").classList.contains("on")) paint(); });
-  setInterval(clock, 15000);
+  setInterval(clock, 15000); setInterval(function () { if (!document.hidden) sky(); }, 5 * 60000);   // the windows go out and come on with the hour
   DESK = innerWidth >= 1024 && innerHeight >= 600; paint(); fit.ready = true; requestAnimationFrame(fit);
   /* a field focused near the bottom can scroll the fixed screen itself; when it lets go, put the screen back */
   document.addEventListener("focusout", function () { setTimeout(function () { var sc = $("screen"); if (sc.scrollTop || sc.scrollLeft) { sc.scrollTop = 0; sc.scrollLeft = 0; } if (window.scrollY) window.scrollTo(0, 0); }, 60); });
