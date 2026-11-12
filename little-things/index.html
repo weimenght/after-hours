@@ -121,9 +121,17 @@
   @keyframes pop { from { opacity:0; transform:translateY(6px); } }
   @keyframes fade { from { opacity:0; } }
   @media (prefers-reduced-motion: reduce) { .say, .paper, .sheet { animation:none; } }
-  @media (min-width:900px) { .wrap { max-width:620px; } }
   [hidden] { display:none !important; }
   .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  /* handoff/DESIGN.md §5: phone one column; tablet the same, centred at 560; computer the scene beside the flow, 560 + 480 in 1080 */
+  @media (min-width: 720px) { .wrap { max-width:592px; } footer { max-width:592px; } }
+  @media (min-width: 1024px) {
+    .wrap { max-width:1112px; display:grid; grid-template-columns:minmax(0, 560px) minmax(0, 480px); grid-template-rows:auto auto auto auto 1fr; justify-content:space-between; column-gap:40px; row-gap:12px; align-content:start; }
+    .wrap > header { grid-column:1 / -1; }
+    .wrap > .scene { grid-column:1; grid-row:2 / span 4; align-self:start; position:sticky; top:24px; }
+    .wrap > .talk, .wrap > #card, .wrap > .acts { grid-column:2; }
+    footer { max-width:1112px; }
+  }
 </style>
 </head>
 <body>

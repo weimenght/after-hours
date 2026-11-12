@@ -171,7 +171,7 @@ footer .fb-mk { width:16px; height:16px; }   /* the pixel marks from the kit (FB
   .doc .foot { font-size:16px; color:#6a5a48; border-top:3px solid #000; padding-top:8px; }
   @keyframes pop { from { opacity:0; transform:translateY(6px); } }
   @media (prefers-reduced-motion: reduce) { .card, .note { animation:none; } }
-  @media (min-width:700px) { .wrap { max-width:620px; } }
+  @media (min-width:700px) { .wrap { max-width:592px; } }
   /* wide: the map on the left, everything else beside it */
   @media (orientation: landscape) and (min-width: 600px) {
     .wrap.inTown { max-width:1200px; }
@@ -183,6 +183,11 @@ footer .fb-mk { width:16px; height:16px; }   /* the pixel marks from the kit (FB
     .panel { grid-column:2; grid-row:3; overflow:auto; min-height:0; padding:2px 8px 8px 2px; }
     .wrap.inStart { max-width:1000px; }
     .hero { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+  }
+  /* handoff/DESIGN.md §5 on computers: the start screen's map (560) beside the flow (480), 1080 in all; the town itself keeps its own wide workspace */
+  @media (min-width: 1024px) {
+    .wrap.inStart { max-width:1112px; }
+    .hero { grid-template-columns:minmax(0, 560px) minmax(0, 480px); justify-content:space-between; column-gap:40px; }
   }
   @media (orientation: landscape) and (max-height: 500px) {
     :root { --hh:50px; }

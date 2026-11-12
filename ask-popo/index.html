@@ -99,6 +99,14 @@
 
   /* print: a clean A5 booklet, the Book and nothing else */
   @page { size:A5; margin:18mm 15mm; }
+  /* handoff/DESIGN.md §5: phone one column; tablet the same, centred at 560; computer the scene beside the flow, 560 + 480 in 1080 */
+  @media (min-width: 720px) { .wrap { max-width:592px; } }
+  @media (min-width: 1024px) {
+    .wrap { max-width:1112px; grid-template-columns:minmax(0, 560px) minmax(0, 480px); justify-content:space-between; column-gap:40px; align-items:start; }
+    .wrap > header { grid-column:1 / -1; }
+    .wrap > .stage { grid-column:1; position:sticky; top:24px; }
+    .wrap > .panel { grid-column:2; }
+  }
   @media print {
     html, body { background:#fff !important; }
     body { display:block; }
