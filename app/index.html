@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e6c4d02f9d"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=dde632a0dc"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>after-hours</title>
 <meta name="description" content="Everything Wei makes after hours, in one place on your phone. Small, free things that end off the screen, next to someone.">
@@ -1201,6 +1201,17 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var b = $("wUp"); b.innerHTML = "<h2>" + esc(w("wUpT")) + "</h2>"; var f = el("div", "faces"), any = false;
     UP.forEach(function (k) { var z = asleep(k); if (!z) any = true; var x = el("button", z ? "z" : ""); x.type = "button"; x.setAttribute("aria-label", nm(k) + " · " + w(z ? "pAsleep" : "pAwake")); x.appendChild(avatar(k)); x.appendChild(el("span", "", esc(nm(k)))); x.onclick = function () { open("phone"); card(k); call(k); }; f.appendChild(x); });
     b.appendChild(f); b.appendChild(el("p", "wl", esc(w(any ? "wUpSome" : "wUpNone"))));
+    /* the window on the town (the owner, Nov 12: the phone holds the tools, the town is where they live): where the animals are right now,
+       from the town's own clock and their own hours (FBWorld.cats() / dog(), nothing fetched); a tap walks there, straight in (from=app) */
+    try {
+      var F = FW(), A = window.FBApps; if (!F || !F.cats || !A || !A.town) return;
+      var ct = F.cats(), dg = F.dog ? F.dog() : null, spots = [], pn = function (k) { var p = F.PLACES && F.PLACES[k]; return p ? (p[1][li()] || p[1][0]) : ""; };
+      if (ct && ct.miso === ct.yuzu) spots.push(["cats", ct.miso]); else if (ct) { spots.push(["miso", ct.miso]); spots.push(["yuzu", ct.yuzu]); }
+      if (dg) spots.push(["mantou", dg]);
+      var row = el("div", "acts2");
+      spots.forEach(function (x) { var n = pn(x[1]); if (!n) return; var a = el("a", "pill ghost", esc(nm(x[0])) + " · " + esc(n) + " ›"); a.href = A.town(x[1]); a.onclick = function () { sfx("text"); }; row.appendChild(a); });
+      if (row.childNodes.length) b.appendChild(row);
+    } catch (e) {}
   }
   function moon() {   // days since a known new moon (6 Jan 2000, 18:14 UTC), over the synodic month
     var d = today(), age = ((d - Date.UTC(2000, 0, 6, 18, 14)) / 864e5) % 29.530588853; if (age < 0) age += 29.530588853;
