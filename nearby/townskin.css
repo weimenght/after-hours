@@ -1,0 +1,51 @@
+/* The town's skin (see townskin.js): Nearby's look over a place that was drawn in its own style.
+   Tokens from handoff/looks/nearby.md: night ink page, pixel wood, 3px black borders, hard shadows, amber for go, VT323 to read,
+   Press Start 2P for small labels, no rounded corners, no blur, no gradients on controls. */
+html.nb-skin {
+  --nb-page: #14101e; --nb-wood: #3a2214; --nb-wood-hi: #4d2e1a; --nb-text: #fbeedd; --nb-amber: #f6b73c; --nb-amber-hi: #ffc95a; --nb-ink: #1d130d;
+}
+html.nb-skin canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
+html.nb-skin body, html.nb-skin body *:not(i):not(svg):not(svg *):not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab):not(canvas) {
+  font-family: VT323, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", monospace !important;
+  letter-spacing: 0 !important;
+}
+html.nb-skin body *:not(canvas):not(img):not(.nb-keep-round):not(.nb-keep-round *) { border-radius: 0 !important; }
+html.nb-skin body * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+html.nb-skin body { -webkit-font-smoothing: none; }
+/* every control: pixel wood */
+html.nb-skin button:not(.nb-plain), html.nb-skin [role="button"]:not(.nb-plain), html.nb-skin a.btn, html.nb-skin .btn, html.nb-skin select,
+html.nb-skin input[type="button"], html.nb-skin input[type="submit"] {
+  background: var(--nb-wood) !important; background-image: none !important; color: var(--nb-text) !important;
+  border: 3px solid #000 !important; box-shadow: inset -2px -2px 0 rgba(0,0,0,.35), inset 2px 2px 0 var(--nb-wood-hi), 3px 3px 0 #000 !important;
+  font-size: max(18px, 1em) !important; line-height: 1.1 !important; text-shadow: none !important; min-height: 40px;
+}
+html.nb-skin button:not(.nb-plain):hover, html.nb-skin [role="button"]:not(.nb-plain):hover { background: var(--nb-wood-hi) !important; }
+html.nb-skin button:not(.nb-plain):active, html.nb-skin [role="button"]:not(.nb-plain):active { transform: translate(2px, 2px); box-shadow: inset 2px 2px 0 rgba(0,0,0,.4), 1px 1px 0 #000 !important; }
+html.nb-skin button[aria-pressed="true"]:not(.nb-plain), html.nb-skin button.active:not(.nb-plain), html.nb-skin button.on:not(.nb-plain), html.nb-skin [aria-selected="true"]:not(.nb-plain) {
+  background: var(--nb-amber) !important; color: var(--nb-ink) !important; box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), inset 2px 2px 0 var(--nb-amber-hi), 3px 3px 0 #000 !important;
+}
+html.nb-skin button:focus-visible, html.nb-skin a:focus-visible, html.nb-skin [role="button"]:focus-visible { outline: 3px solid var(--nb-amber) !important; outline-offset: 2px; }
+html.nb-skin input[type="text"], html.nb-skin input[type="search"], html.nb-skin input:not([type]), html.nb-skin textarea {
+  background: #0e0b14 !important; color: var(--nb-text) !important; border: 3px solid #000 !important; box-shadow: inset 2px 2px 0 rgba(0,0,0,.5) !important; font-size: 20px !important;
+}
+html.nb-skin ::placeholder { color: rgba(251,238,221,.45) !important; }
+/* panels and dialogs: dark wood boards */
+html.nb-skin [role="dialog"], html.nb-skin dialog, html.nb-skin .nb-panel {
+  background: var(--nb-wood) !important; background-image: none !important; color: var(--nb-text) !important;
+  border: 3px solid #000 !important; box-shadow: 4px 4px 0 #000 !important;
+}
+html.nb-skin h1, html.nb-skin h2, html.nb-skin h3, html.nb-skin .nb-label {
+  font-weight: 400 !important; text-shadow: none !important;
+}
+html.nb-skin progress, html.nb-skin [role="progressbar"] { border: 2px solid #000 !important; background: #0e0b14 !important; }
+@media (prefers-reduced-motion: reduce) { html.nb-skin button:active { transform: none; } }
+/* Tailwind-built places: borders become the town's black 3px, soft shadows become hard ones, gradients become wood,
+   and the small type steps up to sizes VT323 reads at */
+html.nb-skin .border:not(.nb-plain), html.nb-skin .border-2:not(.nb-plain), html.nb-skin .border-4:not(.nb-plain), html.nb-skin [class*="border-["]:not(.nb-plain) { border-color: #000 !important; border-width: 3px !important; border-style: solid !important; }
+html.nb-skin .border-l, html.nb-skin .border-r, html.nb-skin .border-t, html.nb-skin .border-b { border-color: rgba(0,0,0,.6) !important; }
+html.nb-skin [class*="shadow-"]:not(button):not(.nb-plain) { box-shadow: 4px 4px 0 #000 !important; }
+html.nb-skin [class*="bg-gradient"]:not(canvas):not(.nb-plain) { background-image: none !important; background-color: var(--nb-wood) !important; }
+html.nb-skin .text-xs, html.nb-skin [class*="text-[9px]"], html.nb-skin [class*="text-[10px]"], html.nb-skin [class*="text-[11px]"], html.nb-skin [class*="text-[12px]"] { font-size: 16px !important; line-height: 1.15 !important; }
+html.nb-skin .text-sm, html.nb-skin [class*="text-[13px]"], html.nb-skin [class*="text-[14px]"] { font-size: 19px !important; line-height: 1.15 !important; }
+html.nb-skin .italic { font-style: normal !important; }
+html.nb-skin .font-bold, html.nb-skin .font-semibold, html.nb-skin .font-black, html.nb-skin .font-medium, html.nb-skin b, html.nb-skin strong { font-weight: 400 !important; }
