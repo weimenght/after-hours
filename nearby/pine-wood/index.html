@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=c6f5572963"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=b8b7725d3e" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=c6f5572963"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=8d5bc5afa4" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Pine Wood · Nearby</title>
-<meta name="description" content="A slow walk under the pines. Stone lanterns, mist, fireflies, and sometimes a cat on the path. Alone, or with a friend somewhere else on the same path.">
+<meta name="description" content="A slow walk under the pines to the cabin. Stone lanterns, mist, fireflies, and sometimes a cat on the path.">
 <meta name="theme-color" content="#090d16">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23101826'/%3E%3Crect x='7' y='2' width='2' height='2' fill='%2326474e'/%3E%3Crect x='5' y='4' width='6' height='4' fill='%2326474e'/%3E%3Crect x='3' y='8' width='10' height='4' fill='%2326474e'/%3E%3Crect x='7' y='12' width='2' height='3' fill='%231a2a30'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/fonts/g/fonts.css">
@@ -24,12 +24,8 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
 <h1 class="sr" id="h1">Pine Wood</h1>
 <canvas id="cv" role="img" aria-label="A path through a pine wood"></canvas>
 <div class="bar">
-  <button type="button" class="duo fbb fbb-glass fbb-icon" id="bag" aria-label="Your pocket" hidden>🧺</button>
-  <button type="button" class="duo fbb fbb-glass fbb-icon" id="duo" aria-label="With a friend">👥</button>
 </div>
-<div id="pocket" role="dialog" aria-label="Your pocket" hidden></div>
 <div id="rest" role="dialog" hidden></div>
-<script src="/nearby/duo.js?v=194fb6e9a1"></script>
 <script>
 /* Pine Wood: hold the left or right half of the screen (or the arrow keys) and walk. The path goes on as long as
    you do. Stone lanterns glow as you pass them at dusk and night; Mantou or the cats, when they wandered into
@@ -80,13 +76,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   cv.addEventListener("pointermove", function (e) { if (pdir) aim(e); });
   ["pointerup", "pointercancel"].forEach(function (ev) { cv.addEventListener(ev, function () { pdir = 0; }); });
 
-  var duo = window.FBDuo ? FBDuo({ topic: "fbwood",
-    onMsg: function (ev, p) { if (ev === "pos") { if (!mate) mate = { x: p.x, f: p.f, m: p.m }; mate.tx = p.x; mate.f = p.f; mate.m = p.m; mate.t = Date.now(); } },
-    onPeer: function (here) { if (!here) mate = null; },
-    onState: function (s) { document.getElementById("duo").classList.toggle("on", s.peer); }
-  }) : null;
-  document.getElementById("duo").onclick = function () { audio(); if (duo) duo.open(); };
-  setInterval(function () { if (duo && duo.peer()) duo.send("pos", { x: Math.round(camX), f: me.face, m: me.moving ? 1 : 0 }); }, 150);
+  /* no friend walk any more (the owner, Nov 14: friend modes only at Two Candles and Next Door's seat) */
 
   /* who walks with you today */
   function companions() { var out = [], c = WD.cats ? WD.cats() : {}; if (c.miso === "forest") out.push("miso"); if (c.yuzu === "forest") out.push("yuzu"); try { if (WD.dog && WD.dog() === "forest") out.push("dog"); } catch (e) {} return out; }
@@ -277,7 +267,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   };
   var PK = ["IN YOUR POCKET", "口袋里", "口袋裡", "EN TU BOLSILLO", "A LA BUTXACA"];
   function li5() { return ({ en: 0, zh: 1, "zh-Hant": 2, es: 3, ca: 4 })[(window.FBL && FBL.get && FBL.get()) || "en"] || 0; }
-  var taken = {}; try { taken = JSON.parse(sessionStorage.getItem("fb_wood_taken") || "{}"); } catch (e) {}
+  var taken = {};
   function pocket(v) { if (v) { try { localStorage.setItem("fb_pocket", JSON.stringify(v)); } catch (e) {} return v; } try { return JSON.parse(localStorage.getItem("fb_pocket") || "[]") || []; } catch (e) { return []; } }
   function findAt(c) {
     if (hash(c * 91.7 + 3) > .55) return null;
@@ -293,9 +283,9 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   function finds(dt) {   /* in update(): walk over one and it's yours */
     var me0 = camX + W / 2, c = Math.floor(me0 / 230);
     for (var cc = c - 1; cc <= c + 1; cc++) { var f = findAt(cc); if (!f || taken[cc]) continue; if (Math.abs(f.x - me0) < 4 && me.moving) {
-      taken[cc] = 1; try { sessionStorage.setItem("fb_wood_taken", JSON.stringify(taken)); } catch (e) {}
-      glints.push({ x: f.x, t: 0, k: f.k }); var pk = pocket().filter(function (x) { return x !== f.k; }); pk.unshift(f.k); pocket(pk.slice(0, 10)); paintBag();
-      if (!finds.said) finds.said = {}; if (!finds.said[f.k] && window.FBG && FBG.note) { finds.said[f.k] = 1; FBG.note({ icon: FIND[f.k][0], label: PK[li5()], text: FIND[f.k][1][li5()] }); }
+      taken[cc] = 1;   /* you pass it and it glints once; it stays on the path, nothing is picked up or kept (Nov 14) */
+      glints.push({ x: f.x, t: 0, k: f.k });
+      if (!finds.said) finds.said = {}; if (!finds.said[f.k] && window.FBG && FBG.note) { finds.said[f.k] = 1; FBG.note({ icon: FIND[f.k][0], text: FIND[f.k][1][li5()] }); }
     } }
     glints = glints.filter(function (g) { g.t += dt; return g.t < 1.2; });
   }
@@ -313,7 +303,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   }
   function drawFinds() {
     var night = WD.phase() === "night", c0 = Math.floor((camX - 20) / 230), c1 = Math.floor((camX + W + 20) / 230);
-    for (var c = c0; c <= c1; c++) { var f = findAt(c); if (!f || taken[c]) continue; var sx = Math.round(f.x - camX); if (sx > -6 && sx < W + 6) drawFind(f.k, sx, GY + 3, night); }
+    for (var c = c0; c <= c1; c++) { var f = findAt(c); if (!f) continue; var sx = Math.round(f.x - camX); if (sx > -6 && sx < W + 6) drawFind(f.k, sx, GY + 3, night); }
     glints.forEach(function (g) { var sx = Math.round(g.x - camX), a = 1 - g.t / 1.2; ctx.fillStyle = "rgba(255,240,180," + a.toFixed(2) + ")"; var yy = GY - 6 - g.t * 14; ctx.fillRect(sx, yy, 1, 1); ctx.fillRect(sx - 2, yy + 2, 1, 1); ctx.fillRect(sx + 2, yy + 1, 1, 1); });
   }
   /* ---------- the exploration: things along the path, side paths, and tired legs ---------- */
@@ -354,7 +344,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   function marks(dt) {
     var me0 = camX + W / 2, c = Math.floor(me0 / 520);
     for (var cc = c - 1; cc <= c + 1; cc++) { var m = markAt(cc); if (!m || told["m" + cc]) continue;
-      if (Math.abs(m.x - me0) < 14 && dwell > 1.1 && !done) { told["m" + cc] = 1; var k = seenKey(m); if (leg.seen.indexOf(k) < 0) leg.seen.push(k); saveLeg(); anims.push({ k: k, x: m.x, t: 0 }); paintBag();
+      if (Math.abs(m.x - me0) < 14 && dwell > 1.1 && !done) { told["m" + cc] = 1; var k = seenKey(m); if (leg.seen.indexOf(k) < 0) leg.seen.push(k); saveLeg(); anims.push({ k: k, x: m.x, t: 0 });
         if (k === "well") { plink(.7, 1800, .03); plink(1.0, 900, .015); } else if (k === "stones") plink(.3, 500, .02); else plink(.1, NOTES[3], .015);
         if (window.FBG && FBG.note) FBG.note({ icon: SEEN[k][0], text: SEEN[k][1][li5()], ms: 6000 }); } }
     anims.forEach(function (a) { a.t += dt; }); anims = anims.filter(function (a) { return a.t < 6; });
@@ -407,7 +397,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   /* the path ends where Popo and Josep's Sunday walk always ended: the cabin's door (the owner, Nov 14) */
   var RESTW = { t: ["The cabin's door.", "小屋的门口。", "小屋門口。", "La puerta de la cabaña.", "La porta de la cabana."], p: ["The path ends where it always did: No Hurry, the cabin Josep built. Popo still walks up on Sundays. Your legs say sit down.", "小路走到头，还是老地方：“不急”，Josep 亲手盖的小屋。婆婆现在每个礼拜天还走上来。你的腿说，坐下吧。", "小路走到盡頭，還是老地方：「不急」，Josep 親手蓋的小屋。婆婆現在每個禮拜天還走上來。你的腿說，坐下吧。", "El camino acaba donde siempre: Sin Prisa, la cabaña que construyó Josep. Popo aún sube los domingos. Tus piernas dicen que te sientes.", "El camí acaba on sempre: Sense Pressa, la cabana que va fer en Josep. La Popo encara hi puja els diumenges. Les cames et diuen que seguis."], cab: ["Go in", "进去", "入去", "Entra", "Entra"], lie: ["Lie back under the pines", "在松树下躺一会儿", "在松樹下躺一會兒", "Túmbate bajo los pinos", "Estira't sota els pins"], home: ["Back to town ›", "回镇上 ›", "回鎮上 ›", "Volver al pueblo ›", "Tornar al poble ›"] };
   function rest() {
-    var i = li5(), d = document.getElementById("rest"), seen = leg.seen; d.innerHTML = "<b>" + RESTW.t[i] + "</b><p>" + RESTW.p[i] + "</p>" + (seen.length ? "<ul>" + seen.map(function (k) { return "<li><span>" + SEEN[k][0] + "</span><span>" + SEEN[k][1][i] + "</span></li>"; }).join("") + "</ul>" : "") + '<div class="row"><button type="button" class="fbb fbb-pri" id="restCab">' + RESTW.cab[i] + '</button><button type="button" class="fbb" id="restLie">' + RESTW.lie[i] + '</button><button type="button" class="fbb" id="restHome">' + RESTW.home[i] + "</button></div>";
+    var i = li5(), d = document.getElementById("rest"), seen = leg.seen; d.innerHTML = "<b>" + RESTW.t[i] + "</b><p>" + RESTW.p[i] + "</p>" + '<div class="row"><button type="button" class="fbb fbb-pri" id="restCab">' + RESTW.cab[i] + '</button><button type="button" class="fbb" id="restLie">' + RESTW.lie[i] + '</button><button type="button" class="fbb" id="restHome">' + RESTW.home[i] + "</button></div>";
     d.hidden = false;
     document.getElementById("restCab").onclick = function () { try { if (parent !== window && parent.FBShell) return parent.FBShell.open("/nearby/no-hurry/"); } catch (e) {} location.href = "/nearby/no-hurry/"; };
     document.getElementById("restLie").onclick = function () { try { if (parent !== window && parent.FBShell) return parent.FBShell.open("/nearby/lie-back/"); } catch (e) {} location.href = "/nearby/lie-back/"; };
@@ -416,11 +406,6 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   if (leg.walked >= leg.max) { done = true; setTimeout(rest, 600); }
   window.FBWood = { markAt: markAt, forkAt: forkAt, trail: trailHere, go: function (x) { camX = x - W / 2; dwell = 0; }, seen: function () { return leg.seen.slice(); } };   /* for tests */
 
-  var bag = document.getElementById("bag"), pkt = document.getElementById("pocket");
-  function paintBag() { var pk = pocket(); bag.hidden = !pk.length && !leg.seen.length; bag.setAttribute("aria-label", PK[li5()]); bag.title = PK[li5()]; }
-  bag.onclick = function () { if (!pkt.hidden) { pkt.hidden = true; return; } var i = li5(), pk = pocket(); pkt.innerHTML = (pk.length ? "<b>" + PK[i] + "</b><ul>" + pk.map(function (k) { return "<li><span>" + FIND[k][0] + "</span><span>" + FIND[k][1][i] + "</span></li>"; }).join("") + "</ul>" : "") + (leg.seen.length ? "<b>" + ST[i] + "</b><ul>" + leg.seen.map(function (k) { return "<li><span>" + SEEN[k][0] + "</span><span>" + SEEN[k][1][i] + "</span></li>"; }).join("") + "</ul>" : ""); pkt.hidden = false; };
-  pkt.onclick = function () { pkt.hidden = true; };
-  paintBag();
   function mist(P, y, h, a, sp) { ctx.fillStyle = "rgba(" + P.mist + "," + (WD.weather() === "fog" ? a * 2.5 : a) + ")"; for (var x = 0; x < W; x += 2) ctx.fillRect(x, Math.round(y + Math.sin((x + camX * sp + time * 8) * .04) * 2), 2, h); }
   var last = performance.now();
   (function loop(now) { now = now || performance.now(); var dt = Math.min(.1, (now - last) / 1000); last = now; update(dt); render(); requestAnimationFrame(loop); })();

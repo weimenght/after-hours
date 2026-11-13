@@ -221,7 +221,7 @@
   var D, seatsEl, idleT;
   function dock() {
     D = document.createElement("div"); D.className = "cb-dock"; D.setAttribute("role", "toolbar"); D.setAttribute("aria-label", "Cabin");
-    D.innerHTML = '<span class="cb-seats" aria-live="polite"></span><button type="button" data-a="sound" data-fb-snd aria-label="' + T.sound + '">🔊</button><button type="button" data-a="shuffle" aria-label="' + T.shuffle + '" title="' + T.shuffle + '">🔀</button><button type="button" data-a="share" aria-label="' + T.share + '" title="' + T.share + '">👥</button>';
+    D.innerHTML = '<span class="cb-seats" aria-live="polite"></span><button type="button" data-a="sound" data-fb-snd aria-label="' + T.sound + '">🔊</button><button type="button" data-a="shuffle" aria-label="' + T.shuffle + '" title="' + T.shuffle + '">🔀</button>' + (/[?&]app=1/.test(location.search) ? '<button type="button" data-a="share" aria-label="' + T.share + '" title="' + T.share + '">👥</button>' : '');   /* riding together lives in the Station app only (the owner, Nov 14) */
     document.body.appendChild(D); seatsEl = D.querySelector(".cb-seats");
     var credit = document.querySelector(".fbg"); if (credit) D.appendChild(credit); else setTimeout(function () { var c = document.querySelector(".fbg"); if (c && D) D.appendChild(c); }, 1500);
     D.addEventListener("click", function (e) {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=c6f5572963"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=b8b7725d3e" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=c6f5572963"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=8d5bc5afa4" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Nearby — FREE//BUILDER</title>
 <meta name="description" content="Nearby: a small pixel town for finding your people, in real life. Wander alone or with a friend, leave something you made for the neighbours, borrow a real book, play with someone far away. Wei, the bartender, will show you around.">
@@ -327,7 +327,6 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     Object.keys(LIT).forEach(function (k) { if (!was[k] && Object.keys(was).length + 1 > 0 && MASK) GLOW[k] = now; });   /* a place you just visited blooms into colour */
     MASK = new Float32Array(WW * H);
     PLACES.forEach(function (p) { if (LIT[p.k]) { paint(p, 1); if (ALSO[p.k]) paint({ k: ALSO[p.k] }, 1); } });
-    document.querySelectorAll(".spot[data-k]").forEach(function (a) { a.classList.toggle("known", (LIT[a.dataset.k] || 0) >= KNOW); });
   }
   /* outdoor places colour in as a soft oval over their whole piece of country (the mountain, the hill, the wood), not as a box
      around the name, so no hard edges cut through the landscape; buildings keep their neat rectangle */
@@ -352,6 +351,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     }
   }
   function mono() {
+    return;   /* the map is in full colour from the first look (the owner, Nov 14: no colour earned by visiting); the old black-and-white pass is kept below */
     if (!MASK) relight();
     var now = Date.now(), blooming = Object.keys(GLOW).filter(function (k) { return now - GLOW[k] < 2400; });
     if (blooming.length) { PLACES.forEach(function (p) { if (blooming.indexOf(p.k) >= 0) { var tt = (now - GLOW[p.k]) / 2400; p.__g = tt * tt * (3 - 2 * tt); } }); }
@@ -585,7 +585,6 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
       a.style.left = (px(p) / WW * 100) + "%"; a.style.top = (p.y / H * 100) + "%"; a.style.width = (p.w / WW * 100) + "%"; a.style.height = (p.h / H * 100) + "%";
       var name = World.name ? World.name(p.k) : (p.n[L()] || p.n[0]); a.setAttribute("aria-label", name);
       a.innerHTML = '<span class="tag' + (BELOW[p.k] ? " below" : SIDE[p.k] ? " side" : "") + '"></span>'; a.firstChild.textContent = name; if (p.quiet) a.firstChild.style.display = "none";
-      if ((LIT[p.k] || 0) >= KNOW) a.classList.add("known");
       if (from && from === p.k) { var h = document.createElement("span"), at = PIN[p.k]; h.className = "here"; h.textContent = "📍"; h.title = t("here"); if (at) { h.style.setProperty("--pinx", at[0] * 100 + "%"); h.style.setProperty("--piny", at[1] * 100 + "%"); } a.appendChild(h); }
       a.addEventListener("click", function (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;
