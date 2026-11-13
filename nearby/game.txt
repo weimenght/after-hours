@@ -31,9 +31,9 @@ URL: mirror-lake/
 CODE: WOOD
 ID: PW-24
 TITLE: Pine Wood
-GENRE: A walk under the pines
+GENRE: The Sunday path to the cabin
 AUTHOR: FREE//BUILDER
-DESC: Hold a side of the screen and walk a path that never ends. Stone lanterns glow as you pass them at dusk; mist, fireflies, and sometimes Mantou or a cat falls in step beside you. A friend walks the same path.
+DESC: The Sunday path up to Popo's cabin. Hold a side of the screen and walk; stone lanterns glow at dusk, things show themselves when you stop, and the path ends at the cabin's door.
 URL: pine-wood/
 
 CODE: MEADOW
@@ -95,9 +95,9 @@ URL: town-hall/
 CODE: PARTY
 ID: CO-28
 TITLE: Come Over
-GENRE: Invitations to real get-togethers
+GENRE: The family's invitations
 AUTHOR: FREE//BUILDER
-DESC: Plan an evening with real people: what, when, where, and things people could bring. Send the link; see who's coming and what they'll bring. Only people with the link can see it, and it's gone a week after the day.
+DESC: Popo's fridge: the family's own invitations, Sunday lunch, Mei's welcome-home dinner and New Year's Eve, with who's bringing what and Josep's chair kept at the table.
 URL: come-over/
 
 CODE: WISH
@@ -159,9 +159,9 @@ URL: same-song/
 CODE: POSTCARD
 ID: PC-10
 TITLE: Say Hello
-GENRE: Slow mail with a sealed date
+GENRE: A family's postcards
 AUTHOR: FREE//BUILDER
-DESC: Pick a picture and a stamp, write on the back, and seal it until the day you choose. Send the link to a friend, who can't open it a minute early, or hang it on the Wall at Next Door.
+DESC: Popo's box of postcards: her sister in Hong Kong, her girls on a school trip, the bowl, Mei's first photo, Mei coming home. Turn each one over, then write one of your own, for real.
 URL: say-hello/
 
 CODE: BAR
@@ -193,5 +193,5 @@ ID: TC-15
 TITLE: Two Candles
 GENRE: A table for two, miles apart
 AUTHOR: FREE//BUILDER
-DESC: A candlelit restaurant by Mirror Lake for two people who live apart. Sit down from anywhere and your candles light up together; cook the same dinner step by step, raise a glass, draw table-talk cards and slide a note across on a napkin.
+DESC: The family's table for two far apart: Popo and her sister's Sunday noodles, three minutes a call since 1969, and the sisters' handoff hour at six. Sit in the empty chair.
 URL: two-candles/

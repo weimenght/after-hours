@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=7fb4c29e8c"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e65fbd5f10" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Pine Wood · Nearby</title>
 <meta name="description" content="A slow walk under the pines. Stone lanterns, mist, fireflies, and sometimes a cat on the path. Alone, or with a friend somewhere else on the same path.">
@@ -404,10 +404,12 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
     ctx.fillStyle = night ? "#22402e" : "#5a8a3a"; for (x = 0; x < W; x += 3) if (hash((Math.floor((x + camX * par) / 3)) * 2.2) < .5) ctx.fillRect(x, y0 + 12 + (hash(x * 1.1) > .5 ? 1 : 0), 1, 3);
   }
   /* the walk ends: sat on a log, a card with what you saw and the way home */
-  var RESTW = { t: ["Good tired.", "累得刚刚好。", "累得剛剛好。", "Un cansancio bueno.", "Un bon cansament."], p: ["Your legs say that's enough wood for one day.", "你的腿说，今天的林子走够了。", "你的腿說，今天的林子走夠了。", "Tus piernas dicen que ya hay bastante bosque por hoy.", "Les cames diuen que ja n'hi ha prou de bosc per avui."], lie: ["Lie back under the pines", "在松树下躺一会儿", "在松樹下躺一會兒", "Túmbate bajo los pinos", "Estira't sota els pins"], home: ["Back to town ›", "回镇上 ›", "回鎮上 ›", "Volver al pueblo ›", "Tornar al poble ›"] };
+  /* the path ends where Popo and Josep's Sunday walk always ended: the cabin's door (the owner, Nov 14) */
+  var RESTW = { t: ["The cabin's door.", "小屋的门口。", "小屋門口。", "La puerta de la cabaña.", "La porta de la cabana."], p: ["The path ends where it always did: No Hurry, the cabin Josep built. Popo still walks up on Sundays. Your legs say sit down.", "小路走到头，还是老地方：“不急”，Josep 亲手盖的小屋。婆婆现在每个礼拜天还走上来。你的腿说，坐下吧。", "小路走到盡頭，還是老地方：「不急」，Josep 親手蓋的小屋。婆婆現在每個禮拜天還走上來。你的腿說，坐下吧。", "El camino acaba donde siempre: Sin Prisa, la cabaña que construyó Josep. Popo aún sube los domingos. Tus piernas dicen que te sientes.", "El camí acaba on sempre: Sense Pressa, la cabana que va fer en Josep. La Popo encara hi puja els diumenges. Les cames et diuen que seguis."], cab: ["Go in", "进去", "入去", "Entra", "Entra"], lie: ["Lie back under the pines", "在松树下躺一会儿", "在松樹下躺一會兒", "Túmbate bajo los pinos", "Estira't sota els pins"], home: ["Back to town ›", "回镇上 ›", "回鎮上 ›", "Volver al pueblo ›", "Tornar al poble ›"] };
   function rest() {
-    var i = li5(), d = document.getElementById("rest"), seen = leg.seen; d.innerHTML = "<b>" + RESTW.t[i] + "</b><p>" + RESTW.p[i] + "</p>" + (seen.length ? "<ul>" + seen.map(function (k) { return "<li><span>" + SEEN[k][0] + "</span><span>" + SEEN[k][1][i] + "</span></li>"; }).join("") + "</ul>" : "") + '<div class="row"><button type="button" class="fbb" id="restLie">' + RESTW.lie[i] + '</button><button type="button" class="fbb fbb-pri" id="restHome">' + RESTW.home[i] + "</button></div>";
+    var i = li5(), d = document.getElementById("rest"), seen = leg.seen; d.innerHTML = "<b>" + RESTW.t[i] + "</b><p>" + RESTW.p[i] + "</p>" + (seen.length ? "<ul>" + seen.map(function (k) { return "<li><span>" + SEEN[k][0] + "</span><span>" + SEEN[k][1][i] + "</span></li>"; }).join("") + "</ul>" : "") + '<div class="row"><button type="button" class="fbb fbb-pri" id="restCab">' + RESTW.cab[i] + '</button><button type="button" class="fbb" id="restLie">' + RESTW.lie[i] + '</button><button type="button" class="fbb" id="restHome">' + RESTW.home[i] + "</button></div>";
     d.hidden = false;
+    document.getElementById("restCab").onclick = function () { try { if (parent !== window && parent.FBShell) return parent.FBShell.open("/nearby/no-hurry/"); } catch (e) {} location.href = "/nearby/no-hurry/"; };
     document.getElementById("restLie").onclick = function () { try { if (parent !== window && parent.FBShell) return parent.FBShell.open("/nearby/lie-back/"); } catch (e) {} location.href = "/nearby/lie-back/"; };
     document.getElementById("restHome").onclick = function () { try { if (parent !== window && parent.FBShell) return parent.FBShell.close(); } catch (e) {} location.href = "/nearby/"; };
   }

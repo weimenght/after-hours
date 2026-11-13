@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=7fb4c29e8c"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e65fbd5f10" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Come Over · Nearby</title>
-<meta name="description" content="Plan a real get-together: write the invitation, send the link, and see who's coming and what they'll bring. Only people with the link can see it.">
+<meta name="description" content="Popo's fridge: the family's own invitations, Sunday lunch, Mei's welcome-home dinner and New Year's Eve, with who's bringing what.">
 <meta name="theme-color" content="#14101e">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='3' y='7' width='10' height='8' fill='%23e8b8a0'/%3E%3Crect x='2' y='5' width='12' height='2' fill='%235a2a1e'/%3E%3Crect x='4' y='3' width='8' height='2' fill='%235a2a1e'/%3E%3Crect x='5' y='9' width='2' height='2' fill='%23f6c84a'/%3E%3Crect x='9' y='9' width='2' height='2' fill='%23f6c84a'/%3E%3Crect x='7' y='12' width='2' height='3' fill='%232f5a3a'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/nearby/townkit.css?v=fae5a10fd3">
 <style>
 .inv{background:#fbf3e2;color:#2a1a10;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:14px 16px;margin:0 0 12px;position:relative}
-.inv .tk-k{color:#8a5a3a}.inv .tk-h{color:#a8302a;font-size:26px}.inv .tk-dim{color:#6a4a30}
+.inv .tk-k{color:#8a5a3a}.inv .guest{margin:0 0 4px}.inv .guest b{color:#a8302a}.inv .guest i{color:#3a2a1c}.inv .tk-h{color:#a8302a;font-size:26px}.inv .tk-dim{color:#6a4a30}
 .inv dl{margin:8px 0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px}.inv dt{color:#8a5a3a}.inv dd{margin:0;overflow-wrap:anywhere}
 .guest{margin:0 0 8px;overflow-wrap:anywhere}.guest b{color:var(--a);font-weight:400}.guest i{font-style:normal;color:var(--dim)}
 .add{display:flex;gap:6px}.add input{flex:1;margin:0}.add .fbb{min-height:44px}
@@ -18,97 +18,61 @@
 </style>
 <link rel="stylesheet" href="/fonts/g/fonts.css"><link rel="manifest" href="/nearby/manifest.webmanifest" data-fbapp><meta name="apple-mobile-web-app-capable" content="yes" data-fbapp><meta name="mobile-web-app-capable" content="yes" data-fbapp><meta name="apple-mobile-web-app-title" content="Nearby" data-fbapp></head>
 <body>
+<script>/* an invitation someone sent you (#p=) opens in the Come Over app; the town keeps the family's own table (Nov 14) */
+(function () { var m = /[#&]p=([A-Za-z0-9]{6,16})/.exec(location.hash); if (!m) return; var u = "/come-over/#p=" + m[1]; try { if (window.top !== window.self) { window.top.location.replace(u); return; } } catch (e) {} location.replace(u); })();</script>
 <h1 class="sr" id="h1">Come Over</h1>
 <div class="tk">
   <div class="tk-scene"><canvas id="cv" aria-hidden="true"></canvas></div>
   <main class="tk-panel" id="panel" aria-live="polite"></main>
 </div>
-<div class="tk-dock" id="dock"><button class="fbb fbb-pri" type="button" id="planBtn"><span aria-hidden="true">🎈</span> <span id="planL">Plan a get-together</span></button></div>
-
-<section class="sheet" id="plan" hidden role="dialog" aria-labelledby="planQ">
-  <button class="x" type="button" data-close aria-label="Close">✕</button>
-  <p class="q" id="planQ">Your invitation</p>
-  <label for="eTitle" id="lTitle"></label><input id="eTitle" maxlength="80" autocomplete="off" />
-  <label for="eHosts" id="lHosts"></label><input id="eHosts" maxlength="60" autocomplete="off" />
-  <label for="eAbout" id="lAbout"></label><textarea id="eAbout" maxlength="280" rows="2"></textarea>
-  <label for="eDate" id="lDate"></label><input id="eDate" type="date" />
-  <label for="eTime" id="lTime"></label><input id="eTime" maxlength="20" autocomplete="off" placeholder="19:30" />
-  <label for="ePlace" id="lPlace"></label><input id="ePlace" maxlength="120" autocomplete="off" />
-  <label id="lItems"></label><div class="choice" id="eItems"></div>
-  <div class="add"><input id="eNew" maxlength="30" autocomplete="off" /><button class="fbb" type="button" id="eAdd">+</button></div>
-  <div class="row"><button class="fbb fbb-pri" type="button" id="eGo"></button></div>
-</section>
-
 <script src="/nearby/townkit.js?v=47e3a98ed5"></script>
 <script>
 (function () {
   "use strict";
+  var $ = function (id) { return document.getElementById(id); };
   var K = window.FBTown, t = K.t, el = K.el;
+  /* the family's own invitations on Popo's fridge (handoff/STORY_LINES.md; the owner, Nov 14). Popo's lines keep her voice; Mei writes in lowercase. */
+  var INV = [
+    { t: ["Sunday lunch", "礼拜天午饭", "禮拜日晏晝飯", "Comida del domingo", "Dinar de diumenge"],
+      by: ["Popo", "婆婆", "婆婆", "Popo", "La Popo"],
+      w: ["Every Sunday, 13:00", "每个礼拜天，13:00", "逢禮拜日，13:00", "Cada domingo, 13:00", "Cada diumenge, 13:00"],
+      at: ["Popo's kitchen", "婆婆的厨房", "婆婆嘅廚房", "La cocina de Popo", "La cuina de la Popo"],
+      note: ["Lunch at one. At two I call my sister, you wash the dishes.", "一点吃饭。两点我打电话给我姐姐，你们洗碗。", "一點食飯。兩點我打電話俾家姐，你哋洗碗。", "Comida a la una. A las dos llamo a mi hermana, vosotros laváis platos.", "Dinem a la una. A les dues truco a la meva germana i vosaltres renteu els plats."],
+      b: [[["Wei", "Wei", "Wei", "Wei", "Wei"], ["Avi's vermut, before lunch", "外公的苦艾酒，饭前喝", "公公嘅苦艾酒，飯前飲", "el vermut del avi, antes de comer", "el vermut de l'avi, abans de dinar"]],
+          [["Mei", "Mei", "Mei", "Mei", "Mei"], ["dessert (bought)", "甜点（买的）", "甜品（買嘅）", "el postre (comprado)", "les postres (comprades)"]],
+          [["Wei's mum", "Wei 的妈妈", "Wei 嘅媽媽", "la madre de Wei", "la mare d'en Wei"], ["the bread", "面包", "麵包", "el pan", "el pa"]],
+          [["Josep", "外公", "公公", "Josep", "En Josep"], ["his chair stays at the table", "他的椅子一直留在桌边", "佢張櫈一直留喺枱邊", "su silla se queda en la mesa", "la seva cadira es queda a taula"]]] },
+    { t: ["Mei's welcome-home dinner", "Mei 回家的晚饭", "Mei 返屋企嘅晚飯", "Cena de bienvenida de Mei", "Sopar de benvinguda de la Mei"],
+      by: ["Popo and Wei", "婆婆和 Wei", "婆婆同 Wei", "Popo y Wei", "La Popo i en Wei"],
+      w: ["The night Mei lands, December", "Mei 落地那天晚上，十二月", "Mei 落機嗰晚，十二月", "La noche que aterrice Mei, diciembre", "La nit que aterri la Mei, desembre"],
+      at: ["Next Door, after closing", "“隔壁”，打烊以后", "「隔壁」，收舖之後", "Al Lado, después de cerrar", "Al Costat, després de tancar"],
+      note: ["she said do NOT cook for twelve. so popo is cooking for twenty.", "她说别做十二个人的饭。所以婆婆做了二十个人的。", "佢話唔好煮十二個人嘅飯。所以婆婆煮咗二十個人嘅。", "dijo que NO cocinara para doce. así que popo cocina para veinte.", "va dir que NO cuinés per a dotze. així que la popo cuina per a vint."],
+      b: [[["Popo", "婆婆", "婆婆", "Popo", "La Popo"], ["wonton noodles, for twenty", "云吞面，二十个人的份", "雲吞麵，二十個人份", "fideos wonton, para veinte", "fideus wonton, per a vint"]],
+          [["Wei", "Wei", "Wei", "Wei", "Wei"], ["the lamp at warm, and her old stool", "灯调到暖光，还有她的老凳子", "燈較到暖光，仲有佢張舊櫈", "la lámpara en cálida, y su taburete de siempre", "el llum en càlid, i el seu tamboret de sempre"]],
+          [["Mantou", "馒头", "饅頭", "Mantou", "En Mantou"], ["the sock he stole from her last time", "上次从她那儿偷的那只袜子", "上次喺佢度偷嗰隻襪", "el calcetín que le robó la última vez", "el mitjó que li va robar l'última vegada"]],
+          [["Mei", "Mei", "Mei", "Mei", "Mei"], ["herself. finally.", "她自己。终于。", "佢自己。終於。", "ella misma. por fin.", "ella mateixa. per fi."]]] },
+    { t: ["New Year's Eve: twelve grapes", "除夕：十二颗葡萄", "除夕：十二粒提子", "Nochevieja: las doce uvas", "Cap d'Any: els dotze grans"],
+      by: ["Popo", "婆婆", "婆婆", "Popo", "La Popo"],
+      w: ["31 December, 23:30", "12月31日，23:30", "12月31日，23:30", "31 de diciembre, 23:30", "31 de desembre, 23:30"],
+      at: ["The table under Josep's clock", "Josep 那座钟下面的桌子", "Josep 個鐘下面張枱", "La mesa bajo el reloj de Josep", "La taula sota el rellotge d'en Josep"],
+      note: ["Only night of the year I stay up late. Don't make me regret.", "一年就这一晚我熬夜。别让我后悔。", "一年淨係呢晚我捱夜。唔好搞到我後悔。", "Única noche del año que me quedo despierta. No me hagáis arrepentir.", "L'única nit de l'any que em quedo desperta. No me'n feu penedir."],
+      b: [[["Wei", "Wei", "Wei", "Wei", "Wei"], ["the grapes, peeled for Popo", "葡萄，给婆婆剥好皮", "提子，幫婆婆剝埋皮", "las uvas, peladas para Popo", "els grans, pelats per a la Popo"]],
+          [["Popo", "婆婆", "婆婆", "Popo", "La Popo"], ["the clock, wound", "那座钟，上好发条", "個鐘，上好鍊", "el reloj, con cuerda", "el rellotge, amb corda"]],
+          [["Mei", "Mei", "Mei", "Mei", "Mei"], ["a resolution she won't keep", "一个她不会遵守的新年愿望", "一個佢唔會守嘅新年願望", "un propósito que no cumplirá", "un propòsit que no complirà"]],
+          [["Miso & Yuzu", "味噌和柚子", "味噌同柚子", "Miso y Yuzu", "Miso i Yuzu"], ["one grape, under the table", "一颗葡萄，滚到桌子底下", "一粒提子，碌咗落枱底", "una uva, debajo de la mesa", "un gra, sota la taula"]]] }
+  ];
   var T = {
     h1: ["Come Over", "来我家", "來我家", "Ven a Casa", "Vine a Casa"],
-    plan: ["Plan a get-together", "办一次聚会", "辦一次聚會", "Organiza un encuentro", "Organitza una trobada"],
-    planQ: ["Your invitation", "你的邀请", "你的邀請", "Tu invitación", "La teva invitació"],
-    title: ["What is it? (Sunday soup, a picnic, games night)", "什么聚会？（周日喝汤、野餐、桌游夜）", "什麼聚會？（週日喝湯、野餐、桌遊夜）", "¿Qué es? (sopa del domingo, un pícnic, noche de juegos)", "Què és? (sopa de diumenge, un pícnic, nit de jocs)"],
-    hosts: ["Hosted by", "主人", "主人", "Organizan", "Organitzen"],
-    about: ["A line about it", "说一句", "說一句", "Una línea sobre el plan", "Una línia sobre el pla"],
-    date: ["Day", "日期", "日期", "Día", "Dia"],
-    time: ["Time", "时间", "時間", "Hora", "Hora"],
-    place: ["Where (only people with the link see it)", "在哪里（只有拿到链接的人看得到）", "在哪裡（只有拿到連結的人看得到）", "Dónde (solo lo ve quien tenga el enlace)", "On (només ho veu qui tingui l'enllaç)"],
-    items: ["Things people could bring", "大家可以带点什么", "大家可以帶點什麼", "Cosas que la gente puede traer", "Coses que la gent pot portar"],
-    newItem: ["Something else…", "别的……", "別的……", "Otra cosa…", "Una altra cosa…"],
-    create: ["Make the invitation", "写好邀请", "寫好邀請", "Crear la invitación", "Fer la invitació"],
-    save: ["Save the changes", "保存修改", "儲存修改", "Guardar los cambios", "Desar els canvis"],
-    PRESET: [["Something to drink", "喝的", "喝的", "Algo de beber", "Alguna cosa per beure"], ["Snacks", "零食", "零食", "Algo para picar", "Alguna cosa per picar"], ["Fruit", "水果", "水果", "Fruta", "Fruita"], ["Something sweet", "甜点", "甜點", "Algo dulce", "Alguna cosa dolça"], ["Music", "音乐", "音樂", "Música", "Música"], ["Flowers", "花", "花", "Flores", "Flors"], ["A game", "一个游戏", "一個遊戲", "Un juego", "Un joc"], ["Just yourself", "人来就好", "人來就好", "Solo tú", "Només tu"]],
-    home: ["Plan a real evening with real people. Write the invitation, send the link, and see who's coming and what they'll bring.", "约真实的人，过一个真实的晚上。写好邀请，发出链接，看看谁会来、带什么。", "約真實的人，過一個真實的晚上。寫好邀請，傳出連結，看看誰會來、帶什麼。", "Planea una tarde de verdad con gente de verdad. Escribe la invitación, envía el enlace y mira quién viene y qué trae.", "Planeja un vespre de debò amb gent de debò. Escriu la invitació, envia l'enllaç i mira qui ve i què porta."],
-    yours: ["YOUR GATHERINGS", "你的聚会", "你的聚會", "TUS ENCUENTROS", "LES TEVES TROBADES"],
-    hosting: ["you're hosting", "你是主人", "你是主人", "organizas tú", "organitzes tu"],
-    invited: ["you're invited", "你被邀请了", "你被邀請了", "estás invitado", "estàs convidat"],
-    when: ["When", "时间", "時間", "Cuándo", "Quan"], where: ["Where", "地点", "地點", "Dónde", "On"], by: ["Hosted by {n}", "{n} 邀请", "{n} 邀請", "Organiza {n}", "Organitza {n}"],
-    send: ["Send the invitation", "发出邀请", "傳出邀請", "Enviar la invitación", "Envia la invitació"],
-    shareT: ["You're invited: {t}. Say if you can come and what you'll bring:", "邀请你：{t}。告诉我你能不能来、带什么：", "邀請你：{t}。告訴我你能不能來、帶什麼：", "Estás invitada: {t}. Dime si vienes y qué traes:", "Estàs convidada: {t}. Digues-me si vens i què portes:"],
-    edit: ["Change it", "修改", "修改", "Cambiarla", "Canviar-la"],
-    del: ["Call it off", "取消聚会", "取消聚會", "Cancelarla", "Cancel·lar-la"],
-    delSure: ["Call it off? Everyone's answers go too.", "确定取消吗？大家的回复也会一起删除。", "確定取消嗎？大家的回覆也會一起刪除。", "¿Cancelarla? Las respuestas también se borran.", "Cancel·lar-la? Les respostes també s'esborren."],
-    cal: ["Add to my calendar", "加到我的日历", "加到我的行事曆", "Añadir a mi calendario", "Afegir al meu calendari"],
-    coming: ["Can you come?", "你能来吗？", "你能來嗎？", "¿Puedes venir?", "Pots venir?"],
-    name: ["Your name", "你的称呼", "你的稱呼", "Tu nombre", "El teu nom"],
-    yes: ["I'll be there", "我会来", "我會來", "Allí estaré", "Hi seré"], no: ["Can't make it", "来不了", "來不了", "No puedo", "No puc"],
-    insteadH: ["Can't be there? Send something instead.", "来不了？送点别的过去吧。", "來不了？送點別的過去吧。", "¿No puedes ir? Manda algo en tu lugar.", "No hi pots anar? Envia-hi alguna cosa."],
-    flw: ["Flowers for {n}", "给{n}送花", "給{n}送花", "Flores para {n}", "Flors per a {n}"], flw0: ["Send flowers", "送花", "送花", "Manda flores", "Envia flors"],
-    tbl: ["Dinner for two, from afar", "隔着距离，两人一桌", "隔著距離，兩人一桌", "Una cena para dos, a distancia", "Un sopar per a dos, a distància"],
-    bring: ["I'll bring", "我带", "我帶", "Llevo", "Porto"],
-    note: ["A note for the host", "给主人留句话", "給主人留句話", "Una nota para quien organiza", "Una nota per a qui organitza"],
-    answer: ["Send my answer", "发送回复", "傳送回覆", "Enviar mi respuesta", "Envia la meva resposta"],
-    change: ["Change my answer", "修改回复", "修改回覆", "Cambiar mi respuesta", "Canviar la meva resposta"],
-    who: ["WHO'S COMING", "谁会来", "誰會來", "QUIÉN VIENE", "QUI VE"],
-    going: ["coming", "会来", "會來", "viene", "ve"], notGoing: ["can't make it", "来不了", "來不了", "no puede", "no pot"],
-    nobody: ["No answers yet. Send the link to the people you'd like there.", "还没有人回复。把链接发给你想请的人吧。", "還沒有人回覆。把連結傳給你想請的人吧。", "Aún no hay respuestas. Envía el enlace a quien quieras ver allí.", "Encara no hi ha respostes. Envia l'enllaç a qui vulguis veure-hi."],
-    still: ["Still nobody bringing: {i}", "还没人带：{i}", "還沒人帶：{i}", "Aún nadie trae: {i}", "Encara ningú porta: {i}"],
-    gone: ["This invitation has ended or was called off.", "这个邀请已经结束或取消了。", "這個邀請已經結束或取消了。", "Esta invitación ya pasó o se canceló.", "Aquesta invitació ja ha passat o s'ha cancel·lat."],
-    rest: ["Five invitations a day is plenty.", "一天发五个邀请就够啦。", "一天發五個邀請就夠啦。", "Cinco invitaciones al día bastan.", "Cinc invitacions al dia ja n'hi ha prou."],
-    off: ["The invitation can't be reached just now. Try again in a moment.", "暂时打不开邀请，稍后再试。", "暫時打不開邀請，稍後再試。", "Ahora no se puede abrir la invitación. Prueba en un momento.", "Ara no es pot obrir la invitació. Torna-ho a provar d'aquí a un moment."],
-    close: ["Close", "关闭", "關閉", "Cerrar", "Tancar"],
-    app: ["Open as an app", "用 App 打开", "用 App 開啟", "Abrir como app", "Obre com a app"]
+    fridge: ["ON POPO'S FRIDGE", "婆婆冰箱上的", "婆婆雪櫃上面", "EN LA NEVERA DE POPO", "A LA NEVERA DE LA POPO"],
+    by: ["from {n}", "{n} 请客", "{n} 請", "de {n}", "de {n}"], when: ["When", "时间", "時間", "Cuándo", "Quan"], where: ["Where", "地点", "地點", "Dónde", "On"], bring: ["Who's bringing what", "谁带什么", "邊個帶咩", "Quién trae qué", "Qui porta què"],
+    yours: ["AND YOURS, ON THIS DEVICE", "还有你的，在这台设备上", "仲有你嘅，喺呢部機度", "Y LAS TUYAS, EN ESTE DISPOSITIVO", "I LES TEVES, EN AQUEST DISPOSITIU"],
+    endP: ["Who you invite this week? Somebody always say yes.", "这礼拜你请谁来？总有人会说好的。", "今個禮拜你請邊個嚟？實有人話好㗎。", "¿A quién invitas esta semana? Siempre alguien dice que sí.", "A qui convides aquesta setmana? Sempre hi ha algú que diu que sí."],
+    endW: ["POPO", "婆婆", "婆婆", "POPO", "LA POPO"], endN: ["POPO'S NOTE · SHE'S ASLEEP", "婆婆的字条 · 她睡了", "婆婆的字條 · 佢瞓咗", "NOTA DE POPO · DUERME", "NOTA DE LA POPO · DORM"]
   };
-  function $(id) { return document.getElementById(id); }
-  var code = (/[#&]p=([A-Za-z0-9]{6,16})/.exec(location.hash) || [])[1] || null, ev = null, editing = false, picked = [], extra = [], ans = { going: true, items: [] };
+  function popoAsleep() { try { return FBWorld.sleeps("popo", Math.floor(FBWorld.hour())); } catch (e) { var h = new Date().getHours(); return h >= 21 || h < 5; } }
   function mineList() { try { return JSON.parse(localStorage.getItem("fb_party") || "[]") || []; } catch (e) { return []; } }
-  function remember(c, title, host, day) { var l = mineList().filter(function (x) { return x.c !== c; }); l.unshift({ c: c, t: title, h: !!host, d: day || null }); try { localStorage.setItem("fb_party", JSON.stringify(l.slice(0, 20))); } catch (e) {} }
-  function forgetLocal(c) { try { localStorage.setItem("fb_party", JSON.stringify(mineList().filter(function (x) { return x.c !== c; }))); } catch (e) {} }
-  function words() {
-    $("h1").textContent = t(T.h1); $("planL").textContent = t(T.plan); $("planQ").textContent = t(T.planQ);
-    $("lTitle").textContent = t(T.title); $("lHosts").textContent = t(T.hosts); $("lAbout").textContent = t(T.about); $("lDate").textContent = t(T.date); $("lTime").textContent = t(T.time); $("lPlace").textContent = t(T.place); $("lItems").textContent = t(T.items);
-    $("eNew").placeholder = t(T.newItem); $("eGo").textContent = t(editing ? T.save : T.create);
-    [].forEach.call(document.querySelectorAll("[data-close]"), function (b) { b.setAttribute("aria-label", t(T.close)); });
-    chips();
-  }
-  function chips() {
-    var box = $("eItems"); box.innerHTML = "";
-    T.PRESET.map(function (p) { return t(p); }).concat(extra).forEach(function (name) { var b = el("button", "fbb", name); b.type = "button"; b.setAttribute("aria-pressed", picked.indexOf(name) >= 0 ? "true" : "false"); b.onclick = function () { var i = picked.indexOf(name); if (i >= 0) picked.splice(i, 1); else if (picked.length < 12) picked.push(name); chips(); }; box.appendChild(b); });
-  }
-  window.FBL_SET = function (l) { if (window.FBL) FBL.set(l); words(); paint(); };
+  function fmtDate(d) { if (!d) return ""; try { return new Date(d + "T12:00:00").toLocaleDateString(K.lang(), { weekday: "short", day: "numeric", month: "short" }); } catch (e) { return d; } }
 
-  /* ---------- the house: warm windows, a string of lights along the balcony, balloons by the door ---------- */
   var cv = $("cv"), g = cv.getContext("2d"), PW = 160, PH = 100, f = 0;
   var W = window.FBWorld || { phase: function () { return "dusk"; }, weather: function () { return "clear"; } };
   function R(x, y, w, h, c) { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); }
@@ -136,99 +100,28 @@
   function loop() { if (!document.hidden) { f++; scene(); } setTimeout(function () { requestAnimationFrame(loop); }, 80); }
   loop();
 
-  /* ---------- the invitation ---------- */
   var panel = $("panel");
-  function fmtDate(d) { if (!d) return ""; try { return new Date(d + "T12:00:00").toLocaleDateString(K.lang(), { weekday: "long", day: "numeric", month: "long" }); } catch (e) { return d; } }
-  function load() {
-    if (!code) { paint(); return Promise.resolve(); }
-    return K.secret("party").then(function (s) { return K.rpc("party_get", { p_secret: s, p_code: code }); })
-      .then(function (d) { ev = d || false; if (d) { remember(code, d.title, d.host, d.date); var me = (d.guests || []).filter(function (g2) { return g2.mine; })[0]; if (me) ans = { going: me.going, items: me.items || [], note: me.note || "", name: me.name, had: 1 }; } else forgetLocal(code); paint(); })
-      .catch(function () { ev = null; paint(true); });
+  function paint() {
+    panel.innerHTML = "";
+    panel.appendChild(el("p", "tk-k", t(T.fridge)));
+    INV.forEach(function (v, k) {
+      var c = el("div", "inv"); c.style.transform = "rotate(" + [-1, 1.2, -.6][k % 3] + "deg)";
+      c.appendChild(el("p", "tk-k", t(T.by, { n: t(v.by) })));
+      c.appendChild(el("h2", "tk-h", t(v.t)));
+      var dl = el("dl"); dl.appendChild(el("dt", "", t(T.when))); dl.appendChild(el("dd", "", t(v.w))); dl.appendChild(el("dt", "", t(T.where))); dl.appendChild(el("dd", "", t(v.at))); c.appendChild(dl);
+      c.appendChild(el("p", "tk-k", t(T.bring)));
+      v.b.forEach(function (r) { var p = el("p", "guest"); p.appendChild(el("b", "", t(r[0]))); p.appendChild(document.createTextNode(" · ")); p.appendChild(el("i", "", t(r[1]))); c.appendChild(p); });
+      c.appendChild(el("p", "tk-p", "“" + t(v.note) + "”"));
+      panel.appendChild(c);
+    });
+    var mine = mineList().filter(function (m) { return m && m.t; }).slice(0, 4);   /* your own gatherings, as a trace: on this device only, no link out */
+    if (mine.length) { panel.appendChild(el("p", "tk-k", t(T.yours))); mine.forEach(function (m) { var c = el("div", "tk-card"); c.appendChild(el("b", "", m.t)); if (m.d) c.appendChild(el("span", "tk-dim", " · " + fmtDate(m.d))); panel.appendChild(c); }); }
+    var sl = popoAsleep(), e = el("div", "tk-card"); e.appendChild(el("p", "tk-k", t(sl ? T.endN : T.endW))); e.appendChild(el("p", "tk-p", t(T.endP))); panel.appendChild(e);
   }
-  function paint(off) {
-    panel.innerHTML = ""; $("dock").hidden = !!code || !$("plan").hidden;
-    if (!code) {
-      panel.appendChild(el("div", "tk-card", t(T.home))); panel.appendChild(appLink(""));
-      var mine = mineList(); if (mine.length) { panel.appendChild(el("p", "tk-k", t(T.yours))); mine.forEach(function (m) { var a = el("a", "tk-card"); a.style.display = "block"; a.style.color = "inherit"; a.style.textDecoration = "none"; a.href = "#p=" + m.c; a.appendChild(el("h3", "tk-h", m.t)); a.appendChild(el("p", "tk-dim", t(m.h ? T.hosting : T.invited))); panel.appendChild(a); }); }
-      return;
-    }
-    if (off) { panel.appendChild(el("div", "tk-card tk-empty", t(T.off))); return; }
-    if (ev === false) { panel.appendChild(el("div", "tk-card tk-empty", t(T.gone))); return; }
-    if (!ev) return;
-    var c = el("div", "inv"); if (ev.hosts) c.appendChild(el("p", "tk-k", t(T.by, { n: ev.hosts })));
-    c.appendChild(el("h2", "tk-h", ev.title)); if (ev.about) c.appendChild(el("p", "tk-p", ev.about));
-    var dl = el("dl"); if (ev.date || ev.time) { dl.appendChild(el("dt", "", t(T.when))); dl.appendChild(el("dd", "", [fmtDate(ev.date), ev.time].filter(Boolean).join(" · "))); }
-    if (ev.place) { dl.appendChild(el("dt", "", t(T.where))); var dd = el("dd"), a = el("a", "", ev.place); a.href = K.mapsUrl(ev.place); a.target = "_blank"; a.rel = "noopener"; a.style.color = "#a8302a"; dd.appendChild(a); dl.appendChild(dd); }
-    c.appendChild(dl);
-    var row = el("div", "tk-row");
-    if (ev.host) { var s1 = el("button", "fbb fbb-pri", "↗ " + t(T.send)); s1.type = "button"; s1.onclick = function () { K.share(ev.title, t(T.shareT, { t: ev.title }), (window.FBApps ? FBApps.link("party", "#p=" + code) : location.origin + "/nearby/come-over/#p=" + code)); }; row.appendChild(s1);
-      var e1 = el("button", "fbb", "✎ " + t(T.edit)); e1.type = "button"; e1.onclick = function () { openForm(true); }; row.appendChild(e1); }
-    if (ev.date) { var cb = el("button", "fbb", t(T.cal)); cb.type = "button"; cb.onclick = ics; row.appendChild(cb); }
-    c.appendChild(row);
-    if (ev.host) { var dx = el("button", "tk-link", t(T.del)); dx.type = "button"; dx.style.color = "#8a5a3a"; dx.onclick = function () { if (!confirm(t(T.delSure))) return; K.secret("party").then(function (s) { return K.rpc("party_forget", { p_secret: s, p_code: code }); }).then(function () { forgetLocal(code); location.hash = ""; code = null; ev = null; paint(); }).catch(function () {}); }; c.appendChild(dx); }
-    panel.appendChild(c); panel.appendChild(appLink("#p=" + code));
-    if (!ev.host) { rsvpCard(); if (ans.had && ans.going === false) instead(); }
-    /* who's coming, and what nobody has said they'll bring yet */
-    panel.appendChild(el("p", "tk-k", t(T.who)));
-    var gs = ev.guests || [];
-    if (!gs.length) panel.appendChild(el("div", "tk-card tk-empty", t(T.nobody)));
-    else { var gc = el("div", "tk-card"); gs.forEach(function (x) { var p = el("p", "guest"); p.appendChild(el("b", "", x.name)); p.appendChild(document.createTextNode(" · " + t(x.going ? T.going : T.notGoing) + (x.items && x.items.length ? " · " + x.items.join(", ") : ""))); if (x.note) { p.appendChild(document.createElement("br")); p.appendChild(el("i", "", "“" + x.note + "”")); } gc.appendChild(p); }); panel.appendChild(gc); }
-    var claimed = {}; gs.forEach(function (x) { if (x.going) (x.items || []).forEach(function (i) { claimed[i] = 1; }); });
-    var still = (ev.items || []).filter(function (i) { return !claimed[i]; }); if (still.length && ev.items.length) panel.appendChild(el("p", "tk-dim", t(T.still, { i: still.join(", ") })));
-  }
-  /* a guest who can't come gets one gentle way to be there anyway: flowers for the hosts, or a table for two from afar (FBApps: the app when it's out, the town place till then) */
-  function instead() {
-    if (!window.FBApps) return;
-    var c = el("div", "tk-card"); c.appendChild(el("p", "tk-dim", t(T.insteadH))); var r = el("div", "tk-row");
-    var f = el("button", "fbb", "🌼 " + (ev.hosts ? t(T.flw, { n: ev.hosts }) : t(T.flw0))); f.type = "button"; f.onclick = function () { var to = String(ev.hosts || "").slice(0, 24), day = /^\d{4}-\d{2}-\d{2}$/.test(ev.date || "") ? ev.date : ""; FBApps.go("flowers", FBApps.live("flowers") ? { hash: "#to=" + encodeURIComponent(to) + (day ? "&day=" + day : "") } : { to: to }); };   /* A Few Stems: written to the hosts, opening on the day */ r.appendChild(f);
-    var d = el("button", "fbb", "🕯️ " + t(T.tbl)); d.type = "button"; d.onclick = function () { FBApps.go("table"); }; r.appendChild(d);
-    c.appendChild(r); panel.appendChild(c);
-  }
-  function appLink(h) { var a = el("a", "tk-link", "↗ " + t(T.app)); a.href = "/come-over/" + h; a.target = "_top"; a.style.display = "inline-block"; a.style.margin = "0 0 12px"; return a; }
-  /* the host's time zone, so a guest elsewhere sees their own time in the app (party_tz, migration 20261106090000; harmless before it) */
-  function setTz(c) { var z = ""; try { z = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {} if (!z) return Promise.resolve(); return K.secret("party").then(function (s) { return K.rpc("party_tz", { p_secret: s, p_code: c, p_tz: z }); }).catch(function () {}); }
-  function rsvpCard() {
-    var c = el("div", "tk-card"); c.appendChild(el("h3", "tk-h", t(T.coming)));
-    var nm = el("input"); nm.maxLength = 24; nm.placeholder = t(T.name); nm.setAttribute("aria-label", t(T.name)); nm.value = ans.name || K.nick(); nm.autocomplete = "nickname"; c.appendChild(nm);
-    var yn = el("div", "yn"); [[true, T.yes], [false, T.no]].forEach(function (o) { var b = el("button", "fbb", t(o[1])); b.type = "button"; b.setAttribute("aria-pressed", ans.going === o[0] ? "true" : "false"); b.onclick = function () { ans.going = o[0]; ans.name = nm.value; ans.note = nt.value; paint(); }; yn.appendChild(b); }); c.appendChild(yn);
-    if (ans.going && ev.items && ev.items.length) { c.appendChild(el("p", "tk-dim", t(T.bring))); var ch = el("div", "choice"); ev.items.forEach(function (i) { var b = el("button", "fbb", i); b.type = "button"; b.setAttribute("aria-pressed", ans.items.indexOf(i) >= 0 ? "true" : "false"); b.onclick = function () { var k = ans.items.indexOf(i); if (k >= 0) ans.items.splice(k, 1); else ans.items.push(i); b.setAttribute("aria-pressed", k >= 0 ? "false" : "true"); }; ch.appendChild(b); }); c.appendChild(ch); }
-    var nt = el("textarea"); nt.maxLength = 140; nt.rows = 2; nt.placeholder = t(T.note); nt.setAttribute("aria-label", t(T.note)); nt.value = ans.note || ""; c.appendChild(nt);
-    var go = el("button", "fbb fbb-pri", t(ans.had ? T.change : T.answer)); go.type = "button";
-    go.onclick = function () { var n = nm.value.trim(); if (!n) { nm.classList.remove("hop"); void nm.offsetWidth; nm.classList.add("hop"); return; } go.disabled = true; K.setNick(n);
-      K.secret("party").then(function (s) { return K.rpc("party_rsvp", { p_secret: s, p_code: code, p_name: n, p_going: ans.going, p_items: ans.going ? ans.items : [], p_note: nt.value.trim() }); }).then(load).catch(function () { go.disabled = false; K.note(t(T.off), "🎈"); }); };
-    c.appendChild(go); panel.appendChild(c);
-  }
-  function ics() {
-    var d = (ev.date || "").replace(/-/g, ""), m = /^(\d{1,2})[:.h](\d{2})/.exec(ev.time || ""), start = m ? d + "T" + ("0" + m[1]).slice(-2) + m[2] + "00" : d;
-    var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Nearby//Come Over//EN", "BEGIN:VEVENT", "UID:" + code + "@nearby", "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, ""),
-      (m ? "DTSTART:" : "DTSTART;VALUE=DATE:") + start, "SUMMARY:" + ev.title.replace(/[,;\n]/g, " "), ev.place ? "LOCATION:" + ev.place.replace(/[,;\n]/g, " ") : "", "URL:" + (window.FBApps ? FBApps.link("party", "#p=" + code) : location.origin + "/nearby/come-over/#p=" + code), "END:VEVENT", "END:VCALENDAR"].filter(Boolean);
-    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([lines.join("\r\n")], { type: "text/calendar" })); a.download = "come-over.ics"; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500);
-  }
-
-  /* ---------- plan or change one ---------- */
-  var shownAt = 0;
-  function show(id) { if (id) shownAt = Date.now(); $("plan").hidden = id !== "plan"; $("dock").hidden = !!id || !!code; }
-  [].forEach.call(document.querySelectorAll("[data-close]"), function (b) { b.onclick = function () { if (Date.now() - shownAt > 450) show(null); }; });   /* the tap that opened the form can't land on its ✕ */
-  addEventListener("keydown", function (e) { if (e.key === "Escape") show(null); });
-  function openForm(edit) {
-    editing = !!edit; var e = edit && ev ? ev : {}; $("eTitle").value = e.title || ""; $("eHosts").value = e.hosts || K.nick(); $("eAbout").value = e.about || ""; $("eDate").value = e.date || ""; $("eTime").value = e.time || ""; $("ePlace").value = e.place || "";
-    picked = (e.items || []).slice(); var pre = T.PRESET.map(function (p) { return t(p); }); extra = picked.filter(function (i) { return pre.indexOf(i) < 0; }); $("eNew").value = "";
-    words(); show("plan");
-  }
-  $("planBtn").onclick = function () { openForm(false); };
-  $("eAdd").onclick = function () { var v = $("eNew").value.trim().slice(0, 30); if (!v) return; if (extra.indexOf(v) < 0) extra.push(v); if (picked.indexOf(v) < 0 && picked.length < 12) picked.push(v); $("eNew").value = ""; chips(); };
-  $("eNew").addEventListener("keydown", function (e) { if (e.key === "Enter") $("eAdd").click(); });
-  $("eGo").onclick = function () {
-    var ti = $("eTitle").value.trim(); if (!ti) { $("eTitle").classList.remove("hop"); void $("eTitle").offsetWidth; $("eTitle").classList.add("hop"); return; }
-    var btn = this; btn.disabled = true;
-    var body = { p_hosts: $("eHosts").value.trim(), p_title: ti, p_about: $("eAbout").value.trim(), p_date: $("eDate").value || null, p_time: $("eTime").value.trim(), p_place: $("ePlace").value.trim(), p_items: picked };
-    K.secret("party").then(function (s) { body.p_secret = s; if (editing && code) { body.p_code = code; return K.rpc("party_edit", body).then(function () { return code; }); } return K.rpc("party_create", body); })
-      .then(function (c) { return setTz(c).then(function () { return c; }); })
-      .then(function (c) { btn.disabled = false; show(null); if (!editing) { code = c; remember(c, ti, true, body.p_date); history.replaceState(null, "", location.pathname + location.search + "#p=" + c); } return load(); })
-      .catch(function (e) { btn.disabled = false; show(null); K.note(t(e && e.rest ? T.rest : T.off), "🎈"); });
-  };
-  addEventListener("hashchange", function () { code = (/[#&]p=([A-Za-z0-9]{6,16})/.exec(location.hash) || [])[1] || null; ev = null; ans = { going: true, items: [] }; load(); });
-  words(); paint(); load();
+  function words() { $("h1").textContent = t(T.h1); paint(); }
+  window.FBL_GET = function () { return (window.FBL && FBL.get()) || "en"; };
+  window.FBL_SET = function (l) { if (window.FBL) FBL.set(l); words(); };
+  words();
 })();
 </script>
 </body>

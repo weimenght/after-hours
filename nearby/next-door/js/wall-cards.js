@@ -27,7 +27,7 @@
       var st = (P && P.STAMPS[c.stamp]) || ["✉️", "#c8402a"], ink = (P && P.INK[c.ink]) || "#2c4a86";
       var m = document.createElement("div"); m.className = "modal-backdrop pc-view";
       m.innerHTML = '<div class="modal panel" style="max-width:520px"><div class="pcv" style="--pc-ink:' + ink + '"><div class="m"></div><div class="s"><span class="st" style="background:' + st[1] + '">' + st[0] + '</span><span style="margin-top:auto"></span></div></div>'
-        + '<div class="flex gap-2 mt-3"><a class="btn btn-amber flex-1" href="/nearby/say-hello/?to=' + encodeURIComponent(c.from) + "&scene=" + encodeURIComponent(c.scene) + '">✍️ ' + esc(T("wall.writeCard")) + '</a><button class="btn" type="button">✕</button></div></div>';
+        + '<div class="flex gap-2 mt-3"><button class="btn flex-1" type="button">✕</button></div></div>';
       m.querySelector(".m").textContent = c.sealed ? "🔒 " + T("wall.opens").replace("{d}", when(c.open_at)) : (c.msg || "");
       var s = m.querySelector(".s span:last-child"); s.innerHTML = ""; s.appendChild(document.createTextNode("— " + c.from + (c.place ? ", " + c.place : "")));
       m.onclick = function (e) { if (e.target === m || e.target.closest("button.btn")) m.remove(); };

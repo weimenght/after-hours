@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=7fb4c29e8c"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e65fbd5f10" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>The Plaza · Nearby</title>
 <meta name="description" content="The square in the middle of Nearby: a fountain, benches, pigeons. Toss a coin and make a wish; keep it to yourself or let it float for the town to read.">
@@ -79,6 +79,13 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
   <div class="row"><button class="fbb fbb-pri" type="button" id="bqBack"></button></div>
 </section>
 
+<section class="sheet bq" id="rose" hidden role="dialog" aria-labelledby="roseH">
+  <p class="q" id="roseH">The flower stall</p>
+  <div class="bqrow"><canvas id="roseCv" width="48" height="64" aria-hidden="true"></canvas><div class="card"><p class="wish" id="roseP"></p><p class="at" id="roseS"></p></div></div>
+  <p class="wish" id="roseToday" style="margin:10px 2px 0"></p>
+  <p class="at" id="roseJar" hidden style="margin:6px 2px 0"></p>
+</section>
+
 <section class="sheet" id="cart" hidden role="dialog" aria-labelledby="cartH">
   <p class="q" id="cartH"></p>
   <div class="bqrow"><canvas id="cartCv" width="48" height="40" aria-hidden="true"></canvas><div class="card"><p class="wish" id="cartP"></p></div></div>
@@ -129,7 +136,7 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
     from: ["from {n}", "来自 {n}", "來自 {n}", "de {n}", "de {n}"],
     bqApp: ["The stall has its own shop now: a day to open it, a picture, real ones ↗", "花摊现在有自己的小店了：定一天打开、发成图片、送真的花 ↗", "花攤現在有自己的小店了：定一天打開、傳成圖片、送真的花 ↗", "El puesto tiene ahora su propia tienda: un día para abrirlo, una foto, flores de verdad ↗", "La parada té ara la seva pròpia botiga: un dia per obrir-lo, una foto, flors de debò ↗"],
     wrapUntil: ["Wrapped until {d}. Come back to this link on the day.", "包好了，{d}才能打开。到那天再点开这个链接吧。", "包好了，{d}才能打開。到那天再點開這個連結吧。", "Envuelto hasta el {d}. Vuelve a este enlace ese día.", "Embolicat fins al {d}. Torna a aquest enllaç aquell dia."],
-    bqBack: ["Make one back", "也扎一束送回去", "也紮一束送回去", "Haz uno de vuelta", "Fes-ne un de tornada"],
+    bqBack: ["Back to the square", "回到广场", "回到廣場", "Volver a la plaza", "Tornar a la plaça"],
     nutsH: ["Hot chestnuts", "糖炒栗子", "糖炒栗子", "Castañas asadas", "Castanyes torrades"],
     nuts: ["*turns them over the coals* Twelve in a paper cone.", "*在炭火上翻着栗子* 一个纸筒十二颗。", "*在炭火上翻著栗子* 一個紙筒十二顆。", "*les da la vuelta sobre las brasas* Doce en un cucurucho de papel.", "*les gira sobre les brases* Dotze en un cucurutxo de paper."],
     nutsB: ["A cone, please", "来一筒", "來一筒", "Un cucurucho, por favor", "Un cucurutxo, si us plau"],
@@ -404,7 +411,7 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
   cv.addEventListener("pointerdown", function (e) {
     var p = at(e), k = pickCoin(p); if (k) { openCoin(k); return; }
     if (JARR && JAR && p.x >= JARR.x && p.x <= JARR.x + JARR.w && p.y >= JARR.y && p.y <= JARR.y + JARR.h) { note(t(JAR.k === "sent" ? "jarSent" : "jarGot"), "🌼"); return; }
-    if (p.x >= STALL.x - 2 && p.x <= STALL.x + STALL.w + 2 && p.y >= STALL.y - 4 && p.y <= STALL.y + STALL.h) { openBouquet(); return; }
+    if (p.x >= STALL.x - 2 && p.x <= STALL.x + STALL.w + 2 && p.y >= STALL.y - 4 && p.y <= STALL.y + STALL.h) { openRose(); return; }
     for (var ci = 0; ci < CARTS.length; ci++) { var C = CARTS[ci]; if (p.x >= C.x && p.x <= C.x + C.w && p.y >= C.y && p.y <= C.y + C.h) { openCart(C.k); return; } }
     birds.forEach(function (b) { if (!b.fly && !b.gone && b.px != null && Math.abs(b.px - p.x) < 24 && Math.abs(b.py - p.y) < 18) { b.fly = 1; b.fx = b.px; b.fy = b.py; b.vx = (b.px < p.x ? -1 : 1) * (.8 + Math.random() * .6); b.vy = -1.2; } });
     if (Math.abs(p.x - G.cx) < G.rx && Math.abs(p.y - G.cy) < G.ry) rings.push({ x: p.x, y: p.y, r: 1, a: .8 });
@@ -435,8 +442,8 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
     }).catch(function () {});
   }, 2500);
 
-  var sheetFor = null, openedAt = 0, VIEW = { coin: 1, bqGot: 1, cart: 1 };
-  function show(id) { ["ask", "coin", "bq", "bqGot", "cart"].forEach(function (s) { $(s).hidden = s !== id; }); $("dock").hidden = !!id; if (id && id !== sheetFor) openedAt = Date.now(); sheetFor = id; }
+  var sheetFor = null, openedAt = 0, VIEW = { coin: 1, bqGot: 1, cart: 1, rose: 1 };
+  function show(id) { ["ask", "coin", "bq", "bqGot", "cart", "rose"].forEach(function (s) { $(s).hidden = s !== id; }); $("dock").hidden = !!id; if (id && id !== sheetFor) openedAt = Date.now(); sheetFor = id; }
   function settled() { return Date.now() - openedAt > 450; }   /* the tap that opened a card never closes it */
   [].forEach.call(document.querySelectorAll("[data-close]"), function (b) { b.onclick = function () { if (settled()) show(null); }; });
   document.addEventListener("pointerdown", function (e) { if (!sheetFor || !VIEW[sheetFor] || !settled()) return; if (e.target.closest && e.target.closest(".sheet,.fbg,.fbc-card,.fbl-menu")) return; show(null); e.stopImmediatePropagation(); }, true);
@@ -514,7 +521,31 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
   function labelStems() { [].forEach.call(stemsBox.children, function (b) { var n = T.fl[+b.dataset.k]; b.setAttribute("aria-label", n[L()] || n[0]); }); }
   labelStems();
   function openBouquet() { BQ = { f: [], w: (Math.random() * WRAPS.length) | 0 }; $("bqTo").value = ""; $("bqMsg").value = ""; paintBq($("bqCv"), BQ); labelStems(); show("bq"); }
-  $("bqBtn").onclick = openBouquet;
+  /* the stall where Josep bought Popo one rose every Sant Jordi, and where Wei buys it now (the owner, Nov 14): making a bouquet is A Few Stems' job, on the phone */
+  var RW = {
+    h: ["The flower stall", "花摊", "花攤", "El puesto de flores", "La parada de flors"],
+    p: ["Every Sant Jordi, Josep bought Popo one rose here. Never a bunch: “A bunch is for showing off. One is for her.”", "每年圣乔治节，Josep 都在这里给婆婆买一枝玫瑰。从来不买一束：“一束是拿来显摆的。一枝才是给她的。”", "每年聖喬治節，Josep 都在這裡給婆婆買一枝玫瑰。從來不買一束：「一束是拿來炫耀的。一枝才是給她的。」", "Cada Sant Jordi, Josep le compraba aquí una rosa a Popo. Nunca un ramo: «Un ramo es para presumir. Una es para ella».", "Cada Sant Jordi, en Josep comprava aquí una rosa a la Popo. Mai un ram: «Un ram és per fer-se veure. Una és per a ella»."],
+    s: ["Now Wei buys it.", "现在是 Wei 来买。", "現在是 Wei 來買。", "Ahora la compra Wei.", "Ara la compra en Wei."],
+    sj: ["Today is Sant Jordi: Wei was here at eight, for one red rose.", "今天是圣乔治节：Wei 八点就来了，买一枝红玫瑰。", "今天是聖喬治節：Wei 八點就來了，買一枝紅玫瑰。", "Hoy es Sant Jordi: Wei ha pasado a las ocho, a por una rosa roja.", "Avui és Sant Jordi: en Wei ha passat a les vuit, per una rosa vermella."],
+    spring: ["Today: tulips, peonies and the first roses.", "今天有：郁金香、牡丹，还有第一批玫瑰。", "今天有：鬱金香、牡丹，還有第一批玫瑰。", "Hoy: tulipanes, peonías y las primeras rosas.", "Avui: tulipes, peònies i les primeres roses."],
+    summer: ["Today: sunflowers, lavender and daisies.", "今天有：向日葵、薰衣草和雏菊。", "今天有：向日葵、薰衣草和雛菊。", "Hoy: girasoles, lavanda y margaritas.", "Avui: gira-sols, espígol i margarides."],
+    autumn: ["Today: chrysanthemums, dahlias and dry wheat.", "今天有：菊花、大丽花和干麦穗。", "今天有：菊花、大麗花和乾麥穗。", "Hoy: crisantemos, dalias y espigas secas.", "Avui: crisantems, dàlies i espigues seques."],
+    winter: ["Today: mimosa, anemones and a little holly.", "今天有：含羞草、银莲花和一点冬青。", "今天有：含羞草、銀蓮花和一點冬青。", "Hoy: mimosa, anémonas y un poco de acebo.", "Avui: mimosa, anemones i una mica de grèvol."],
+    jar: ["Your jar from today is on the counter.", "你今天那瓶花在柜台上。", "你今天那瓶花在櫃檯上。", "Tu tarro de hoy está en el mostrador.", "El teu pot d'avui és al taulell."],
+    end: ["Flowers are for giving. One is enough.", "花是用来送人的。一枝就够。", "花是用來送人的。一枝就夠。", "Las flores son para regalar. Una basta.", "Les flors són per regalar. Amb una n'hi ha prou."]
+  };
+  function rw(k) { return RW[k][L()] || RW[k][0]; }
+  function openRose() {
+    var d = new Date(), sj = d.getMonth() === 3 && (d.getDate() === 22 || d.getDate() === 23), se = "spring";
+    try { se = (window.FBWorld && FBWorld.season && FBWorld.season()) || se; } catch (e) {}
+    $("roseH").textContent = rw("h"); $("roseP").textContent = rw("p"); $("roseS").textContent = sj ? rw("sj") : rw("s");
+    $("roseToday").textContent = (RW[se] ? rw(se) : rw("spring")) + " " + rw("end");
+    var j = null; try { j = window.FBApps && FBApps.traced ? FBApps.traced("flowers") : null; } catch (e) {}
+    $("roseJar").hidden = !j; $("roseJar").textContent = rw("jar");
+    paintBq($("roseCv"), { f: [0], w: 1 });   /* one rose in paper */
+    show("rose");
+  }
+  $("bqBtn").onclick = openRose;
   $("bqWrap").onclick = function () { BQ.w = (BQ.w + 1) % WRAPS.length; paintBq($("bqCv"), BQ); };
   $("bqClear").onclick = function () { BQ.f = []; paintBq($("bqCv"), BQ); };
   $("bqApp").onclick = function () {   /* A Few Stems (after-hours.work/a-few-stems/): the stall as its own app, same #bq= format; #edit= carries what's on the counter */
@@ -550,12 +581,12 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
       show("bqGot");
     }, 900);
   } }
-  $("bqBack").onclick = openBouquet;
+  $("bqBack").onclick = function () { show(null); };
   /* sent here to make one (FBApps.go("flowers", {to}) from Come Over or another app): the stall opens with who it's for written in */
   function flowersFor() {
     var m = /[#&]flowers(?:=([^&]*))?(?:&|$)/.exec(location.hash); if (!m) return;
     var to = ""; try { to = decodeURIComponent(m[1] || "").slice(0, 24); } catch (e) {}
-    setTimeout(function () { openBouquet(); $("bqTo").value = to; }, 600);
+    setTimeout(openRose, 600);
   }
   flowersFor(); addEventListener("hashchange", flowersFor);
   /* a cart's card: what it is, and where the real one is */

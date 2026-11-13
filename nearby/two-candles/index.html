@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt fbfit">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=7fb4c29e8c"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e65fbd5f10" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Two Candles · Nearby</title>
 <meta name="description" content="A candlelit table for two people who live apart. Sit down together from anywhere, cook the same dinner step by step, raise a glass, and talk until the candles go out.">
@@ -27,6 +27,7 @@ main{max-width:760px;margin:0 auto;padding:4px 16px 120px}
 .seat small{display:block;font:14px var(--ui);color:var(--dim)}
 .seat.me{border-left:6px solid var(--rose)}.seat.them{border-left:6px solid var(--sky)}
 .seat .clock{font:400 26px var(--vt);color:var(--a)}
+.fam-clk{font:400 12px/1.6 var(--px);color:var(--a);letter-spacing:.04em;margin:0 0 6px}.fam-say b{font:400 9px/1.4 var(--px);color:var(--a)}.fam-after{margin:14px 4px 0;font-size:22px;line-height:1.2;text-align:center}
 .panel{padding:14px;background:var(--card);border:3px solid #000;box-shadow:4px 4px 0 #000;margin-top:14px}
 .panel h2{margin:0 0 10px;font:400 11px/1.5 var(--px);color:var(--a);letter-spacing:.05em}
 .panel p{font:15px/1.5 var(--ui);color:#eadccc;margin:0 0 10px}
@@ -79,6 +80,13 @@ html.fbsh-in.fbfit .fit-panel .panel:first-child{margin-top:0}html.fbsh-in.fbfit
   <div class="stage fit-hero" style="--fit-ar:1.667"><canvas id="cv" width="160" height="96" role="img" aria-label="A candlelit table for two by a window"></canvas></div>
 
   <div class="fit-panel">
+  <!-- in town (Nov 14, the owner): the family's own table for two far apart; booking a table is the app's -->
+  <section id="family" hidden>
+    <div class="panel"><h2 id="f1h"></h2><p class="fam-clk" id="f1c"></p><p id="f1p"></p><p class="fam-say"><b id="f1w"></b> <span id="f1s"></span></p></div>
+    <div class="panel"><h2 id="f2h"></h2><p class="fam-clk" id="f2c"></p><p id="f2p"></p></div>
+    <button class="big" type="button" id="famSit">🕯️ <span id="famSitL"></span></button>
+    <p class="fam-after" id="famAfter" hidden></p>
+  </section>
   <!-- the door: find your table -->
   <section id="lobby">
     <div class="panel">
@@ -523,6 +531,28 @@ html.fbsh-in.fbfit .fit-panel .panel:first-child{margin-top:0}html.fbsh-in.fbfit
     stage: document.querySelector(".stage")
   };
   if (APP) { var sc = document.createElement("script"); sc.src = "./app.js?v=a63c7350"; document.body.appendChild(sc); }
+  /* in town there's no booking (the app has it): an invitation link opens the app, and the lobby is the family's own table for two far apart */
+  if (!APP) (function () {
+    if (inv) { var u = "/two-candles/?t=" + inv + location.hash; try { if (window.top !== window.self) { window.top.location.replace(u); return; } } catch (e) {} location.replace(u); return; }
+    var F = {
+      f1h: ["SUNDAYS · POPO AND HER SISTER", "礼拜天 · 婆婆和她姐姐", "禮拜日 · 婆婆同佢家姐", "LOS DOMINGOS · POPO Y SU HERMANA", "ELS DIUMENGES · LA POPO I LA SEVA GERMANA"],
+      f1c: ["BARCELONA 14:00 · HONG KONG 21:00 · 3:00 ON THE TIMER", "巴塞罗那 14:00 · 香港 21:00 · 计时器 3:00", "巴塞隆拿 14:00 · 香港 21:00 · 計時器 3:00", "BARCELONA 14:00 · HONG KONG 21:00 · 3:00 EN EL RELOJ", "BARCELONA 14:00 · HONG KONG 21:00 · 3:00 AL RELLOTGE"],
+      f1p: ["From 1969, every Sunday: one phone call, three minutes, and a bowl of noodles each, on both sides of the world.", "从1969年起，每个礼拜天：一通电话，三分钟，世界两头各一碗面。", "從1969年起，每個禮拜日：一通電話，三分鐘，世界兩頭各一碗麵。", "Desde 1969, cada domingo: una llamada, tres minutos y un cuenco de fideos para cada una, a los dos lados del mundo.", "Des del 1969, cada diumenge: una trucada, tres minuts i un bol de fideus per a cadascuna, a les dues bandes del món."],
+      f1s: ["“Three minutes only, very expensive. So we eat fast, talk fast. Still, every Sunday.”", "「才三分钟，很贵的。所以吃得快，说得快。还是每个礼拜天。」", "「得三分鐘，好貴㗎。所以食得快，講得快。照樣逢禮拜日。」", "«Tres minutos solo, muy caro. Así comemos rápido, hablamos rápido. Igual, cada domingo.»", "«Només tres minuts, caríssim. Així que menjàvem de pressa i parlàvem de pressa. I cada diumenge, igualment.»"],
+      popo: ["POPO", "婆婆", "婆婆", "POPO", "LA POPO"],
+      f2h: ["EVERY DAY · THE TWO SISTERS", "每一天 · 两姐妹", "每一日 · 兩姊妹", "CADA DÍA · LAS DOS HERMANAS", "CADA DIA · LES DUES GERMANES"],
+      f2c: ["BARCELONA 18:00 · NEW YORK 12:00 · SINCE 1997", "巴塞罗那 18:00 · 纽约 12:00 · 自1997年", "巴塞隆拿 18:00 · 紐約 12:00 · 自1997年", "BARCELONA 18:00 · NUEVA YORK 12:00 · DESDE 1997", "BARCELONA 18:00 · NOVA YORK 12:00 · DES DEL 1997"],
+      f2p: ["Wei's mum sends the evening, what Popo cooked. Mei's mum sends the noon, the sky over Queens. They call it the handoff hour.", "Wei 的妈妈寄来傍晚：婆婆煮了什么。Mei 的妈妈寄来中午：皇后区的天空。她们叫它交接时刻。", "Wei 嘅媽媽寄嚟傍晚：婆婆煮咗咩。Mei 嘅媽媽寄嚟中午：皇后區嘅天空。佢哋叫佢做交接時刻。", "La madre de Wei manda la tarde, lo que cocinó Popo. La madre de Mei manda el mediodía, el cielo sobre Queens. Lo llaman la hora del relevo.", "La mare d'en Wei envia el vespre, el que ha cuinat la Popo. La mare de la Mei envia el migdia, el cel de Queens. En diuen l'hora del relleu."],
+      sit: ["Sit in the empty chair", "坐到那张空椅子上", "坐落嗰張空櫈度", "Siéntate en la silla vacía", "Seu a la cadira buida"],
+      after: ["Who would you eat with, far away? Same dinner, same time, both phones face down. Call them and set a day.", "远方的人里，你想和谁一起吃饭？同一顿饭，同一个时间，两边的手机都扣在桌上。打给他，约个日子。", "遠方嘅人入面，你想同邊個一齊食飯？同一餐，同一個時間，兩邊部手機都反轉放喺枱。打俾佢，約個日子。", "¿Con quién comerías, lejos? La misma cena, a la misma hora, los dos móviles boca abajo. Llámale y poned un día.", "Amb qui menjaries, lluny? El mateix sopar, a la mateixa hora, tots dos mòbils de cara avall. Truca-li i poseu un dia."]
+    };
+    var LI = { en: 0, zh: 1, "zh-Hant": 2, es: 3, ca: 4 };
+    function f(k) { var a = F[k]; return a[LI[(window.FBL && FBL.get && FBL.get()) || "en"] || 0] || a[0]; }
+    function paint() { ["f1h", "f1c", "f1p", "f1s", "f2h", "f2c", "f2p"].forEach(function (k) { $(k).textContent = f(k); }); $("f1w").textContent = f("popo"); $("famSitL").textContent = f("sit"); $("famAfter").textContent = f("after"); }
+    $("lobby").hidden = true; $("family").hidden = false; paint();
+    $("famSit").onclick = function () { $("famAfter").hidden = false; $("famSit").hidden = true; try { chime(); } catch (e) {} };
+    addEventListener("fbl", paint); var old = window.FBL_SET; window.FBL_SET = function (l) { if (old) old(l); else if (window.FBL) FBL.set(l); paint(); };
+  })();
   if (inv && !APP) { ready().then(function () { if (ME.name) return sit(inv);
     /* invited, no name yet: just ask for one, then sit down */
     $("pastBox").hidden = true; $("reserve").lastElementChild.setAttribute("data-t", "sitDown"); $("reserve").lastElementChild.textContent = t("sitDown");

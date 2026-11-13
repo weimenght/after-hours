@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=7fb4c29e8c"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e65fbd5f10" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Paw Reading · Nearby</title>
 <meta name="description" content="Miso and Yuzu's little stall by the Plaza: one of them paws a card from the Nearby deck over to you, and the card says what you'll do today, somewhere real. One card a day.">
@@ -122,7 +122,7 @@
     var c = cardOf(v.i), src = "cards/" + (v.i < 10 ? "0" : "") + v.i + ".png";
     panel.innerHTML = '<p class="pr-say">' + (fresh ? (who ? act(t(S.paw[who === "miso" ? 1 : 0])) : esc(t(S.self))) : line()) + "</p>" +
       '<div class="pr-card"><div class="pr-flip"><div class="pr-in' + (fresh ? "" : " up") + '"><img class="b" src="cards/back.png" alt=""><img class="f" src="' + src + '" alt=""></div></div>' +
-      '<div><span class="pr-k">' + esc(t(P.titleFor(v) || S.today)) + "</span><p class=\"pr-f\">" + esc(t(P.askFor(v))) + '</p><p class="pr-w">' + esc(t(S.tomorrow)) + '</p></div></div>";
+      '<div><span class="pr-k">' + esc(t(P.titleFor(v) || S.today)) + "</span><p class=\"pr-f\">" + esc(t(P.askFor(v))) + '</p><p class="pr-w">' + esc(t(S.tomorrow)) + '</p></div></div>';
     if (fresh) setTimeout(function () { var el = panel.querySelector(".pr-in"); if (el) el.classList.add("up"); }, 380);
     document.getElementById("dock").hidden = true; links();
   }
