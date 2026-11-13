@@ -97,7 +97,7 @@ window.WR_W = {
   mine: ["Make my own tape", "做我自己的磁带", "做我自己的磁帶", "Hacer mi propia cinta", "Fer la meva cinta"],
   /* the family through the tapes only (handoff/STORY_LINES.md) */
   bolero: ["Bolero after closing", "打烊后的波莱罗", "打烊後的波萊羅", "Bolero después de cerrar", "Bolero després de tancar"],
-  tapeFor: ["For Popo's sister, already asleep in Hong Kong.", "给婆婆的妹妹，她在香港已经睡了。", "給婆婆的妹妹，她在香港已經睡了。", "Para la hermana de Popo, que ya duerme en Hong Kong.", "Per a la germana de la Popo, que ja dorm a Hong Kong."],
+  tapeFor: ["For Popo's sister, already asleep in Hong Kong.", "给婆婆的姐姐，她在香港已经睡了。", "給婆婆的姐姐，她在香港已經睡了。", "Para la hermana de Popo, que ya duerme en Hong Kong.", "Per a la germana de la Popo, que ja dorm a Hong Kong."],
   moonCall: ["Someone you love is under the same moon. Call.", "你爱的人，在同一个月亮底下。打个电话吧。", "你愛的人，在同一個月亮底下。打個電話吧。", "Alguien a quien quieres está bajo la misma luna. Llama.", "Algú que estimes és sota la mateixa lluna. Truca-li."],
   doneT: ["Side A is over.", "A面放完了。", "A面放完了。", "Se acabó la cara A.", "S'ha acabat la cara A."],
   doneB: ["Leave the phone here for a bit. See who's home, and ask if they'd like tea.", "把手机放下一会儿。看看谁在家，问问要不要喝杯茶。", "把手機放下一會兒。看看誰在家，問問要不要喝杯茶。", "Deja el móvil aquí un rato. Mira quién hay en casa y pregunta si le apetece un té.", "Deixa el mòbil aquí una estona. Mira qui hi ha a casa i pregunta si li ve de gust un te."],
