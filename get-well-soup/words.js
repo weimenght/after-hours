@@ -47,6 +47,8 @@ window.GW_W = {
   sentOn: ["put on {d}", "{d} 炖上", "{d} 燉上", "puesta el {d}", "posada el {d}"],
   newPot: ["Put another pot on", "再炖一锅", "再燉一鍋", "Poner otra olla", "Posar una altra olla"],
 
+  popoPaper: ["A paper on the pot, signed P: \u201cCongee. No recipe. Rice, water, ginger, time. You don't know how? Call me, I stand next to you on the phone.\u201d", "锅上贴着一张纸，署名 P：\u201c粥。没有食谱。米、水、姜、时间。不会煮？打给我，我在电话里站在你旁边。\u201d", "鍋上貼著一張紙，署名 P：「粥。冇食譜。米、水、薑、時間。唔識煲？打俾我，我喺電話度企喺你隔籬。」", "Un papel en la olla, firmado P: \u00abCongee. No receta. Arroz, agua, jengibre, tiempo. ¿No sabes? Llámame, yo estoy a tu lado en el teléfono.\u00bb", "Un paper a l'olla, signat P: \u00abCongee. No hi ha recepta. Arròs, aigua, gingebre i temps. No en saps? Truca'm i m'estaré al teu costat per telèfon.\u00bb"],
+  ginger: ["If it's soup: bring the ginger.", "如果是汤：带上姜。", "如果是湯：帶上薑。", "Si es sopa: lleva el jengibre.", "Si és sopa: porta el gingebre."],
   goTitle: ["Go and see {n}.", "去看看{n}吧。", "去看看{n}吧。", "Ve a ver a {n}.", "Ves a veure {n}."],
   goLead: ["Knock softly. If they're asleep, leave it at the door and send one text.", "轻轻敲门。如果对方睡着了，放在门口，发一条消息就好。", "輕輕敲門。如果對方睡著了，放在門口，發一條訊息就好。", "Llama flojito. Si duerme, déjalo en la puerta y manda un mensaje.", "Truca fluixet. Si dorm, deixa-ho a la porta i envia un missatge."],
   goBtn: ["Phone away, off I go", "手机收好，出发", "手機收好，出發", "Móvil al bolsillo, me voy", "Mòbil a la butxaca, hi vaig"],

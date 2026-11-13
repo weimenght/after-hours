@@ -92,6 +92,13 @@
   .entry p { margin:0; font-size:17px; line-height:1.5; white-space:pre-line; }
   .entry .d { font-size:13px; color:#8a7058; margin-top:6px; }
   .entry .none { color:#8a7058; font-style:italic; }
+  .entry .pa { margin:8px 0 0 14px; font-size:14px; line-height:1.45; color:#8a7058; font-style:italic; }
+  .entry .pa b { font-style:normal; font-weight:400; letter-spacing:.1em; margin-right:6px; }
+  .pans { margin:18px auto 0; max-width:34em; text-align:left; }
+  .pans .lead { margin:0 0 6px; color:var(--mut); }
+  .pans blockquote { margin:0; padding:12px 14px; border-left:3px solid var(--amber); background:var(--field); font-size:17px; line-height:1.5; }
+  .pans.paper blockquote { border-left:0; background:#f6efdf; color:#3a2a1c; box-shadow:2px 3px 0 rgba(0,0,0,.18); transform:rotate(-.6deg); }
+  .pans .sig { display:block; text-align:right; margin-top:6px; letter-spacing:.1em; }
   .bempty { text-align:center; font-style:italic; color:#6e5440; }
   html:lang(zh) .book h3, html:lang(zh-Hant) .book h3 { font-style:normal; font-weight:600; }
   [hidden] { display:none !important; }
@@ -327,7 +334,15 @@ function quiet() {
   var box = el("div", "quiet col", null, $("ctl"));
   el("h2", "q", esc(last ? T(W.allDone) : F(W.nextOn, { day: dayName(S.day) })), box);
   el("p", "note", esc(last ? T(W.allDoneSub) : T(W.quietSub)), box);
+  popoAnswers(box);
   var l = el("div", "links", null, $("ctl")); l.style.justifyContent = "center"; link(W.b.book, function () { go(book); }, l);
+}
+/* Popo answers the same question herself, after you keep your relative's (never after Skip). Asleep, it waits on a folded paper under the teapot. */
+function popoAnswers(box) {
+  var a = S.answers[S.answers.length - 1]; if (!a || !W.pa || !W.pa[a.q]) return;
+  var up = !sleeps("popo"), w = el("div", "pans" + (up ? "" : " paper"), null, box);
+  el("p", "lead", esc(T(up ? W.pNow : W.pPaper)), w);
+  el("blockquote", "", esc(T(W.pa[a.q])) + (up ? "" : '<span class="sig">' + esc(T(W.pSign)) + "</span>"), w);
 }
 function done() {
   scene = "table"; clear(); course(W.course.done); say("done");
@@ -347,7 +362,8 @@ function book() {
   S.answers.forEach(function (a, i) {
     var dt = ""; try { dt = new Date(a.d).toLocaleDateString(loc, { day: "numeric", month: "long", year: "numeric" }); } catch (e) {}
     el("section", "entry", '<div class="n">' + esc(F(W.week, { n: i + 1 })) + "</div><h3>" + esc(T(W.q[a.q])) + "</h3>" +
-      (a.t ? "<p>" + esc(a.t) + "</p>" : '<p class="none">' + esc(T(W.noAnswer)) + "</p>") + '<div class="d">' + esc(dt) + "</div>", b);
+      (a.t ? "<p>" + esc(a.t) + "</p>" : '<p class="none">' + esc(T(W.noAnswer)) + "</p>") + '<div class="d">' + esc(dt) + "</div>" +
+      (W.pa && W.pa[a.q] ? '<p class="pa np"><b>' + esc(T(W.pSign)) + "</b>" + esc(T(W.pa[a.q])) + "</p>" : ""), b);
   });
   el("div", "orn", "· · ·", b);
 }

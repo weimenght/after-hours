@@ -472,6 +472,7 @@
                     <span class="opacity-55 shrink-0 hide-narrow" data-i18n="overlapTitle">Together window</span>
                     <span id="overlap-text" class="font-medium text-amber-200 truncate text-right flex-1 min-w-0">--</span>
                 </div>
+                <p id="sis-first" class="hidden text-[10px] opacity-60" data-i18n="sisFirst">The sisters' one is at six.</p>
                 <div class="relative">
                     <div id="overlap-bar" class="h-2.5 rounded-full overflow-hidden flex bg-white/5" aria-hidden="true"></div>
                     <div id="overlap-marker" class="absolute -top-1 -bottom-1 w-0.5 rounded bg-white shadow" aria-hidden="true"></div>
@@ -560,6 +561,15 @@
 
                 <!-- Pairing: shown until you're connected to your partner -->
                 <div id="pair-panel" class="hidden flex flex-col gap-2.5 shrink-0">
+                    <div id="sisters" class="rounded-2xl glass-subtle px-3.5 py-3 flex flex-col gap-2" aria-label="">
+                        <div class="flex items-center justify-between text-[11px] gap-3">
+                            <span><span class="opacity-60" data-i18n="sisBcn">Barcelona</span> <b class="text-amber-200">18:00</b> <span aria-hidden="true">🌆</span></span>
+                            <span class="opacity-40" aria-hidden="true">· · ·</span>
+                            <span><span aria-hidden="true">🏙️</span> <b class="text-amber-200">12:00</b> <span class="opacity-60" data-i18n="sisNy">New York</span></span>
+                        </div>
+                        <p class="text-[11px] opacity-75 leading-snug" data-i18n="sisIntro">Two sisters have done this since 1997. Six hours apart, one hour that belongs to both.</p>
+                        <p class="text-[11px] leading-snug italic opacity-90"><span class="not-italic opacity-50" data-i18n="sisEg">For example</span> · <span data-i18n="sisSample">Mama made wonton tonight. Your bowl is in the cupboard, the mended one. Waiting.</span></p>
+                    </div>
                     <p class="text-xs opacity-75" data-i18n="pairTitle">Connect with your partner</p>
                     <div id="invite-box" class="hidden flex items-center justify-between gap-2 rounded-2xl glass-subtle px-3.5 py-2">
                         <div class="min-w-0">
@@ -855,7 +865,7 @@
                 yourVibe: 'Your vibe (colors partner’s sky)',
                 vibeRadiant: '☀️ Radiant', vibeWarm: '✨ Warm', vibePlayful: '🎈 Playful', vibeCalm: '🌊 Calm', vibeFocus: '⚡ Focus',
                 vibeDrifting: '☁️ Drifting', vibeDrained: '🥀 Drained', vibeOverwhelmed: '🌧️ Overwhelmed', vibeMissing: '🌙 Missing You',
-                overlapTitle: 'Together window',
+                overlapTitle: 'Your handoff hour', sisFirst: "The sisters' one is at six.", sisIntro: "Two sisters have done this since 1997. Six hours apart, one hour that belongs to both.", sisSample: "Mama made wonton tonight. Your bowl is in the cupboard, the mended one. Waiting.", sisEg: "For example", sisBcn: "Barcelona", sisNy: "New York",
                 overlapNow: 'Both awake now · until {time}',
                 overlapRange: 'Both awake {range}',
                 overlapNone: 'No shared awake hours today',
@@ -956,7 +966,7 @@
                 yourVibe: '此刻状态（渲染对方的天空背景）',
                 vibeRadiant: '☀️ 明媚', vibeWarm: '✨ 温暖', vibePlayful: '🎈 雀跃', vibeCalm: '🌊 平静', vibeFocus: '⚡ 专注',
                 vibeDrifting: '☁️ 放空', vibeDrained: '🥀 疲惫', vibeOverwhelmed: '🌧️ 烦闷', vibeMissing: '🌙 想你',
-                overlapTitle: '共同清醒时段',
+                overlapTitle: '你们的交接时刻', sisFirst: "那对姐妹的，在六点。", sisIntro: "有一对姐妹从1997年起就这样做。相隔六个小时，有一个小时属于两个人。", sisSample: "妈妈今晚包了云吞。你的碗在柜子里，补过的那只。等你。", sisEg: "比如", sisBcn: "巴塞罗那", sisNy: "纽约",
                 overlapNow: '此刻你们都醒着 · 直到 {time}',
                 overlapRange: '都醒着：{range}',
                 overlapNone: '今天没有共同清醒的时段',
@@ -1057,7 +1067,7 @@
                 yourVibe: '此刻狀態（渲染對方的天空背景）',
                 vibeRadiant: '☀️ 明媚', vibeWarm: '✨ 溫暖', vibePlayful: '🎈 雀躍', vibeCalm: '🌊 平靜', vibeFocus: '⚡ 專注',
                 vibeDrifting: '☁️ 放空', vibeDrained: '🥀 疲憊', vibeOverwhelmed: '🌧️ 煩悶', vibeMissing: '🌙 想你',
-                overlapTitle: '共同清醒時段',
+                overlapTitle: '你們的交接時刻', sisFirst: "那對姊妹的，在六點。", sisIntro: "有一對姊妹從1997年起就這樣做。相隔六個小時，有一個小時屬於兩個人。", sisSample: "媽媽今晚包了餛飩。你的碗在櫃子裡，補過的那個。等你。", sisEg: "比如", sisBcn: "巴塞隆納", sisNy: "紐約",
                 overlapNow: '此刻你們都醒著 · 直到 {time}',
                 overlapRange: '都醒著：{range}',
                 overlapNone: '今天沒有共同清醒的時段',
@@ -1158,7 +1168,7 @@
                 yourVibe: 'Tu vibra (pinta el cielo de tu pareja)',
                 vibeRadiant: '☀️ Radiante', vibeWarm: '✨ Cálido', vibePlayful: '🎈 Juguetón', vibeCalm: '🌊 Calma', vibeFocus: '⚡ Enfoque',
                 vibeDrifting: '☁️ Flotando', vibeDrained: '🥀 Agotado', vibeOverwhelmed: '🌧️ Abrumado', vibeMissing: '🌙 Extrañándote',
-                overlapTitle: 'Ventana juntos',
+                overlapTitle: 'Vuestra hora del relevo', sisFirst: "La de las hermanas es a las seis.", sisIntro: "Dos hermanas lo hacen desde 1997. Seis horas de diferencia, una hora que es de las dos.", sisSample: "Mamá ha hecho wonton esta noche. Tu cuenco está en el armario, el reparado. Esperando.", sisEg: "Por ejemplo", sisBcn: "Barcelona", sisNy: "Nueva York",
                 overlapNow: 'Ambos despiertos ahora · hasta las {time}',
                 overlapRange: 'Ambos despiertos {range}',
                 overlapNone: 'Hoy no coincidís despiertos',
@@ -1259,7 +1269,7 @@
                 yourVibe: 'La teva vibra (pinta el cel de la parella)',
                 vibeRadiant: '☀️ Radiant', vibeWarm: '✨ Càlid', vibePlayful: '🎈 Juganer', vibeCalm: '🌊 Calma', vibeFocus: '⚡ Concentrat',
                 vibeDrifting: '☁️ Flotant', vibeDrained: '🥀 Esgotat', vibeOverwhelmed: '🌧️ Aclaparat', vibeMissing: '🌙 T’enyoro',
-                overlapTitle: 'Finestra junts',
+                overlapTitle: 'La vostra hora del relleu', sisFirst: "La de les germanes és a les sis.", sisIntro: "Dues germanes ho fan des del 1997. Sis hores de diferència, una hora que és de totes dues.", sisSample: "La mare ha fet wonton aquest vespre. El teu bol és a l'armari, el que està reparat. T'espera.", sisEg: "Per exemple", sisBcn: "Barcelona", sisNy: "Nova York",
                 overlapNow: 'Desperts tots dos ara · fins a les {time}',
                 overlapRange: 'Desperts tots dos {range}',
                 overlapNone: 'Avui no coincidiu desperts',
@@ -2057,6 +2067,7 @@
             show('overlap-card', hasPartner);
             show('composer-body', hasPartner);
             show('pair-panel', !hasPartner);
+            if (hasPartner && !lsGet('handoff_sis_seen')) { show('sis-first', true); lsSet('handoff_sis_seen', '1'); }
             if (!hasPartner) renderInvite();
             show('partner-sleep-badge', hasPartner);
 

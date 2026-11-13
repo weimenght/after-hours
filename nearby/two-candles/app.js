@@ -25,6 +25,13 @@
     app: ["Two Candles", "双烛小馆", "雙燭小館", "Dos Velas", "Dues Espelmes"],
     lede: ["Dinner for two, however far apart.", "两个人的晚饭，再远也一起吃。", "兩個人的晚飯，再遠也一起吃。", "Una cena para dos, por lejos que estéis.", "Un sopar per a dos, per lluny que sigueu."],
     lede2: ["Pick a day, shop for the same dinner, then sit down together from wherever you are. It ends with the candles out and the phone down.", "约一个日子，买同一顿饭的菜，然后各自在自己的地方一起坐下。最后吹灭蜡烛，放下手机。", "約一個日子，買同一頓飯的菜，然後各自在自己的地方一起坐下。最後吹熄蠟燭，放下手機。", "Elegid un día, comprad para la misma cena y sentaos juntos desde donde estéis. Termina con las velas apagadas y el móvil en la mesa.", "Trieu un dia, compreu per al mateix sopar i seieu junts des d'on sigueu. Acaba amb les espelmes apagades i el mòbil a la taula."],
+    famH: ["Popo and her sister, every Sunday since 1969", "婆婆和她妹妹，从1969年起每个星期天", "婆婆和她妹妹，從1969年起每個星期日", "Popo y su hermana, cada domingo desde 1969", "La Popo i la seva germana, cada diumenge des del 1969"],
+    famClk: ["Barcelona 14:00 · Hong Kong 21:00 · the timer at 3:00", "巴塞罗那 14:00 · 香港 21:00 · 计时器 3:00", "巴塞隆納 14:00 · 香港 21:00 · 計時器 3:00", "Barcelona 14:00 · Hong Kong 21:00 · temporizador en 3:00", "Barcelona 14:00 · Hong Kong 21:00 · el temporitzador a 3:00"],
+    famQ: ["Three minutes only, very expensive. So we eat fast, talk fast. Still, every Sunday.", "三分钟而已，很贵的。所以吃得快，讲得快。还是每个星期天都打。", "三分鐘咋，好貴㗎。所以食得快，講得快。不過，個個禮拜日都打。", "Tres minutos solo, muy caro. Así comemos rápido, hablamos rápido. Pero cada domingo.", "Només tres minuts, que era molt car. Així que menjàvem de pressa i parlàvem de pressa. Però cada diumenge."],
+    famNap: ["Under the napkin, a paper from Popo: \u201cNo timer for you. Eat slow lah.\u201d", "餐巾底下，婆婆留了张纸：\u201c你们不用计时。慢慢吃啦。\u201d", "餐巾底下，婆婆留了張紙：「你哋唔使計時。慢慢食啦。」", "Debajo de la servilleta, un papel de Popo: \u00abPara vosotros no timer. Come despacio, eh.\u00bb", "Sota el tovalló, un paper de la Popo: \u00abPer a vosaltres, res de rellotge. Mengeu a poc a poc.\u00bb"],
+    famNext: ["Same day next week. Sunday is how you keep somebody.", "下个星期同一天。星期天就是这样留住一个人的。", "下個禮拜同一日。禮拜日就係咁留住一個人。", "Mismo día la semana que viene. El domingo es cómo guardas a alguien.", "El mateix dia, la setmana que ve. Els diumenges és com es manté a prop algú."],
+    popo: ["Popo", "婆婆", "婆婆", "Popo", "La Popo"],
+    paper: ["a paper on the table", "桌上一张纸", "枱上一張紙", "un papel en la mesa", "un paper damunt la taula"],
     book: ["Book a table", "订一张桌子", "訂一張桌子", "Reserva una mesa", "Reserva una taula"],
     yourName: ["Your name", "你的名字", "你的名字", "Tu nombre", "El teu nom"],
     day: ["Day", "日子", "日子", "Día", "Dia"], time: ["Time, yours", "时间（你那边）", "時間（你那邊）", "Hora, la tuya", "Hora, la teva"],
@@ -184,6 +191,7 @@
   "html[data-tc=table] .tc-foot{display:none}",
   "@media (min-width:1024px){html[data-tc=table] .tc-main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,1fr);grid-template-areas:'seats seats' 'stage side';align-items:start;gap:16px}html[data-tc=table] .tc-seats{grid-area:seats}html[data-tc=table] #tcStage{grid-area:stage;position:sticky;top:12px}html[data-tc=table] .tc-side{grid-area:side}",
   "html[data-tc=home] .tc-main{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(360px,1fr);gap:20px;align-items:start}html[data-tc=home] .tc-col:first-child{position:sticky;top:12px}}",
+  ".tc-fam-clk{margin:2px 0 6px;font-variant-numeric:tabular-nums;letter-spacing:.02em}.tc-fam-q{margin:0;font-style:italic;line-height:1.5;opacity:.9}.tc-fam-q b{font-style:normal;font-weight:600;margin-right:4px}.tc-fam-nap{font-style:italic}" +
   "@media (min-width:1024px){html[data-tc=booked] .tc-main,html[data-tc=after] .tc-main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}html[data-tc=booked] .tc-hero,html[data-tc=after] .tc-hero{grid-column:1 / -1}}",
   "@media (max-width:380px){.tc-tab{font-size:11px}.tc-tab .tc-ic{width:18px;height:18px}.tc-clock{font-size:21px}}",
   /* handoff/DESIGN.md §5: tablet one column at 560; computer the picture (560) beside the flow (480) on the home screen, 1080 in all; the table keeps its own wider room */
@@ -321,6 +329,9 @@
     return { at: at, dish: function () { return b.d; } };
   }
 
+  /* Popo's lines keep her hours (asleep 21–5, never woken): asleep, her words wait on a paper */
+  function popoUp() { try { var h = new Date(); h = h.getHours() + h.getMinutes() / 60; return window.FBWorld && FBWorld.sleeps ? !FBWorld.sleeps("popo", h) : !(h >= 21 || h < 5); } catch (e) { return true; } }
+  function popoLine(c, k) { var p = el("p", "tc-fam-q"); p.appendChild(el("b", "", (popoUp() ? w("popo") : w("popo") + " · " + w("paper")) + " ")); p.appendChild(document.createTextNode("\u201c" + w(k) + "\u201d")); c.appendChild(p); return p; }
   /* ---------- home: book a table ---------- */
   function home() {
     T.leave(); B = null; address(null);
@@ -328,6 +339,7 @@
       var lf = el("div", "tc-col"), m = el("div", "tc-col"); m0.appendChild(lf); m0.appendChild(m);
       hero(lf);
       var h = el("div", "tc-intro"); h.appendChild(el("h1", "tc-h1", w("lede"))); h.appendChild(el("p", "tc-p", w("lede2"))); lf.appendChild(h);
+      var fam = card(lf, "fam"); fam.appendChild(el("p", "tc-lab", w("famH"))); fam.appendChild(el("p", "tc-fam-clk", w("famClk"))); popoLine(fam, "famQ");
       var c = card(m); c.appendChild(el("h2", "tc-h2", w("book")));
       var nm = nameField(c);
       var pk = picker(c);
@@ -429,6 +441,7 @@
       if (!s.lit.me) { lb.appendChild(btn("tc-btn pri big", "candle", w("light"), function () { T.light(); paint(); })); lb.appendChild(el("p", "tc-hint", s.lit.them ? w("theyLit", { p: them }) : w("lightNote"))); }
       else lb.appendChild(el("p", "tc-wait", w("lightWait", { p: them })));
     }
+    else { var nk = "tc_nap_p"; try { if (!localStorage.getItem(nk)) { localStorage.setItem(nk, "1"); lb.appendChild(el("p", "tc-hint tc-fam-nap", w("famNap"))); } } catch (e) {} }
     /* the empty chair */
     var iv = $("tcInvite"); iv.innerHTML = "";
     if (!s.here) { iv.appendChild(el("p", "tc-hint", B && B.by ? w("waiting0") : w("waiting", { p: them }))); if (B && B.by) iv.appendChild(btn("tc-btn sm", "share", w("invite"), function () { share(B, !B.w || when(B) < Date.now() + 3600000); })); }
@@ -472,7 +485,7 @@
       hero(m, true);
       var c = card(m, "gn"); c.appendChild(el("h1", "tc-h1", w("gn"))); if (info && info.with) c.appendChild(el("p", "tc-p", w("gnWith", { p: info.with })));
       var outs = W.out, pickd = outs[(Math.random() * outs.length) | 0]; c.appendChild(el("p", "tc-out", pickd[li()] || pickd[0]));
-      var n = card(m); n.appendChild(el("h2", "tc-h2", w("nextOne"))); var o = b0 ? { o: (info && info.with) || (b0.by ? b0.o : b0.n), oz: b0.by ? b0.oz : b0.z } : null;
+      var n = card(m); n.appendChild(el("h2", "tc-h2", w("nextOne"))); popoLine(n, "famNext"); var o = b0 ? { o: (info && info.with) || (b0.by ? b0.o : b0.n), oz: b0.by ? b0.oz : b0.z } : null;
       var pk = picker(n, b0 && b0.w ? b0 : { w: Math.round(Date.now() / 60000), d: b0 && b0.d }, o);
       var res = el("div", "tc-acts"); n.appendChild(btn("tc-btn pri", "cal", w("nextOne"), function () {
         var nb = keep({ c: b0 ? b0.c : newCode(), w: Math.round(pk.at() / 60000), z: tz(), n: T.me.name, d: pk.dish(), by: 1, o: o && o.o || "", oz: o && o.oz || "" });

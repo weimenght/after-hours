@@ -97,6 +97,7 @@
     .screen:has(> .scene) > .scene { grid-column:1; grid-row:1 / span 30; align-self:center; justify-self:center; width:100%; max-width:440px; margin:0; }
     .screen:has(> .scene) > :not(.scene) { grid-column:2; margin-bottom:14px; }
   }
+.paperP{margin:10px 2px 0;padding:10px 12px;background:#fffaf2;color:#3a2a1c;border:1.5px solid var(--ink);border-radius:4px;transform:rotate(-.8deg);font-family:"Caveat",cursive;font-size:20px;line-height:1.25;box-shadow:2px 3px 0 rgba(0,0,0,.12)}
 </style>
 </head>
 <body>
@@ -209,7 +210,7 @@ function share(text) {
 function on(id, ev, fn) { var el = $(id); if (el) el.addEventListener(ev || "click", fn); }
 
 /* ---------- screens ---------- */
-var pot = null, pick = null, cur = null, goName = "";
+var pot = null, pick = null, cur = null, goName = "", goSoup = false;
 var MID = { offers: 1, share: 1, open: 1, choose: 1, tell: 1 };   /* the footer shows only on the first and last screens */
 var V = {
   make: function () {
@@ -223,6 +224,7 @@ var V = {
   offers: function () {
     return '<section class="screen"><h2>' + esc(T(W.offerTitle)) + '</h2><p class="lede">' + esc(T(W.offerLead)) + '</p><div class="offers" id="pick">' +
       OFFERS.map(function (k) { return card(k, st.offers.indexOf(k) >= 0); }).join("") + "</div>" +
+      (st.offers.indexOf("soup") >= 0 ? '<p class="paperP">' + esc(T(W.popoPaper)) + "</p>" : "") +
       '<div class="grow"></div><button type="button" class="btn" id="go2"' + (st.offers.length ? "" : " disabled") + ">" + esc(T(W.makeLink)) + "</button>" +
       '<button type="button" class="link" id="back">' + esc(T(W.back)) + "</button></section>";
   },
@@ -243,7 +245,7 @@ var V = {
       '</div><div class="grow"></div><button type="button" class="btn quiet" id="newPot">' + esc(T(W.newPot)) + "</button></section>";
   },
   go: function () {
-    return '<section class="screen">' + doorArt() + "<h1>" + esc(F(W.goTitle, { n: goName })) + '</h1><p class="lede">' + esc(T(W.goLead)) + "</p>" +
+    return '<section class="screen">' + doorArt() + "<h1>" + esc(F(W.goTitle, { n: goName })) + '</h1><p class="lede">' + esc(T(W.goLead)) + "</p>" + (goSoup ? '<p class="lede"><b>' + esc(T(W.ginger)) + "</b></p>" : "") +
       '<div class="grow"></div><button type="button" class="btn sage" id="away">' + esc(T(W.goBtn)) + "</button></section>";
   },
   open: function () {
@@ -280,7 +282,7 @@ var B = {
     on("back", null, function () { show("make"); });
     on("go2", null, function () {
       var p = { v: 1, id: Math.random().toString(36).slice(2, 9), t: draft.t, f: st.me, n: draft.n, o: st.offers.slice() };
-      st.pots.unshift({ id: p.id, to: p.t, at: Date.now(), url: base() + "#s=" + enc(p), done: false });
+      st.pots.unshift({ id: p.id, to: p.t, at: Date.now(), url: base() + "#s=" + enc(p), done: false, soup: p.o.indexOf("soup") >= 0 ? 1 : 0 });
       st.pots = st.pots.slice(0, 30); save(); draft = null; show("share");
     });
   },
@@ -292,7 +294,7 @@ var B = {
   },
   pots: function () {
     Array.prototype.forEach.call(document.querySelectorAll(".pill[data-i]"), function (b) { b.addEventListener("click", function () {
-      var p = st.pots[+b.getAttribute("data-i")]; if (!p) return; p.done = true; save(); goName = p.to; show("go"); }); });
+      var p = st.pots[+b.getAttribute("data-i")]; if (!p) return; p.done = true; save(); goName = p.to; goSoup = !!p.soup; show("go"); }); });
     on("newPot", null, function () { show("make"); });
   },
   go: function () { on("away", null, function () { toast(T(W.bye)); setTimeout(function () { show("make"); }, 900); }); },

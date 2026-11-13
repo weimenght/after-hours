@@ -438,7 +438,9 @@
           <button data-act="setDeck" data-arg="level">程度 <span class="lvlTxt">A1</span></button>
           <button data-act="setDeck" data-arg="saved">⭐ 收藏</button>
           <button data-act="setDeck" data-arg="mine">我嘅字</button>
+          <button data-act="setDeck" data-arg="mei">mei 嘅</button>
         </div>
+      <p class="meta" id="meiNote" hidden style="margin:8px 2px 0">mei: popo sends me voice notes in cantonese. i understand like 40%. these are the words i looked up.<br>call your grandma and say one of these. she'll correct you. that's the point.</p>
         <div class="row">
           <button class="btn sm" data-act="toggleDir" id="dirBtn"><svg class="ic sm"><use href="#i-languages"/></svg><span id="dirTxt">粵 → 英</span></button>
           <button class="btn sm square" data-act="shuffle" aria-label="洗牌"><svg class="ic sm"><use href="#i-shuffle"/></svg></button>
@@ -1330,6 +1332,15 @@ let S = DEFAULT_STORE();
 try { const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); if (raw) S = Object.assign(DEFAULT_STORE(), raw); } catch (e) {}
 let saveT = null;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) {} }, 200); }
+/* Mei's list (handoff/STORY_LINES.md): the words she looked up from Popo's voice notes. Not counted with the levels. */
+const MEI = `食咗飯未|sik6 zo2 faan6 mei6|have you eaten yet?|吃饭了吗|食咗飯未呀？煲咗湯俾你。|sik6 zo2 faan6 mei6 aa3? bou1 zo2 tong1 bei2 nei5.|Eaten yet? I made you soup.
+唔該|m4 goi1|thanks (for a small favour); excuse me|谢谢 / 劳驾|唔該你幫我開門。|m4 goi1 nei5 bong1 ngo5 hoi1 mun4.|Could you get the door for me, thanks.
+飲湯|jam2 tong1|to have soup|喝汤|返嚟飲湯啦。|faan1 lai4 jam2 tong1 laa1.|Come home for soup.
+乖|gwaai1|good, well-behaved (said to someone you love)|乖|乖，早啲瞓。|gwaai1, zou2 di1 fan3.|Be good, sleep early.
+早啲瞓|zou2 di1 fan3|sleep early|早点睡|唔好玩電話喇，早啲瞓。|m4 hou2 waan2 din6 waa2 laa3, zou2 di1 fan3.|Stop playing with your phone, sleep early.
+着多件衫|zoek3 do1 gin6 saam1|put on another layer|多穿件衣服|出面凍，着多件衫。|ceot1 min6 dung3, zoek3 do1 gin6 saam1.|It's cold out, put another layer on.
+好味|hou2 mei6|tasty|好吃|好唔好味呀？|hou2 m4 hou2 mei6 aa3?|Is it good?
+返嚟食飯|faan1 lai4 sik6 faan6|come home to eat|回来吃饭|星期日返嚟食飯。|sing1 kei4 jat6 faan1 lai4 sik6 faan6.|Come home for dinner on Sunday.`.split('\n').map(line => { const p = line.split('|'); return { key: 'mei:' + p[0], src: 'b', lv: 'mei', word: p[0], jp: p[1], en: p[2], mando: p[3] || '', ex: p[4] || '', exJp: p[5] || '', exEn: p[6] || '' }; });
 function mineItems() { return S.mine.map(m => ({ key: 'm:' + m.id, src: 'm', lv: 'mine', word: m.word, jp: m.jp, en: m.en, mando: '', ex: m.ex || '', exJp: '', exEn: '' })); }
 function allItems() { return ALL_B.concat(mineItems()); }
 const meta = k => S.meta[k] || (S.meta[k] = { box: 0, due: 0 });
@@ -1388,6 +1399,7 @@ function go(tab, sub) {
 function deckSource() {
   if (S.deck === 'saved') return allItems().filter(it => peek(it.key).saved);
   if (S.deck === 'mine') return mineItems();
+  if (S.deck === 'mei') return MEI;
   return LEVELS.slice(0, LEVELS.indexOf(S.lv) + 1).reduce((a, l) => a.concat(BUILTIN[l]), []);
 }
 function buildDeck() {
@@ -1398,7 +1410,7 @@ function buildDeck() {
   items.sort((a, b) => (peek(a.key).due || 0) - (peek(b.key).due || 0) || LEVELS.indexOf(a.lv) - LEVELS.indexOf(b.lv));
   App.deck = items; const k = items.findIndex(x => x.key === cur); App.idx = k >= 0 ? k : 0;
 }
-function lvTag(it) { return it.lv === 'mine' ? '我嘅字' : `${it.lv} · ${LEVEL_INFO[it.lv]}`; }
+function lvTag(it) { return it.lv === 'mei' ? 'mei 嘅' : it.lv === 'mine' ? '我嘅字' : `${it.lv} · ${LEVEL_INFO[it.lv]}`; }
 function backHtml(it) {
   return `<p class="term han" style="font-size:clamp(30px,9vw,44px)">${esc(it.word)}</p>
     <div class="jp big">${esc(it.jp)}</div>
@@ -1409,6 +1421,7 @@ function backHtml(it) {
 function renderCard() {
   $('lvlPill').textContent = S.lv; document.querySelectorAll('.lvlTxt').forEach(e => e.textContent = S.lv);
   document.querySelectorAll('#deckSeg button').forEach(b => b.classList.toggle('on', b.dataset.arg === S.deck));
+  if ($('meiNote')) $('meiNote').hidden = S.deck !== 'mei';
   $('dirTxt').textContent = S.dir === 'yue' ? '粵 → 英' : '英 → 粵';
   if (!App.deck.length || !App.deck[App.idx]) buildDeck();
   const src = deckSource(), mastered = src.filter(it => peek(it.key).status === 'mastered').length;
