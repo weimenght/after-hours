@@ -100,14 +100,6 @@ AUTHOR: FREE//BUILDER
 DESC: Board a night sleeper and just look out. Stations from Kyoto to Sitges roll by, each in its own style and announced in its own language. Write on the fogged glass, and share your cabin so friends ride the same window, live.
 URL: station/
 
-CODE: JUKEBOX
-ID: JB-09
-TITLE: Same Song
-GENRE: One shared record player
-AUTHOR: FREE//BUILDER
-DESC: An old jukebox full of the town's records, Popo and Josep's bolero among them. Pick one and the whole town hears the same song at the same second: here, Next Door and in Borrowed Pages.
-URL: same-song/
-
 CODE: POPO
 ID: PH-30
 TITLE: Popo's House

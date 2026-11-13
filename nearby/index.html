@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=c6f5572963"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=8d5bc5afa4" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2078add2cb"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=3d627039d6" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Nearby — FREE//BUILDER</title>
 <meta name="description" content="Nearby: a small pixel town for finding your people, in real life. Wander alone or with a friend, leave something you made for the neighbours, borrow a real book, play with someone far away. Wei, the bartender, will show you around.">
@@ -92,8 +92,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     { k: "tower", url: "/nearby/slow-clock/", x: 80, y: 50, w: 20, h: 42, n: ["Slow Clock", "慢钟", "慢鐘", "Reloj Lento", "Rellotge Lent"] },
     { k: "kintsugi", url: "/nearby/mended/", x: 4, y: 212, w: 40, h: 34, n: ["Mended", "金缮坊", "金繕坊", "Remendado", "Adobat"] },
     { k: "bar", url: "/nearby/next-door/", x: 48, y: 110, w: 48, h: 40, n: ["Next Door", "隔壁", "隔壁", "Al Lado", "Al Costat"] },
-    { k: "books", url: "/nearby/borrowed-pages/", x: 100, y: 114, w: 38, h: 36, n: ["Borrowed Pages", "借来的书", "借來的書", "Páginas Prestadas", "Pàgines Manllevades"] },
-    { k: "jukebox", url: "/nearby/same-song/", x: 142, y: 122, w: 34, h: 28, n: ["Same Song", "同一首歌", "同一首歌", "La Misma Canción", "La Mateixa Cançó"] },
+    { k: "books", url: "/nearby/borrowed-pages/", x: 100, y: 114, w: 76, h: 36, n: ["Borrowed Pages", "借来的书", "借來的書", "Páginas Prestadas", "Pàgines Manllevades"] },
     { k: "popo", url: "/nearby/popos-house/", x: 6, y: 164, w: 56, h: 44, n: ["Popo's House", "婆婆家", "婆婆家", "Casa de Popo", "Cal Popo"] },
     { k: "plaza", url: "/nearby/plaza/", x: 64, y: 168, w: 42, h: 40, n: ["The Plaza", "广场", "廣場", "La Plaza", "La Plaça"] },
     { k: "nest", url: "/nearby/miso-and-yuzu/", x: 4, y: 116, w: 40, h: 34, n: ["Miso & Yuzu's", "味噌和柚子家", "味噌和柚子家", "Casa de Miso y Yuzu", "Cal Miso i la Yuzu"] },
@@ -110,6 +109,8 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     { k: "lake", abs: 1, url: "/nearby/lie-back/?place=lake", x: 274, y: 104, w: 84, h: 66, n: ["Mirror Lake", "镜湖", "鏡湖", "Lago Espejo", "Llac Mirall"] },
     { k: "sea", abs: 1, url: "/nearby/lie-back/?place=sea", x: 274, y: 214, w: 84, h: 78, n: ["Sandy Cove", "沙湾", "沙灣", "Cala de Arena", "Cala de Sorra"] }
   ];
+  /* only buildings carry a name tag (the owner, Nov 14); the wild places are just the country, still a tap away */
+  var NOTAG = { cloud: 1, forest: 1, meadow: 1, lake: 1, sea: 1, pasture: 1 };
   var BELOW = { cloud: 0, kintsugi: 1 }, SIDE = {};
   /* where the 📍 stands inside a spot (fractions), when the middle isn't the drawing: High Pasture's middle is No Hurry's cabin */
   var PIN = { pasture: [.22, .78] };
@@ -221,10 +222,16 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     R(126, 131, 9, 19, "#2f5a3a"); R(126, 131, 9, 1, "#1e3a26"); R(127, 140, 1, 1, "#c8a050"); R(127, 128, 7, 2, lit ? "#f6c84a" : "#e8b060");
     R(116, 121, 9, 4, "#6b4426"); R(117, 122, 3, 2, "#f3e6cf"); R(121, 122, 3, 2, "#f3e6cf");
     R(137, 124, 1, 2, "#1a1a1a"); R(136, 126, 3, 4, lit ? "#ff6a4a" : "#e0402a"); if (lit) R(134, 124, 7, 8, "rgba(255,140,80,.18)");
-    // jukebox booth
-    R(144, 128, 30, 22, night ? "#2a1810" : "#5a2e1a"); R(142, 124, 34, 4, "#b3261e"); for (var aw = 142; aw < 176; aw += 4) R(aw, 128, 2, 2, "#fbeedd");
-    R(152, 132, 14, 18, "#3a2214"); R(153, 133, 12, 6, ((f / 6) | 0) % 2 ? "#f6b73c" : "#ff6a4a"); R(154, 140, 10, 6, "#7affc1"); R(153, 147, 12, 3, "#1d130d");
-    for (var nt = 0; nt < 3; nt++) { var ny = 128 - ((f * .4 + nt * 9) % 22); R(166 + Math.sin((f + nt * 20) / 8) * 2, ny, 2, 2, "rgba(255,243,192," + (1 - (128 - ny) / 22) + ")"); }
+    // Borrowed Pages' second room (Nov 14: Same Song closed and the bookshop took its corner): the same timber and roof, a bay window
+    // of shelves with a reading lamp and an armchair, a ladder against the stacks
+    R(138, 122, 38, 28, night ? "#3a2a1e" : "#4a3424"); R(138, 118, 40, 4, "#2a2a30"); R(138, 116, 38, 2, "#3a3a40");
+    for (var fl2 = 139; fl2 < 176; fl2 += 4) R(fl2, 120, 1, 1, lit ? "#ffd68a" : "#8a7a5a");
+    R(142, 126, 30, 20, lit ? "#f6c84a" : "#e8b060"); R(142, 126, 30, 1, "#2a180e"); R(142, 145, 30, 1, "#2a180e"); R(142, 126, 1, 20, "#2a180e"); R(171, 126, 1, 20, "#2a180e");
+    [130, 136].forEach(function (sy) { R(143, sy, 16, 1, "#6b4426"); for (var bk = 0; bk < 7; bk++) R(144 + bk * 2, sy - 4 + (bk % 3 === 0 ? 1 : 0), 1, 4 - (bk % 3 === 0 ? 1 : 0), ["#1e3a5f", "#7c2513", "#c8a050", "#2f4a2a", "#5a3a6e"][bk % 5]); });
+    R(160, 136, 8, 6, "#7c2513"); R(160, 142, 8, 3, "#5a1a0e"); R(161, 134, 6, 2, "#9a3a22");   // the armchair
+    R(166, 128, 1, 8, "#3a2414"); R(164, 127, 5, 2, lit ? "#fff3c0" : "#d8c890"); if (lit) { g.globalAlpha = .25; R(160, 128, 12, 12, "#fff3c0"); g.globalAlpha = 1; }
+    for (var ld = 0; ld < 5; ld++) R(149 + ld, 140 - ld * 3, 3, 1, "#8a5a30");   // the ladder
+    R(140, 148, 34, 2, "#2a180e");
     // Popo's house (Nov 14: Say Hello, Come Over, Two Candles and the back room are its rooms): two storeys, a tiled roof, a red door, lamplit windows
     for (var ph = 0; ph < 8; ph++) R(8 + ph, 164 + ph, 52 - ph * 2, 1, night ? "#3a2420" : "#8a3a2a");
     R(6, 172, 56, 36, night ? "#5a4434" : "#c8a070"); R(6, 189, 56, 1, night ? "#4a3424" : "#a07a4a");
@@ -313,7 +320,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     if (night) { g.fillStyle = "rgba(10,10,40,.18)"; g.fillRect(0, 0, WW, H); }
     ["miso", "yuzu", "dog"].forEach(function (k) { var b = kit[k], p = catPos[k]; if (b && p) { b.style.left = ((p[0] + 3) / WW * 100) + "%"; b.style.top = ((p[1] + 2) / H * 100) + "%"; } });
   }
-  var kit = {}, TC = [], AROUND = { nest: 1, bar: 1, kintsugi: 1, books: 1, postcard: 1, popo: 1, jukebox: 1 };
+  var kit = {}, TC = [], AROUND = { nest: 1, bar: 1, kintsugi: 1, books: 1, postcard: 1, popo: 1 };
   /* the town starts in black and white; every place you have been to keeps its colour. Places you know well lose their name tags (hover or focus to see them). */
   var MASK = null, LIT = {}, GLOW = {}, KNOW = 3;
   function litNow() {
@@ -387,7 +394,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
   /* Miso and Yuzu: out and about, near wherever they wandered to this visit */
   var PET = (window.FBWorld && FBWorld.PETS) || { miso: { b: "#231b17", e: "#f2c94c" }, yuzu: { b: "#e8913a", e: "#4f9a62", stripe: "#b5611d", belly: "#f8dcae" }, dog: { b: "#e8c48a", w: "#fbf3e2", d: "#b88a4a", collar: "#c8402a", e: "#2a1a14" } };
   var CATS = { miso: { b: PET.miso.b, e: PET.miso.e, n: ["Miso", "味噌", "味噌", "Miso", "Miso"] }, yuzu: { b: PET.yuzu.b, e: PET.yuzu.e, s: PET.yuzu.stripe, belly: PET.yuzu.belly, n: ["Yuzu", "柚子", "柚子", "Yuzu", "Yuzu"] } };
-  var PATH = { nest: [6, 48, 158], bar: [50, 94, 158], cloud: [108, 170, 64], kintsugi: [6, 44, 247], books: [100, 138, 158], postcard: [8, 60, 207], popo: [8, 60, 207], jukebox: [142, 176, 158], tower: [76, 104, 87], train: [30, 150, 289], plaza: [66, 104, 207] };
+  var PATH = { nest: [6, 48, 158], bar: [50, 94, 158], cloud: [108, 170, 64], kintsugi: [6, 44, 247], books: [100, 138, 158], postcard: [8, 60, 207], popo: [8, 60, 207], tower: [76, 104, 87], train: [30, 150, 289], plaza: [66, 104, 207] };
   var where = (World.cats && World.cats()) || { miso: "bar", yuzu: "books" }, catPos = {};
   /* where each animal is, how it moves, and what they do when they meet */
   function placeOf(k) { return k === "dog" ? dogAt : where[k]; }
@@ -584,7 +591,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
       var a = document.createElement("a"); a.className = "spot"; a.href = p.url; a.dataset.k = p.k;
       a.style.left = (px(p) / WW * 100) + "%"; a.style.top = (p.y / H * 100) + "%"; a.style.width = (p.w / WW * 100) + "%"; a.style.height = (p.h / H * 100) + "%";
       var name = World.name ? World.name(p.k) : (p.n[L()] || p.n[0]); a.setAttribute("aria-label", name);
-      a.innerHTML = '<span class="tag' + (BELOW[p.k] ? " below" : SIDE[p.k] ? " side" : "") + '"></span>'; a.firstChild.textContent = name; if (p.quiet) a.firstChild.style.display = "none";
+      a.innerHTML = '<span class="tag' + (BELOW[p.k] ? " below" : SIDE[p.k] ? " side" : "") + '"></span>'; a.firstChild.textContent = name; if (p.quiet || NOTAG[p.k]) a.firstChild.style.display = "none";
       if (from && from === p.k) { var h = document.createElement("span"), at = PIN[p.k]; h.className = "here"; h.textContent = "📍"; h.title = t("here"); if (at) { h.style.setProperty("--pinx", at[0] * 100 + "%"); h.style.setProperty("--piny", at[1] * 100 + "%"); } a.appendChild(h); }
       a.addEventListener("click", function (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;

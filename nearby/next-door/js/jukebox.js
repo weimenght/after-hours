@@ -6,7 +6,7 @@
     document.head.appendChild(st);
     var box = document.createElement("div"); box.id = "jbRoom"; inner.insertBefore(box, inner.firstChild);
     JBW.mount(box, { venue: "bar" });
-    var make = document.createElement("a"); make.className = "jbc-make"; make.href = "../same-song/"; make.innerHTML = '<span aria-hidden="true">🎛️</span><span></span>'; make.lastChild.textContent = JB.w("make"); box.appendChild(make);
+    /* no "make a tune" link: Same Song closed (Nov 14); the jukebox only plays */
     JB.watch();
     /* walking into the room turns it on */
     new MutationObserver(function () { if (!room.classList.contains("hidden") && !JB.listening()) { JB.unlock(); JB.listen(true); JBW.fire(); JBW.paint(); } }).observe(room, { attributes: true, attributeFilter: ["class"] });
