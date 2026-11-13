@@ -20,6 +20,8 @@
     ctl: ["Show the controls", "显示控制按钮", "顯示控制按鈕", "Muestra los controles", "Mostra els controls"],
     u_music: ["Music", "音乐", "音樂", "Música", "Música"], u_drink: ["Drink", "喝点什么", "喝點什麼", "Bebida", "Beguda"], u_sky: ["Sky", "天色", "天色", "Cielo", "Cel"],
     u_else: ["Elsewhere", "换个地方", "換個地方", "Otro lugar", "Un altre lloc"], u_friend: ["Friend", "朋友", "朋友", "Amigo", "Amic"],
+    more: ["More", "更多", "更多", "Más", "Més"], lang: ["Language", "语言", "語言", "Idioma", "Idioma"], priv: ["Your privacy", "你的隐私", "你的隱私", "Tu privacidad", "La teva privadesa"],
+    moreAh: ["More from after-hours", "after-hours 的更多小东西", "after-hours 的更多小東西", "Más de after-hours", "Més d'after-hours"],
     help: ["How it works", "怎么玩", "怎麼玩", "Cómo funciona", "Com funciona"], full: ["Full screen", "全屏", "全螢幕", "Pantalla completa", "Pantalla completa"], unfullL: ["Exit full screen", "退出全屏", "退出全螢幕", "Salir de pantalla completa", "Surt de la pantalla completa"],
     nextOnly: ["Next stop", "下一站", "下一站", "Próxima parada", "Propera parada"], arrivingOnly: ["Arriving", "即将到站", "即將到站", "Llegando", "Arribant"],
     atPf: ["At the platform", "停靠站台", "停靠月台", "En el andén", "A l'andana"], offShort: ["Get off", "下车", "下車", "Bajar", "Baixar"],
@@ -203,6 +205,7 @@
     full: SV('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'),
     unfull: SV('<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>'),
     window: SV('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 3v18M3 12h18"/><path d="M6 7.5l2-2M15 16.5l2-2" opacity=".6"/>'),
+    more: SV('<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>'),
     door: SV('<path d="M5 21V4a1 1 0 0 1 1-1h9v18"/><path d="M15 3l4 1.5V21"/><path d="M3 21h18"/><circle cx="12" cy="12.5" r=".9" fill="currentColor"/>')
   };
   function fullOk() { var d = document.documentElement; try { return !!(d.requestFullscreen || d.webkitRequestFullscreen) && window.top === window ? true : !!(window.top.document.documentElement.requestFullscreen); } catch (e) { return false; } }
@@ -216,11 +219,28 @@
     try { var td = window.top.document, el = td.documentElement, on = td.fullscreenElement || td.webkitFullscreenElement;
       if (on) (td.exitFullscreen || td.webkitExitFullscreen).call(td); else (el.requestFullscreen || el.webkitRequestFullscreen).call(el); } catch (e) {}
   }
+  /* ⋯ (handoff/DESIGN.md §3, step 6): full screen where the browser allows it, the language, your privacy, and the way to the rest */
+  function more() {
+    var on = false; try { var td = window.top.document; on = !!(td.fullscreenElement || td.webkitFullscreenElement); } catch (e) {}
+    var LN = ["en", "zh", "zh-Hant", "es", "ca"], NM = ["English", "简体中文", "繁體中文", "Español", "Català"], cur = li();
+    var s = sheet('<small class="cb-stn">' + w("more") + '</small>' +
+      (fullOk() ? '<button type="button" class="jn-wide" data-full>' + w(on ? "unfullL" : "full") + '</button>' : "") +
+      '<h3 class="jn-h">' + w("lang") + '</h3><div class="jn-chips">' + LN.map(function (l, i) { return '<button type="button" class="jn-chip' + (i === cur ? " on" : "") + '" data-l="' + l + '" lang="' + l + '" aria-pressed="' + (i === cur) + '">' + NM[i] + "</button>"; }).join("") + "</div>" +
+      '<a class="jn-wide" href="/privacy/" data-pv>' + w("priv") + '</a>' +
+      '<a class="jn-wide" href="/app/" target="_top" data-ah>' + w("moreAh") + ' ›</a>' +
+      '<div class="row"><button type="button" data-x>' + w("close") + "</button></div>");
+    s.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-full],[data-l],[data-pv],[data-ah]"); if (!b) return;
+      if (b.hasAttribute("data-full")) { toggleFull(); s.remove(); }
+      if (b.dataset.l) { try { FBL.set(b.dataset.l); } catch (x) {} s.remove(); words(); }
+      if (b.hasAttribute("data-pv")) setTimeout(function () { s.remove(); }, 0);
+    });
+  }
   function buildUI() {
     if (UI) return UI;
     var top = document.createElement("div"); top.className = "jn-topbar";
     top.innerHTML = '<div class="jn-where"><b class="jn-stn"></b><small class="jn-status" aria-live="polite"></small></div><span class="jn-seats"></span><button type="button" class="jn-do" hidden></button>' +
-      '<button type="button" class="jn-ic" data-u="help"></button>' + (fullOk() ? '<button type="button" class="jn-ic" data-u="full">' + ICON.full + '</button>' : "");
+      '<button type="button" class="jn-ic" data-u="help"></button><button type="button" class="jn-ic" data-u="more" aria-haspopup="dialog">' + ICON.more + '</button>';   /* DESIGN.md §3: ? and ⋯ only; full screen lives in ⋯ */
     var dock = document.createElement("nav"); dock.className = "jn-dock";
     dock.innerHTML = ["music", "drink", "sky", "else", "friend"].map(function (k) { return '<button type="button" data-u="' + k + '"><i aria-hidden="true">' + ICON[k] + '</i><span></span></button>'; }).join("");
     document.body.appendChild(top); document.body.appendChild(dock);
@@ -228,7 +248,7 @@
     function click(e) {
       var b = e.target.closest("button"); if (!b) return; var u = b.dataset.u;
       if (b.classList.contains("jn-do")) { if (b.dataset.a === "stop" && state.trainState === "CRUISING" && !state.inTunnel) { try { triggerStationStopOrDepart(); FBCabin.director.next.depart = Date.now() + 90e3; } catch (x) {} } else if (b.dataset.a === "off") getOff(); return; }
-      if (u === "help") intro(true); if (u === "full") toggleFull();
+      if (u === "help") intro(true); if (u === "more") more();
       if (u === "music") records(); if (u === "drink") trolley(false); if (u === "sky") sky();
       if (u === "else") { try { FBCabin.somewhereElse(); } catch (x) {} }
       if (u === "friend") { try { FBCabin.share(); } catch (x) {} }
@@ -240,6 +260,7 @@
     if (!UI) return;
     UI.dock.querySelectorAll("button").forEach(function (b) { var k = "u_" + b.dataset.u; b.querySelector("span").textContent = w(k); b.setAttribute("aria-label", w(k)); });
     var h = UI.top.querySelector('[data-u="help"]'); h.textContent = "?"; h.setAttribute("aria-label", w("help")); h.title = w("help");
+    var mo = UI.top.querySelector('[data-u="more"]'); mo.setAttribute("aria-label", w("more")); mo.title = w("more");
     paintFull();
   }
   function paintUI() {
@@ -580,6 +601,7 @@
     ".jn-h{margin:12px 0 6px;font:600 11px/1.2 ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.6}" +
     ".jn-chips{display:flex;flex-wrap:wrap;gap:6px}.jn-chip{flex:none!important;min-height:38px!important;padding:0 14px!important;display:inline-flex!important;align-items:center!important;justify-content:center;line-height:1!important;gap:6px;border-radius:999px!important;border:1.5px solid rgba(42,26,16,.2)!important;font:500 14px system-ui,sans-serif!important}" +
     ".jn-chip i{font-style:normal}.jn-chip.on{background:#2a1a10!important;color:#f8efe0!important;border-color:#2a1a10!important}" +
+    "a.jn-wide{display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none}" +
     ".jn-wide{display:block;width:100%;min-height:44px;margin:12px 0 4px;border-radius:999px;border:1.5px solid rgba(42,26,16,.35);background:transparent;font:600 14px system-ui,sans-serif;color:inherit;cursor:pointer}" +
     "@media (max-width:380px){.jn-stn{font-size:18px}.jn-do{padding:0 12px;font-size:13px}.jn-dock button{font-size:11px}.jn-topbar{padding-left:12px}}" +
     "@media (max-height:500px){.jn-topbar{padding:5px 6px 5px 14px}.jn-stn{font-size:17px}.jn-status{font-size:11.5px}.jn-dock button{min-height:42px;flex-direction:row;gap:6px}.jn-dock button svg{width:19px;height:19px}.jn-dock{padding:4px}}" +
