@@ -169,6 +169,7 @@
     return (GPIC[gd.k] = big.toDataURL());
   }
   function mapsQ(q) {
+    if (window.FBC && FBC.mapsUrl) return FBC.mapsUrl(q);
     var ua = navigator.userAgent || "", e = encodeURIComponent(q);
     if (/iPhone|iPad|Macintosh/.test(ua) && "ontouchend" in document || /iPhone|iPad/.test(ua)) return "https://maps.apple.com/?q=" + e;
     if (/Android/.test(ua)) return "geo:0,0?q=" + e;

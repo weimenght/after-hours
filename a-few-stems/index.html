@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b0d31a9748"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=3f62c3f1b4"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>A Few Stems · flowers for someone, in a link</title>
 <meta name="description" content="Tie a few stems for someone you love and send them in a link or a picture. Nothing is kept anywhere.">
@@ -437,6 +437,7 @@ h1.tagline em{font-style:italic;color:var(--rose)}
 
   /* ---------- real ones: a florist in the visitor's own maps app (the same rule as the town's townkit.js) ---------- */
   function mapsUrl(q) {
+    if (window.FBC && FBC.mapsUrl) return FBC.mapsUrl(q);
     var ua = navigator.userAgent || "";
     if (/iPhone|iPad/.test(ua) || (/Macintosh/.test(ua) && "ontouchend" in document)) return "https://maps.apple.com/?q=" + encodeURIComponent(q);
     if (/Android/.test(ua)) return "geo:0,0?q=" + encodeURIComponent(q);
@@ -449,7 +450,7 @@ h1.tagline em{font-style:italic;color:var(--rose)}
       + '<a class="btn" id="rMe" target="_blank" rel="noopener">' + esc(t("nearMe")) + " ↗</a></div>";
     document.body.appendChild(s); var inp = s.querySelector("#rIn"); if (place) inp.value = place;
     s.querySelector("#rMe").href = mapsUrl(t("florist"));
-    s.querySelector("#rF").onsubmit = function (e) { e.preventDefault(); var p = inp.value.trim(); if (!p) { hop(inp); inp.focus(); return; } window.open(mapsUrl(t("florist_near", { p: p })), "_blank", "noopener"); };
+    s.querySelector("#rF").onsubmit = function (e) { e.preventDefault(); var p = inp.value.trim(); if (!p) { hop(inp); inp.focus(); return; } var fq = t("florist_near", { p: p }); if (window.FBC && FBC.map) FBC.map(fq); else window.open(mapsUrl(fq), "_blank", "noopener"); };
     s.querySelector(".x").onclick = closeSheet; s.onclick = function (e) { if (e.target === s) closeSheet(); };
     setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) {} }, 60);
   }

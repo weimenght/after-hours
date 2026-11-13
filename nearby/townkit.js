@@ -32,6 +32,7 @@
     if (navigator.clipboard) return navigator.clipboard.writeText(text + " " + url).then(function () { note(t(COPIED), "↗"); }).catch(function () {});
   }
   function mapsUrl(q) {
+    if (window.FBC && FBC.mapsUrl) return FBC.mapsUrl(q);
     var ua = navigator.userAgent || "";
     if (/iPhone|iPad/.test(ua) || (/Macintosh/.test(ua) && "ontouchend" in document)) return "https://maps.apple.com/?q=" + encodeURIComponent(q);
     if (/Android/.test(ua)) return "geo:0,0?q=" + encodeURIComponent(q);

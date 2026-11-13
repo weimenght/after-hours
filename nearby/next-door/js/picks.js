@@ -41,6 +41,7 @@
   function realQ(k) { const r = REAL[k]; if (!r) return ''; const lg = AppState.lang; return lg === 'zh' || lg === 'tw' || lg === 'yue' ? r[1] : lg === 'es' ? r[2] : lg === 'ca' ? r[3] : r[0]; }
   function mapsUrl(q, url) {   /* the visitor's own maps: Apple Maps on Apple devices, the system's map app on Android, OpenStreetMap elsewhere */
     if (url && /^https:\/\//.test(url)) return url;
+    if (window.FBC && FBC.mapsUrl) return FBC.mapsUrl(q);
     const ua = navigator.userAgent || '';
     if (/iPhone|iPad|Macintosh/.test(ua) && 'ontouchend' in document || /iPhone|iPad/.test(ua)) return 'https://maps.apple.com/?q=' + encodeURIComponent(q);
     if (/Android/.test(ua)) return 'geo:0,0?q=' + encodeURIComponent(q);
