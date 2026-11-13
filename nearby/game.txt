@@ -103,9 +103,9 @@ URL: station/
 CODE: JUKEBOX
 ID: JB-09
 TITLE: Same Song
-GENRE: Light-up tunes, one shared record player
+GENRE: One shared record player
 AUTHOR: FREE//BUILDER
-DESC: Light one bulb per beat and you have a tune; tap the drum for a groove. Press it into a record and sign it: it plays Next Door, in Borrowed Pages and here at the same second, with your name on it.
+DESC: An old jukebox full of the town's records, Popo and Josep's bolero among them. Pick one and the whole town hears the same song at the same second: here, Next Door and in Borrowed Pages.
 URL: same-song/
 
 CODE: POPO
@@ -137,5 +137,5 @@ ID: KS-07
 TITLE: Mended
 GENRE: Golden joinery, slow craft
 AUTHOR: FREE//BUILDER
-DESC: A different broken piece waits on the bench each visit. Fit the shards, trace the cracks with lacquer, and the gold fills them. Sign the finished piece into a book every visitor can leaf through.
+DESC: A blue-and-white rice bowl from Popo's kitchen waits on the bench, like the one the sisters broke. Fit the big pieces back in any order, trace the cracks with lacquer, and the gold fills them. Sign it into a book every visitor can leaf through.
 URL: mended/
