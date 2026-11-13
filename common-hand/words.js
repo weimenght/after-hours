@@ -42,6 +42,10 @@ window.CH_W = {
   doneT: ["Hand complete", "胡了", "食糊", "Mano completa", "Mà completa"],
   doneSub: ["Every pair at this table has something in common.", "这张桌上每两个人都有共同点。", "這張桌上每兩個人都有共同點。", "Cada pareja de esta mesa tiene algo en común.", "Cada parella d'aquesta taula té alguna cosa en comú."],
   donePopo: ["Hu! Six pairs, all same same somewhere. Now wash the tiles, we play properly.", "胡了！六对，个个都有一样的地方。好，洗牌，正经开打咯。", "食糊！六對，個個都有啲嘢一樣。好，洗牌，正式開枱喇。", "¡Hu! Seis parejas, todas igual en algo. Ahora lava las fichas, jugamos de verdad.", "Hu! Sis parelles, totes amb alguna cosa en comú. Ara renteu les fitxes, que juguem de debò."],
+  /* who taught Popo (handoff/STORY_LINES.md) */
+  gpPopo: ["Me. My grandmother, the one with the pipe. She cheat, everybody know. I don't cheat. Mostly.", "我啊。我外婆，抽烟斗那个。她出千，大家都知道。我不出千。大部分时候。", "我囉。我婆婆，食煙斗嗰個。佢出貓，個個都知。我唔出貓。大部分時間啦。", "Yo. Mi abuela, la de la pipa. Ella hace trampa, todos saben. Yo no hago trampa. Casi nunca.", "Jo. La meva àvia, la de la pipa. Feia trampes, tothom ho sabia. Jo no en faig. Gairebé mai."],
+  washPopo: ["My grandmother say: wash slow, you hear who's nervous.", "我外婆说：洗牌慢慢洗，就听得出谁紧张。", "我婆婆話：洗牌洗慢啲，就聽到邊個緊張。", "Mi abuela dice: lava despacio, oyes quién está nervioso.", "La meva àvia deia: renta-les a poc a poc i sentiràs qui està nerviós."],
+  josepPopo: ["Josep never win one time. He say he let me. He lie.", "Josep 一次都没赢过。他说是让我的。他骗人。", "Josep 一次都冇贏過。佢話係讓我。佢呃人。", "Josep nunca gana ni una vez. Dice que me deja ganar. Miente.", "En Josep no va guanyar ni un sol cop. Deia que em deixava guanyar. Mentia."],
   pairLine: ["{a} & {b}: both {k}", "{a}和{b}：都{k}", "{a}和{b}：都{k}", "{a} y {b}: los dos {k}", "{a} i {b}: tots dos {k}"],
   send: ["Send our hand", "把这一手发出去", "把這一手發出去", "Enviar nuestra mano", "Enviar la nostra mà"],
   shareText: ["Our table found its common hand:\n{lines}\nDeal your own:", "我们这桌凑齐了一手：\n{lines}\n你们也来凑一手：", "我們這桌湊齊了一手：\n{lines}\n你們也來湊一手：", "Nuestra mesa encontró su mano común:\n{lines}\nHaced la vuestra:", "La nostra taula ha trobat la seva mà comuna:\n{lines}\nFeu la vostra:"],

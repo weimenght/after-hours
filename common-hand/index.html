@@ -613,15 +613,17 @@ function renderPlay() {
     $("claim").onclick = claim;
   } else {
     card.innerHTML = '<p class="q" style="color:var(--ink-soft)">' + esc(t("drawHint")) + "</p>";
-    say($("sayPlay"), "popo", t("pairsLeft", { n: 6 - n }) + ".");
+    say($("sayPlay"), "popo", special ? t(special) : t("pairsLeft", { n: 6 - n }) + ".");
     $("drawBtn").onclick = draw;
   }
   $("felt").querySelectorAll("[data-seat]").forEach(function (b) { b.onclick = function () { if (S.drawn == null) return; sfx("tap"); var i = +b.getAttribute("data-seat"); S.sel = S.sel.indexOf(i) >= 0 ? S.sel.filter(function (x) { return x !== i; }) : S.sel.concat(i); toast = ""; save(); renderPlay(); }; });
 }
-function draw() { sfx("draw"); if (!S.deck.length) S.deck = shuffled(); S.drawn = S.deck.shift(); S.sel = []; flip = true; toast = ""; save(); renderPlay(); }
+var special = null, GP = -1; Q.forEach(function (q, i) { if (q.s === "m" && q.t === 3) GP = i; });   /* Popo's own lines: the grandparent tile, the first wash */
+function draw() { special = null; sfx("draw"); if (!S.deck.length) S.deck = shuffled(); S.drawn = S.deck.shift(); S.sel = []; flip = true; toast = ""; save(); renderPlay(); }
 function claim() {
   sfx(S.sel.length < 2 ? "discard" : S.sel.length === 2 ? "pung" : S.sel.length === 3 ? "chow" : "kong");
   if (S.sel.length < 2) { S.deck.push(S.drawn); S.drawn = null; S.sel = []; toast = t("discarded"); save(); renderPlay(); return; }
+  if (S.drawn === GP) special = "gpPopo";
   var sel = S.sel.slice().sort(), fresh = [];
   for (var i = 0; i < sel.length; i++) for (var j = i + 1; j < sel.length; j++) { var k = pk(sel[i], sel[j]); if (S.pairs[k] == null) { S.pairs[k] = S.drawn; fresh.push(nm(sel[i]) + t("and") + nm(sel[j])); } }
   toast = fresh.length ? t("newSet", { p: fresh.join(", ") }) : t("already");
@@ -636,7 +638,7 @@ function myTiles() { return PAIRS.map(function (p) { return S.pairs[pk(p[0], p[1
 function renderDone() {
   sceneTable($("scDone"), "done");
   $("sets").innerHTML = setsHTML(S.names, myTiles());
-  say($("sayDone"), "popo", t("donePopo"));
+  say($("sayDone"), "popo", t("donePopo") + " " + t("josepPopo"));
 }
 function renderRecv() {
   sceneTable($("scRecv"));
@@ -678,7 +680,7 @@ if ("serviceWorker" in navigator && window.isSecureContext) addEventListener("lo
     document.addEventListener("visibilitychange", function () { if (!document.hidden) reg.update().catch(function () {}); });
   }).catch(function () {});
 });
-$("wash").onclick = function () { sfx("wash"); S.names = S.names.map(function (x) { return (x || "").trim(); }); if (S.screen !== "play" || found() === 6) { var nms = S.names; S = fresh(nms); } line = null; toast = ""; show("play"); };
+$("wash").onclick = function () { sfx("wash"); S.names = S.names.map(function (x) { return (x || "").trim(); }); if (S.screen !== "play" || found() === 6) { var nms = S.names; S = fresh(nms); } line = null; toast = ""; try { if (!localStorage.getItem("ch_wash")) { localStorage.setItem("ch_wash", "1"); special = "washPopo"; } } catch (e) {} show("play"); };
 $("reseat").onclick = function () { S.drawn = null; S.sel = []; S.pairs = {}; S.deck = shuffled(); line = null; toast = ""; show("home"); };
 $("again").onclick = function () { S = fresh(S.names); line = null; toast = ""; $("sendNote").textContent = ""; show("play"); };
 $("send").onclick = send;

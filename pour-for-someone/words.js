@@ -939,6 +939,11 @@ window.PF_W = {
 "*se aparta de la barra* Tu hervidor. Yo me callo.",
 "*s'aparta de la barra* El teu bullidor. Jo callo."
 ],
+"aviName": ["Avi's cabin coffee", "外公的小木屋咖啡", "外公的小木屋咖啡", "El café de la cabaña del Avi", "El cafè de la cabana de l'Avi"],
+"aviSub": ["Wei · no recipe", "Wei · 没有冲法", "Wei · 沒有沖法", "Wei · sin receta", "En Wei · sense recepta"],
+"aviNote": ["Boiled on the stove at the cabin, grounds and all. Popo drank it every Sunday anyway. That's why I learned. Mei, it turns out, takes after him.", "在小木屋的炉子上连渣一起煮。婆婆每个星期天还是照喝。所以我才去学的。结果 Mei 随了他。", "在小木屋的爐子上連渣一起煮。婆婆每個星期天還是照喝。所以我才去學的。結果 Mei 隨了他。", "Hervido en el fogón de la cabaña, con posos y todo. Popo se lo bebía igual cada domingo. Por eso aprendí. Mei, por lo visto, ha salido a él.", "Bullit al fogó de la cabana, amb el pòsit i tot. La Popo se'l bevia igualment cada diumenge. Per això en vaig aprendre. La Mei, pel que sembla, ha sortit a ell."],
+"aviLine": ["No timer. Make a good one for whoever always drinks yours anyway.", "没有计时器。给那个不管怎样都会喝你咖啡的人，好好冲一杯。", "沒有計時器。給那個不管怎樣都會喝你咖啡的人，好好沖一杯。", "Sin temporizador. Haz uno bueno para quien siempre se bebe el tuyo de todos modos.", "Sense temporitzador. Fes-ne un de bo per a qui sempre es beu el teu de totes maneres."],
+"popoMilk": ["Popo takes it with too much milk. Let her.", "婆婆会加太多牛奶。由她吧。", "婆婆會加太多牛奶。由她吧。", "Popo lo toma con demasiada leche. Déjala.", "La Popo se'l pren amb massa llet. Deixa-la."],
 "weiDone": [
 "Two cups. Carry one over while it's hot.",
 "两杯。趁热端一杯过去。",

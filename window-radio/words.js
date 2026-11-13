@@ -95,6 +95,10 @@ window.WR_W = {
   gotT: ["Someone sent you a tape.", "有人给你寄了一盘磁带。", "有人給你寄了一盤磁帶。", "Alguien te ha enviado una cinta.", "Algú t'ha enviat una cinta."],
   gotB: ["Press play at the same time and you'll hear the same song. Better still, in the same room.", "同时按播放，你们会听到同一首歌。在同一个房间里更好。", "同時按播放，你們會聽到同一首歌。在同一個房間裡更好。", "Si le dais al play a la vez, oiréis la misma canción. Mejor aún, en la misma habitación.", "Si hi poseu play alhora, sentireu la mateixa cançó. Encara millor, a la mateixa habitació."],
   mine: ["Make my own tape", "做我自己的磁带", "做我自己的磁帶", "Hacer mi propia cinta", "Fer la meva cinta"],
+  /* the family through the tapes only (handoff/STORY_LINES.md) */
+  bolero: ["Bolero after closing", "打烊后的波莱罗", "打烊後的波萊羅", "Bolero después de cerrar", "Bolero després de tancar"],
+  tapeFor: ["For Popo's sister, already asleep in Hong Kong.", "给婆婆的妹妹，她在香港已经睡了。", "給婆婆的妹妹，她在香港已經睡了。", "Para la hermana de Popo, que ya duerme en Hong Kong.", "Per a la germana de la Popo, que ja dorm a Hong Kong."],
+  moonCall: ["Someone you love is under the same moon. Call.", "你爱的人，在同一个月亮底下。打个电话吧。", "你愛的人，在同一個月亮底下。打個電話吧。", "Alguien a quien quieres está bajo la misma luna. Llama.", "Algú que estimes és sota la mateixa lluna. Truca-li."],
   doneT: ["Side A is over.", "A面放完了。", "A面放完了。", "Se acabó la cara A.", "S'ha acabat la cara A."],
   doneB: ["Leave the phone here for a bit. See who's home, and ask if they'd like tea.", "把手机放下一会儿。看看谁在家，问问要不要喝杯茶。", "把手機放下一會兒。看看誰在家，問問要不要喝杯茶。", "Deja el móvil aquí un rato. Mira quién hay en casa y pregunta si le apetece un té.", "Deixa el mòbil aquí una estona. Mira qui hi ha a casa i pregunta si li ve de gust un te."],
   again: ["Play side B", "放B面", "放B面", "Poner la cara B", "Posar la cara B"],

@@ -565,11 +565,18 @@ window.CF_W = {
 "Llegeix a poc a poc. Cuina a poc a poc. Menja a poc a poc."
 ],
 "popoDone": [
-"Good. Now call them. Food taste better when somebody waiting for it.",
-"好。现在打电话给他们。有人等着吃，菜才好吃。",
-"好。而家打電話俾佢哋。有人等住食，啲餸先好食。",
-"Bien. Ahora llámales. La comida sabe mejor cuando alguien espera.",
-"Molt bé. Ara truca'ls. El menjar és més bo quan algú l'espera."
+"Who you cook for, that's the recipe. The rest only salt. Now call them lah.",
+"你为谁做饭，那个才是食谱。其他的，只是盐。现在打电话给他们啦。",
+"你煮俾邊個食，嗰個先係食譜。其他嘅，只係鹽。而家打電話俾佢哋啦。",
+"Para quién cocinas, esa es la receta. Lo demás solo sal. Ahora llámales.",
+"Per a qui cuines, aquesta és la recepta. La resta només és sal. Ara truca'ls."
+],
+"sickPaper": [
+"A paper on top, from Popo: \u201cCongee? No recipe. Call me, I stand next to you.\u201d",
+"最上面，婆婆留的一张纸：\u201c煮粥？没有食谱。打给我，我站在你旁边。\u201d",
+"最上面，婆婆留低一張紙：「煲粥？冇食譜。打俾我，我企喺你隔籬。」",
+"Encima, un papel de Popo: \u00ab¿Congee? No receta. Llámame, yo estoy a tu lado.\u00bb",
+"A sobre, un paper de la Popo: \u00abCongee? No hi ha recepta. Truca'm i m'estaré al teu costat.\u00bb"
 ],
 "popoLeave": [
 "Whose recipe you keep? Write it down before you forget. I forget many already.",
@@ -829,5 +836,37 @@ window.CF_HOUSE = [
 "Un paquete de ramen, solo la mitad del sobre de sabor. Mientras hierve el agua: corta una cebolleta, abre una lata de maíz, busca el queso. Los fideos dos minutos, casca un huevo directamente en la olla y no lo toques. Una loncha de queso encima, tapa, treinta segundos. Aceite de chile si te atreves. Quemé el huevo dos veces antes de aprender lo de «no lo toques». Cómetelo y luego escribe a alguien a quien echas de menos. Esa es la mejora de verdad.",
 "Un paquet de ramen, només la meitat del sobre de gust. Mentre bull l'aigua: talla una ceba tendra, obre una llauna de blat de moro, busca el formatge. Els fideus dos minuts, trenca un ou directament a l'olla i no el toquis. Una llesca de formatge al damunt, tapa, trenta segons. Oli de bitxo si t'hi atreveixes. Vaig cremar l'ou dues vegades abans d'aprendre allò de «no el toquis». Menja-te'l i després escriu a algú que trobes a faltar. Aquesta és la millora de debò."
 ]
+},
+{
+"dish": [
+"Steamed egg with minced pork",
+"肉碎蒸蛋",
+"肉碎蒸水蛋",
+"Huevo al vapor con cerdo picado",
+"Ou al vapor amb carn picada"
+],
+"whose": [
+"Popo's mother's, Sham Shui Po",
+"婆婆妈妈的，深水埗",
+"婆婆阿媽嘅，深水埗",
+"De la madre de Popo, Sham Shui Po",
+"De la mare de la Popo, Sham Shui Po"
+],
+"forwho": [
+"someone home late",
+"晚归的人",
+"夜咗返屋企嗰個",
+"alguien que llega tarde a casa",
+"algú que arriba tard a casa"
+],
+"body": [
+"Three eggs, beat. Warm water, one and a half times the egg, little salt. Minced pork, little soy, little cornflour, flat on the plate. Egg on top, through a sieve so no bubble. Cover, small steam, ten minutes. Soy sauce and a drop of oil at the end. I make it many times, never same as hers. Her hand different. Still, make. Your hand also somebody's.",
+"三只蛋，打散。温水，蛋的一倍半，一点盐。肉碎拌一点酱油、一点生粉，铺平在碟上。蛋液过筛倒上面，就没有泡。盖起来，小火蒸十分钟。最后淋酱油，滴一点油。我做了很多次，从来没有她做的一样。她的手不一样。还是要做。你的手，也是某个人的。",
+"三隻蛋，打散。暖水，蛋嘅一倍半，少少鹽。免治豬肉撈少少豉油、少少生粉，攤平喺碟度。蛋漿隔篩倒上面，咁就冇泡。冚住，細火蒸十分鐘。最後淋豉油，滴少少油。我整過好多次，都冇佢整得咁好。佢隻手唔同。不過都要整。你隻手，都係某個人嘅。",
+"Tres huevos, batir. Agua tibia, vez y media el huevo, poca sal. Cerdo picado, poca soja, poca maicena, plano en el plato. Huevo encima, por colador, así no burbujas. Tapar, vapor suave, diez minutos. Soja y una gota de aceite al final. Lo hago muchas veces, nunca igual que ella. Su mano diferente. Igual, hazlo. Tu mano también es de alguien.",
+"Tres ous, batuts. Aigua tèbia, una vegada i mitja la quantitat d'ou, i una mica de sal. Carn de porc picada amb una mica de soja i de midó, ben estesa al plat. L'ou per sobre, passat pel colador perquè no faci bombolles. Tapa-ho i al vapor suau deu minuts. Al final, soja i una gota d'oli. L'he fet moltes vegades i mai no em queda com el seu. La seva mà era diferent. Tot i així, fes-lo. La teva mà també és d'algú."
+],
+"who": "popo",
+"tag": "late"
 }
 ];

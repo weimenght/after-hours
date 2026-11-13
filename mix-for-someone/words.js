@@ -862,6 +862,13 @@ window.MX_W = {
 "*sonríe* La de Popo. Querría que la bebieras con la cena, no en su lugar.",
 "*somriu* La de la Popo. Voldria que te la beguessis amb el sopar, no en lloc seu."
 ],
+"weiDoneSun": [
+"Make two. Sunday is for somebody.",
+"调两杯。星期天是留给某个人的。",
+"調兩杯。星期天是留給某個人的。",
+"Haz dos. El domingo es para alguien.",
+"Fes-ne dos. El diumenge és per a algú."
+],
 "weiDone": [
 "Make two. And a glass of water each, on the house.",
 "调两杯。再每人一杯水，我请。",
@@ -1188,6 +1195,37 @@ window.MX_HOUSE = [
 "冇酒。食完大餐飲，對個胃好。個個都飲得，細路都得。",
 "Sin alcohol. Bueno para la barriga después de cena grande. Todos pueden beber, niños también.",
 "Sense alcohol. Bo per a la panxa després d'un bon sopar. Tothom en pot beure, els nens també."
+]
+},
+{
+"who": "wei",
+"name": [
+"Avi's Sunday vermut",
+"外公的星期天味美思",
+"外公的星期天香艾酒",
+"El vermut de los domingos del Avi",
+"El vermut dels diumenges de l'Avi"
+],
+"glass": "rocks",
+"ice": "cubes",
+"method": "build",
+"garnish": "olive",
+"pours": [
+[
+"sweet_vermouth",
+60
+],
+[
+"soda",
+15
+]
+],
+"note": [
+"Red vermouth over ice, a slice of orange, one olive, a splash of soda, small tumbler. Before Sunday lunch, every Sunday. He poured Popo half a glass, and then drank the other half of hers. Mei's goes without the vermouth. She calls it orange soda with an olive, and she's right.",
+"红味美思倒在冰上，一片橙，一颗橄榄，一点苏打水，小平底杯。每个星期天午饭前都喝。他给婆婆倒半杯，然后把她那半杯也喝了。Mei 的不放味美思。她管它叫加了橄榄的橙子汽水，说得没错。",
+"紅香艾酒倒在冰上，一片柳橙，一顆橄欖，一點蘇打水，小平底杯。每個星期天午飯前都喝。他給婆婆倒半杯，然後把她那半杯也喝了。Mei 的不放香艾酒。她叫它加了橄欖的柳橙汽水，說得沒錯。",
+"Vermut rojo con hielo, una rodaja de naranja, una aceituna, un chorrito de sifón, vaso pequeño. Antes de la comida del domingo, cada domingo. Le servía a Popo medio vaso, y luego se bebía la otra mitad del suyo. El de Mei va sin vermut. Ella lo llama refresco de naranja con aceituna, y tiene razón.",
+"Vermut vermell amb gel, una rodanxa de taronja, una oliva, un raig de sifó, got petit. Abans del dinar de diumenge, cada diumenge. A la Popo li'n servia mig got, i després es bevia l'altra meitat del seu. El de la Mei va sense vermut. Ella en diu refresc de taronja amb oliva, i té raó."
 ]
 }
 ];

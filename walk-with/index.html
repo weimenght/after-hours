@@ -40,6 +40,8 @@
   h1 { font-size:44px; line-height:1.02; white-space:pre-line; }
   html:lang(zh) h1, html:lang(zh-Hant) h1 { font-size:34px; line-height:1.3; font-weight:700; }
   .lede { font-size:20px; color:var(--soft); }
+  .popo { margin:10px 0 0; font-style:italic; line-height:1.45; } .popo b { font-style:normal; font-weight:600; margin-right:4px; }
+  .popo.paper { padding:8px 12px; background:#fffaf2; color:#3a2a1c; border:1.5px solid var(--ink); border-radius:4px; transform:rotate(-.6deg); font-family:'Caveat',cursive; font-style:normal; font-size:21px; }
   .center { text-align:center; align-items:center; }
   .scene { width:100%; height:auto; display:block; }
   label { font-family:var(--hand); font-weight:600; font-size:27px; display:block; margin-bottom:6px; }
@@ -247,10 +249,13 @@ const WALKING=()=>`<svg class="scene" viewBox="0 0 320 150" role="img" aria-labe
  <path d="M246 105 q-4 7 0 10 q3 -4 2 -9z" fill="#b8862a"/>
 </g></svg>`;
 
+/* Popo's lines keep her hours (asleep 21–5, never woken): asleep, they wait on a paper tied to the lamp-post */
+function popoUp() { try { var d = new Date(), h = d.getHours() + d.getMinutes() / 60; return window.FBWorld && FBWorld.sleeps ? !FBWorld.sleeps("popo", h) : !(h >= 21 || h < 5); } catch (e) { return true; } }
+function popo(k) { var up = popoUp(); return '<p class="popo' + (up ? "" : " paper") + '"><b>' + esc(T(up ? W.pWho : W.pPaper)) + '</b> \u201c' + esc(T(W[k])) + '\u201d</p>'; }
 /* ---------- screens ---------- */
 var V = {
 home: function () { return '<section class="screen">' + CORNER() +
-  '<div><h1>' + esc(T(W.app)) + '</h1><p class="lede">' + esc(T(W.lede)) + '</p></div>' +
+  '<div><h1>' + esc(T(W.app)) + '</h1><p class="lede">' + esc(T(W.lede)) + '</p>' + popo("pCorner") + '</div>' +
   '<div><label id="dayL">' + esc(T(W.pickDay)) + '</label><div class="days" role="group" aria-labelledby="dayL">' + [0, 1, 2, 3, 4, 5, 6].map(function (o) { return '<button type="button" class="chip day" aria-pressed="false" data-d="' + o + '">' + esc(dayName(o)) + '</button>'; }).join("") + '</div></div>' +
   '<div><label id="whenL">' + esc(T(W.pickTime)) + '</label><div class="times" role="group" aria-labelledby="whenL">' + TIMES.map(function (x) { return '<button type="button" class="chip tm" aria-pressed="false" data-t="' + x + '">' + x + '</button>'; }).join("") + '<button type="button" class="chip other" id="otherBtn" aria-pressed="false">' + esc(T(W.otherTime)) + '</button><div class="pickt" id="tmIn" hidden><select id="tmH" aria-label="' + esc(T(W.pickTime)) + '"></select><span aria-hidden="true">:</span><select id="tmM" aria-label="' + esc(T(W.pickTime)) + '"></select></div></div></div>' +
   '<div><label for="corner">' + esc(T(W.whereLabel)) + '</label><input id="corner" maxlength="60" autocomplete="off" placeholder="' + esc(T(W.wherePh)) + '"></div>' +
@@ -278,10 +283,11 @@ countdown: function () { return '<section class="screen center"><div class="spac
   (s.role === "host" ? '<p class="note">' + esc(T(W.replyHint)) + '</p>' : '') +
   '<button type="button" class="link" id="msg">' + esc(T(W.msgThem)) + '</button></section>'; },
 go: function () { return '<section class="screen center">' + WALKING() +
-  '<h1>' + esc(T(W.goTitle)) + '</h1><button type="button" class="btn quiet" id="start">' + esc(T(W.startTimer)) + '</button></section>'; },
+    '<h1>' + esc(T(W.goTitle)) + '</h1><p class="note">' + esc(T(W.dogWaits)) + '</p><button type="button" class="btn quiet" id="start">' + esc(T(W.startTimer)) + '</button></section>'; },
 timer: function () { return '<section class="screen center"><div class="mins" id="mins" role="timer" aria-label="' + esc(T(W.minsLeft)) + '"></div></section>'; },
 done: function () { return '<section class="screen center"><h1>' + esc(T(W.doneTitle)) + '</h1>' +
   '<p class="corner" style="font-size:30px">' + esc(T(W.again)) + '</p>' +
+  popo("pAgain") +
   '<div class="row"><button type="button" class="btn sage" id="again">' + esc(T(W.yes)) + '</button><button type="button" class="btn quiet" id="nope">' + esc(T(W.no)) + '</button></div></section>'; },
 bye: function () { return '<section class="screen center">' + WALKING() +
   '<h1>' + esc(T(W.byeTitle)) + '</h1><p class="lede">' + esc(T(W.byeSub)) + '</p>' +

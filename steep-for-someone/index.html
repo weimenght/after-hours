@@ -631,6 +631,7 @@ function sceneHome(c) {
   if (who === "popo") drawPopo(ctx, 60, 30, 1.25);
   else { ctx.fillStyle = "#7a2a3a"; ctx.fillRect(60, 40, 34, 30); ctx.fillStyle = "#8a3a4a"; ctx.fillRect(58, 36, 38, 6); ctx.fillRect(58, 40, 4, 30); ctx.fillRect(92, 40, 4, 30); }   /* her armchair, empty: she's gone up to bed */
   table(ctx); clayPot(ctx, 70, 70); tinyCup(ctx, 52, 70, "#5a2a14"); tinyCup(ctx, 88, 70, "#5a2a14"); tinyCup(ctx, 96, 70, "#5a2a14");
+  ctx.fillStyle = "#f6f2ea"; ctx.fillRect(100, 64, 7, 6); ctx.fillStyle = "#2a5aa8"; ctx.fillRect(100, 65, 7, 1); ctx.fillRect(102, 67, 3, 1); ctx.fillStyle = "#5a2a14"; ctx.fillRect(101, 64, 5, 1);   /* her mother's cup, the one thing left from Hong Kong */
   if (who === "note") { ctx.fillStyle = "#f3ead8"; ctx.fillRect(110, 62, 16, 12); ctx.fillStyle = "#c8303a"; ctx.fillRect(110, 62, 16, 2); ctx.fillStyle = "#3a2418"; ctx.fillRect(113, 66, 10, 1); ctx.fillRect(113, 69, 8, 1); }
   drawPet(ctx, "miso", 27, 38, 1, { asleep: catsAsleep() });
   drawPet(ctx, "yuzu", 30, 70, 1, { asleep: catsAsleep() });
@@ -680,6 +681,10 @@ function render() {
   ({ home: renderHome, pick: renderPick, card: renderCard, steep: renderSteep, done: renderDone, book: renderBook, write: renderWrite, thanks: renderThanks, kept: renderKept })[cur]();
 }
 var homeLine = null;
+/* a tap on her mother's cup on the tray (handoff/STORY_LINES.md) */
+(function () { var c = document.getElementById("scHome"); if (!c) return; c.addEventListener("click", function (e) {
+  var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 160, y = (e.clientY - r.top) / r.height * 96;
+  if (x > 96 && x < 112 && y > 58 && y < 74) hostSay($("sayHome"), t("motherCup")); }); })();
 function renderHome() { sceneHome($("scHome")); if (!homeLine) homeLine = pick(W.popoHome); hostSay($("sayHome"), T(homeLine)); }
 function renderPick() {
   scenePick($("scPick")); hostSay($("sayPick"), t("popoPick"), t("catsPick"));
@@ -842,7 +847,7 @@ function pauseTimer() { B.el = (performance.now() - B.t0) / 1000; B.run = false;
 function stopTimer() { B.run = false; clearInterval(B.tick); release(); }
 function nextStep() { var n = teaNow().steps.length; B.el = 0; B.up = false; B.run = false; clearInterval(B.tick); if (B.i >= n - 1) { B.fin = true; release(); } else B.i++; paintSteep(); }
 function resetSteep() { stopTimer(); B.i = 0; B.el = 0; B.up = false; B.fin = false; paintSteep(); }
-function renderSteep() { hostSay($("saySteep"), t("popoSteep")); lock(); paintSteep(); }
+function renderSteep() { var first = false; try { first = !sessionStorage.getItem("tf_mother"); if (first) sessionStorage.setItem("tf_mother", "1"); } catch (e) {} hostSay($("saySteep"), t(first ? "motherPour" : "popoSteep")); lock(); paintSteep(); }
 document.addEventListener("visibilitychange", function () { if (!document.hidden && cur === "steep") { lock(); paintSteep(); } });
 $("goBtn").onclick = function () {
   var p = teaNow().steps[B.i];

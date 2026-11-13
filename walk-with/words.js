@@ -5,6 +5,12 @@ window.WW_W = {
   lang: ["Language", "语言", "語言", "Idioma", "Idioma"],
   device: ["Lives in your link, not a server", "只在你的链接里，不在服务器上", "只在你的連結裡，不在伺服器上", "Vive en tu enlace, no en un servidor", "Viu al teu enllaç, no en un servidor"],
   ah: ["After hours ↗", "下班以后 ↗", "下班以後 ↗", "Fuera de horario ↗", "Fora d'hores ↗"],
+  /* Josep's corner (handoff/STORY_LINES.md): Popo on her hours; asleep, a paper tied to the lamp-post */
+  pCorner: ["Every night I finish, Josep already at the corner. Never late, not one time. So, you also: be the one who come first.", "每天晚上我收工，Josep 已经在街角等。从来没迟到，一次都没有。所以你也是：做先到的那个。", "每晚我收工，Josep 已經喺街角等。從來冇遲到，一次都冇。所以你都係：做先到嗰個。", "Cada noche yo termino, Josep ya en la esquina. Nunca tarde, ni una vez. Así que tú también: sé el que llega primero.", "Cada nit, quan acabava, en Josep ja era a la cantonada. Mai no va arribar tard, ni un sol cop. Així que tu també: sigues qui arriba primer."],
+  pAgain: ["Same corner, same time. Then nobody need to look for nobody.", "同一个街角，同一个时间。这样谁都不用找谁。", "同一個街角，同一個時間。咁就冇人使搵人。", "Misma esquina, misma hora. Así nadie necesita buscar a nadie.", "La mateixa cantonada, la mateixa hora. Així ningú no ha de buscar ningú."],
+  pWho: ["Popo", "婆婆", "婆婆", "Popo", "La Popo"],
+  pPaper: ["A paper tied to the lamp-post, from Popo", "路灯柱上绑着婆婆的一张纸", "路燈柱上綁住婆婆一張紙", "Un papel atado a la farola, de Popo", "Un paper lligat al fanal, de la Popo"],
+  dogWaits: ["Mantou sits under the lamp-post and waits, the way he waited for the 7:40.", "馒头在路灯下坐着等，就像他以前等七点四十那班车。", "饅頭在路燈下坐著等，就像他以前等七點四十那班車。", "Mantou se sienta bajo la farola y espera, como esperaba el de las 7:40.", "En Mantou s'asseu sota el fanal i espera, com esperava el de les 7:40."],
   lede: ["Two people. One corner. Twenty minutes.", "两个人，一个街角，二十分钟。", "兩個人，一個街角，二十分鐘。", "Dos personas. Una esquina. Veinte minutos.", "Dues persones. Una cantonada. Vint minuts."],
   pickDay: ["Which day?", "哪天？", "哪天？", "¿Qué día?", "Quin dia?"],
   pickTime: ["What time?", "几点？", "幾點？", "¿A qué hora?", "A quina hora?"],

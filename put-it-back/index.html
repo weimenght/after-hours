@@ -704,6 +704,9 @@ function sendHome(it) {
   $("roomStatus").textContent = t("sends", { x: T(it.n), p: T(it.p) });
   say(it.who, sleeps(it.who) ? t("asleepLine") : T(it.l));
   setTimeout(function () { puff(HOME[it.id]); }, 650);
+  var ps = W.past && W.past[it.id], pk = "pb_past";   /* its past, once, when the one who knows it is awake */
+  if (ps && !sleeps(ps.who)) { var seen = {}; try { seen = JSON.parse(localStorage.getItem(pk) || "{}") || {}; } catch (e) {}
+    if (!seen[it.id]) { seen[it.id] = 1; try { localStorage.setItem(pk, JSON.stringify(seen)); } catch (e) {} setTimeout(function () { if (cur === "room") say(ps.who, T(ps.l)); }, 2400); } }
   var m = null, target = null;
   MISCHIEF.forEach(function (mm) {
     if (m || room.mdone[mm.pet] || room.returns < mm.at || sleeps(mm.pet)) return;

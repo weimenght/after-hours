@@ -136,6 +136,7 @@
     <p class="tapeno" id="tapeNo"></p>
     <h1 id="tapeTitle"></h1>
     <p class="meta" id="tapeMeta"></p>
+    <p class="meta" id="tapeFor" hidden></p>
     <div class="chips" id="chips"></div>
     <div class="controls">
       <button class="play" id="play" type="button"></button>
@@ -491,7 +492,7 @@ function pausePlay(){
   S.playing=false;au.pause();renderPlayBtn();session();
 }
 function resetTape(){au.pause();if(onTrack)try{au.currentTime=0}catch(e){}lastPos=0;S.started=false;S.winding=false;floaters=[];renderLeft()}
-function finish(){S.playing=false;S.remaining=0;resetTape();renderPlayBtn();session();show('sDone')}
+function finish(){S.playing=false;S.remaining=0;resetTape();renderPlayBtn();session();$('doneB').textContent=Tr(W.doneB)+(cfg&&moonFest(cfg)?' '+Tr(W.moonCall):'');show('sDone')}
 function segMs(){return S.playFor==='cup'?15*60e3:S.playFor==='pot'?30*60e3:0}
 /* the timer never cuts a song: when what's left is shorter than the rest of this pass, the tape stops looping and plays out to its end */
 function loopRule(){au.loop=!(S.playFor!=='open'&&S.playing&&cur&&endAt-Date.now()<=(cur.len-au.currentTime)*1000)}
@@ -545,8 +546,10 @@ function ctxLine(){const d=new Date(),f=festivalFor(d);return[dayName(d.getDay()
 function dayName(i){return W.days[li()][i]}
 /* the tape's name: one of many titles, chosen by the tape's own seed (so side B has its own, and a sent tape keeps its name):
    the festival's when there is one, otherwise the weather, the hour, the mood, the animal on the desk, the season, or the old "Rain on the Kettle" kind */
+function moonFest(c){return !!c&&(c.fid==='midautumn'||c.fid==='lny')}
 function tapeTitle(c){
   const N=W.names,r=mulberry((c.seed^0x2f6b5)>>>0),asleep=['evening','night','late'].includes(c.tb)||c.weather==='storm',pool=[];
+  if(c.dow===6&&(c.tb==='late'||c.tb==='night')&&(c.mood==='calm'||c.mood==='tired')&&!c.fid&&r()<.3)return Tr(W.bolero);   // rare: Saturday, late, calm or tired
   const add=(list,wt)=>{if(list&&list.length)pool.push([list,wt])};
   if(c.fid)add(N.fest[c.fid],60);
   add(N.weather[c.weather==='sun'&&asleep?'clearnight':c.weather],22);add(N.time[c.tb],22);add(N.mood[c.mood],14);add(N.pet[asleep?'asleep':'awake'],14);add(N.season[c.season],10);
@@ -578,7 +581,7 @@ function renderText(){
   $('weatherGrid').innerHTML=WEATHERS.map(w=>`<button class="pick" type="button" data-w="${w}" aria-pressed="${S.weather===w}">${svg(WICON[w])}<span>${esc(Tr(W.weathers[w]))}</span></button>`).join('');
   $('playForLbl').textContent=Tr(W.playFor);
   $('seg').innerHTML=['cup','pot','open'].map(k=>`<button type="button" data-k="${k}" aria-pressed="${S.playFor===k}">${esc(Tr(W.seg[k]))}</button>`).join('');
-  $('sameNote').textContent=Tr(W.same);$('doneT').textContent=Tr(W.doneT);$('doneB').textContent=Tr(W.doneB);$('again').textContent=Tr(W.again);$('backWin').textContent=Tr(W.backWin);
+  $('sameNote').textContent=Tr(W.same);$('doneT').textContent=Tr(W.doneT);$('doneB').textContent=Tr(W.doneB)+(cfg&&moonFest(cfg)?' '+Tr(W.moonCall):'');$('again').textContent=Tr(W.again);$('backWin').textContent=Tr(W.backWin);
   if(cfg)$('scene').setAttribute('aria-label',F(W.scene,{p:Tr(W.pets[cfg.pet])}));
   const _k=(k,d)=>window.FBC&&FBC.W&&FBC.W[k]?FBC.t(FBC.W[k]):d;
   const x='<span>'+esc(Tr(W.device))+'</span><a href="https://www.after-hours.work/?fbl='+LANGS[i]+'" target="_blank" rel="noopener">'+esc(_k('fAh',Tr(W.ah)))+'</a>';
@@ -591,6 +594,7 @@ function renderPlayer(){
   $('tapeNo').textContent=`${Tr(W.tape)} No. ${c.tapeNo} · ${Tr(S.side==='B'?W.sideB:W.side)}`;
   $('tapeTitle').textContent=tapeTitle(c);
   $('tapeMeta').textContent=F(W.meta,{k:W.keys[li()][c.keyOff],b:c.bpm,i:Tr(W.inst[c.lead])});
+  $('tapeFor').hidden=!moonFest(c);$('tapeFor').textContent=moonFest(c)?Tr(W.tapeFor):'';
   const chips=[`<span class="chip">${esc(dayName(c.dow))}</span>`,`<span class="chip">${esc(Tr(W.times[c.tb]))}</span>`];
   if(c.fest)chips.push(`<span class="chip">${esc(festName(c.fest))}</span>`);
   if(c.shared)chips.push(`<span class="chip">${esc(Tr(W.weathers[c.weather]))}</span>`,`<span class="chip">${esc(Tr(W.moods[c.mood]))}</span>`);

@@ -204,6 +204,7 @@ html:lang(zh) .top .ahh-nm, html:lang(zh-Hant) .top .ahh-nm { font: 700 18px/1.2
   .screen:has(> .scene) > .scene { grid-column: 1; grid-row: 1 / span 30; position: sticky; top: 24px; }
   .screen:has(> .scene) > :not(.scene) { grid-column: 2; margin-bottom: 14px; }
 }
+.card.avi{margin:6px 0 0;padding:12px 14px}.card.avi p{margin:0 0 6px}
 </style>
 </head>
 <body>
@@ -735,13 +736,23 @@ function renderCard() {
   $("keepBtn").textContent = isKept(brew) ? t("kept1") : t("keep"); $("keepBtn").disabled = isKept(brew) || brew.src === "mine";
   $("another").hidden = back !== "pick";
 }
-function renderDone() { sceneDone($("scDone")); hostSay($("sayDone"), t("weiDone")); if (!$("whoName").value) $("whoName").value = S.who || ""; }
+function renderDone() { sceneDone($("scDone")); var pm = ""; try { if (!localStorage.getItem("pf_milk")) { localStorage.setItem("pf_milk", "1"); pm = " " + t("popoMilk"); } } catch (e) {} hostSay($("sayDone"), t("weiDone") + pm); if (!$("whoName").value) $("whoName").value = S.who || ""; }
 function renderThanks() { hostSay($("sayThanks"), t("weiThanks")); if (brew) fillBrew($("thanksCard"), brew, false); }
 function itemBtn(b, sub) {
   var el = document.createElement("button"); el.type = "button"; el.className = "item";
   var c = document.createElement("canvas"); c.width = 48; c.height = 56; c.setAttribute("aria-hidden", "true"); smallV60(c, b); el.appendChild(c);
   var tx = document.createElement("span"), n = document.createElement("b"), s = document.createElement("small"); n.textContent = F(b, "name"); s.textContent = sub; tx.appendChild(n); tx.appendChild(s); el.appendChild(tx);
   el.onclick = function () { open(b, cur); }; return el;
+}
+/* a seventh card on the shelf, never brewed (handoff/STORY_LINES.md): Avi's cabin coffee, no recipe and no timer */
+function aviItem() {
+  var w = document.createElement("div"), el = document.createElement("button"); el.type = "button"; el.className = "item"; el.setAttribute("aria-expanded", "false");
+  var c = document.createElement("canvas"); c.width = 48; c.height = 56; c.setAttribute("aria-hidden", "true"); var g = c.getContext("2d");
+  g.fillStyle = "#3a2a1c"; g.fillRect(12, 22, 24, 26); g.fillStyle = "#6e4a2a"; g.fillRect(14, 24, 20, 6); g.fillStyle = "#1a1410"; g.fillRect(34, 28, 6, 4); g.fillRect(36, 28, 2, 12); g.fillStyle = "#cfc6b8"; g.fillRect(18, 12, 2, 6); g.fillRect(26, 8, 2, 8);
+  el.appendChild(c); var tx = document.createElement("span"), n = document.createElement("b"), s2 = document.createElement("small"); n.textContent = t("aviName"); s2.textContent = t("aviSub"); tx.appendChild(n); tx.appendChild(s2); el.appendChild(tx);
+  var d = document.createElement("div"); d.className = "card avi"; d.hidden = true; d.innerHTML = "<p>" + esc(t("aviNote")) + '</p><p class="note">' + esc(t("aviLine")) + "</p>";
+  el.onclick = function () { d.hidden = !d.hidden; el.setAttribute("aria-expanded", String(!d.hidden)); };
+  w.appendChild(el); w.appendChild(d); return w;
 }
 function sect(text) { var p = document.createElement("p"); p.className = "sect"; p.textContent = text; return p; }
 function subOf(b) { return [b.src === "house" ? T(W.names[b.who]) : b.nick ? t("by", { n: b.nick }) : "", Math.round(b.dose * 10) / 10 + " g · " + ratio(b), b.ice ? T(W.moods.iced) : ""].filter(Boolean).join(" · "); }
@@ -764,7 +775,8 @@ function paintBook(q) {
   var ns = (bookRows || []).filter(ok);
   if (ns.length) { L.appendChild(sect(t("neighbours"))); var g = document.createElement("div"); g.className = "list"; ns.forEach(function (b) { g.appendChild(itemBtn(b, subOf(b))); }); L.appendChild(g); }
   else if (bookRows && !q && !bookIced && $("bookNote").textContent !== t("offline")) { var e = document.createElement("p"); e.className = "note"; e.style.color = "var(--muted)"; e.textContent = t("emptyBook"); L.appendChild(e); }
-  if (hs.length) { L.appendChild(sect(t("hosts"))); var g2 = document.createElement("div"); g2.className = "list"; hs.forEach(function (b) { g2.appendChild(itemBtn(b, subOf(b))); }); L.appendChild(g2); }
+  var avi = !bookIced && (!ql || t("aviName").toLowerCase().indexOf(ql) >= 0);
+  if (hs.length || avi) { L.appendChild(sect(t("hosts"))); var g2 = document.createElement("div"); g2.className = "list"; hs.forEach(function (b) { g2.appendChild(itemBtn(b, subOf(b))); }); if (avi) g2.appendChild(aviItem()); L.appendChild(g2); }
   if (q && bookRows && !ns.length && !hs.length) { var z = document.createElement("p"); z.className = "note"; z.style.color = "var(--muted)"; z.textContent = t("noneFound"); L.appendChild(z); }
 }
 function renderKept() {

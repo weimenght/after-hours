@@ -694,7 +694,7 @@ function renderCard() {
   $("keepBtn").textContent = isKept(drink) ? t("kept1") : t("keep"); $("keepBtn").disabled = isKept(drink);
   $("another").hidden = back !== "pick";
 }
-function renderDone() { sceneDone($("scDone")); hostSay($("sayDone"), t("weiDone")); if (!$("whoName").value) $("whoName").value = S.who || ""; }
+function renderDone() { sceneDone($("scDone")); hostSay($("sayDone"), t(drink && drink.src === "house" && HOUSE[drink.i] && HOUSE[drink.i].garnish === "olive" && HOUSE[drink.i].pours[0][0] === "sweet_vermouth" ? "weiDoneSun" : "weiDone")); if (!$("whoName").value) $("whoName").value = S.who || ""; }
 function renderThanks() { hostSay($("sayThanks"), t("weiThanks")); if (drink) fillDrink($("thanksCard"), drink, false); }
 function itemBtn(d, sub) {
   var b = document.createElement("button"); b.type = "button"; b.className = "item";
@@ -745,7 +745,12 @@ function suggest(m) {
     if (!all.length) all = hs.filter(function (d) { return mood(d, m); });
     if (!all.length) all = hs;
     var fresh = all.filter(function (d) { return seen.indexOf(dKey(d)) < 0; }); if (!fresh.length) { seen = []; fresh = all; }
-    var d = pick(fresh); seen.push(dKey(d)); seen = seen.slice(-10); busy = false; open(d, "pick");
+    var d = pick(fresh);
+    /* Avi's Sunday vermut (handoff/STORY_LINES.md): for a little bitter and surprise me, and always on a Sunday before two */
+    var vi = -1; HOUSE.forEach(function (h, i) { if (h.pours[0][0] === "sweet_vermouth" && h.garnish === "olive") vi = i; });
+    var nw = new Date(), sun = nw.getDay() === 0 && nw.getHours() < 14;
+    if (vi >= 0 && m !== "zero" && (sun || ((m === "bitter" || !m) && Math.random() < .35))) d = house(vi);
+    seen.push(dKey(d)); seen = seen.slice(-10); busy = false; open(d, "pick");
   };
   if (poolRows) { go(); return; }
   rest("town_bar_cocktails?select=" + COLS + "&order=created_at.desc&limit=60").then(function (rows) { poolRows = (rows || []).map(neighbour).filter(function (d) { return d.name && d.pours.length; }); go(); }).catch(function () { poolRows = []; go(); });

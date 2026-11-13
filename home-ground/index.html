@@ -217,6 +217,7 @@ footer .fb-mk { width:16px; height:16px; }   /* the pixel marks from the kit (FB
     .sheet .paperpage { padding:0; max-width:none; }
     .sheet .doc { border:0; box-shadow:none; padding:0; }
   }
+.their{font-size:19px;line-height:1.35}.their b{display:block;letter-spacing:.06em;text-transform:uppercase;font-size:12px;opacity:.75;margin-bottom:2px}.their p{margin:0 0 6px}.their ul{margin:0 0 6px;padding-left:18px}.their li{margin:2px 0;font-style:italic}.their .miss1{font-weight:600}
 </style>
 </head>
 <body>
@@ -319,6 +320,13 @@ var W = {
   next: ["Next ›", "下一个 ›", "下一個 ›", "Siguiente ›", "Següent ›"],
   prev: ["‹", "‹", "‹", "‹", "‹"],
   stop: ["Stop walking", "不走了", "不走了", "Dejar de caminar", "Deixar de caminar"],
+  /* the family's town as the example (handoff/STORY_LINES.md): read only, gone once you start yours */
+  theirH: ["Their town", "他们的小镇", "他們的小鎮", "Su pueblo", "El seu poble"],
+  theirSub: ["Popo, an empty chair for Josep on her porch, Wei, Mei, the two sisters, and Popo's sister far off in Hong Kong.", "婆婆（门廊上给 Josep 留了一把空椅子）、Wei、Mei、两姐妹，还有远在香港的婆婆的妹妹。", "婆婆（門廊上給 Josep 留了一把空椅子）、Wei、Mei、兩姊妹，還有遠在香港的婆婆的妹妹。", "Popo, con una silla vacía para Josep en el porche, Wei, Mei, las dos hermanas, y la hermana de Popo lejos, en Hong Kong.", "La Popo, amb una cadira buida per a en Josep al porxo, en Wei, la Mei, les dues germanes, i la germana de la Popo lluny, a Hong Kong."],
+  th1: ["Mei, at Say Hello: \u201ci write popo more than my mom. working on it.\u201d", "Mei，在问个好：\u201c我给婆婆写的比给我妈多。在改了。\u201d", "Mei，在問個好：「我寫給婆婆的比寫給我媽多。在改了。」", "Mei, en Di Hola: \u00able escribo más a popo que a mi madre. estoy en ello.\u00bb", "La Mei, a Digues Hola: \u00abescric més a la popo que a la meva mare. hi estic treballant.\u00bb"],
+  th2: ["Wei's mum, at Two Candles: \u201cNoon in New York, six here. Every day since 1997.\u201d", "Wei 的妈妈，在双烛小馆：\u201c纽约中午，这里六点。从1997年起，每天。\u201d", "Wei 的媽媽，在雙燭小館：「紐約中午，這裡六點。從1997年起，每天。」", "La madre de Wei, en Dos Velas: \u00abMediodía en Nueva York, las seis aquí. Cada día desde 1997.\u00bb", "La mare d'en Wei, a Dues Espelmes: \u00abMigdia a Nova York, les sis aquí. Cada dia des del 1997.\u00bb"],
+  th3: ["Popo, at the kitchen: \u201cDoor open. Somebody always come.\u201d", "婆婆，在厨房：\u201c门开着。总会有人来。\u201d", "婆婆，喺廚房：「道門開住。總會有人嚟。」", "Popo, en la cocina: \u00abPuerta abierta. Siempre alguien viene.\u00bb", "La Popo, a la cuina: \u00abLa porta oberta. Sempre ve algú.\u00bb"],
+  thMiss: ["What's missing? A visit to Hong Kong. Popo hasn't been back.", "还缺什么？回一趟香港。婆婆一直没回去过。", "還缺什麼？回一趟香港。婆婆一直沒回去過。", "¿Qué falta? Una visita a Hong Kong. Popo no ha vuelto.", "Què hi falta? Una visita a Hong Kong. La Popo no hi ha tornat mai."],
   toMissing: ["What's missing? ›", "还缺什么？ ›", "還缺什麼？ ›", "¿Qué falta? ›", "Què hi falta? ›"],
   missing: ["What's missing?", "还缺什么？", "還缺什麼？", "¿Qué falta?", "Què hi falta?"],
   missingNone: ["Every way of looking after each other has a place here. Which ones are only on the map?", "每种彼此照顾的方式，在这里都有了位置。哪些只存在于地图上？", "每種彼此照顧的方式，在這裡都有了位置。哪些只存在於地圖上？", "Cada forma de cuidaros tiene aquí su lugar. ¿Cuáles están solo en el mapa?", "Cada manera de cuidar-vos hi té el seu lloc. Quines només són al mapa?"],
@@ -937,12 +945,22 @@ function demo() {
   add("tree", 0, 0); add("tree", 9, 0); add("tree", 2, 5); add("flowers", 1, 4); add("lamp", 2, 2); add("pond", 8, 0); add("bench", 6, 2); add("tree", 9, 5); add("flowers", 7, 5); add("climb", 1, 0);
   return t;
 }
+function familyTown() {
+  var t = { i: "family", p: {}, l: {} }, add = function (k, x, y, nm) { var id = "f" + x + "_" + y; t.p[id] = { i: id, k: k, x: x, y: y, at: 1, nm: nm || "" }; };
+  for (var x = 0; x < 9; x++) add("road", x, 3); add("road", 4, 4);
+  add("house", 3, 4, "Popo"); add("bench", 2, 4); add("house", 1, 2, "Wei"); add("house", 5, 2, "Mei"); add("house", 3, 2, "Wei's mum"); add("house", 7, 2, "Mei's mum");
+  add("house", 9, 5, "Popo's sister"); add("pond", 8, 4); add("pond", 9, 4); add("pond", 8, 5);
+  add("postcard", 6, 2); add("restaurant", 4, 1); add("recipe", 5, 4); add("tree", 0, 0); add("lamp", 2, 2); add("flowers", 1, 4); add("tree", 0, 5);
+  return t;
+}
 function startView() {
   $("town").hidden = true; $("start").hidden = false; $("wrap").classList.remove("inTown"); $("wrap").classList.add("inStart");
   var s = $("start"); s.innerHTML = "";
   var col1 = document.createElement("div"); col1.style.display = "flex"; col1.style.flexDirection = "column"; col1.style.gap = "12px";
   var sc = document.createElement("div"); sc.className = "scene"; var c = document.createElement("canvas"); c.width = 160; c.height = 96; c.setAttribute("role", "img"); c.setAttribute("aria-label", T(W.app)); sc.appendChild(c); col1.appendChild(sc);
-  drawTown(c.getContext("2d"), demo(), 10, 6, { night: night(), present: { "lucía": 1, "popo": 1 } });
+  var fam = !Object.keys(shelf()).length;
+  drawTown(c.getContext("2d"), fam ? familyTown() : demo(), 10, 6, { night: night(), present: fam ? { "popo": 1 } : { "lucía": 1, "popo": 1 } });
+  if (fam) col1.insertAdjacentHTML("beforeend", '<div class="their"><b>' + esc(T(W.theirH)) + "</b><p>" + esc(T(W.theirSub)) + "</p><ul>" + ["th1", "th2", "th3"].map(function (k) { return "<li>" + esc(T(W[k])) + "</li>"; }).join("") + '</ul><p class="miss1">' + esc(T(W.thMiss)) + "</p></div>");
   col1.insertAdjacentHTML("beforeend", '<p class="lead">' + esc(sg(T(W.lead))) + '</p><ul class="rows">' + [["heart", W.r1], ["thought", W.r2], ["bowl", W.r3]].map(function (r) { return "<li><b>" + icon(r[0]) + "</b><span>" + esc(T(r[1])) + "</span></li>"; }).join("") + "</ul>");
   var col2 = document.createElement("div"); col2.style.display = "flex"; col2.style.flexDirection = "column"; col2.style.gap = "14px";
   var f = document.createElement("form"); f.className = "form"; f.noValidate = true;
