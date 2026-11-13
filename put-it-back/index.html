@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d25d7c87f6"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e170c9a7ea"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Put It Back</title>
 <meta name="description" content="Everyone's things wandered off today. Help Popo, Wei, Mei and the animals put them back, then tidy one real spot for one song, with someone if you can, and keep what you found.">
@@ -426,9 +426,9 @@ function face(who) {
   if (who === "popo") drawPopo(g, 0, 0, 1, { asleep: sleeps("popo") });
   else if (who === "wei") drawWei(g, 0, -1, 1, { asleep: sleeps("wei") });
   else if (who === "mei") drawMei(g, 0, 0, 1, { asleep: sleeps("mei") });
-  else if (who === "mantou") { if (FW().drawDogFace) FW().drawDogFace(g, 0, 0, 1, { asleep: sleeps("mantou") }); }
+  else if (who === "mantou") { if (FW().drawDogFace) (FW().dogBust || FW().drawDogFace)(g, 0, 0, 1, { asleep: sleeps("mantou") }); }
   else if (who === "note") { g.fillStyle = "#f3ead8"; g.fillRect(6, 4, 20, 24); g.fillStyle = "#c8b89a"; for (var y = 9; y < 26; y += 4) g.fillRect(9, y, 14, 1); g.fillStyle = "#c8303a"; g.fillRect(14, 2, 4, 4); }
-  else if (FW().drawCatsFace) FW().drawCatsFace(g, 0, 0, 1, { asleep: sleeps("miso") });
+  else if (FW().drawCatsFace) (FW().catsBust || FW().drawCatsFace)(g, 0, 0, 1, { asleep: sleeps("miso") });
   return c;
 }
 function say(who, line) {

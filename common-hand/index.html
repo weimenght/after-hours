@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d25d7c87f6"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e170c9a7ea"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Common Hand</title>
 <meta name="description" content="A ten-minute warm-up for a mahjong table of four: draw a tile, read it out, and find something in common for every pair at the table. One phone in the middle, then phones down and deal.">
@@ -324,6 +324,7 @@ var POPO = [[7,22,18,10,"#8a2a3a"],[6,25,2,7,"#7a2232"],[24,25,2,7,"#7a2232"],[1
   [14,18,4,1,"#c07068"],[13,17,1,1,"#c07068"],[18,17,1,1,"#c07068"]];
 function drawPopo(ctx, x, y, px) { var f = R(ctx, x, y, px); POPO.forEach(f); f([12,14,1,1,"#3a2418"]); f([19,14,1,1,"#3a2418"]); f([11,13,1,1,"#e2b890"]); f([20,13,1,1,"#e2b890"]); }
 function drawDogFace(ctx, x, y, px) {
+  if (window.FBWorld && FBWorld.dogBust) return FBWorld.dogBust(ctx, x, y, px, {});   // a speaker dresses up (the rule of Nov 13)
   var P = PETS.dog, f = function (c, r) { ctx.fillStyle = c; ctx.fillRect(x + r[0] * px, y + r[1] * px, r[2] * px, r[3] * px); };
   f(P.b,[6,4,6,10]); f(P.b,[20,4,6,10]); f(P.d,[7,6,4,7]); f(P.d,[21,6,4,7]); f(P.b,[8,8,16,16]); f(P.b,[6,12,20,10]); f(P.w,[11,16,10,9]); f(P.w,[13,24,6,2]);
   f("#2a1a14",[14,18,4,3]); f("#c98272",[15,22,2,2]); f(P.e,[10,12,3,3]); f(P.e,[19,12,3,3]); f("#fff",[11,12,1,1]); f("#fff",[20,12,1,1]); f(P.collar,[8,26,16,3]); f("#e8c44a",[15,28,2,2]);

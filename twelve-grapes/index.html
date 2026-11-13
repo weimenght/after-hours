@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d25d7c87f6"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e170c9a7ea"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Twelve Grapes</title>
 <meta name="description" content="New Year's Eve at Popo's table: twelve grapes for twelve months, a chair for everyone you care about, three small red papers on the door. Kept on your own device.">
@@ -264,7 +264,7 @@ function loop(t) { if (!document.hidden && t - lastT > (RM ? 250 : 66)) { lastT 
 var faceC = $("face").getContext("2d");
 function face(who) { faceC.clearRect(0, 0, 32, 32); faceC.fillStyle = "#3a2414"; faceC.fillRect(0, 0, 32, 32);
   if (who === "popo" && FW.drawPopo) FW.drawPopo(faceC, 0, 0, 1, {}); else if (who === "mei" && FW.drawMei) FW.drawMei(faceC, 0, 0, 1, { look: meiLook() });
-  else if (who === "cats" && FW.drawCatsFace) FW.drawCatsFace(faceC, 0, 0, 1, {}); else if (who === "mantou" && FW.drawDogFace) FW.drawDogFace(faceC, 0, 0, 1, {});
+  else if (who === "cats" && FW.drawCatsFace) (FW.catsBust || FW.drawCatsFace)(faceC, 0, 0, 1, {}); else if (who === "mantou" && FW.drawDogFace) (FW.dogBust || FW.drawDogFace)(faceC, 0, 0, 1, {});
   else drawWei(faceC, 0, 0, 1); }
 function say(who, text, aside) {
   face(who); $("name").textContent = T(W.names[who]); $("line").innerHTML = rich(T(text));

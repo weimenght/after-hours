@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d25d7c87f6"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e170c9a7ea"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Along the Way</title>
 <meta name="description" content="A few lines a day: the weather inside, a rose, a thorn and a bud, and who made the day better. Keep the road as a PDF booklet. Kept on your own device.">
@@ -403,11 +403,12 @@ var POPO = [[7,22,18,10,"#8a2a3a"],[6,25,2,7,"#7a2232"],[24,25,2,7,"#7a2232"],[1
   [14,18,4,1,"#c07068"],[13,17,1,1,"#c07068"],[18,17,1,1,"#c07068"]];
 function drawPopo(ctx, x, y, px, z) { var f = R(ctx, x, y, px); POPO.forEach(f); f([12,14,1,1,"#3a2418"]); f([19,14,1,1,"#3a2418"]); f([11,13,1,1,"#e2b890"]); f([20,13,1,1,"#e2b890"]); if (z) shut(ctx, "popo", x, y, px); }
 function drawDogFace(ctx, x, y, px) {
+  if (window.FBWorld && FBWorld.dogBust) return FBWorld.dogBust(ctx, x, y, px, {});   // a speaker dresses up (the rule of Nov 13)
   var P = PETS.dog, f = function (c, r) { ctx.fillStyle = c; ctx.fillRect(x + r[0] * px, y + r[1] * px, r[2] * px, r[3] * px); };
   f(P.b,[6,4,6,10]); f(P.b,[20,4,6,10]); f(P.d,[7,6,4,7]); f(P.d,[21,6,4,7]); f(P.b,[8,8,16,16]); f(P.b,[6,12,20,10]); f(P.w,[11,16,10,9]); f(P.w,[13,24,6,2]);
   f("#2a1a14",[14,18,4,3]); f("#c98272",[15,22,2,2]); f(P.e,[10,12,3,3]); f(P.e,[19,12,3,3]); f("#fff",[11,12,1,1]); f("#fff",[20,12,1,1]); f(P.collar,[8,26,16,3]); f("#e8c44a",[15,28,2,2]);
 }
-function drawCatsFace(ctx, x, y, px) { drawPet(ctx, "miso", x + 10 * px, y + 28 * px, px, {}); drawPet(ctx, "yuzu", x + 22 * px, y + 31 * px, px, { flip: true }); }
+function drawCatsFace(ctx, x, y, px) { if (window.FBWorld && FBWorld.catsBust) return FBWorld.catsBust(ctx, x, y, px, {}); drawPet(ctx, "miso", x + 10 * px, y + 28 * px, px, {}); drawPet(ctx, "yuzu", x + 22 * px, y + 31 * px, px, { flip: true }); }
 function drawNote(ctx, x, y, px) { var f = R(ctx, x, y, px); [[6,5,20,24,"#f3ead8"],[6,28,20,1,"#c8b890"],[13,3,6,4,"#c8303a"],[9,11,14,1,"#a08870"],[9,15,12,1,"#a08870"],[9,19,14,1,"#a08870"],[9,23,8,1,"#a08870"]].forEach(f); }
 var FACE = { popo: drawPopo, mei: drawMei, wei: drawWei, dog: drawDogFace, cats: drawCatsFace, note: drawNote };
 /* the town's hours (FBWorld.sleeps, the browser's clock; ?h= sets it for testing): Mei and Wei can be woken for fifteen minutes; nobody wakes Popo */

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d25d7c87f6"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e170c9a7ea"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Little Things</title>
 <meta name="description" content="Popo's jar of little offline things: one at a time, in her kitchen, for a fuller life away from the screen. Kept on your own device.">
@@ -592,8 +592,9 @@ function face(cv, who, o) {
   o = o || {}; var g = cv.getContext("2d"); cv.width = 32; cv.height = 32; rect(g, 0, 0, 32, 32, who === "note" ? "#f6ecd4" : "#3a2414");
   if (who === "popo") return popoDraw(g, 0, 0, { asleep: !!o.asleep });
   if (who === "mei" && FW.drawMei) return FW.drawMei(g, 0, 0, 1, { phone: Math.random() < .3 });
-  if (who === "cats" && FW.drawCatsFace) return FW.drawCatsFace(g, 0, 0, 1, { asleep: !!o.asleep });
-  if (who === "mantou" && FW.drawDogFace) return FW.drawDogFace(g, 0, 0, 1, { asleep: !!o.asleep });
+  if (who === "cats" && FW.drawCatsFace) return (FW.catsBust || FW.drawCatsFace)(g, 0, 0, 1, { asleep: !!o.asleep });
+  if (who === "mantou" && FW.drawDogFace) return (FW.dogBust || FW.drawDogFace)(g, 0, 0, 1, { asleep: !!o.asleep });
+  if ((who === "miso" || who === "yuzu") && FW.drawPetBust) return FW.drawPetBust(g, who, 0, 0, 1, { asleep: !!o.asleep });
   if ((who === "miso" || who === "yuzu") && FW.drawPet) return FW.drawPet(g, who, 16, 24, 1, { asleep: !!o.asleep });
   if (who === "wei") { WEI.forEach(function (r) { rect(g, r[0], r[1] - 1, r[2], r[3], r[4]); }); return; }
   if (who === "note") { rect(g, 6, 6, 20, 22, "#fffdf6"); rect(g, 6, 6, 20, 1, "#000"); rect(g, 6, 27, 20, 1, "#000"); rect(g, 6, 6, 1, 22, "#000"); rect(g, 25, 6, 1, 22, "#000"); for (var i = 0; i < 4; i++) rect(g, 9, 11 + i * 4, i === 3 ? 8 : 14, 1, "#4a7ec0"); rect(g, 12, 4, 8, 4, "rgba(232,168,56,.8)"); return; }

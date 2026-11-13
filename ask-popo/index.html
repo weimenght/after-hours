@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d25d7c87f6"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e170c9a7ea"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ask Popo</title>
 <meta name="description" content="One question a week to ask an older relative in person, and two lines to keep the answer. A small book you can print. Kept on your own device.">
@@ -255,7 +255,7 @@ function say(key) {
   if (!line) return;
   $("name").textContent = T(W.names[who]); $("line").innerHTML = rich(T(line));
   fc.clearRect(0, 0, 32, 32);
-  if (who === "popo" && FW.drawPopo) FW.drawPopo(fc, 0, 0, 1, {}); else if (FW.drawCatsFace) FW.drawCatsFace(fc, 0, 0, 1, {});
+  if (who === "popo" && FW.drawPopo) FW.drawPopo(fc, 0, 0, 1, {}); else if (FW.drawCatsFace) (FW.catsBust || FW.drawCatsFace)(fc, 0, 0, 1, {});
 }
 function course(a, v) { $("course").textContent = v ? F(a, v) : T(a); }
 function clear() { $("ctl").innerHTML = ""; }

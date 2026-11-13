@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=d25d7c87f6"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e170c9a7ea"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>after-hours</title>
 <meta name="description" content="Everything Wei makes after hours, in one place on your phone. Small, free things that end off the screen, next to someone.">
@@ -975,7 +975,9 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     if (k === "wm") { box.innerHTML = '<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#1E1830"/><path fill="#ECE6DA" fill-rule="evenodd" d="M7.6 4.2h8.8a3.4 3.4 0 0 1 3.4 3.4v8.8a3.4 3.4 0 0 1-3.4 3.4H7.6a3.4 3.4 0 0 1-3.4-3.4V7.6a3.4 3.4 0 0 1 3.4-3.4ZM7.8 5.8a2 2 0 0 0-2 2v3.5h5.5V5.8Zm4.9 0v5.5h5.5V7.8a2 2 0 0 0-2-2Zm-6.9 6.9v3.5a2 2 0 0 0 2 2h3.5v-5.5Zm6.9 0v5.5h3.5a2 2 0 0 0 2-2v-3.5Z"/><rect x="13.4" y="13.4" width="4.1" height="4.1" rx=".9" fill="#F2A33A"/></svg>';   /* filled shapes, no strokes: no hairline at any size (Nov 8) */ return box; }
     var c = document.createElement("canvas"), g; c.width = 32; c.height = 32; g = c.getContext("2d");
     g.fillStyle = (WHO[k] || {}).bg || "#222"; g.fillRect(0, 0, 32, 32);
-    if (k === "miso" || k === "yuzu" || k === "cats") {   // the cats as faces, like Mantou's (the owner, Nov 13): one big head, or both for Miso & Yuzu
+    var FB0 = FW();
+    if ((k === "miso" || k === "yuzu" || k === "cats" || k === "mantou") && FB0 && FB0.drawPetBust) { try { FB0.drawPetBust(g, k, 0, 0, 1, { asleep: asleep(k) }); } catch (e) {} }   // on the phone they write and call like people, so they dress up (the rule of Nov 13)
+    else if (k === "miso" || k === "yuzu" || k === "cats") {   // the cats as faces, like Mantou's (the owner, Nov 13): one big head, or both for Miso & Yuzu
       c.width = c.height = 64; g.fillStyle = (WHO[k] || {}).bg || "#222"; g.fillRect(0, 0, 64, 64); var z = asleep(k);
       if (k === "cats") { catHead(g, "yuzu", 31, 7, 2, z); catHead(g, "miso", 3, 22, 2, z); } else catHead(g, k, 10, 11, 3, z);
     }
