@@ -1,0 +1,15 @@
+{
+  "name": "What Grows Between Us",
+  "short_name": "Between Us",
+  "description": "A seed with no label, grown by a group of friends from what they do together off the screen. Pass it hand to hand; when it blooms, grow a real one.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14101e",
+  "theme_color": "#14101e",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
