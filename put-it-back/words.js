@@ -1,6 +1,6 @@
 /* Put It Back: every word, five languages [en, zh, zh-Hant, es, ca].
    Popo keeps her voice (Hong Kong English, broken Spanish, a Hong Kong grandmother's Mandarin in zh, her own Cantonese in zh-Hant,
-   fluent Catalan). Wei acts in small acts, Mei is sixteen, Miso, Yuzu and Mantou only act. The interface itself is plain.
+   fluent Catalan). Wei acts in small acts, Mei is nineteen, Miso, Yuzu and Mantou only act. The interface itself is plain.
    ITEMS keep their order: a found line is kept by the spot's key, never by an item's index, but keep them stable anyway. */
 window.PB_W = {
   title: ["Put It Back", "归位", "歸位", "Cada Cosa en su Sitio", "Cada Cosa al seu Lloc"],

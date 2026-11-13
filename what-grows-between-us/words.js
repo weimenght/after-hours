@@ -1,6 +1,6 @@
 /* What Grows Between Us: every word, five languages [en, zh, zh-Hant, es, ca].
    Popo keeps her voice (Hong Kong English, broken Spanish, a Hong Kong grandmother's Mandarin in zh (never 唔/咗/嘅/佢/睇/瞓/俾),
-   her own Cantonese in zh-Hant, fluent Catalan). Wei acts in small acts, Mei is sixteen (lowercase in English).
+   her own Cantonese in zh-Hant, fluent Catalan). Wei acts in small acts, Mei is nineteen (lowercase in English).
    The interface itself is plain. Never reorder CARE's needs or acts, or SP: a pot in a link keeps their indexes. */
 window.GB_W = {
   title: ["What Grows Between Us", "我们之间长的花", "我們之間長的花", "Lo que Crece Entre Nosotros", "El que Creix Entre Nosaltres"],

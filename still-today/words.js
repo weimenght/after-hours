@@ -1,6 +1,6 @@
 /* Still Today: every word, five languages [en, zh, zh-Hant, es, ca].
    Popo keeps her voice (Hong Kong English, broken Spanish, a Hong Kong grandmother's Mandarin in zh, her own Cantonese in zh-Hant,
-   fluent Catalan). Wei acts in small acts, Mei is sixteen (lowercase in English), Miso, Yuzu and Mantou only act.
+   fluent Catalan). Wei acts in small acts, Mei is nineteen (lowercase in English), Miso, Yuzu and Mantou only act.
    Josep's winding log is in his Catalan, with the visitor's language under it. The interface itself is plain.
    Shared by the app (/still-today/) and the town (Slow Clock), through still.js. Never reorder LOG: the device keeps its index. */
 window.SL_W = {
