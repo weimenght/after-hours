@@ -1655,13 +1655,16 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
       var k = forced || surKind(); put("ah_app_sur", day); SURS = { k: k, t0: performance.now(), d: SUR[k].d, c: Math.random() < .5 ? "miso" : "yuzu" };
     }, forced ? 1200 : first ? 9000 + Math.random() * 6000 : 15000 + Math.random() * 40000);
   }
+  /* how far along it is, 0..1. A tap never moves it (Nov 13, the owner: on a computer a tapped dog jumped to the far side):
+     the walkers keep their pace, the things in the sky finish their way in 2.5 s from where they are. */
+  function surP(now) { if (!SURS) return 1; if (SURS.t1) return Math.min(1, SURS.p0 + (1 - SURS.p0) * (now - SURS.t1) / SURS.r); return Math.max(0, (now - SURS.t0) / SURS.d); }
   function surLine() { return w({ star: "surStar", plane: "surPlane", balloon: "surBalloon", dog: "surDog", cat: "surCat", kite: "surKite", geese: "surGeese", rainbow: "surRainbow" }[SURS.k]).replace("{c}", w(WHO[SURS.c].n)); }
   function surStep(g, W, H, ts) {
     var b = SURB; if (!SURS) { if (b) b.style.display = "none"; return; }
-    var now = performance.now(), p = Math.max(0, (now - SURS.t0) / SURS.d), S = SUR[SURS.k]; if (p >= 1) { SURS = null; if (b) b.style.display = "none"; return; }
+    var now = performance.now(), p = surP(now), S = SUR[SURS.k]; if (p >= 1) { SURS = null; if (b) b.style.display = "none"; return; }
     var sc = $("screen"), k = sc.clientWidth / W, gy = H - 4; try { gy = Math.floor(($("rest").getBoundingClientRect().top - sc.getBoundingClientRect().top) / k) - 2; } catch (e) {}
     S.draw.call(S, g, W, H, p, gy, ts);
-    if (!b) { b = SURB = el("button", "surb"); b.type = "button"; b.onclick = function () { if (SURS) { toast(surLine(), 6500); SURS.d = Math.min(SURS.d, performance.now() - SURS.t0 + 2500); } }; sc.appendChild(b); }
+    if (!b) { b = SURB = el("button", "surb"); b.type = "button"; b.onclick = function () { if (SURS) { toast(surLine(), 6500); var n0 = performance.now(), p0 = surP(n0), left = (1 - p0) * SURS.d; if (!SUR[SURS.k].ground && !SURS.t1 && left > 2500) { SURS.p0 = p0; SURS.t1 = n0; SURS.r = Math.min(left, 5000); } } }; sc.appendChild(b); }
     var q = S.pos.call(S, p, W, H, gy); b.style.display = "block"; b.style.transform = "translate(" + (q[0] * k - 32).toFixed(0) + "px," + (q[1] * k - 32).toFixed(0) + "px)"; b.setAttribute("aria-label", surLine());
   }
   function fxDraw(ts) {
