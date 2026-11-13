@@ -181,6 +181,17 @@ html.framed .hb{height:30px}
 .hb.glow::before{background:var(--lamp);animation:hbg 1.2s ease-in-out 3}
 @keyframes hbg{50%{transform:scaleX(1.12);box-shadow:0 0 12px var(--lamp)}}
 .bk.glow{animation:bkg 1.2s ease-in-out 3;border-radius:999px}
+/* text buttons become a full chip under the cursor or the finger (the owner, Nov 13): ‹ back, the Store's "A note from",
+   Settings' links, the album's arrows, the starter picks. At rest they are amber words; the chip's room is already there
+   (padding, pulled back by the same margin), so nothing moves when it fills. */
+.bar .bk,.snoteL summary,.set .lnk,.set .acct .lnk2,.pnav button{border-radius:999px;transition:background .14s,color .14s;-webkit-tap-highlight-color:transparent}
+.bar .bk{padding:6px 14px 6px 11px;margin-left:-11px}
+.snoteL summary{display:inline-block;padding:7px 13px;margin:-7px -13px}
+.set .lnk,.set .acct .lnk2{display:inline-block;padding:6px 12px;margin:-6px -12px}
+.set .acct .lnk2{margin:-2px -12px}
+.bar .bk:active,.snoteL summary:active,.set .lnk:active,.set .acct .lnk2:active,.pnav button:active,.picks button:active,
+.bar .bk:focus-visible,.snoteL summary:focus-visible,.set .lnk:focus-visible,.set .acct .lnk2:focus-visible,.pnav button:focus-visible,.picks button:focus-visible{background:var(--lamp);color:#1B1408;outline:0}
+@media (hover:hover){.bar .bk:hover,.snoteL summary:hover,.set .lnk:hover,.set .acct .lnk2:hover,.pnav button:hover,.picks button:hover{background:var(--lamp);color:#1B1408}}
 @keyframes bkg{50%{background:rgba(242,163,58,.18);box-shadow:0 0 0 6px rgba(242,163,58,.18)}}
 .opic{margin-top:10px;padding:12px;border-radius:14px;background:rgba(0,0,0,.22)}
 html.light .opic{background:rgba(0,0,0,.06)}
