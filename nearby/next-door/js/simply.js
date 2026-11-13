@@ -350,7 +350,7 @@
   /* on the cats' own visit the cats are behind the counter: tapping one is tapping the host (a sleeping one wakes, an awake one
      starts something); on anyone else's visit a cat gets a reaction (catTap) */
   if (stage) stage.addEventListener('click', e => {
-    const c = e.target.closest && e.target.closest('.cat'); if (!c || e.target.closest('.nd-paw')) return;   /* today's Paw Reading card under a paw answers for itself */
+    const c = e.target.closest && e.target.closest('.cat'); if (!c || e.target.closest('.nd-paw, .nd-deck')) return;   /* today's Paw Reading card under a paw answers for itself */
     const h = hostNow(); if (h.who !== 'cats') return;
     e.stopPropagation(); idle(); try { tapBartender(); } catch (x) {}
   }, true);

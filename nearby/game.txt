@@ -52,14 +52,6 @@ AUTHOR: FREE//BUILDER
 DESC: Lie on the grass up on the pasture. An eagle turns overhead and the cowbells come and go.
 URL: lie-back/?place=mountain
 
-CODE: CARDS
-ID: PR-29
-TITLE: Paw Reading
-GENRE: A card a day from two cats
-AUTHOR: FREE//BUILDER
-DESC: Miso and Yuzu keep a little stall by the Plaza with the Nearby deck. Tap it and one of them paws a card over: what it says you'll do, somewhere real, today. One card a day. When they're out or asleep, cut the deck yourself.
-URL: paw-reading/
-
 CODE: CABIN
 ID: NH-16
 TITLE: No Hurry

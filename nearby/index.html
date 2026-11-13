@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=9ce4df0998"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=14f247f97b" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=206965a7d4"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=b8c1a4bd4b" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Nearby — FREE//BUILDER</title>
 <meta name="description" content="Nearby: a small pixel town for finding your people, in real life. Wander alone or with a friend, leave something you made for the neighbours, borrow a real book, play with someone far away. Wei, the bartender, will show you around.">
@@ -96,7 +96,6 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     { k: "jukebox", url: "/nearby/same-song/", x: 142, y: 122, w: 34, h: 28, n: ["Same Song", "同一首歌", "同一首歌", "La Misma Canción", "La Mateixa Cançó"] },
     { k: "popo", url: "/nearby/popos-house/", x: 6, y: 164, w: 56, h: 44, n: ["Popo's House", "婆婆家", "婆婆家", "Casa de Popo", "Cal Popo"] },
     { k: "plaza", url: "/nearby/plaza/", x: 64, y: 168, w: 42, h: 40, n: ["The Plaza", "广场", "廣場", "La Plaza", "La Plaça"] },
-    { k: "fortune", url: "/nearby/paw-reading/", x: 50, y: 218, w: 20, h: 26, n: ["Paw Reading", "猫爪占卜", "貓爪占卜", "Lectura de Patas", "Lectura de Potes"] },
     { k: "nest", url: "/nearby/miso-and-yuzu/", x: 4, y: 116, w: 40, h: 34, n: ["Miso & Yuzu's", "味噌和柚子家", "味噌和柚子家", "Casa de Miso y Yuzu", "Cal Miso i la Yuzu"] },
     /* over the tracks: the new street */
     { k: "train", url: "/nearby/station/", x: 30, y: 246, w: 120, h: 48, n: ["Nearby Station", "近邻站", "近鄰站", "Estación Cerca", "Estació A Prop"] },
@@ -111,7 +110,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     { k: "lake", abs: 1, url: "/nearby/lie-back/?place=lake", x: 274, y: 104, w: 84, h: 66, n: ["Mirror Lake", "镜湖", "鏡湖", "Lago Espejo", "Llac Mirall"] },
     { k: "sea", abs: 1, url: "/nearby/lie-back/?place=sea", x: 274, y: 214, w: 84, h: 78, n: ["Sandy Cove", "沙湾", "沙灣", "Cala de Arena", "Cala de Sorra"] }
   ];
-  var BELOW = { cloud: 0, kintsugi: 1 }, SIDE = { fortune: 1 };
+  var BELOW = { cloud: 0, kintsugi: 1 }, SIDE = {};
   /* where the 📍 stands inside a spot (fractions), when the middle isn't the drawing: High Pasture's middle is No Hurry's cabin */
   var PIN = { pasture: [.22, .78] };
   var T = { title: ["NEARBY", "近邻", "近鄰", "CERCA", "A PROP"], all: ["All games", "全部游戏", "全部遊戲", "Todos los juegos", "Tots els jocs"], lang: ["Languages", "学语言", "學語言", "Idiomas", "Idiomes"], beijing: ["Beijing", "北京", "北京", "Pekín", "Pequín"], map: ["Map of Nearby", "近邻地图", "近鄰地圖", "Mapa del barrio", "Mapa del barri"], here: ["You were here", "你刚从这里来", "你剛從這裡來", "Venías de aquí", "Venies d'aquí"] };
@@ -261,14 +260,6 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     /* an old arcade cabinet against the back room's wall, no sign: its screen flickers if you look */
     R(163, 197, 8, 11, "#2a1a3a"); R(163, 196, 8, 2, "#ff3ad0"); R(164, 199, 6, 4, ((f >> 2) % 7) ? ["#7affc1", "#7ab8ff", "#f6b73c"][(f >> 4) % 3] : "#1a1420"); R(165, 204, 1, 2, "#c8402a"); R(168, 205, 2, 1, "#f6b73c"); R(162, 208, 10, 1, "#0a0a10");
     g.restore();
-    // Paw Reading: the cats' stall, a striped awning over a little counter with the deck on it; a lamp in the evening
-    (function () { var x = 52, y = 222, cA = "#c8303a", cB = "#f3ead8";
-      R(x + 1, y + 6, 14, 16, night ? "#2a1a24" : "#5a3a2a"); R(x + 2, y + 8, 12, 8, lit ? "#3a2418" : "#2a1a14");
-      for (var a = 0; a < 8; a++) R(x - 1 + a * 2, y + 2, 2, 5, a % 2 ? cB : cA); R(x - 1, y + 1, 16, 1, "#7c2513"); for (var sc = 0; sc < 8; sc++) R(x - 1 + sc * 2, y + 7, 2, 1, sc % 2 ? cA : cB);
-      R(x, y + 16, 16, 3, "#a8743a"); R(x, y + 19, 16, 1, "#6a4020"); R(x + 6, y + 14, 3, 2, "#f3ead8"); R(x + 7, y + 14, 1, 1, "#c8303a");
-      R(x + 11, y + 13, 2, 3, "#7cc8d8"); R(x + 11, y + 13, 1, 1, "#fff");
-      if (lit) { R(x + 3, y + 9, 2, 2, "#f6c84a"); g.globalAlpha = .25; R(x - 2, y + 8, 20, 14, "#f6c84a"); g.globalAlpha = 1; }
-      R(x + 1, y + 22, 2, 1, "#2a1a14"); R(x + 13, y + 22, 2, 1, "#2a1a14"); })();
     // Mended, on the square (moved down from the family street, Nov 14)
     g.save(); g.translate(0, 96);
     R(4, 124, 40, 26, night ? "#3a2a20" : "#6a4a32"); R(2, 118, 44, 6, "#2a2a30"); R(6, 116, 36, 2, "#3a3a40");
@@ -396,7 +387,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
   /* Miso and Yuzu: out and about, near wherever they wandered to this visit */
   var PET = (window.FBWorld && FBWorld.PETS) || { miso: { b: "#231b17", e: "#f2c94c" }, yuzu: { b: "#e8913a", e: "#4f9a62", stripe: "#b5611d", belly: "#f8dcae" }, dog: { b: "#e8c48a", w: "#fbf3e2", d: "#b88a4a", collar: "#c8402a", e: "#2a1a14" } };
   var CATS = { miso: { b: PET.miso.b, e: PET.miso.e, n: ["Miso", "味噌", "味噌", "Miso", "Miso"] }, yuzu: { b: PET.yuzu.b, e: PET.yuzu.e, s: PET.yuzu.stripe, belly: PET.yuzu.belly, n: ["Yuzu", "柚子", "柚子", "Yuzu", "Yuzu"] } };
-  var PATH = { fortune: [48, 72, 245], nest: [6, 48, 158], bar: [50, 94, 158], cloud: [108, 170, 64], kintsugi: [6, 44, 247], books: [100, 138, 158], postcard: [8, 60, 207], popo: [8, 60, 207], jukebox: [142, 176, 158], tower: [76, 104, 87], train: [30, 150, 289], plaza: [66, 104, 207] };
+  var PATH = { nest: [6, 48, 158], bar: [50, 94, 158], cloud: [108, 170, 64], kintsugi: [6, 44, 247], books: [100, 138, 158], postcard: [8, 60, 207], popo: [8, 60, 207], jukebox: [142, 176, 158], tower: [76, 104, 87], train: [30, 150, 289], plaza: [66, 104, 207] };
   var where = (World.cats && World.cats()) || { miso: "bar", yuzu: "books" }, catPos = {};
   /* where each animal is, how it moves, and what they do when they meet */
   function placeOf(k) { return k === "dog" ? dogAt : where[k]; }
