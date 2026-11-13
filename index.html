@@ -177,6 +177,7 @@
     html:lang(zh) .day .accent-word, html:lang(zh-Hant) .day .accent-word { font-style:normal; }
     .dayd { position:relative; margin:18px 0 0; max-width:40rem; line-height:1.7; color:#4A4037; }
     .day .acts { position:relative; }
+    .byday { margin:28px auto 0; font-size:14px; text-align:center; } .byday a { color:inherit; opacity:.75; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:4px; } .byday a:hover { opacity:1; }
     .go-d { background:#1E1A16; color:#FFF7EA; }
     .go-d:hover { background:#B4472E; color:#fff; }
     .sub-d { font:400 12px 'Space Mono', monospace; color:#1E1A16; text-decoration:none; border-bottom:1px solid #B4472E; padding-bottom:2px; }
@@ -323,20 +324,6 @@ img{filter:none}
       <ol class="rules"><li class="reveal"><span class="rn">01</span><b data-i18n="p1T">It ends off the screen.</b><span data-i18n="p1D">Every visit closes with something to do away from it: call someone, cook, go outside, sleep.</span></li><li class="reveal"><span class="rn">02</span><b data-i18n="p2T">Nothing to win.</b><span data-i18n="p2D">No scores, streaks or badges. Nothing counts how long you stayed.</span></li><li class="reveal"><span class="rn">03</span><b data-i18n="p3T">Made for two.</b><span data-i18n="p3D">Most things work alone or with someone far away, from one link.</span></li><li class="reveal"><span class="rn">04</span><b data-i18n="p4T">Yours stays yours.</b><span data-i18n="p4D">No ads, no tracking, sign-in only where it has to be. Most of it never leaves your device.</span></li><li class="reveal"><span class="rn">05</span><b data-i18n="p5T">Small on purpose.</b><span data-i18n="p5D">One thing at a time. A short visit is a good visit.</span></li></ol>
     </section>
 
-    <section class="day reveal wrap-day" aria-labelledby="day-h">
-      <svg class="sunrise" viewBox="0 0 420 240" aria-hidden="true" focusable="false">
-        <g fill="none" stroke="#B4472E" stroke-opacity=".3" stroke-width="1.2"><circle cx="330" cy="240" r="96"/><circle cx="330" cy="240" r="140"/><circle cx="330" cy="240" r="186"/><circle cx="330" cy="240" r="234"/></g>
-        <circle cx="330" cy="240" r="66" fill="#F2B25C" opacity=".9"/>
-      </svg>
-      <p class="eyebrow day-eyebrow"><span data-i18n="dayK">By day</span></p>
-      <h2 id="day-h" class="dh day-h" data-i18n-html="dayH">The same idea, <span class="accent-word">at work</span>.</h2>
-      <p class="dayd" data-i18n="dayD">FREE//BUILDER turns it into learning for teams: better work starts between people. Short, hands-on practice in listening, feedback and trust that ends in a real conversation.</p>
-      <div class="acts">
-        <a class="go go-d" href="https://www.freebuilder.net/" target="_blank" rel="noopener noreferrer"><span data-i18n="dayGo">Visit FREE//BUILDER</span> ↗</a>
-        <a class="sub-d" href="https://www.wei-meng.org/portfolio/"><span data-i18n="dayPf">Back to the portfolio</span> →</a>
-      </div>
-    </section>
-
     <section class="sec wrap works" aria-labelledby="wk-h">
       <div class="head reveal">
         <p class="eyebrow" id="wk-h" data-i18n="wkK">The works</p>
@@ -347,6 +334,7 @@ img{filter:none}
       </figure>
       <div class="acts works-go reveal"><a class="go" href="/app/#store"><span data-i18n="wkGo">See all the works</span> →</a><span class="wk-note" data-i18n="wkNote">On a phone it's a home screen; on a computer, a desktop.</span></div>
     </section>
+    <p class="byday wrap"><!-- Nov 13, the owner: by day is one plain link at the bottom, no card --><a href="https://www.freebuilder.net/" target="_blank" rel="noopener noreferrer"><span data-i18n="dayK">By day</span> · <span data-i18n="dayGo">Visit FREE//BUILDER</span> ↗</a></p>
   </main>
 
   <footer class="fbf" data-fbf-root><div class="fbf-in"><div class="fbf-row"><span class="fbf-own"><a class="fbf-lg fbf-ahl fbf-ahw" href="/" aria-label="after-hours"><svg class="fb-mk" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 4.5v15M4.5 12h15" stroke="currentColor" stroke-width="2"/><rect x="13.2" y="13.2" width="6" height="6" rx="1.2" fill="#F2A33A"/></svg><em>after-hours</em></a><span class="fbf-cy"><svg class="fbf-c" viewBox="0 0 24 24" role="img" aria-label="©"><circle cx="12" cy="12" r="9.3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.3 9.4a4.3 4.3 0 1 0 0 5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span id="current-year">2026</span></span></span><nav aria-label="Footer"><span class="fbf-dot" aria-hidden="true">·</span><a href="/privacy/" data-fbf="privacy">Your privacy</a><span class="fbf-dot" aria-hidden="true">·</span><span data-fbf="made">Made with <a href="https://www.freebuilder.net/notes/ai-use/" class="fbf-ai fbf-ico" aria-label="AI" title="AI" data-fb-emoji><svg viewBox="0 0 24 24" aria-hidden="true"><path class="r-st" d="M12 7.2V4.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle class="r-ant" cx="12" cy="3.4" r="1.6" fill="currentColor"/><rect x="4.6" y="7.4" width="14.8" height="12" rx="3.6" fill="none" stroke="currentColor" stroke-width="1.7"/><g class="r-eyes"><circle cx="9.4" cy="12.8" r="1.55" fill="currentColor"/><circle cx="14.6" cy="12.8" r="1.55" fill="currentColor"/></g><path d="M10 16.4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 12.2v2.6M21 12.2v2.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></a> &amp; <a href="/" class="fbf-heart fbf-ico" aria-label="♥ after hours" title="♥" data-fb-emoji><svg viewBox="0 0 24 24" aria-hidden="true"><path class="h-b" d="M12 20.4s-7.8-4.7-7.8-10.3A4.4 4.4 0 0 1 12 7.5a4.4 4.4 0 0 1 7.8 2.6c0 5.6-7.8 10.3-7.8 10.3z" fill="currentColor"/><path class="h-s" d="M7.6 9.6a2.2 2.2 0 0 1 2.1-1.7" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/></svg></a></span></nav></div></div></footer>
