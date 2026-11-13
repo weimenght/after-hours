@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=28888bbc82"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d81ef70ee4" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Paw Reading · Nearby</title>
 <meta name="description" content="Miso and Yuzu's little stall by the Plaza: one of them paws a card from the Nearby deck over to you, and the card says what you'll do today, somewhere real. One card a day.">
 <meta name="theme-color" content="#14101e">
 <link rel="icon" href="/nearby/icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/nearby/townkit.css?v=dc5add2ffb">
+<link rel="stylesheet" href="/nearby/townkit.css?v=fae5a10fd3">
 <style>
 #cv{touch-action:manipulation;cursor:pointer}
 .pr-say{margin:0 0 12px;font:400 22px/1.3 var(--vt);color:#fbeedd}
@@ -34,7 +34,7 @@
   <main class="tk-panel" id="panel" aria-live="polite"></main>
 </div>
 <div class="tk-dock" id="dock"><button class="fbb fbb-pri" type="button" id="ask"><span aria-hidden="true">🔮</span> <span id="askL">Ask for a card</span></button></div>
-<script src="/nearby/townkit.js?v=54affc0833"></script>
+<script src="/nearby/townkit.js?v=47e3a98ed5"></script>
 <script src="/nearby/paw-reading/paw.js?v=72eae390a9"></script>
 <script>
 /* Paw Reading: Miso and Yuzu's stall by the Plaza. Tap the deck (or Ask for a card) and whichever cat is minding the stall
@@ -122,7 +122,7 @@
     var c = cardOf(v.i), src = "cards/" + (v.i < 10 ? "0" : "") + v.i + ".png";
     panel.innerHTML = '<p class="pr-say">' + (fresh ? (who ? act(t(S.paw[who === "miso" ? 1 : 0])) : esc(t(S.self))) : line()) + "</p>" +
       '<div class="pr-card"><div class="pr-flip"><div class="pr-in' + (fresh ? "" : " up") + '"><img class="b" src="cards/back.png" alt=""><img class="f" src="' + src + '" alt=""></div></div>' +
-      '<div><span class="pr-k">' + esc(t(P.titleFor(v) || S.today)) + "</span><p class=\"pr-f\">" + esc(t(P.askFor(v))) + '</p><p class="pr-w">' + esc(t(S.tomorrow)) + '</p><p class="pr-w pr-app"><a href="/paw-reading/" data-app>' + esc(t(S.app)) + " ↗</a></p></div></div>";
+      '<div><span class="pr-k">' + esc(t(P.titleFor(v) || S.today)) + "</span><p class=\"pr-f\">" + esc(t(P.askFor(v))) + '</p><p class="pr-w">' + esc(t(S.tomorrow)) + '</p></div></div>";
     if (fresh) setTimeout(function () { var el = panel.querySelector(".pr-in"); if (el) el.classList.add("up"); }, 380);
     document.getElementById("dock").hidden = true; links();
   }

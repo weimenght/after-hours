@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt fbfit fit-col">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=28888bbc82"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d81ef70ee4" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Neighbours' Brew · Nearby</title>
-<meta name="description" content="Brew your own beer: pick the malt, hops, yeast and a twist, design the can, and ship it to Next Door and Late Light for everyone to try.">
+<meta name="description" content="Brew your own beer: pick the malt, hops, yeast and a twist, design the can, and put it on tap at Next Door for everyone to try.">
 <meta name="theme-color" content="#14101e">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='3' y='5' width='8' height='10' fill='%23e8a030'/%3E%3Crect x='3' y='2' width='8' height='4' fill='%23fbf6ea'/%3E%3Crect x='11' y='7' width='3' height='5' fill='none' stroke='%23fbf6ea'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/fonts/g/fonts.css">
@@ -85,7 +85,7 @@ h2 .chips{margin-left:auto}
       <label class="label" for="brewer" data-t="brewerL">Brewed by</label><input class="field" id="brewer" maxlength="24" autocomplete="nickname">
       <label class="label" data-t="canL">The can</label>
       <div style="display:flex;gap:12px;align-items:center;width:100%"><canvas id="can" width="24" height="40"></canvas><div style="flex:1"><div class="chips" id="bg"></div><div class="chips" id="icon" style="margin-top:6px"></div></div></div>
-      <div class="ship"><label><input type="checkbox" id="toBar" checked> 🍸 <span data-t="bar">Next Door</span></label><label><input type="checkbox" id="toClub" checked> 🎧 <span data-t="club">Late Light</span></label></div>
+      <div class="ship"><label><input type="checkbox" id="toBar" checked> 🍸 <span data-t="bar">Next Door</span></label><input type="checkbox" id="toClub" hidden></div>
       <button class="brew" type="button" id="brew">🍺 <span data-t="brew">Brew it</span></button>
     </section>
   </div>
@@ -97,7 +97,7 @@ h2 .chips{margin-left:auto}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script id="beer-art">
-/* Beer pictures: a pint and a can, drawn as pixels (Next Door and Late Light borrow this block). */
+/* Beer pictures: a pint and a can, drawn as pixels (Next Door borrows this block). */
 window.BeerArt = (function () {
   var ICON = {
     cat: ["0100010", "0111110", "0101010", "0111110", "0011100"], dog: ["1100011", "1111111", "1101011", "0111110", "0011100"], dragon: ["0011000", "0111100", "1110110", "0011111", "0110001"],
@@ -279,7 +279,7 @@ window.BeerArt = (function () {
       var d = document.createElement("article"); d.className = "tap" + (b.host ? " host" : ""); var c = document.createElement("canvas"); BeerArt.can(c, b); d.appendChild(c);
       d.insertAdjacentHTML("beforeend", "<b></b><small></small><small></small><span class='ven'></span><div class='row'><button type='button' class='ch'></button><button type='button' class='flag'></button></div>");
       var sm = d.querySelectorAll("small"), nr = b.recipe && b.recipe.abv; d.querySelector("b").textContent = b.host ? tr(b.name) : b.name; sm[0].textContent = localStyle(b) + " · " + (nr != null ? nr : 5).toFixed(1) + "%"; sm[1].textContent = t("by").replace("{b}", b.host ? tr(b.brewer) : b.brewer);
-      d.querySelector(".ven").textContent = (b.bar ? "🍸 " : "") + (b.club ? "🎧" : "");
+      d.querySelector(".ven").textContent = (b.bar ? "🍸 " : "") + "";
       var ch = d.querySelector(".ch"); ch.textContent = "🍻 " + t("cheers");
       if (b.host) {   /* the host's own: a line in their voice, a clink here, nothing sent */
         var ln = document.createElement("small"); ln.className = "hline"; ln.textContent = "“" + tr(b.line) + "”"; d.insertBefore(ln, d.querySelector(".ven"));

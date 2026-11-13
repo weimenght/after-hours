@@ -334,7 +334,7 @@
     tram: { body: "#eadbab", stripe: "#2c8a7a", roof: "#6f6247", win: "#fde9b0" }
   };
   var COACH_OF = { metropolis: "commuter", alpine: "mountain", coastal: "tram" };
-  var WILDSTOP = { lake: "lake", snow: "peaks", alpine: "pasture", coastal: "sea", forest: "forest", countryside: "meadow" };
+  var WILDSTOP = { lake: "lake", alpine: "pasture", coastal: "sea", forest: "forest", countryside: "meadow" };
   function placeOk(k) { try { return !!(FBWorld.PLACES && FBWorld.PLACES[k]); } catch (e) { return false; } }
   function exitsFor(st) {
     if (!st) return [];

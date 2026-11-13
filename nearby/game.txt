@@ -20,14 +20,6 @@ AUTHOR: FREE//BUILDER
 DESC: Row a little boat around the cove. Lanterns drift on the water; row through one and it follows you on a string. Drop anchor and they rise into the sky. With a friend, their boat rows beside yours.
 URL: sandy-cove/
 
-CODE: PEAKS
-ID: SP-22
-TITLE: Snow Peaks
-GENRE: Fresh snow, your own line
-AUTHOR: FREE//BUILDER
-DESC: Lean left and right and carve down a long, quiet slope. Brush a pine and you tumble into the powder, then get up and go on. No metres, no best. Mantou sometimes runs alongside; a friend skis the same slope.
-URL: snow-peaks/
-
 CODE: LAKE
 ID: ML-23
 TITLE: Mirror Lake
@@ -92,14 +84,6 @@ AUTHOR: FREE//BUILDER
 DESC: A little market stall below the railway, left of Town Hall. Pick the awning and the cloth, lay out what you'd offer on the counter, say how it works (free, swap, pay what you like, or just come and chat), name it and chalk the board. It stays on your device; show it to someone with a link.
 URL: set-up-shop/
 
-CODE: SCREEN
-ID: FR-26
-TITLE: Front Row
-GENRE: The town's little cinema club
-AUTHOR: FREE//BUILDER
-DESC: Nominate a film with a line on why, and say which of the others you'd watch. The one most people want is on this week. No counts, no rankings: just a screen, red seats, and someone to watch it with.
-URL: front-row/
-
 CODE: BOARD
 ID: TH-27
 TITLE: Town Hall
@@ -137,7 +121,7 @@ ID: BW-14
 TITLE: Neighbours' Brew
 GENRE: Brew a beer, ship it to the bar
 AUTHOR: FREE//BUILDER
-DESC: Pick the malt, hops and yeast, add a twist like osmanthus or Sichuan pepper, and design the can. Send it to Next Door and Late Light, where everyone can order it and raise a glass.
+DESC: Pick the malt, hops and yeast, add a twist like osmanthus or Sichuan pepper, and design the can. It goes on tap at Next Door, where everyone can order it and raise a glass.
 URL: neighbours-brew/
 
 CODE: NEST
@@ -211,19 +195,3 @@ GENRE: A table for two, miles apart
 AUTHOR: FREE//BUILDER
 DESC: A candlelit restaurant by Mirror Lake for two people who live apart. Sit down from anywhere and your candles light up together; cook the same dinner step by step, raise a glass, draw table-talk cards and slide a note across on a napkin.
 URL: two-candles/
-
-CODE: DJ
-ID: RD-02
-TITLE: Late Light
-GENRE: 8-bit rhythm and turntables
-AUTHOR: FREE//BUILDER
-DESC: Hit the records as they cross the line, scratch through the bars and drop the bass when the hype is full. Tour city to city, each with its own twist. Better with a friend: send a link, take a deck each.
-URL: late-light/
-
-CODE: CLIMB
-ID: CM-01
-TITLE: Hold On
-GENRE: Route-reading climbing tactics
-AUTHOR: FREE//BUILDER
-DESC: Read the wall, plan your hands, then commit. Ten real crags from Montserrat to El Capitan, 5.6 to 5.15d. Clip every bolt, chalk at the rests, and tie in with a friend to swap leads up a multi-pitch.
-URL: hold-on/

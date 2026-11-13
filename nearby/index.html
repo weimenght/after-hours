@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=28888bbc82"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d81ef70ee4" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Nearby — FREE//BUILDER</title>
 <meta name="description" content="Nearby: a small pixel town for finding your people, in real life. Wander alone or with a friend, leave something you made for the neighbours, borrow a real book, play with someone far away. Wei, the bartender, will show you around.">
@@ -88,7 +88,6 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
 
   /* ---------- the places (logical pixels on a 180×320 map) ---------- */
   var PLACES = [
-    { k: "climb", url: "/nearby/hold-on/", x: 4, y: 10, w: 56, h: 60, n: ["Hold On", "抓稳", "抓穩", "Agárrate", "Agafa't"] },
     { k: "cloud", url: "/nearby/lie-back/", x: 104, y: 40, w: 72, h: 40, n: ["Lie Back Park", "看云坡", "看雲坡", "Parque Panza Arriba", "Parc Panxa Enlaire"] },
     { k: "tower", url: "/nearby/slow-clock/", x: 80, y: 50, w: 20, h: 42, n: ["Slow Clock", "慢钟", "慢鐘", "Reloj Lento", "Rellotge Lent"] },
     { k: "kintsugi", url: "/nearby/mended/", x: 4, y: 116, w: 40, h: 34, n: ["Mended", "金缮坊", "金繕坊", "Remendado", "Adobat"] },
@@ -97,17 +96,14 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     { k: "jukebox", url: "/nearby/same-song/", x: 142, y: 122, w: 34, h: 28, n: ["Same Song", "同一首歌", "同一首歌", "La Misma Canción", "La Mateixa Cançó"] },
     { k: "postcard", url: "/nearby/say-hello/", x: 6, y: 168, w: 56, h: 40, n: ["Say Hello", "问个好", "問個好", "Di Hola", "Digues Hola"] },
     { k: "plaza", url: "/nearby/plaza/", x: 64, y: 168, w: 42, h: 40, n: ["The Plaza", "广场", "廣場", "La Plaza", "La Plaça"] },
-    { k: "dj", url: "/nearby/late-light/", x: 112, y: 204, w: 62, h: 42, n: ["Late Light", "夜灯", "夜燈", "Luz Tardía", "Llum Tardana"] },
     { k: "brewery", url: "/nearby/neighbours-brew/", x: 106, y: 164, w: 70, h: 36, n: ["Neighbours' Brew", "邻家酿", "鄰家釀", "Cerveza Vecina", "Cervesa Veïna"] },
     { k: "fortune", url: "/nearby/paw-reading/", x: 50, y: 218, w: 20, h: 26, n: ["Paw Reading", "猫爪占卜", "貓爪占卜", "Lectura de Patas", "Lectura de Potes"] },
     { k: "nest", url: "/nearby/miso-and-yuzu/", x: 4, y: 212, w: 40, h: 34, n: ["Miso & Yuzu's", "味噌和柚子家", "味噌和柚子家", "Casa de Miso y Yuzu", "Cal Miso i la Yuzu"] },
     /* over the tracks: the new street */
     { k: "hall", url: "/nearby/town-hall/", x: 6, y: 324, w: 52, h: 40, n: ["Town Hall", "镇公所", "鎮公所", "Ayuntamiento", "Ajuntament"] },
-    { k: "cinema", url: "/nearby/front-row/", x: 64, y: 324, w: 54, h: 40, n: ["Front Row", "前排", "前排", "Primera Fila", "Primera Fila"] },
     { k: "party", url: "/nearby/come-over/", x: 124, y: 322, w: 52, h: 42, n: ["Come Over", "来我家", "來我家", "Ven a Casa", "Vine a Casa"] },
     { k: "train", url: "/nearby/station/", x: 30, y: 246, w: 120, h: 48, n: ["Nearby Station", "近邻站", "近鄰站", "Estación Cerca", "Estació A Prop"] },
     /* the wild country around the town: each opens Lie Back's sky in that landscape */
-    { k: "peaks", abs: 1, url: "/nearby/snow-peaks/", x: 4, y: 8, w: 70, h: 62, n: ["Snow Peaks", "雪峰", "雪峰", "Picos Nevados", "Cims Nevats"] },
     { k: "forest", abs: 1, url: "/nearby/pine-wood/", x: 4, y: 112, w: 82, h: 50, n: ["Pine Wood", "松林", "松林", "Pinar", "Pineda"] },
     { k: "sanctuary", abs: 1, url: "/nearby/come-home/", x: 40, y: 206, w: 48, h: 40, n: ["Come Home", "回家吧", "回家吧", "Vuelve a Casa", "Torna a Casa"] },
     { k: "meadow", abs: 1, url: "/nearby/lie-back/?place=meadow", x: 4, y: 168, w: 82, h: 36, n: ["Wildflower Meadow", "野花草甸", "野花草甸", "Prado de Flores", "Prat de Flors"] },
@@ -121,7 +117,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     { k: "lake", abs: 1, url: "/nearby/mirror-lake/", x: 274, y: 104, w: 84, h: 66, n: ["Mirror Lake", "镜湖", "鏡湖", "Lago Espejo", "Llac Mirall"] },
     { k: "sea", abs: 1, url: "/nearby/sandy-cove/", x: 274, y: 214, w: 84, h: 78, n: ["Sandy Cove", "沙湾", "沙灣", "Cala de Arena", "Cala de Sorra"] }
   ];
-  var BELOW = { climb: 1, cloud: 0, peaks: 1 }, SIDE = { fortune: 1 };
+  var BELOW = { cloud: 0 }, SIDE = { fortune: 1 };
   /* where the 📍 stands inside a spot (fractions), when the middle isn't the drawing: High Pasture's middle is No Hurry's cabin */
   var PIN = { pasture: [.22, .78] };
   var T = { title: ["NEARBY", "近邻", "近鄰", "CERCA", "A PROP"], all: ["All games", "全部游戏", "全部遊戲", "Todos los juegos", "Tots els jocs"], lang: ["Languages", "学语言", "學語言", "Idiomas", "Idiomes"], beijing: ["Beijing", "北京", "北京", "Pekín", "Pequín"], map: ["Map of Nearby", "近邻地图", "近鄰地圖", "Mapa del barrio", "Mapa del barri"], here: ["You were here", "你刚从这里来", "你剛從這裡來", "Venías de aquí", "Venies d'aquí"] };
@@ -162,7 +158,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
 
   function win(x, y, lit, f) { R(x, y, 3, 3, lit ? (hash(x + "," + y + ((f / 40) | 0)) < .08 ? "#ffd27a" : "#f6c84a") : "#3a4a6a"); if (!lit) R(x, y, 1, 1, "#7a9aca"); }
   var sheepT = (Date.now() / 110) % 2400;   /* where the flock is in its day */
-  /* over the tracks, the new street: Town Hall, Front Row and Come Over (town coordinates, 308–368) */
+  /* over the tracks, the new street: Town Hall, a free lot and Come Over (town coordinates, 308–368) */
   function street(f, night, lit, wx) {
     R(0, 314, W, 4, night ? "#2a2a30" : "#8a8a84"); for (var cb = 0; cb < W; cb += 6) R(cb, 316, 3, 1, night ? "#3a383c" : "#9a968e");
     R(0, 364, W, 4, night ? "#2a2a30" : "#8a8a84");
@@ -175,13 +171,11 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     [12, 22, 40, 50].forEach(function (cx) { R(cx, 336, 3, 22, co); R(cx + 2, 336, 1, 22, sd); });
     R(28, 344, 8, 14, "#3a2414"); if (lit) R(29, 345, 6, 2, "#f6c84a");
     R(4, 358, 56, 2, sd); R(2, 360, 60, 2, st); R(0, 362, 64, 2, sd);
-    /* Front Row: brick, a marquee of bulbs, two posters, a red door */
-    var br = night ? "#4a2224" : "#7a2a2a"; R(64, 332, 54, 28, br); for (var by = 334; by < 360; by += 3) for (var bx = 64 + ((by / 3) % 2) * 2; bx < 118; bx += 5) R(bx, by, 4, 2, night ? "#56282a" : "#8a3434");
-    R(62, 326, 58, 8, "#2a2a30"); R(66, 328, 50, 4, night || lit ? "#fbf3e2" : "#e8e0d0");
-    for (var lb = 64; lb < 120; lb += 3) R(lb, 326, 1, 1, ((lb / 3 | 0) + (f >> 3)) % 2 ? "#f6c84a" : (lit ? "#ffd68a" : "#a88a4a"));
-    for (var lt = 0; lt < 5; lt++) R(70 + lt * 9, 329, 6, 1, "#8a2a2a");
-    R(68, 338, 10, 14, "#1a1a20"); R(69, 339, 8, 12, ["#3a6a9a", "#c8a050", "#6a3a7a"][(f / 400 | 0) % 3]); R(104, 338, 10, 14, "#1a1a20"); R(105, 339, 8, 12, ["#c84a3a", "#2f7a7a", "#f4c0d0"][(f / 400 | 0) % 3]);
-    R(84, 342, 14, 18, "#5a1a1e"); R(90, 342, 1, 18, "#3a0e10"); if (lit) R(85, 343, 12, 2, "#ffd68a");
+    /* the free lot where Front Row stood (scrubbed Nov 14): grass, a bench, a young tree; waiting for whoever builds next */
+    R(64, 340, 54, 20, night ? "#1e2a1e" : "#7aa85a"); for (var gx = 66; gx < 118; gx += 4) R(gx, 340 + (gx % 3), 1, 2, night ? "#2a3a2a" : "#5a8a3a");
+    R(64, 340, 54, 1, night ? "#3a3a34" : "#c8c0a8"); for (var fp = 64; fp <= 118; fp += 6) R(fp, 336, 1, 5, night ? "#4a4038" : "#a88a5a");   // a low fence
+    R(72, 350, 14, 2, night ? "#5a3a24" : "#8a5a30"); R(73, 352, 1, 3, "#3a2414"); R(84, 352, 1, 3, "#3a2414"); R(72, 347, 14, 1, night ? "#5a3a24" : "#8a5a30");   // a bench
+    R(103, 344, 2, 14, "#5a3a24"); R(98, 336, 12, 9, night ? "#1a3a22" : "#4f8a3a"); R(100, 334, 8, 3, night ? "#1a3a22" : "#5f9a4a");   // a young tree
     R(60, 360, 62, 2, "#5a5a54");
     /* Come Over: a pink house with warm windows, a string of lights and balloons by the door */
     for (var r2 = 0; r2 < 12; r2++) R(150 - r2 * 2.2, 322 + r2, r2 * 4.4 + 1, 1, "#5a2a1e");
@@ -190,7 +184,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     R(145, 348, 8, 12, "#2f5a3a"); R(151, 354, 1, 1, "#f6c84a");
     for (var lx = 126; lx < 175; lx += 3) { var sag = Math.sin((lx - 126) / 48 * Math.PI) * 2; R(lx, 345 + sag, 1, 1, lit ? ["#f6c84a", "#f48fb8", "#7ac8d8", "#a0e08a"][((lx / 3 | 0) + (f >> 4)) % 4] : "#8a6a4a"); }
     var bob = Math.sin(f / 15) > 0 ? 1 : 0; R(155, 340 - bob, 3, 4, "#e0405a"); R(159, 342 + bob, 3, 4, "#f6c84a"); R(156, 344 - bob, 1, 6, "rgba(255,255,255,.6)"); R(160, 346 + bob, 1, 4, "rgba(255,255,255,.6)");
-    if (wx === "snow") { R(6, 332, 52, 1, "#ffffff"); R(62, 325, 58, 1, "#ffffff"); }
+    if (wx === "snow") { R(6, 332, 52, 1, "#ffffff"); R(64, 340, 54, 1, "#ffffff"); }
   }
   function draw(f) {
     var ph = World.phase(), wx = World.weather(), night = ph === "night", lit = night || ph === "dusk", sky = SKY[ph];
@@ -281,15 +275,17 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     // paths down to the station
     R(0, 208, W, 38, night ? "#1e2a1e" : "#6a9a4a"); R(84, 208, 12, 38, night ? "#2e2c30" : "#a8a49c");
     for (var tr = 0; tr < 7; tr++) { var tx = 10 + tr * 26 + (tr > 2 ? 14 : 0), ty = 214 + hash("tr" + tr) * 20; if (tx > 80 || tx < 44) continue; R(tx + 3, ty + 6, 2, 5, "#4a2e1a"); R(tx, ty, 8, 7, night ? "#1a3a22" : "#3f7a3a"); }
-    g.save(); g.translate(0, 38);   // Late Light: down by the station, where the night trains come in
-    // club
-    R(112, 174, 62, 34, "#1a1420"); R(110, 170, 66, 4, "#0a0a10");
-    var neon = night || ph === "dusk" ? (((f / 3) | 0) % 9 === 0 ? .4 : 1) : .45;
-    g.globalAlpha = neon; R(118, 178, 50, 8, "#ff3ad0"); R(120, 179, 46, 6, "#1a1420"); ["#7affc1", "#ff3ad0", "#f6b73c", "#7ab8ff"].forEach(function (c, i) { R(124 + i * 11, 180, 7, 2, c); }); g.globalAlpha = 1;
-    R(136, 192, 14, 16, "#2a2238"); R(137, 193, 12, 15, night ? "#4a2a6a" : "#3a2a4a");
-    if (night || ph === "dusk") for (var qn = 0; qn < 4; qn++) { R(118 + qn * 4, 202, 2, 6, ["#c8402a", "#2a6a9a", "#f6c84a", "#7affc1"][qn]); R(118 + qn * 4, 200, 2, 2, "#f5d49a"); }
-    for (var sp = 0; sp < 5; sp++) R(152 + sp * 4, 196 + Math.abs(Math.sin((f + sp * 9) / 5)) * -4, 2, 2, ["#ff3ad0", "#7affc1", "#f6b73c", "#7ab8ff", "#fff"][sp]);
-    /* an old arcade cabinet against the club wall, no sign: its screen flickers if you look */
+    g.save(); g.translate(0, 38);   // Popo's back room, down by the station (where Late Light stood until Nov 14): mahjong, the Casino nights, Last Coin's cabinet against its wall
+    var bw = night ? "#5a3a30" : "#b0644a", bk = night ? "#4a2e26" : "#94523c";
+    R(112, 182, 62, 26, bw); for (var bry = 184; bry < 208; bry += 3) for (var brx = 112 + ((bry / 3) % 2) * 3; brx < 174; brx += 6) R(brx, bry, 5, 2, bk);
+    for (var rf = 0; rf < 6; rf++) R(110 + rf, 176 + rf, 66 - rf * 2, 1, night ? "#2a2a30" : "#5a4a44");   // a tiled roof
+    R(108, 182, 70, 2, night ? "#1a1a20" : "#3a2e2a");
+    R(120, 188, 22, 12, "#2a1a14"); R(121, 189, 20, 10, lit ? "#f6c84a" : "#e8d8a8");   // the window: lamplight and the mahjong table
+    R(125, 195, 12, 3, "#2f7a5a"); R(126, 194, 2, 1, "#f3ead8"); R(129, 194, 2, 1, "#f3ead8"); R(132, 194, 2, 1, "#f3ead8"); R(135, 194, 1, 1, "#f3ead8");
+    R(130, 189, 1, 3, "#3a2414");   // the lamp's cord
+    R(148, 192, 10, 16, "#3a2414"); R(149, 193, 8, 15, night ? "#5a1a1e" : "#7a2a2a"); R(155, 200, 1, 1, "#f6c84a");   // the door
+    var lb = Math.sin(f / 20) > 0 ? 0 : 1; R(146, 186 + lb, 1, 3, "#3a2414"); R(144, 189 + lb, 5, 5, "#c8303a"); R(145, 190 + lb, 3, 3, lit ? "#ff8a5a" : "#e04040"); R(146, 194 + lb, 1, 2, "#f6c84a");   // a red lantern
+    /* an old arcade cabinet against the back room's wall, no sign: its screen flickers if you look */
     R(163, 197, 8, 11, "#2a1a3a"); R(163, 196, 8, 2, "#ff3ad0"); R(164, 199, 6, 4, ((f >> 2) % 7) ? ["#7affc1", "#7ab8ff", "#f6b73c"][(f >> 4) % 3] : "#1a1420"); R(165, 204, 1, 2, "#c8402a"); R(168, 205, 2, 1, "#f6b73c"); R(162, 208, 10, 1, "#0a0a10");
     g.restore();
     // Paw Reading: the cats' stall, a striped awning over a little counter with the deck on it; a lamp in the evening
@@ -318,7 +314,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     street(f, night, lit, wx);
     g.restore();
     wilds(f, sky, ph, wx, night, lit);
-    /* the level crossing beside the station: how you walk over the railway to Town Hall, Front Row and Come Over */
+    /* the level crossing beside the station: how you walk over the railway to Town Hall and Come Over */
     var XX = 248, XW = 14;
     R(XX, 292, XW, 22, night ? "#3a3a40" : "#8a8a84"); R(XX, 296, XW, 13, night ? "#4a4036" : "#8a7458"); for (var xp = 297; xp < 309; xp += 2) R(XX, xp, XW, 1, night ? "#3a3028" : "#6a5840");
     R(XX, 300, XW, 1, "#c8c8c8"); R(XX, 305, XW, 1, "#c8c8c8");
@@ -345,7 +341,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     if (night) { g.fillStyle = "rgba(10,10,40,.18)"; g.fillRect(0, 0, WW, H); }
     ["miso", "yuzu", "dog"].forEach(function (k) { var b = kit[k], p = catPos[k]; if (b && p) { b.style.left = ((p[0] + 3) / WW * 100) + "%"; b.style.top = ((p[1] + 2) / H * 100) + "%"; } });
   }
-  var kit = {}, TC = [], AROUND = { nest: 1, bar: 1, kintsugi: 1, books: 1, postcard: 1, jukebox: 1, dj: 1, brewery: 1, restaurant: 1 };
+  var kit = {}, TC = [], AROUND = { nest: 1, bar: 1, kintsugi: 1, books: 1, postcard: 1, jukebox: 1, brewery: 1, restaurant: 1 };
   /* the town starts in black and white; every place you have been to keeps its colour. Places you know well lose their name tags (hover or focus to see them). */
   var MASK = null, LIT = {}, GLOW = {}, KNOW = 3;
   function litNow() {
@@ -358,13 +354,15 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
     var was = LIT, now = Date.now(); LIT = litNow();
     Object.keys(LIT).forEach(function (k) { if (!was[k] && Object.keys(was).length + 1 > 0 && MASK) GLOW[k] = now; });   /* a place you just visited blooms into colour */
     MASK = new Float32Array(WW * H);
-    PLACES.forEach(function (p) { if (LIT[p.k]) paint(p, 1); });
+    PLACES.forEach(function (p) { if (LIT[p.k]) { paint(p, 1); if (ALSO[p.k]) paint({ k: ALSO[p.k] }, 1); } });
     document.querySelectorAll(".spot[data-k]").forEach(function (a) { a.classList.toggle("known", (LIT[a.dataset.k] || 0) >= KNOW); });
   }
   /* outdoor places colour in as a soft oval over their whole piece of country (the mountain, the hill, the wood), not as a box
      around the name, so no hard edges cut through the landscape; buildings keep their neat rectangle */
-  var LAND = { peaks: [0, 0, 92, 90], climb: [86, 0, 172, 90], cloud: [178, 22, 274, 92], tower: [164, 34, 194, 96], pasture: [266, 12, 360, 92],
+  var LAND = { _peaks: [0, 0, 92, 90], _crag: [86, 0, 172, 90], cloud: [178, 22, 274, 92], tower: [164, 34, 194, 96], pasture: [266, 12, 360, 92],
     forest: [0, 108, 92, 170], meadow: [0, 164, 92, 210], lake: [268, 94, 360, 176], sea: [266, 204, 360, 298], cabin: [300, 28, 350, 66] };
+  /* the snowy peaks and the crag are scenery now (Snow Peaks and Hold On were scrubbed, Nov 14): they colour in with their neighbours */
+  var ALSO = { forest: "_peaks", cloud: "_crag" };
   function paint(p, a) {
     var L = LAND[p.k];
     if (L) {   /* full height up into the sky, soft sides (18 px) and a soft foot (10 px) */
@@ -417,7 +415,7 @@ canvas{display:block;width:100%;height:100%;image-rendering:-moz-crisp-edges;ima
   /* Miso and Yuzu: out and about, near wherever they wandered to this visit */
   var PET = (window.FBWorld && FBWorld.PETS) || { miso: { b: "#231b17", e: "#f2c94c" }, yuzu: { b: "#e8913a", e: "#4f9a62", stripe: "#b5611d", belly: "#f8dcae" }, dog: { b: "#e8c48a", w: "#fbf3e2", d: "#b88a4a", collar: "#c8402a", e: "#2a1a14" } };
   var CATS = { miso: { b: PET.miso.b, e: PET.miso.e, n: ["Miso", "味噌", "味噌", "Miso", "Miso"] }, yuzu: { b: PET.yuzu.b, e: PET.yuzu.e, s: PET.yuzu.stripe, belly: PET.yuzu.belly, n: ["Yuzu", "柚子", "柚子", "Yuzu", "Yuzu"] } };
-  var PATH = { fortune: [48, 72, 245], nest: [6, 48, 247], bar: [50, 94, 158], cloud: [108, 170, 64], kintsugi: [6, 44, 158], books: [100, 138, 158], postcard: [8, 60, 207], jukebox: [142, 176, 158], tower: [76, 104, 87], train: [30, 150, 289], dj: [112, 172, 246], brewery: [108, 176, 199], restaurant: [196, 264, 203], climb: [6, 56, 80], plaza: [66, 104, 207] };
+  var PATH = { fortune: [48, 72, 245], nest: [6, 48, 247], bar: [50, 94, 158], cloud: [108, 170, 64], kintsugi: [6, 44, 158], books: [100, 138, 158], postcard: [8, 60, 207], jukebox: [142, 176, 158], tower: [76, 104, 87], train: [30, 150, 289], brewery: [108, 176, 199], restaurant: [196, 264, 203], plaza: [66, 104, 207] };
   var where = (World.cats && World.cats()) || { miso: "bar", yuzu: "books" }, catPos = {};
   /* where each animal is, how it moves, and what they do when they meet */
   function placeOf(k) { return k === "dog" ? dogAt : where[k]; }

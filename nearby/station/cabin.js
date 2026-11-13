@@ -334,7 +334,7 @@
     w.addEventListener("click", function (e) { if (e.target === w || e.target.closest('[data-a="stay"]')) { w.remove(); director.next.depart = Date.now() + 3000; } });
   }
   /* ---------- the line passes the town's wild places: pull the cord and step off there ---------- */
-  var WILDSTOP = { lake: "lake", snow: "peaks", alpine: "pasture", coastal: "sea", forest: "forest", countryside: "meadow" }, cordFor = null;
+  var WILDSTOP = { lake: "lake", alpine: "pasture", coastal: "sea", forest: "forest", countryside: "meadow" }, cordFor = null;
   var CW = { cord: ["Pull the cord", "拉一下停车绳", "拉一下停車繩", "Tira de la cuerda", "Estira la corda"], off: ["Step off at {p}", "在{p}下车", "在{p}下車", "Bájate en {p}", "Baixa a {p}"], stay: ["Stay aboard", "继续坐车", "繼續坐車", "Quédate a bordo", "Queda't a bord"], stop: ["Request stop · Nearby", "请求停车 · 近邻", "請求停車 · 近鄰", "Parada solicitada · Cerca", "Parada sol·licitada · A Prop"] };
   function cw5(k, p) { var i = { en: 0, zh: 1, "zh-Hant": 2, es: 3, ca: 4 }[(window.FBL && FBL.get && FBL.get()) || "en"] || 0; return (CW[k][i] || CW[k][0]).replace("{p}", p || ""); }
   function wildHere() { var k = WILDSTOP[state.biome]; return k && window.FBWorld && FBWorld.PLACES && FBWorld.PLACES[k] && !state.inTunnel ? k : null; }

@@ -1,4 +1,4 @@
-/* A few things the newer places share (Front Row, Town Hall, Come Over): the language, the town's database through its
+/* A few things the newer places share (Town Hall, Come Over): the language, the town's database through its
    functions, the device key hashed with the place (so nothing here links to what the device made elsewhere), the visitor's
    one name, a share sheet, the visitor's own maps, and the town's quiet notes. */
 (function () {

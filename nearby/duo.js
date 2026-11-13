@@ -1,6 +1,6 @@
 /* Nearby · with a friend
-   The one "with a friend" card for every place you can do alone or together: Sandy Cove, Snow Peaks, Mirror Lake,
-   Pine Wood, Wildflower Meadow, Hold On, Late Light, Next Door. Same 👥 card everywhere: a four-letter code,
+   The one "with a friend" card for every place you can do alone or together: Sandy Cove, Mirror Lake,
+   Pine Wood, Wildflower Meadow, High Pasture, Next Door. Same 👥 card everywhere: a four-letter code,
    "Send the link", "or type their code", who is here, "Go alone". Same link: ?with=CODE. Same quiet notes when a friend
    sits down or leaves. You meet on a Supabase Realtime broadcast channel (relay first, then direct, see FBWorld.rtUrl);
    nothing is stored: what you send goes live to your friend only.

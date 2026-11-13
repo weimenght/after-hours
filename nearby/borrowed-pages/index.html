@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=28888bbc82"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d81ef70ee4" defer></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Borrowed Pages · Nearby</title>
 <meta name="description" content="A four-room book house next door to the bar. Wander the attic, parlour, garden and basement, read the notes tucked into books, ask for one, and pass it on by hand.">
@@ -652,7 +652,6 @@ html.fbsh-in.bp-one body > header.sign { position: fixed; }
       }).join("") : '<p class="note">—</p>');
       var link = location.origin + location.pathname + "#key=" + k, town = townKeys();
       h += "<h4>" + esc(t("key")) + '</h4><div class="keybox">' + KEYSVG + (town ? '<span style="flex:1">' + esc(t("keyHint")) + '</span><button class="btn sm" type="button" id="kc">🗝️</button></div>' : '<code id="kl" tabindex="0">' + esc(link) + '</code><button class="btn sm" type="button" id="kc">' + esc(t("copy")) + '</button></div><p class="note">' + esc(t("keyHint")) + "</p>");
-      h += '<p class="note" style="margin-top:14px"><a href="/borrowed-pages/" target="_top" rel="noopener">' + esc(APP[LI[lang()] || 0]) + " ↗</a></p>";   /* the same shelves as an app of its own, outside the town */
       h += '<div class="row" style="margin-top:26px"><button class="btn sm warn" type="button" id="fg">' + esc(t("forget")) + "</button></div>";
       L.innerHTML = h;
       if ($("#kl", s)) $("#kl", s).onclick = function () { this.classList.toggle("show"); };

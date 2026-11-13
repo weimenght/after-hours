@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=28888bbc82"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d81ef70ee4" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=2dd6c99689"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=e05a13b9cc" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Slow Clock · Nearby</title>
 <meta name="description" content="Climb the clock tower and set Nearby's hour and weather: every game you visit next follows it.">
@@ -280,9 +280,9 @@ addEventListener("DOMContentLoaded", function () {
   $("slPlay").onclick = function () {
     if (!window.FBStill || document.querySelector(".slsh")) return;
     var W = window.SL_W, back = document.activeElement, sh = document.createElement("div"); sh.className = "slsh";
-    sh.innerHTML = '<div class="in" role="dialog" aria-modal="true"><div class="hd"><b></b><button class="x" type="button">✕</button></div><div class="fl"></div><a class="app" href="/still-today/" target="_top"></a></div>';
+    sh.innerHTML = '<div class="in" role="dialog" aria-modal="true"><div class="hd"><b></b><button class="x" type="button">✕</button></div><div class="fl"></div></div>';
     sh.querySelector(".hd b").textContent = t(W.title); sh.querySelector(".in").setAttribute("aria-label", t(W.title));
-    sh.querySelector(".x").setAttribute("aria-label", t(W.close)); sh.querySelector(".app").textContent = t(W.townApp);
+    sh.querySelector(".x").setAttribute("aria-label", t(W.close));
     document.body.appendChild(sh);
     var tw = $("tower"), hand = $("hand");
     function shut() { sh.remove(); tw.classList.remove("dim", "slow"); hand.style.transform = "rotate(" + (World.hour() / 24 * 360) + "deg)"; document.removeEventListener("keydown", key, true); try { back.focus(); } catch (e) {} }
