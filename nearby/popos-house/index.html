@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="fbt">
+<head>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=9ce4df0998"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=14f247f97b" defer></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Popo's House · Nearby</title>
+<meta name="description" content="Popo's house on the family street in Nearby: the kitchen and its fridge, the front room with her box of postcards, the table for two far apart, and the back room.">
+<meta name="theme-color" content="#14101e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='3' y='7' width='10' height='8' fill='%23c8a070'/%3E%3Crect x='2' y='5' width='12' height='2' fill='%235a2a1e'/%3E%3Crect x='7' y='10' width='2' height='5' fill='%233a2414'/%3E%3Crect x='4' y='9' width='2' height='2' fill='%23f6c84a'/%3E%3Crect x='10' y='9' width='2' height='2' fill='%23f6c84a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/nearby/townkit.css?v=fae5a10fd3">
+<style>
+/* Popo's house (the owner, Nov 14): one building with four rooms instead of four places. Each room opens its own page through the shell. */
+.tk-scene{background:#14101e}.tk-scene canvas{cursor:pointer;object-fit:contain}
+.room{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;margin:0 0 10px;padding:10px 12px;min-height:64px}
+.room .ri{font-size:24px;line-height:1}
+.room b{display:block;font-weight:400;font-size:21px;color:var(--a)}
+.room span.l{display:block;font-size:16px;color:var(--dim);line-height:1.2}
+.room .go{color:var(--dim);font-size:20px}
+.say{margin:0 0 12px}
+.say .who{font-size:15px;letter-spacing:.08em;color:var(--dim);text-transform:uppercase;margin:0 0 2px}
+.say p{margin:0}
+.say.paper{background:#fbf3e2;color:#2a1a10;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px 12px;transform:rotate(-.6deg)}
+.say.paper .who{color:#8a5a3a}
+</style>
+<link rel="stylesheet" href="/fonts/g/fonts.css">
+<link rel="manifest" href="/nearby/manifest.webmanifest" data-fbapp><meta name="apple-mobile-web-app-capable" content="yes" data-fbapp><meta name="mobile-web-app-capable" content="yes" data-fbapp><meta name="apple-mobile-web-app-title" content="Nearby" data-fbapp></head>
+<body>
+<h1 class="sr" id="h1">Popo's House</h1>
+<div class="tk">
+  <div class="tk-scene"><canvas id="cv" width="160" height="110" role="img" aria-label=""></canvas></div>
+  <main class="tk-panel" id="panel" aria-live="polite"></main>
+</div>
+<script src="/nearby/townkit.js?v=47e3a98ed5"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var K = window.FBTown, t = K.t, el = K.el, W = window.FBWorld || {};
+  /* the four rooms: where each is drawn in the house (160×110), the page it opens, its name and one line */
+  var ROOMS = [
+    { k: "kitchen", go: "party", x: 18, y: 64, w: 60, h: 36, ic: "🍲",
+      n: ["The kitchen", "厨房", "廚房", "La cocina", "La cuina"],
+      l: ["The fridge: Sunday lunch, Mei's welcome-home dinner, New Year's Eve.", "冰箱上：礼拜天午饭、Mei 回家的晚饭、除夕。", "雪櫃上：禮拜日午飯、Mei 返屋企嘅晚飯、除夕。", "La nevera: la comida del domingo, la cena de bienvenida de Mei, Nochevieja.", "La nevera: el dinar de diumenge, el sopar de benvinguda de la Mei, Cap d'Any."] },
+    { k: "front", go: "postcard", x: 82, y: 64, w: 60, h: 36, ic: "📮",
+      n: ["The front room", "前厅", "前廳", "La sala", "La sala"],
+      l: ["Her box of postcards, sixty years of them.", "她的明信片盒，六十年的。", "佢嘅明信片盒，六十年嘅。", "Su caja de postales, sesenta años de ellas.", "La seva capsa de postals, seixanta anys."] },
+    { k: "table", go: "restaurant", x: 18, y: 26, w: 60, h: 34, ic: "🕯️",
+      n: ["The table upstairs", "楼上的饭桌", "樓上的飯桌", "La mesa de arriba", "La taula de dalt"],
+      l: ["The family's table for two far apart: Sunday noodles, three minutes.", "一家人隔着远方的两人桌：礼拜天的面，三分钟。", "一家人隔住遠方嘅兩人枱：禮拜日嘅麵，三分鐘。", "La mesa para dos de la familia, lejos: fideos de domingo, tres minutos.", "La taula per a dos de la família, lluny: fideus de diumenge, tres minuts."] },
+    { k: "back", go: "arcade", x: 82, y: 26, w: 60, h: 34, ic: "🀄",
+      n: ["The back room", "后屋", "後屋", "El cuarto de atrás", "L'habitació del darrere"],
+      l: ["The mahjong table, and an old cabinet against the wall. One coin.", "麻将桌，还有靠墙的一台旧街机。一枚硬币。", "麻將枱，仲有挨住牆嗰部舊街機。一個銀仔。", "La mesa de mahjong, y una vieja máquina contra la pared. Una moneda.", "La taula de mahjong, i una vella màquina contra la paret. Una moneda."] }
+  ];
+  var T = {
+    h1: ["Popo's House", "婆婆家", "婆婆家", "Casa de Popo", "Cal Popo"],
+    popo: ["POPO", "婆婆", "婆婆", "POPO", "LA POPO"],
+    note: ["POPO'S NOTE · SHE'S ASLEEP", "婆婆的字条 · 她睡了", "婆婆的字條 · 佢瞓咗", "NOTA DE POPO · DUERME", "NOTA DE LA POPO · DORM"],
+    hi: [["Come in, come in. Shoes off. Kitchen is warm, go sit.", "进来进来。鞋子脱掉。厨房暖，去坐。", "入嚟入嚟。除鞋。廚房暖，去坐啦。", "Pasa, pasa. Zapatos fuera. Cocina caliente, siéntate.", "Passa, passa. Treu-te les sabates. La cuina és calenta, ves a seure."],
+         ["You eat already or not? Door always open here lah.", "你吃饭了没有？这里的门一直开着啦。", "你食咗飯未呀？呢度道門一直開㗎。", "¿Ya comes o no? Aquí la puerta siempre abierta.", "Ja has menjat o què? Aquí la porta sempre és oberta."],
+         ["Four room, one family. Look around, then go call somebody.", "四个房间，一家人。看看，然后去打个电话给人。", "四間房，一家人。睇吓，跟住去打個電話俾人。", "Cuatro cuartos, una familia. Mira, luego llama a alguien.", "Quatre estances, una família. Fes un tomb i després truca a algú."]],
+    zz: ["Door open, lamp on in the kitchen. Take what you need, close it soft. Go sleep soon!", "门开着，厨房的灯亮着。要什么自己拿，关门轻一点。早点睡！", "道門開住，廚房盞燈著住。要乜自己攞，閂門輕手啲。早啲瞓！", "Puerta abierta, luz en la cocina. Coge lo que necesitas, cierra suave. ¡A dormir pronto!", "La porta és oberta i hi ha llum a la cuina. Agafa el que necessitis i tanca a poc a poc. A dormir aviat!"]
+  };
+  function hour() { try { return W.hour ? W.hour() : new Date().getHours(); } catch (e) { return new Date().getHours(); } }
+  function asleep() { try { return W.sleeps ? W.sleeps("popo", Math.floor(hour())) : (hour() >= 21 || hour() < 5); } catch (e) { return false; } }
+  function night() { try { var p = W.phase ? W.phase() : ""; return p === "night" || p === "dusk"; } catch (e) { var h = hour(); return h >= 19 || h < 7; } }
+
+  /* ---------- the house, in cross-section ---------- */
+  var cv = $("cv"), g = cv.getContext("2d"); g.imageSmoothingEnabled = false;
+  function R(x, y, w, h, c) { g.fillStyle = c; g.fillRect(x, y, w, h); }
+  var hot = null;
+  function draw() {
+    var n = night(), z = asleep(), f = (Date.now() / 120) | 0;
+    R(0, 0, 160, 110, n ? "#1a1830" : "#9cc8e8");   /* sky */
+    if (n) for (var s = 0; s < 14; s++) R((s * 37) % 160, (s * 13) % 22, 1, 1, "#fff6c0");
+    R(0, 100, 160, 10, n ? "#2a2a30" : "#8a8a84");   /* the street */
+    for (var r = 0; r < 16; r++) R(80 - 70 + r * 2.5, 22 - r * 1.2 + 14 - 14, 140 - r * 5, 2, n ? "#3a2420" : "#8a3a2a");   /* the roof */
+    R(12, 10, 136, 3, n ? "#4a2a24" : "#a04a32"); R(120, 2, 8, 10, n ? "#4a3a34" : "#7a5a4a");   /* ridge, chimney */
+    var sm = (f % 12); if (!z || n) R(122 + (sm % 3), 0 - sm * .3, 3, 2, "rgba(220,220,230,.5)");
+    R(14, 22, 132, 80, n ? "#5a4434" : "#c8a070");   /* the walls */
+    ROOMS.forEach(function (rm) {
+      var lit = n || rm.k === "kitchen";
+      R(rm.x, rm.y, rm.w, rm.h, hot === rm.k ? (n ? "#7a5a3a" : "#fbe0a8") : (lit ? (n ? "#6a4a2a" : "#f3e2b8") : "#e8d8b0"));
+      R(rm.x, rm.y + rm.h - 3, rm.w, 3, n ? "#3a2414" : "#8a5a30");   /* floor */
+    });
+    R(78, 26, 4, 74, n ? "#4a3424" : "#a07a4a"); R(14, 60, 132, 4, n ? "#4a3424" : "#a07a4a");   /* the inner walls and the floor between */
+    /* kitchen: stove with a pot, the fridge with papers */
+    R(22, 84, 16, 13, "#2a2a30"); R(25, 80, 10, 5, "#c8c8d0"); if (!z) R(28 + (f % 2), 76, 2, 3, "rgba(255,255,255,.5)");
+    R(62, 70, 12, 27, "#e8ecf0"); R(62, 82, 12, 1, "#9aa"); R(64, 73, 4, 3, "#c8303a"); R(69, 74, 3, 4, "#f6c84a"); R(65, 85, 5, 3, "#7cc8d8");
+    /* the front room: an armchair, the postcard box on a low table, a window */
+    R(86, 82, 16, 12, "#8a2a2a"); R(86, 78, 4, 16, "#7a2020"); R(110, 88, 14, 6, "#6a4426"); R(112, 84, 10, 4, "#c8303a"); R(113, 85, 8, 1, "#f3e6cf");
+    R(128, 70, 12, 12, n ? "#f6c84a" : "#9cc8e8"); R(133, 70, 1, 12, "#5a3a24"); R(128, 75, 12, 1, "#5a3a24");
+    /* upstairs, the table for two: two chairs, two candles, a window */
+    R(34, 48, 26, 3, "#f3ead8"); R(36, 51, 2, 6, "#5a3a24"); R(56, 51, 2, 6, "#5a3a24"); R(26, 44, 4, 13, "#5a3a24"); R(64, 44, 4, 13, "#5a3a24");
+    R(43, 44, 1, 4, "#fbf6ea"); R(50, 44, 1, 4, "#fbf6ea"); if (n || ((f >> 2) % 2)) { R(43, 42, 1, 2, "#f6b73c"); R(50, 42, 1, 2, "#f6b73c"); }
+    R(22, 30, 12, 10, n ? "#f6c84a" : "#9cc8e8"); R(27, 30, 1, 10, "#5a3a24");
+    /* the back room: the mahjong table, the lamp's cord, the cabinet against the wall */
+    R(96, 48, 26, 4, "#2f7a5a"); R(98, 52, 2, 5, "#3a2414"); R(118, 52, 2, 5, "#3a2414"); for (var tl = 0; tl < 6; tl++) R(98 + tl * 4, 46, 2, 2, "#f3ead8");
+    R(108, 26, 1, 10, "#3a2414"); R(105, 36, 7, 3, n ? "#f6c84a" : "#c8a050");
+    R(130, 36, 10, 21, "#2a1a3a"); R(130, 35, 10, 2, "#ff3ad0"); R(131, 39, 8, 6, ((f >> 2) % 7) ? ["#7affc1", "#7ab8ff", "#f6b73c"][(f >> 4) % 3] : "#1a1420");
+    /* who's home: Popo in the kitchen while she's up, asleep in the armchair after nine; the cats on the stairs if they're home */
+    try {
+      if (W.drawPopo) { if (!z) W.drawPopo(g, 38, 66, 1, {}); else W.drawPopo(g, 86, 66, 1, { asleep: true }); }
+      if (z) { R(104, 66, 1, 1, "#fff"); R(106, 64, 1, 1, "#fff"); }
+      var cats = W.cats ? W.cats() : {}; if (W.drawPet) { if (cats.miso === "nest" || cats.miso === "postcard") W.drawPet(g, "miso", 116, 98, 1, { asleep: n }); var d = W.dog ? W.dog() : ""; if (d === "bar" || d === "postcard") W.drawPet(g, "dog", 100, 58, 1, { asleep: n }); }
+    } catch (e) {}
+  }
+  function roomAt(ev) { var b = cv.getBoundingClientRect(), k = Math.min(b.width / 160, b.height / 110), ox = (b.width - 160 * k) / 2, oy = (b.height - 110 * k) / 2, x = (ev.clientX - b.left - ox) / k, y = (ev.clientY - b.top - oy) / k;   /* the drawing is letterboxed (object-fit: contain) */
+    for (var i = 0; i < ROOMS.length; i++) { var r = ROOMS[i]; if (x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h) return r; } return null; }
+  cv.addEventListener("pointermove", function (e) { var r = roomAt(e); hot = r ? r.k : null; });
+  cv.addEventListener("pointerleave", function () { hot = null; });
+  cv.addEventListener("click", function (e) { var r = roomAt(e); if (r) K.goPlace(r.go); });
+
+  /* ---------- the panel: whoever's up, then the four rooms ---------- */
+  var line = null;
+  function paint() {
+    $("h1").textContent = t(T.h1); cv.setAttribute("aria-label", t(T.h1));
+    var p = $("panel"); p.innerHTML = "";
+    var z = asleep(), s = el("div", "say" + (z ? " paper" : "")); s.appendChild(el("p", "who", t(z ? T.note : T.popo)));
+    if (!line) line = T.hi[(Math.random() * T.hi.length) | 0];
+    s.appendChild(el("p", "", t(z ? T.zz : line))); p.appendChild(s);
+    ROOMS.forEach(function (rm) {
+      var b = el("button", "fbb room"); b.type = "button";
+      var ic = el("span", "ri", rm.ic), tx = el("span"); tx.appendChild(el("b", "", t(rm.n))); tx.appendChild(el("span", "l", t(rm.l)));
+      b.appendChild(ic); b.appendChild(tx); b.appendChild(el("span", "go", "›"));
+      b.onmouseenter = function () { hot = rm.k; }; b.onmouseleave = function () { hot = null; };
+      b.onclick = function () { K.goPlace(rm.go); }; p.appendChild(b);
+    });
+  }
+  paint(); draw();
+  var raf = 0; (function loop() { draw(); raf = setTimeout(function () { requestAnimationFrame(loop); }, 250); })();
+  addEventListener("fbl:lang", paint);
+  window.PH = { rooms: ROOMS, paint: paint };   /* test hook */
+})();
+</script>
+</body>
+</html>

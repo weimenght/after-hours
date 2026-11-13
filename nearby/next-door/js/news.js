@@ -2,7 +2,7 @@
 (function () {
   /* Fallback names only: the real names come from FBWorld.PLACES (build/fbl.js). [EN, 简中, ES, CA, url] */
   const P = {
-    bar: ["Next Door", "隔壁", "Al Lado", "Al Costat", "/nearby/next-door/"], books: ["Borrowed Pages", "借来的书", "Páginas Prestadas", "Pàgines Manllevades", "/nearby/borrowed-pages/"],
+    bar: ["Next Door", "隔壁", "Al Lado", "Al Costat", "/nearby/next-door/"], popo: ["Popo's House", "婆婆家", "Casa de Popo", "Cal Popo", "/nearby/popos-house/"], books: ["Borrowed Pages", "借来的书", "Páginas Prestadas", "Pàgines Manllevades", "/nearby/borrowed-pages/"],
     jukebox: ["Same Song", "同一首歌", "La Misma Canción", "La Mateixa Cançó", "/nearby/same-song/"], postcard: ["Say Hello", "问个好", "Di Hola", "Digues Hola", "/nearby/say-hello/"], kintsugi: ["Mended", "金缮坊", "Remendado", "Adobat", "/nearby/mended/"],
     tower: ["Slow Clock", "慢钟", "Reloj Lento", "Rellotge Lent", "/nearby/slow-clock/"], train: ["Nearby Station", "近邻站", "Estación Cerca", "Estació A Prop", "/nearby/station/"], dj: ["Late Light", "夜灯", "Luz Tardía", "Llum Tardana", "/nearby/late-light/"],
     climb: ["Hold On", "抓稳", "Agárrate", "Agafa't", "/nearby/hold-on/"], cloud: ["Lie Back Park", "看云坡", "Parque Panza Arriba", "Parc Panxa Enlaire", "/nearby/lie-back/"], nest: ["Miso & Yuzu's", "味噌和柚子家", "Casa de Miso y Yuzu", "Cal Miso i la Yuzu", "/nearby/miso-and-yuzu/"],
@@ -32,8 +32,7 @@
   };
   const WX = { clear: S("clear", "晴", "despejado", "serè"), cloudy: S("cloudy", "多云", "nublado", "ennuvolat"), rain: S("raining", "下雨", "lloviendo", "plovent"), storm: S("stormy", "有雷雨", "tormentoso", "tempestuós"), snow: S("snowing", "下雪", "nevando", "nevant"), fog: S("foggy", "起雾", "con niebla", "boirós") };
   const TIPS = [
-    ["restaurant", S("\"Got someone far away? Two Candles by the lake keeps a table for two. You both sit down from wherever you are and cook the same dinner.\"", "\"有人在远方？湖边的“双烛小馆”有双人桌。你们各自坐下，一起做同一顿饭。\"", "\"¿Alguien lejos? Dos Velas, junto al lago, guarda mesa para dos. Os sentáis cada uno desde donde estéis y cocináis la misma cena.\"", "\"Algú lluny? Dues Espelmes, vora el llac, guarda taula per a dos. Seieu cadascú des d'on sigueu i cuineu el mateix sopar.\"")],
-    ["brewery", S("\"Neighbours' Brew, up the street, lets you make your own beer. Osmanthus IPA, anyone? Ship it here and I'll pour it.\"", "\"街上的“邻家酿”可以自己酿酒。来一桶桂花 IPA？送过来我就给你倒。\"", "\"En Cerveza Vecina, calle arriba, puedes hacer tu propia cerveza. ¿IPA de osmanto? Mándamela y la sirvo.\"", "\"A Cervesa Veïna, carrer amunt, pots fer la teva pròpia cervesa. IPA d'osmant? Envia-me-la i la serveixo.\"")],
+    ["popo", S("\"Popo's house is two doors down. The kitchen's warm, and her box of postcards is in the front room.\"", "\"婆婆家就在隔两间。厨房很暖，她的明信片盒在前厅。\"", "\"La casa de Popo está a dos puertas. La cocina está caliente y su caja de postales, en la sala.\"", "\"La casa de la Popo és a dues portes. La cuina és calenta i la capsa de postals, a la sala.\"")],
     ["books", S("\"Borrowed Pages, across the lane, gets quiet after nine. Best time to find something you weren't looking for.\"", "\"巷子对面的“借来的书”九点以后就安静了，最适合找到你没在找的书。\"", "\"Páginas Prestadas, enfrente, se queda tranquila después de las nueve. El mejor momento para encontrar lo que no buscabas.\"", "\"Pàgines Manllevades, al davant, es queda tranquil·la després de les nou. El millor moment per trobar el que no buscaves.\"")],
     ["kintsugi", S("\"Broke something? Mended puts it back together with gold. Works on bad days too.\"", "\"打碎了什么？“金缮坊”会用金子补好。坏日子也一样。\"", "\"¿Rompiste algo? En Remendado lo reparan con oro. También sirve para los días malos.\"", "\"Has trencat alguna cosa? A Adobat la reparen amb or. També serveix per als dies dolents.\"")],
     ["train", S("\"The night train leaves Nearby Station at the bottom of the hill. Hong Kong, Wales, wherever. Share a sleeper cabin if you're brave.\"", "\"夜车从山脚的“近邻站”出发，香港、威尔士，哪儿都去。胆子大就和人拼个卧铺。\"", "\"El tren nocturno sale de la Estación Cerca, al pie de la colina. Hong Kong, Gales, donde sea. Comparte litera si te atreves.\"", "\"El tren de nit surt de l'Estació A Prop, al peu del turó. Hong Kong, Gal·les, on sigui. Comparteix llitera si t'atreveixes.\"")],
@@ -49,8 +48,7 @@
       const out = [], W = window.FBWorld;
       try { const c = W && W.cats && W.cats(); if (c && P[c.miso] && P[c.yuzu]) out.push(c.miso === c.yuzu ? [() => fill(LINE.catsTogether, { a: pn(c.miso) }), c.miso] : [() => fill(LINE.cats, { a: pn(c.miso), b: pn(c.yuzu) }), c.miso === 'bar' ? c.yuzu : c.miso]); } catch (e) {}
       try { const d = W && W.dog && W.dog(); if (d && P[d]) out.push([() => fill(LINE.dog, { a: pn(d) }), d]); } catch (e) {}
-      if (Array.isArray(bn) && bn.length) { const b = bn[0]; out.push([() => fill(LINE.beerNew, { b: b.brewer, n: b.name, s: b.style, w: L(b.bar ? LINE.beerHere : LINE.beerNone) }), b.bar ? 'menu' : 'brewery']); }
-      else if (bn) out.push([() => L(LINE.noBeer), 'brewery']);
+      /* Neighbours' Brew is retired (Nov 14): no beer news */
       if (gs && typeof gs.count === 'number') out.push([() => fill(gs.count ? LINE.garden : LINE.gardenNone, { n: gs.count }), 'garden']);
       if (Array.isArray(sl)) out.push([() => fill(sl.length ? LINE.sanctuary : LINE.sanctuaryNone, { n: sl.length }), 'sanctuary']);
       if (Array.isArray(pw)) out.push([() => fill(pw.length ? LINE.wall : LINE.wallNone, { n: pw.length }), pw.length ? 'wall' : 'postcard']);

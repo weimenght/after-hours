@@ -15,18 +15,18 @@ URL: lie-back/
 CODE: COVE
 ID: CV-21
 TITLE: Sandy Cove
-GENRE: Row out, gather lanterns, let them go
+GENRE: Lie on the sand
 AUTHOR: FREE//BUILDER
-DESC: Row a little boat around the cove. Lanterns drift on the water; row through one and it follows you on a string. Drop anchor and they rise into the sky. With a friend, their boat rows beside yours.
-URL: sandy-cove/
+DESC: Lie on the sand by the water. Gulls drift over, the tide comes in, the clouds take their time.
+URL: lie-back/?place=sea
 
 CODE: LAKE
 ID: ML-23
 TITLE: Mirror Lake
-GENRE: Fishing from the dock
+GENRE: Lie by the lake
 AUTHOR: FREE//BUILDER
-DESC: Cast from a wooden dock, wait for the float to dip, and reel in. Then let the fish go, give it to the cat on the dock, or send it to Next Door, where Wei cooks it. A friend can sit beside you.
-URL: mirror-lake/
+DESC: Lie on the bank by the lake. Herons wait on the far shore, and the sky sits in the water.
+URL: lie-back/?place=lake
 
 CODE: WOOD
 ID: PW-24
@@ -47,10 +47,10 @@ URL: lie-back/?place=meadow
 CODE: PASTURE
 ID: HP-26
 TITLE: High Pasture
-GENRE: The flock goes home
+GENRE: Lie on the high grass
 AUTHOR: FREE//BUILDER
-DESC: Walk the dog; a tap is a woof. The flock drifts away from him toward the pen: four to fourteen sheep, and some days a goat, a cow or an alpaca came up too. When everyone is home they settle, and later wander out again. At night everyone sleeps. A friend can be the second shepherd.
-URL: high-pasture/
+DESC: Lie on the grass up on the pasture. An eagle turns overhead and the cowbells come and go.
+URL: lie-back/?place=mountain
 
 CODE: CARDS
 ID: PR-29
@@ -68,38 +68,6 @@ AUTHOR: FREE//BUILDER
 DESC: A small cabin on the high pasture with one big window. Clouds drift, cows wander, the weather does what it does. There is nothing to win and nothing to finish. Stay as long as you like.
 URL: no-hurry/
 
-CODE: PLOT
-ID: YP-30
-TITLE: Your Plot
-GENRE: A piece of land that's yours
-AUTHOR: FREE//BUILDER
-DESC: A plot below the railway, past Come Over. Build whatever you like, block by block, in any shape and colour, put up signs that say what it's for, and name it. It stays on your device unless you keep a copy; show it to someone with a link.
-URL: your-plot/
-
-CODE: SHOP
-ID: SS-31
-TITLE: Set Up Shop
-GENRE: A market stall that's yours
-AUTHOR: FREE//BUILDER
-DESC: A little market stall below the railway, left of Town Hall. Pick the awning and the cloth, lay out what you'd offer on the counter, say how it works (free, swap, pay what you like, or just come and chat), name it and chalk the board. It stays on your device; show it to someone with a link.
-URL: set-up-shop/
-
-CODE: BOARD
-ID: TH-27
-TITLE: Town Hall
-GENRE: A notice board for the town
-AUTHOR: FREE//BUILDER
-DESC: Pin an idea for the town, your own news, or a word about a place you love here, and answer each other. Inside, stitch one square into the town quilt; it only grows. No votes, no counts.
-URL: town-hall/
-
-CODE: PARTY
-ID: CO-28
-TITLE: Come Over
-GENRE: The family's invitations
-AUTHOR: FREE//BUILDER
-DESC: Popo's fridge: the family's own invitations, Sunday lunch, Mei's welcome-home dinner and New Year's Eve, with who's bringing what and Josep's chair kept at the table.
-URL: come-over/
-
 CODE: WISH
 ID: PZ-25
 TITLE: The Plaza
@@ -115,14 +83,6 @@ GENRE: One endless garden, planted together
 AUTHOR: FREE//BUILDER
 DESC: Pick a seed and plant it next to someone else's: cherry trees, sunflowers, peonies, ponds and stone lanterns. Everything grows over days, faster when people water it, and the garden keeps spreading.
 URL: plant-a-friend/
-
-CODE: BREWERY
-ID: BW-14
-TITLE: Neighbours' Brew
-GENRE: Brew a beer, ship it to the bar
-AUTHOR: FREE//BUILDER
-DESC: Pick the malt, hops and yeast, add a twist like osmanthus or Sichuan pepper, and design the can. It goes on tap at Next Door, where everyone can order it and raise a glass.
-URL: neighbours-brew/
 
 CODE: NEST
 ID: CN-11
@@ -156,13 +116,13 @@ AUTHOR: FREE//BUILDER
 DESC: Light one bulb per beat and you have a tune; tap the drum for a groove. Press it into a record and sign it: it plays Next Door, in Borrowed Pages and here at the same second, with your name on it.
 URL: same-song/
 
-CODE: POSTCARD
-ID: PC-10
-TITLE: Say Hello
-GENRE: A family's postcards
+CODE: POPO
+ID: PH-30
+TITLE: Popo's House
+GENRE: Four rooms of the family
 AUTHOR: FREE//BUILDER
-DESC: Popo's box of postcards: her sister in Hong Kong, her girls on a school trip, the bowl, Mei's first photo, Mei coming home. Turn each one over, then write one of your own, for real.
-URL: say-hello/
+DESC: Popo's house on the family street. The kitchen with the fridge's invitations, the front room with her box of postcards, the table for two far apart, and the back room where the mahjong table and an old arcade cabinet wait.
+URL: popos-house/
 
 CODE: BAR
 ID: WB-03
@@ -187,11 +147,3 @@ GENRE: Golden joinery, slow craft
 AUTHOR: FREE//BUILDER
 DESC: A different broken piece waits on the bench each visit. Fit the shards, trace the cracks with lacquer, and the gold fills them. Sign the finished piece into a book every visitor can leaf through.
 URL: mended/
-
-CODE: CANDLES
-ID: TC-15
-TITLE: Two Candles
-GENRE: A table for two, miles apart
-AUTHOR: FREE//BUILDER
-DESC: The family's table for two far apart: Popo and her sister's Sunday noodles, three minutes a call since 1969, and the sisters' handoff hour at six. Sit in the empty chair.
-URL: two-candles/

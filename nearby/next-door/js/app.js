@@ -208,7 +208,6 @@
         const sw = document.createElement('i'); sw.style.cssText = `float:right;width:14px;height:14px;border:2px solid #000;background:${/^#[0-9a-f]{6}$/i.test(b.color) ? b.color : '#e8a030'}`; el.prepend(sw);
         pane.appendChild(el);
       });
-      const a = document.createElement('a'); a.href = '/nearby/neighbours-brew/'; a.className = 'opt-btn w-full !block text-center'; a.textContent = '🏭 ' + T('menu.tapBrew'); pane.appendChild(a);
     }
     function pourBeer(b) {
       try { SoundEngine.playClick(); } catch (e) {}
