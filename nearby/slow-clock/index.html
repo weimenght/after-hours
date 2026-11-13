@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=109613d842"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=43af997c69" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=d9bef98ebf"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=fb93a2e346" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Slow Clock · Nearby</title>
 <meta name="description" content="Climb the clock tower and set Nearby's hour and weather: every game you visit next follows it.">
@@ -53,6 +53,19 @@ main{max-width:560px;margin:0 auto;padding:6px 16px 100px}
 .ring{animation:ring .6s steps(4)}
 @keyframes ring{25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* Josep's clock (Still Today, /still-today/: words.js + still.js): play along in a card, or turn the clock round */
+.row.jc{grid-template-columns:1fr 1fr}
+.chip.jcb{height:48px;grid-template-rows:1fr;padding:0 8px}.chip.jcb small{font-size:21px;opacity:1}
+.slsh{position:fixed;inset:0;z-index:50;background:rgba(8,6,12,.62);display:flex;align-items:flex-end;justify-content:center;padding:12px;box-sizing:border-box}
+@media (min-width:640px){.slsh{align-items:center}}
+.slsh .in{width:100%;max-width:460px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;background:repeating-conic-gradient(rgba(0,0,0,.25) 0 25%,transparent 0 50%) 0 0/4px 4px,#14101e;border:3px solid #000;box-shadow:3px 3px 0 #000;padding:12px;display:flex;flex-direction:column;gap:12px}
+.slsh .hd{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.slsh .hd b{font:400 10px/1.3 var(--px);color:var(--a);text-transform:uppercase;letter-spacing:.05em}
+html:lang(zh-Hans) .slsh .hd b,html:lang(zh-Hant) .slsh .hd b{font:400 19px/1 var(--vt)}
+.slsh .x{width:44px;height:44px;border:3px solid #000;background:#2a2238;color:var(--ink);font:400 24px/1 var(--vt);cursor:pointer;box-shadow:inset -3px -3px 0 rgba(0,0,0,.45),inset 3px 3px 0 rgba(255,255,255,.12),3px 3px 0 #000}
+.slsh .app{align-self:center;color:var(--dim);font:400 19px/1 var(--vt);text-decoration:underline;text-underline-offset:3px;padding:10px 4px}
+.tower.slow .hand{transition:transform 1.8s cubic-bezier(.2,.8,.3,1)}
+.tower.dim{filter:brightness(.45);transition:filter 2.4s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 <style data-fit>
@@ -101,6 +114,7 @@ html.fbsh-in .grp{margin-top:8px}
   <section class="grp" aria-labelledby="gT"><div class="gh"><b id="gT" data-t="time">Time</b><span id="vT"></span></div><div class="row" id="times" role="group" aria-labelledby="gT"></div></section>
   <section class="grp" aria-labelledby="gW"><div class="gh"><b id="gW" data-t="sky">Sky</b><span id="vW"></span></div><div class="row" id="wx" role="group" aria-labelledby="gW"></div></section>
   <section class="grp" aria-labelledby="gS"><div class="gh"><b id="gS" data-t="season">Season</b><span id="vS"></span></div><div class="row" id="sea" role="group" aria-labelledby="gS"></div></section>
+  <section class="grp" aria-labelledby="gJ"><div class="gh"><b id="gJ">Josep's clock</b></div><div class="row jc" role="group" aria-labelledby="gJ"><button class="chip jcb" type="button" id="slPlay"><small></small></button><button class="chip jcb" type="button" id="slLog"><small></small></button></div></section>
   <div class="go">
     <button class="big alt" type="button" id="dice" aria-label="Surprise me">🎲</button>
     <a class="big" href="/nearby/?from=tower" id="back">🔔 <span data-t="back">Ring the bell, back to town</span></a>
@@ -250,6 +264,41 @@ html.fbsh-in .grp{margin-top:8px}
   setInterval(function () { f++; drawSky(); }, 120);
   setInterval(paint, 30000);
 })();
+</script>
+<script src="/still-today/words.js?v=5b46de9f9a" defer></script>
+<script src="/still-today/still.js?v=08f0005f8c" defer></script>
+<script>
+/* Josep's clock: Still Today in a card over the tower (the town's hour decides who's up), and the back of the clock (Josep's log).
+   The flow and the words are the app's own (/still-today/still.js, words.js), so the two never drift. Nothing is sent. */
+addEventListener("DOMContentLoaded", function () {
+  var $ = function (id) { return document.getElementById(id); }, LI = { en: 0, zh: 1, "zh-Hant": 2, es: 3, ca: 4 };
+  function t(a) { var l = LI[(window.FBL && FBL.get && FBL.get()) || "en"] || 0; return a ? a[l] || a[0] : ""; }
+  function words() { var W = window.SL_W; if (!W) return; $("gJ").textContent = t(W.townK); $("slPlay").lastChild.textContent = t(W.townPlay); $("slLog").lastChild.textContent = t(W.townLog); }
+  words(); addEventListener("fbl:lang", words);
+  var World = window.FBWorld || { hour: function () { return 21; } };
+  $("slLog").onclick = function () { if (window.FBStill) FBStill.log(); };
+  $("slPlay").onclick = function () {
+    if (!window.FBStill || document.querySelector(".slsh")) return;
+    var W = window.SL_W, back = document.activeElement, sh = document.createElement("div"); sh.className = "slsh";
+    sh.innerHTML = '<div class="in" role="dialog" aria-modal="true"><div class="hd"><b></b><button class="x" type="button">✕</button></div><div class="fl"></div><a class="app" href="/still-today/" target="_top"></a></div>';
+    sh.querySelector(".hd b").textContent = t(W.title); sh.querySelector(".in").setAttribute("aria-label", t(W.title));
+    sh.querySelector(".x").setAttribute("aria-label", t(W.close)); sh.querySelector(".app").textContent = t(W.townApp);
+    document.body.appendChild(sh);
+    var tw = $("tower"), hand = $("hand");
+    function shut() { sh.remove(); tw.classList.remove("dim", "slow"); hand.style.transform = "rotate(" + (World.hour() / 24 * 360) + "deg)"; document.removeEventListener("keydown", key, true); try { back.focus(); } catch (e) {} }
+    function key(e) { if (e.key === "Escape" && !document.querySelector(".aht-scr,.sl-scr,.sl-dark")) { e.preventDefault(); shut(); } }
+    document.addEventListener("keydown", key, true);
+    sh.querySelector(".x").onclick = shut;
+    sh.addEventListener("click", function (e) { if (e.target === sh) shut(); });
+    FBStill.mount(sh.querySelector(".fl"), {
+      hour: function () { return World.hour(); },
+      root: sh.querySelector(".in"),
+      /* Josep's clock runs slow: on the tower, the hand eases back */
+      slow: function (done) { tw.classList.add("slow"); hand.style.transform = "rotate(" + (World.hour() / 24 * 360 - 12) + "deg)"; setTimeout(done, 1800); },
+      dim: function (on) { tw.classList.toggle("dim", on); }
+    }).home();
+  };
+});
 </script>
 </body>
 </html>
