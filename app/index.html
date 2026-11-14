@@ -350,10 +350,10 @@ html.light .navg .nb i{background:rgba(40,30,20,.55)}
 .photo p{margin:14px 6px 0;font:italic 400 22px/1.25 var(--serif);text-align:center}
 .photo small{display:block;margin-top:6px;font:11px/1 var(--mono);color:var(--dim);text-align:center}
 /* the camera on a computer (the owner, Nov 8): a portrait viewfinder in the middle, as a camera holds it, not a stretched strip */
-html.desk .cam .vf{flex:none;align-self:center;height:calc(min(800px,100vh - 120px) - 250px);width:auto;aspect-ratio:3/4;margin:4px auto 0}
-html.desk .cam .shut{width:min(460px,100%);align-self:center}
-html.desk .roll{grid-template-columns:repeat(6,1fr)}
-html.desk .photo canvas{max-height:78%;width:auto;align-self:center}
+html.deskwide .cam .vf{flex:none;align-self:center;height:calc(min(800px,100vh - 120px) - 250px);width:auto;aspect-ratio:3/4;margin:4px auto 0}
+html.deskwide .cam .shut{width:min(460px,100%);align-self:center}
+html.deskwide .roll{grid-template-columns:repeat(6,1fr)}
+html.deskwide .photo canvas{max-height:78%;width:auto;align-self:center}
 /* your own photos and voice notes (the owner, Nov 7): kept in this browser only (IndexedDB "ah_app_media"), never uploaded */
 .mineb{display:block;margin:10px auto 0}
 .roll .rsec{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 8px 6px;font:11px/1.3 var(--mono);color:var(--dim);letter-spacing:.04em}
@@ -361,9 +361,9 @@ html.desk .photo canvas{max-height:78%;width:auto;align-self:center}
 /* a note that sits straight in an app's page keeps the page's side margins (the owner, Nov 7: nothing flush to the edge) */
 .body>.fnote,#card>.fnote,#voice>.fnote{margin:12px 22px 0;font:12px/1.45 var(--mono);color:var(--dim)}
 #voice>.fnote{text-align:center;max-width:30em;margin-left:auto;margin-right:auto;padding:0 22px}
-html.desk #voice,html.desk #card{max-width:620px;margin:0 auto}
+html.deskwide #voice,html.deskwide #card{max-width:620px;margin:0 auto}
 /* a wide window gets a wider gutter, so nothing in an app runs close to its edge */
-html.desk .app .view{padding-left:18px;padding-right:18px}
+html.deskwide .app .view{padding-left:18px;padding-right:18px}
 .fbnote{padding:2px 16px 4px}
 .roll button img{width:100%;height:100%;object-fit:cover;display:block}
 .roll button.mine{position:relative}
@@ -509,7 +509,7 @@ html.framed .rest{margin-bottom:24px}
 .tc{position:relative;width:34px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 .tc svg{width:17px;height:17px}
 .tc.has::after{content:"";position:absolute;top:3px;right:4px;width:8px;height:8px;border-radius:50%;background:#E0604A;box-shadow:0 0 0 2px rgba(37,30,49,.9)}
-html.inapp .tchips{visibility:hidden}
+html.inapp:not(.desk) .tchips{visibility:hidden}
 html.desk .tchips{order:4}
 .fold.xtra{align-items:flex-start;justify-content:flex-end}
 .fold.xtra .fpanel{max-width:300px;margin-top:calc(46px + env(safe-area-inset-top));border-radius:24px;transform-origin:100% 0}
@@ -749,8 +749,8 @@ html.light .banner{background:rgba(255,252,246,.96)}
 html.light .toast,html.light .sheet{background:#FFFDF8;color:var(--paper)}
 html.light .hb::before{background:rgba(34,28,46,.35)}
 html.light .bub.me{color:#221C2E}
-html.light.inapp .top{color:var(--paper)}
-html.light.inapp .chip{background:rgba(255,255,255,.6)}
+html.light.inapp:not(.desk) .top{color:var(--paper)}
+html.light.inapp:not(.desk) .chip{background:rgba(255,255,255,.6)}
 html.light .wmoon svg circle:first-child{fill:#3A3150}
 html.light .call,html.light .lock{--paper:#ECE6DA;--dim:#9C93A8;color:#ECE6DA}
 html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color:#ECE6DA}
@@ -794,10 +794,10 @@ html.light .cam{--paper:#ECE6DA;--dim:#9C93A8;--line:rgba(236,230,218,.12);color
 .snoteL summary::after{content:" ›"}
 .snoteL[open] summary::after{content:" ⌄"}
 .snoteL .sabout{margin:10px 0 0}
-html.desk #storeA .show{grid-column:1/-1;margin:6px 0 10px}
-html.desk #storeA .ssteps{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 10px}
-html.desk #storeA .ssteps li{flex-direction:column;align-items:flex-start;padding:16px}
-html.desk #storeA .sfor{margin:12px 12px 0}
+html.deskwide #storeA .show{grid-column:1/-1;margin:6px 0 10px}
+html.deskwide #storeA .ssteps{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 10px}
+html.deskwide #storeA .ssteps li{flex-direction:column;align-items:flex-start;padding:16px}
+html.deskwide #storeA .sfor{margin:12px 12px 0}
 .sabout{margin:0 18px}
 .sabout p{margin:0 0 10px;font:15px/1.55 var(--sans)}
 .sabout .sby{font:11px/1 var(--mono);color:var(--lamp)}
@@ -833,34 +833,42 @@ html.desk .dock .dsep{display:block;align-self:stretch;width:1px;margin:6px -4px
 html.desk .dock .dmoon .ico{box-shadow:0 0 18px rgba(242,163,58,.18)}
 html.desk .dock{grid-area:dock;justify-self:center;margin:6px 0 22px;padding:10px 18px;gap:22px}
 html.desk .home.away{transform:none;opacity:.4;filter:blur(1.5px)}
-html.desk .app{inset:auto;left:50%;top:calc(50% + 20px);width:min(1100px,calc(100vw - 80px));height:min(800px,calc(100vh - 120px));transform:translate(-50%,-47%) scale(.985);opacity:0;transition:opacity .22s,transform .22s,visibility 0s .22s;border-radius:18px;border:1px solid var(--line);box-shadow:0 50px 140px -30px rgba(0,0,0,.85)}
-html.desk .app.open{transform:translate(-50%,-50%);opacity:1;transition:opacity .22s,transform .22s}
-html.desk .bar{padding:22px 70px 10px 28px}
-html.desk .bar h3{font-size:38px}
-html.desk .hb{position:absolute;top:16px;right:16px;width:36px;height:36px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--ink2);align-items:center;justify-content:center;z-index:6}
-html.desk .hb::before{content:"\2715";width:auto;height:auto;border-radius:0;background:none;font:600 14px/1 var(--sans);color:var(--paper)}
-html.desk .hb:hover{border-color:var(--lamp)}
-html.desk .body{padding-bottom:28px}
+html.desk .app{inset:auto;top:72px;right:36px;width:430px;height:min(880px,calc(100vh - 96px));border-radius:26px;border:1px solid var(--line);overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.25);transform:translateY(10px) scale(.985);opacity:0;transition:opacity .2s,transform .22s cubic-bezier(.2,.8,.2,1),visibility 0s .22s}
+html.desk .app.open{transform:none;opacity:1;transition:opacity .2s,transform .22s cubic-bezier(.2,.8,.2,1)}
+/* Nov 15, the owner: Messages, Settings, the Store and the rest open on a computer like every other app, in a window beside the others, the home screen still there */
+.app>.wbar{display:none}
+html.desk .app>.wbar{display:flex}
+html.desk .app>.hb{display:none}
+html.desk .app .bar{padding-top:14px}
+html.desk .app:not(.front){box-shadow:0 18px 50px -24px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.25)}html.desk .app:not(.front) .wbar{opacity:.72}
+html.desk .home.away{transform:none;opacity:1;filter:none}
+html.desk .done,html.desk .eadds,html.desk .call,html.desk .fold{z-index:1000060}html.desk .sheet{z-index:1000080}html.desk .banner{z-index:1000085}html.desk .toast{z-index:1000090}html.desk .lock{z-index:1000095}html.desk .pwr{z-index:1000130}html.desk .dragghost{z-index:1000200}   /* over the windows, which climb from 110 */
+html.deskwide .bar{padding:22px 70px 10px 28px}
+html.deskwide .bar h3{font-size:38px}
+html.deskwide .hb{position:absolute;top:16px;right:16px;width:36px;height:36px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--ink2);align-items:center;justify-content:center;z-index:6}
+html.deskwide .hb::before{content:"\2715";width:auto;height:auto;border-radius:0;background:none;font:600 14px/1 var(--sans);color:var(--paper)}
+html.deskwide .hb:hover{border-color:var(--lamp)}
+html.deskwide .body{padding-bottom:28px}
 html.desk .sheet{left:50%;right:auto;width:440px;transform:translateX(-50%)}
 html.desk .banner{left:auto;right:18px;width:380px;top:54px}
 html.desk .banner:not(.on){opacity:0;pointer-events:none}
-html.desk #storeL .sfeat{width:auto;max-width:760px}
-html.desk #storeL .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:10px;background:none;border:0;overflow:visible}
-html.desk #storeL .srow{border:1px solid var(--line);border-radius:16px;background:var(--ink2)}
-html.desk #storeL .srow:hover{border-color:rgba(242,163,58,.5)}
-html.desk #storeA{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:34px;align-content:start;padding:8px 18px 34px}
-html.desk #storeA .shead{grid-column:1/-1;padding:4px 10px 6px}
-html.desk #storeA .shead .tx b{font-size:40px}
-html.desk #storeA .sshots{flex-wrap:wrap;overflow:visible;padding:0 10px}
-html.desk #storeA .sshots img{height:460px}
-html.desk #storeA .sshots canvas{height:300px}
-html.desk #storeA .sabout p{font-size:16px;max-width:38em}
+html.deskwide #storeL .sfeat{width:auto;max-width:760px}
+html.deskwide #storeL .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:10px;background:none;border:0;overflow:visible}
+html.deskwide #storeL .srow{border:1px solid var(--line);border-radius:16px;background:var(--ink2)}
+html.deskwide #storeL .srow:hover{border-color:rgba(242,163,58,.5)}
+html.deskwide #storeA{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:34px;align-content:start;padding:8px 18px 34px}
+html.deskwide #storeA .shead{grid-column:1/-1;padding:4px 10px 6px}
+html.deskwide #storeA .shead .tx b{font-size:40px}
+html.deskwide #storeA .sshots{flex-wrap:wrap;overflow:visible;padding:0 10px}
+html.deskwide #storeA .sshots img{height:460px}
+html.deskwide #storeA .sshots canvas{height:300px}
+html.deskwide #storeA .sabout p{font-size:16px;max-width:38em}
 .ntb{display:none;position:relative;width:34px;height:30px;padding:0;align-items:center;justify-content:center;margin-left:auto;margin-right:8px}
 .ntb.has{display:inline-flex}
 .ntb svg{width:17px;height:17px}
 .ntb.new::after{content:"";position:absolute;top:4px;right:5px;width:8px;height:8px;border-radius:50%;background:#E0604A;box-shadow:0 0 0 2px rgba(37,30,49,.9)}
 html.desk .ntb{margin-left:12px;margin-right:0;order:3}
-html.inapp .ntb,html.editing .ntb{visibility:hidden}
+html.inapp:not(.desk) .ntb,html.editing .ntb{visibility:hidden}
 .sheet.ntop{top:calc(10px + env(safe-area-inset-top));bottom:auto;max-height:calc(100% - 40px);overflow:auto}
 html.framed .sheet.ntop{top:46px}
 html.desk .sheet.ntop{left:auto;right:18px;width:400px;top:54px;transform:none}
@@ -2097,7 +2105,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   function fit() {   // the phone stands in the middle of anything wider than a phone; icons size to the screen's height
     var desk = innerWidth >= 1024 && innerHeight >= 600, wide = !desk && innerWidth > 560 && innerHeight > 600;   // a computer gets the desktop; a tablet the phone
     document.documentElement.classList.toggle("desk", desk); document.documentElement.classList.toggle("framed", wide);
-    if (desk !== DESK) { DESK = desk; if (fit.ready) setTimeout(paint, 0); }
+    if (desk !== DESK) { DESK = desk; if (!DESK) sysClear(); else if (cur) sysOpen(cur); if (fit.ready) setTimeout(paint, 0); }
     var ph = $("phone"); ph.style.transform = wide ? "scale(" + Math.min(1, (innerHeight - 64) / 868, (innerWidth - 40) / 414).toFixed(3) + ")" : "";
     var gr = $("grid"); if (desk) { $("screen").style.removeProperty("--ic"); pages(gr, 0); } else if (gr.clientHeight) {
       var lab = gr.querySelector(".tile b"), lh = lab ? lab.offsetHeight + 6 : 22, cs = getComputedStyle(gr), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
@@ -2149,6 +2157,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   function open(id) {
     if (cur === id) return; var prev = cur; if (cur) $("a-" + cur).classList.remove("open");
     cur = id; document.documentElement.classList.add("inapp"); var a = $("a-" + id); RENDER[id] && RENDER[id](); a.classList.add("open"); a.setAttribute("aria-hidden", "false"); $("home").classList.add("away");
+    sysOpen(id);
     if (id === "cam") camStart();
     if (id === "msg") msgDot(false);
     if (id === "msg" && introLater) { introLater = false; setTimeout(function () { intro(); }, 200); }
@@ -2166,7 +2175,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   function homeIn() {
     typeT.forEach(clearTimeout); typeT = [];
     if (REC && REC.mr.state !== "inactive") try { REC.mr.stop(); } catch (e) {}
-    if (!cur) return; document.documentElement.classList.remove("inapp"); var a = $("a-" + cur); a.classList.remove("open"); a.setAttribute("aria-hidden", "true"); if (cur === "cam") camStop(); cur = null;
+    if (!cur) return; document.documentElement.classList.remove("inapp"); var a = $("a-" + cur); a.classList.remove("open"); a.setAttribute("aria-hidden", "true"); if (cur === "cam") camStop(); cur = null; sysShut();
     $("home").classList.remove("away"); $("call").classList.remove("on"); $("sheet").classList.remove("on");
     if (introLater) { introLater = false; setTimeout(intro, 450); }   // a newcomer who landed in an app gets the welcome on their first look at the home screen
   }
@@ -2190,7 +2199,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     t = e.target.closest("[data-back]"); if (t) { BACKING = true; try { view(cur, t.getAttribute("data-back")); } finally { BACKING = false; } return; }
     t = e.target.closest("[data-tab]"); if (t) { qa("[data-tab]", $("a-phone")).forEach(function (b) { b.setAttribute("aria-selected", b === t ? "true" : "false"); }); if (t.getAttribute("data-tab") === "voice") RENDER.voiceView(); view("phone", t.getAttribute("data-tab")); }
   });
-  document.addEventListener("keydown", function (e) { if (e.key !== "Escape") return; if ($("call").classList.contains("on")) return endCall(); if ($("sheet").classList.contains("on")) return $("sheet").classList.remove("on"); if (cur) { var back = qa(".view.on [data-back]", $("a-" + cur))[0]; if (back) back.click(); else home(); } });
+  document.addEventListener("keydown", function (e) { if (e.key !== "Escape") return; if ($("call").classList.contains("on")) return endCall(); if ($("sheet").classList.contains("on")) return $("sheet").classList.remove("on"); if (cur && (!DESK || !sysRec() || sysRec().el.classList.contains("front"))) { e.preventDefault(); var back = qa(".view.on [data-back]", $("a-" + cur))[0]; if (back) back.click(); else home(); } });
 
   /* ── Phone ── */
   var RENDER = { store: renderStore };
@@ -3028,33 +3037,67 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var o = WIN.list.filter(function (x) { return x.k === k; })[0];
     if (o) { if (o.f.getAttribute("src") !== href) o.f.setAttribute("src", href); o.full.href = href; winFront(o); sfx("pop"); return; }
     if (WIN.list.length >= WIN.MAX) { var old = WIN.list.slice().sort(function (a, b) { return a.t - b.t; })[0]; winClose(old, true); }
-    var el = $("winT").content.firstElementChild.cloneNode(true); document.body.appendChild(el);
+    var el = $("winT").content.firstElementChild.cloneNode(true); $("screen").appendChild(el);
     o = { k: k, el: el, f: el.querySelector("iframe"), full: el.querySelector(".wfull"), bar: el.querySelector(".wbar"), slot: winSlot(), t: Date.now() };
     el.querySelector(".wi").innerHTML = appIcon(k); el.querySelector("b").textContent = pname(k); el.setAttribute("aria-label", pname(k));
     o.full.href = href; o.full.textContent = w("winFull"); el.querySelector(".wx").setAttribute("aria-label", w("winClose"));
     el.querySelector(".wx").onclick = function () { winClose(o); };
     el.addEventListener("pointerdown", function () { winFront(o); }, true);
-    o.bar.addEventListener("pointerdown", function (e) { if (e.target.closest("a,button")) return; var r = el.getBoundingClientRect(); WIN.drag = { o: o, x: e.clientX - r.left, y: e.clientY - r.top }; WIN.list.forEach(function (x) { x.f.style.pointerEvents = "none"; }); try { o.bar.setPointerCapture(e.pointerId); } catch (x) {} });
-    o.bar.addEventListener("pointermove", function (e) { if (!WIN.drag || WIN.drag.o !== o) return; el.style.right = "auto"; el.style.left = Math.max(8, Math.min(innerWidth - 120, e.clientX - WIN.drag.x)) + "px"; el.style.top = Math.max(8, Math.min(innerHeight - 60, e.clientY - WIN.drag.y)) + "px"; });
-    o.bar.addEventListener("pointerup", wEnd); o.bar.addEventListener("pointercancel", wEnd);
+    winDrag(o);
     WIN.list.push(o); winPlace(o); o.f.setAttribute("src", href); winFront(o); sfx("pop");
   }
-  function wEnd() { WIN.drag = null; WIN.list.forEach(function (x) { x.f.style.pointerEvents = ""; }); }
+  function winDrag(o) {
+    var el = o.el;
+    o.bar.addEventListener("pointerdown", function (e) { if (e.target.closest("a,button")) return; var r = el.getBoundingClientRect(); WIN.drag = { o: o, x: e.clientX - r.left, y: e.clientY - r.top }; WIN.list.forEach(function (x) { if (x.f) x.f.style.pointerEvents = "none"; }); try { o.bar.setPointerCapture(e.pointerId); } catch (x) {} });
+    o.bar.addEventListener("pointermove", function (e) { if (!WIN.drag || WIN.drag.o !== o) return; el.style.right = "auto"; el.style.left = Math.max(8, Math.min(innerWidth - 120, e.clientX - WIN.drag.x)) + "px"; el.style.top = Math.max(8, Math.min(innerHeight - 60, e.clientY - WIN.drag.y)) + "px"; });
+    o.bar.addEventListener("pointerup", wEnd); o.bar.addEventListener("pointercancel", wEnd);
+  }
+  /* a built-in app (Messages, Settings, the Store, Phone, Mail, Camera) as one of the windows: one at a time, like on the
+     phone, beside the apps' windows; it keeps its place when another built-in takes it */
+  var SYSN = { phone: "aPhone", msg: "aMsg", mail: "aMail", cam: "aCam", store: "aStore", set: "aSet" };
+  function sysBar(id) {
+    var a = $("a-" + id), b = a.querySelector(":scope>.wbar");
+    if (!b) { b = el("div", "wbar"); b.innerHTML = '<span class="wi"></span><b></b><span class="sp"></span><button class="wx" type="button">✕</button>'; a.insertBefore(b, a.firstChild); b.querySelector(".wx").onclick = function () { home(); }; }
+    b.querySelector(".wi").innerHTML = sysIcon(id); b.querySelector("b").textContent = w(SYSN[id] || "aSet"); b.querySelector(".wx").setAttribute("aria-label", w("winClose"));
+    return b;
+  }
+  function sysOpen(id) {
+    if (!DESK) return;
+    var a = $("a-" + id), old = WIN.list.filter(function (x) { return x.sys; })[0], bar = sysBar(id);
+    if (old && old.el !== a) { a.style.left = old.el.style.left; a.style.right = old.el.style.right; a.style.top = old.el.style.top; a.style.height = old.el.style.height; old.el.style.zIndex = ""; old.el.classList.remove("front"); old.el = a; old.bar = bar; }
+    if (!old) { if (WIN.list.length >= WIN.MAX) { var oldest = WIN.list.slice().sort(function (p, q) { return p.t - q.t; })[0]; winClose(oldest, true); } old = { k: "sys", sys: 1, el: a, f: null, bar: bar, slot: winSlot(), t: Date.now() }; WIN.list.push(old); winPlace(old); }
+    if (!bar.dataset.drag) { bar.dataset.drag = "1"; winDrag({ get el() { return sysRec() ? sysRec().el : a; }, get bar() { return bar; } }); }
+    a.addEventListener("pointerdown", sysFront, true);
+    winFront(old);
+  }
+  function sysRec() { return WIN.list.filter(function (x) { return x.sys; })[0]; }
+  function sysFront() { var o = sysRec(); if (o && !o.el.classList.contains("front")) winFront(o); }
+  function sysShut() {
+    var o = sysRec(); if (!o) return; WIN.list = WIN.list.filter(function (x) { return x !== o; });
+    var el = o.el; setTimeout(function () { if (!el.classList.contains("open")) { el.style.left = el.style.right = el.style.top = el.style.height = el.style.zIndex = ""; el.classList.remove("front"); } }, 260);
+    winFront(winTop());
+  }
+  function sysClear() { var o = sysRec(); if (o) WIN.list = WIN.list.filter(function (x) { return x !== o; }); qa(".app").forEach(function (a) { a.style.left = a.style.right = a.style.top = a.style.height = a.style.zIndex = ""; a.classList.remove("front"); }); }
+  function wEnd() { WIN.drag = null; WIN.list.forEach(function (x) { x.f && (x.f.style.pointerEvents = ""); }); }
   function winClose(o, quiet) {
     o = o || winTop(); if (!o) return;
+    if (o.sys) { home(); return; }   // a built-in app closes the phone's way
     WIN.list = WIN.list.filter(function (x) { return x !== o; });
     o.f.setAttribute("src", "about:blank"); o.el.classList.add("shut"); setTimeout(function () { o.el.remove(); }, quiet ? 0 : 170);
     winFront(winTop());
   }
   addEventListener("blur", function () { setTimeout(function () {   // a click inside an app's page: bring its window forward
-    var a = document.activeElement; if (a && a.tagName === "IFRAME") WIN.list.forEach(function (x) { if (x.f === a && !x.el.classList.contains("front")) winFront(x); });
+    var a = document.activeElement; if (a && a.tagName === "IFRAME") WIN.list.forEach(function (x) { if (x.f && x.f === a && !x.el.classList.contains("front")) winFront(x); });
   }, 0); });
   document.addEventListener("click", function (e) {
     if (!DESK || e.defaultPrevented || editing || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     var a = e.target.closest && e.target.closest("a[href]"); if (!a || a.closest(".win") || a.target === "_blank") return;
     var k = appOf(a.href); if (!k) return; e.preventDefault(); winOpen(k, a.href);
   });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && WIN.list.length) winClose(); });
+  document.addEventListener("keydown", function (e) {   // Esc closes the front window; a built-in in front was already handled (a step back, or home)
+    if (e.key !== "Escape" || e.defaultPrevented || !WIN.list.length || $("call").classList.contains("on") || $("sheet").classList.contains("on")) return;
+    var t = winTop(); if (t && !t.sys) winClose(t);
+  });
   addEventListener("resize", function () { WIN.list.forEach(function (x) { if (x.el.style.left === "auto" || !x.el.style.left) winPlace(x); }); });
   /* ── the moment ── */
   var MO = {
