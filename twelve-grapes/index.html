@@ -216,6 +216,9 @@ function draw(t) {
   var spots = [[284, 50, 6, 36], [308, 50, 6, 36], [282, 30, 34, 7]];
   for (k = 0; k < Math.min(3, S.hung); k++) { var p = spots[k]; R(p[0] - 1, p[1] - 1, p[2] + 2, p[3] + 2, "#1a1410"); R(p[0], p[1], p[2], p[3], "#c8303a");
     if (p[2] < p[3]) { for (y = p[1] + 4; y < p[1] + p[3] - 3; y += 7) R(p[0] + 2, y, 2, 3, "#e8c44a"); } else { for (x = p[0] + 4; x < p[0] + p[2] - 3; x += 7) R(x, p[1] + 2, 3, 2, "#e8c44a"); } }
+  /* Lunar New Year's Eve: two red lanterns by the lamp and, once the paper's up, a 福 upside down on the door */
+  if (S.lny) { [[90, 6], [188, 6]].forEach(function (l) { var sw = RM ? 0 : Math.round(Math.sin(s * 1.3 + l[0]) * 1); R(l[0], 0, 1, l[1] + 2, "#1a1410"); R(l[0] - 6 + sw, l[1] + 2, 13, 3, "#e8b040"); R(l[0] - 8 + sw, l[1] + 5, 17, 14, "#c8302a"); R(l[0] - 6 + sw, l[1] + 7, 13, 1, "#e8503a"); R(l[0] - 6 + sw, l[1] + 19, 13, 3, "#e8b040"); R(l[0] - 1 + sw, l[1] + 22, 3, 6, "#e8b040"); });
+    if (S.fu) { var fx = 299, fy = 64; for (var q = 0; q < 7; q++) R(fx - q, fy - 6 + q, q * 2 + 1, 1, "#c8303a"); for (var q2 = 0; q2 < 6; q2++) R(fx - 5 + q2, fy + 1 + q2, 11 - q2 * 2, 1, "#c8303a"); R(fx - 2, fy - 2, 5, 1, "#e8c44a"); R(fx, fy - 3, 1, 6, "#e8c44a"); R(fx - 2, fy + 2, 5, 1, "#e8c44a"); } }
   /* the lamp over the table */
   R(159, 0, 2, 8, "#1a1410"); R(149, 8, 22, 3, "#c8a040"); R(147, 11, 26, 3, "#a88428"); R(156, 14, 8, 2, "#fff2c0");
   var gr = C.createRadialGradient(160, 40, 4, 160, 70, 150); gr.addColorStop(0, "rgba(255,196,120,.20)"); gr.addColorStop(1, "rgba(255,196,120,0)"); C.fillStyle = gr; C.fillRect(0, 0, 320, 200);
@@ -293,6 +296,7 @@ function intro(arrived) {
   S.phase = "intro"; S.min = 47; course(W.courses.eve);
   say("popo", W.intro, arrived ? ["wei", W.arrived] : null);
   btn(W.b.sit, function () { go(introWei); }, "pri");
+  btn(W.lny.enter, function () { go(lny); });
   btn(W.b.invite, function (b) { share(T(W.invite), location.origin + location.pathname + "#with=1", b,
     function () { $("aside").hidden = false; $("aside").innerHTML = rich(T(W.inviteSent)); }, function () { $("aside").hidden = false; $("aside").innerHTML = rich(T(W.inviteCopied)); }); });
   if (arrived && window.FBC && FBC.tell) btn(W.tellB, function () {   /* answers go in their own messages, never through a server */
@@ -449,10 +453,69 @@ function nextDec(real) {
   if (real) btn(W.b.thisYear, function () { fresh(); go(intro); }, "pri");
   else { btn(W.b.back, function () { go(end); }, "pri"); btn(W.b.again, again); }
 }
+/* ---------- Lunar New Year's Eve at Popo's table (Nov 14, the owner: the family's cities); nothing kept, nothing sent ---------- */
+function lny() {
+  fresh(); S.lny = true; S.grapes = Array(12).fill("x"); S.packets = ["", "", ""]; S.min = 47; S.hung = 0; course(W.lny.courses.eve);
+  say("popo", W.lny.in, ["wei", W.lny.tray]);
+  btn(W.b.sit, function () { go(lnyCall); }, "pri");
+}
+function lnyCall() {
+  say("mei", W.lny.call, ["popo", W.lny.callPopo]);
+  btn(W.lny.ghfc, function () { tone(660, .12, "triangle", .1); go(lnyPackets); }, "pri");
+}
+function lnyPackets() {
+  S.min = 52; course(W.lny.courses.packets);
+  say("popo", W.lny.packets);
+  var fields = [0, 1, 2].map(function (k) { var b = el("div"); if (!k) b.innerHTML = '<label class="lab" for="lp0">' + esc(T(W.lny.lab)) + "</label>";
+    var inp = document.createElement("input"); inp.type = "text"; inp.id = "lp" + k; inp.className = "red"; inp.maxLength = 24; inp.placeholder = T(W.lny.ph); inp.value = S.packets[k]; inp.autocomplete = "off";
+    if (k) inp.setAttribute("aria-label", T(W.lny.lab)); inp.addEventListener("input", function () { S.packets[k] = inp.value; }); b.appendChild(inp); return inp; });
+  btn(W.lny.wrap, function () { S.packets = fields.map(function (f) { return f.value.trim(); }); tone(440, .15, "triangle", .1); go(lnyWrapped); }, "pri", rowEl(true));
+}
+function lnyWrapped() {
+  say("popo", W.lny.packed);
+  var wrap = el("div", "chairs");
+  S.packets.filter(Boolean).forEach(function (n) {
+    var d = el("div", "chair", '<h3>' + esc(n) + "<span>" + esc(T(W.lny.forTag)) + "</span></h3>", wrap), card = el("div", "card", null, d), msg = F(W.lny.msg, { n: n });
+    el("p", "msg", esc(msg), card); btn(W.b.send, function (bb) { share(msg, "", bb); }, "sm", el("div", "row", null, card));
+  });
+  rowEl(true); btn(W.lny.toDoor, function () { go(lnyDoor); }, "pri");
+}
+function lnyDoor() {
+  S.min = 57; course(W.courses.door);
+  say("wei", W.lny.couplet);
+  var b = el("div"); b.innerHTML = '<label class="lab" for="lw">' + esc(T(W.lny.wishLab)) + "</label>";
+  var inp = document.createElement("input"); inp.type = "text"; inp.id = "lw"; inp.className = "red"; inp.maxLength = 32; inp.placeholder = T(W.lny.wishPh); inp.value = S.wish || ""; inp.autocomplete = "off"; b.appendChild(inp);
+  btn(W.b.hang, function () { S.wish = inp.value.trim(); S.hung = 3; S.fu = true; tone(440, .15, "triangle", .1); go(lnyHung); }, "pri", rowEl(true));
+}
+function lnyHung() {
+  say("popo", W.lny.hung);
+  btn(W.b.nearly, function () { go(lnyMid); }, "pri");
+}
+function lnyMid() {
+  S.min = 59; course(W.lny.courses.mid);
+  say("wei", W.lny.mid);
+  btn(W.lny.fire, function () { S.min = 60; S.fireworks = true; S.mantou = "hide"; for (var k = 0; k < 6; k++) setTimeout(function () { pop(); }, k * 140); go(lnyHide); }, "pri");
+}
+function lnyHide() {
+  course(W.lny.courses.day1);
+  say("mantou", W.hide, ["popo", W.lny.hnyPopo]);
+  btn(W.b.floor, function () { S.mantou = "lap"; go(lnyLap); }, "pri");
+}
+function lnyLap() {
+  say("mantou", W.lap);
+  btn(W.lny.ghfc, function () { go(lnyEnd); }, "pri");
+}
+function lnyEnd() {
+  S.fireworks = false; course(W.lny.courses.day1);
+  say("popo", ""); $("line").innerHTML = '<span class="hny">' + esc(T(W.lny.big)) + "</span>";
+  el("p", "big", esc(T(W.lny.out)));
+  var names = S.packets.filter(Boolean); if (names.length || S.wish) { var d = el("div", "chairs"); names.forEach(function (n) { el("div", "chair", "<h3>" + esc(n) + "<span>" + esc(T(W.lny.forTag)) + "</span></h3>", d); }); if (S.wish) el("div", "chair", "<h3>" + esc(S.wish) + "<span>" + esc(T(W.courses.door)) + "</span></h3>", d); }
+  rowEl(true); btn(W.lny.again, function () { go(lny); }, "pri"); btn(W.lny.grapes, again);
+}
 function door() {
   S.phase = "door"; course(W.courses.door);
   say("popo", W.doorIn);
-  btn(W.b.look, function () { go(doorLook); }, "pri"); btn(W.b.again, again);
+  btn(W.b.look, function () { go(doorLook); }, "pri"); btn(W.b.again, again); btn(W.lny.enter, function () { go(lny); });
 }
 function doorLook() { say("popo", W.doorIn); summary(load() || keepYear()); rowEl(true); btn(W.b.again, again, "pri"); }
 
