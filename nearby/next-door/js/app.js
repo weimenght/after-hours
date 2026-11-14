@@ -219,6 +219,7 @@
     function menuItem(icon, title, desc, onClick) {
       const div = document.createElement('button');
       div.className = 'opt-btn w-full !block';
+      div.style.cssText = 'display:block;width:100%;text-align:left';   /* name over its line, every row the same width */
       div.innerHTML = `<div class="font-semibold text-[var(--amber-2)] text-[14px]">${icon} ${esc(title)}</div><p class="text-[12.5px] text-[#e8d6b4] mt-0.5 leading-snug">${esc(desc)}</p>`;
       div.onclick = onClick;
       return div;

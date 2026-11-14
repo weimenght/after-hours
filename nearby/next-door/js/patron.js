@@ -80,6 +80,11 @@
         if (this.timer) this.finish();
       }
     };
+    /* a tap anywhere on the dialogue panel (not on an answer) while a line is typing shows all of it at once */
+    (function () {
+      const box = document.getElementById('dialogue-box');
+      if (box) box.addEventListener('click', e => { if (Typer.timer && !document.getElementById('rpg-dialogue-screen').classList.contains('hidden') && !e.target.closest('button,a,input,textarea,select')) { Typer.skip(); e.stopPropagation(); } }, true);
+    })();
 
     /* ===== DIALOGUE & RPG ENGINE ===== */
     const DEFAULT_GRID = "grid grid-cols-1 gap-1.5 mt-2";
@@ -116,7 +121,7 @@
       showScreen('rpg-dialogue-screen');
       AppState.uiMode = mode;
       setText('dialogue-speaker-tag', speakerTag());
-      setText('dialogue-skip-hint', L(WeiText.ui.tapSkip));
+      setText('dialogue-skip-hint', '');   /* no hint (Nov 14, the owner didn't get it): a tap anywhere on the panel shows the whole line */
       Typer.run(document.getElementById('dialogue-speech-text'), text);
 
       const grid = document.getElementById('rpg-options-grid');

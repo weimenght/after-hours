@@ -104,10 +104,14 @@
   words(); addEventListener('fbl:lang', words); setInterval(words, 4000);
   setInterval(() => { try { if (juke) juke.classList.toggle('on', !!(window.JB && JB.listening && JB.listening())); } catch (e) {} }, 1500);
 
-  /* the light, kept on this device */
+  /* the light follows the town's clock (Nov 14, the owner): cool morning light 6–10, bright by day 10–17, warm in the
+     evening 17–22, dim late at night; a pull of the lamp holds for this visit only (nd_light in sessionStorage) */
   const LIGHTS = ['warm', 'bright', 'dim', 'cool'];
-  let li = 0; try { li = Math.max(0, LIGHTS.indexOf(localStorage.getItem('nd_light') || 'warm')); } catch (e) {}
+  function byHour() { let h = 20; try { h = Math.floor(FBWorld.hour()) % 24; } catch (e) { h = new Date().getHours(); } return h >= 6 && h < 10 ? 3 : h >= 10 && h < 17 ? 1 : h >= 17 && h < 22 ? 0 : 2; }
+  let li = byHour(), held = false;
+  try { localStorage.removeItem('nd_light'); const v = sessionStorage.getItem('nd_light'); if (v && LIGHTS.indexOf(v) >= 0) { li = LIGHTS.indexOf(v); held = true; } } catch (e) {}
   function paintLight() { if (stage) { if (li) stage.dataset.light = LIGHTS[li]; else delete stage.dataset.light; } }
+  setInterval(() => { if (held) return; const n = byHour(); if (n !== li) { li = n; paintLight(); } }, 60000);
   const LAMPSAY = {
     wei: [H("*squints up at the lamp* Better. Or worse. I'll get used to it.", "*眯眼看了看灯* 好些了。或者更糟。我会习惯的。", "*瞇眼看了看燈* 好些了。或者更糟。我會習慣的。", "*瞇埋眼望吓盞燈* 好啲喇。或者差啲。我會慣㗎。", "*mira la lámpara entornando los ojos* Mejor. O peor. Ya me acostumbraré.", "*mira el llum arrufant els ulls* Millor. O pitjor. Ja m'hi acostumaré.")],
     mei: [H("*looks up from her phone* ooh. moody. keep it.", "*从手机上抬起头* 哦。有氛围。就这样。", "*從手機上抬起頭* 哦。有氛圍。就這樣。", "*擰起頭離開部手機* 哦。好有feel。就咁啦。", "*levanta la vista del móvil* uh. ambiente. déjalo así.", "*aixeca la vista del mòbil* uh. ambient. deixa-ho així.")],
@@ -118,7 +122,7 @@
   let lampSaid = false;
   function lamp() {
     li = (li + 1) % LIGHTS.length; paintLight();
-    try { localStorage.setItem('nd_light', LIGHTS[li]); } catch (e) {}
+    held = true; try { sessionStorage.setItem('nd_light', LIGHTS[li]); } catch (e) {}
     try { SoundEngine.playChiptune(li === 2 ? 330 : li === 3 ? 520 : 440, 'square', 0.04); } catch (e) {}
     if (lampB) { lampB.animate && lampB.animate([{ transform: 'translateX(-50%) rotate(0)' }, { transform: 'translateX(-50%) rotate(6deg)' }, { transform: 'translateX(-50%) rotate(-4deg)' }, { transform: 'translateX(-50%) rotate(0)' }], { duration: 600, easing: 'steps(4)' }); }
     if (!lampSaid && li) { const k = talker(); if (k && LAMPSAY[k]) { lampSaid = true; say(L(one(LAMPSAY[k]))); } }
