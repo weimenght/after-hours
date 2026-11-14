@@ -139,7 +139,7 @@
       if (AppState.weiState === 'awake') renderWei(L(pick(WEI_WORK)), [], DEFAULT_GRID, 'topic'); else renderCurrentDialogue();
       resetIdle();
 
-      try { if (window.NDJuke) NDJuke.on(); } catch (e) {}   /* the jukebox is the bar's music: it starts when you come in */
+      /* no jukebox on arrival (Nov 14, the owner): the room plays the town's Window Radio tape; the old records play only from the jukebox */
 
       if (AppState.weiState === 'awake') {
         const greetPool = Bond.visits <= 1 ? WeiText.greet.first : WeiText.greet.back.concat(WeiText.greet.friend);

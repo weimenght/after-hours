@@ -9,8 +9,9 @@
     /* no "make a tune" link: Same Song closed (Nov 14); the jukebox only plays */
     JB.watch();
     /* walking into the room turns it on */
-    new MutationObserver(function () { if (!room.classList.contains("hidden") && !JB.listening()) { JB.unlock(); JB.listen(true); JBW.fire(); JBW.paint(); } }).observe(room, { attributes: true, attributeFilter: ["class"] });
-    /* the jukebox is the bar's music: it starts when you come in (NDJuke.on) */
+    /* walking up to the jukebox turns it on; walking back to the counter lets the record go, and the town's tape comes back up (Nov 14) */
+    new MutationObserver(function () { var open = !room.classList.contains("hidden"); if (open && !JB.listening()) { JB.unlock(); JB.listen(true); JBW.fire(); JBW.paint(); } else if (!open && JB.listening()) { JB.listen(false); JBW.paint(); } }).observe(room, { attributes: true, attributeFilter: ["class"] });
+    /* the old records play only from the jukebox itself (NDJuke.on, Nov 14) */
     function on() { JB.unlock(); if (!JB.listening()) { JB.listen(true); JBW.fire(); } JBW.paint(); }
     window.NDJuke = { on: on };
     /* phones keep sound locked until a touch: the first tap anywhere lets the record play */
