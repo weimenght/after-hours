@@ -355,8 +355,8 @@
     react: "🫧"
   },
   {
-    en: "A developer walks into the hutong bar to debug a git merge conflict. Wei slides over a 120-proof cask strength: 'Drink this, it force-pushes everything to oblivion.'",
-    zh: "程序员推门走进胡同酒吧想借酒消愁解决代码合并冲突。Wei 倒了一杯60度原桶烈酒：‘干了这杯，万事万物皆可强制覆盖（git push -f）。’",
+    en: "A developer walks into Next Door to debug a git merge conflict. Wei slides over a 120-proof cask strength: 'Drink this, it force-pushes everything to oblivion.'",
+    zh: "程序员推门走进“隔壁”想借酒消愁解决代码合并冲突。Wei 倒了一杯60度原桶烈酒：‘干了这杯，万事万物皆可强制覆盖（git push -f）。’",
     es: "Un programador entra al bar para resolver un conflicto de git merge. Wei le sirve whisky de 60 grados: 'Tómate esto, forzará el push hacia el olvido.'",
     react: "💻"
   },

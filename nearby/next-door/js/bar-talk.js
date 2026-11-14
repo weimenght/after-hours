@@ -4,9 +4,9 @@
         id: "gulou_bells",
         mood: "nightOwl",
         text: {
-          en: "\"The belltower bells over Gulou just struck midnight into the hutong alleyways. Did you escape the cold wind, or are you chasing night stories?\"",
-          zh: "\"鼓楼的夜钟刚敲过子夜，钟声穿过了灰瓦胡同。你是来躲避北风的，还是来打捞今夜的故事？\"",
-          es: "\"Las campanas de Gulou acaban de dar la medianoche entre los callejones hutong. ¿Huyes del viento o buscas historias?\""
+          en: "\"Midnight. In Beijing the Drum Tower bells would be ringing into the hutong about now: I lived by them one winter, on my travels. Did you escape the cold wind, or are you chasing night stories?\"",
+          zh: "\"半夜了。这个点，北京鼓楼的夜钟该敲进灰瓦胡同里了——我旅行那年在那儿住过一个冬天。你是来躲避北风的，还是来打捞今夜的故事？\"",
+          es: "\"Medianoche. A esta hora en Pekín las campanas de Gulou estarían sonando entre los hutong: viví allí un invierno, de viaje. ¿Huyes del viento o buscas historias?\""
         },
         options: [
           {
@@ -50,9 +50,9 @@
         id: "line2_last_train",
         mood: "sarcastic",
         text: {
-          en: "\"Line 2 subway just sent out its last train announcement. If you're still on this side of the door, either your shift was brutal or your soul refused to go home.\"",
-          zh: "\"地铁二号线的末班车刚刚驶过护城河。既然你还留在吧台这头，要么是今天方案改了八遍，要么是灵魂拒绝回家。\"",
-          es: "\"El último tren de la Línea 2 acaba de pasar. Si sigues en mi barra, o tu jornada fue brutal o tu alma se negó a ir a casa.\""
+          en: "\"The last metro just rattled under the street. In Beijing it was Line 2 round the old city walls, my winter there. If you're still on this side of the door, either your shift was brutal or your soul refused to go home.\"",
+          zh: "\"末班地铁刚从街底下开过去。我在北京那个冬天，坐的是绕着老城墙走的二号线。既然你还留在吧台这头，要么是今天方案改了八遍，要么是灵魂拒绝回家。\"",
+          es: "\"El último metro acaba de pasar bajo la calle. En Pekín era la Línea 2, alrededor de las murallas viejas, mi invierno allí. Si sigues en mi barra, o tu jornada fue brutal o tu alma se negó a ir a casa.\""
         },
         options: [
           {
@@ -143,7 +143,7 @@
         mood: "nightOwl",
         text: {
           en: "\"Hear that soft 33 RPM crackle under the stylus? That's an analog warmth no digital codec can fake. The needle vibrates, the tube warms up, and midnight suddenly feels three-dimensional.\"",
-          zh: "\"听见黑胶唱针压在唱片上的轻微沙沙声了吗？这是任何数字算法都调不出来的模拟温度。电子管一热，整个胡同子夜都变得立体了。\"",
+          zh: "\"听见黑胶唱针压在唱片上的轻微沙沙声了吗？这是任何数字算法都调不出来的模拟温度。电子管一热，整条街的子夜都变得立体了。\"",
           es: "\"¿Oyes el suave chasquido del vinilo a 33 RPM? Es una calidez analógica irrepetible. La aguja vibra, las válvulas calientan y la noche cobra otra dimensión.\""
         },
         options: [
@@ -175,7 +175,7 @@
             deltaEnergy: -1, drink: "oldfashioned", nextMood: "sarcastic"
           },
           {
-            label: { en: "Nothing heavy. Just glad this warm light exists.", zh: "倒也没什么沉重的，只是庆幸胡同尽头还有这样一盏灯。", es: "Nada grave. Solo me alegra que este rincón cálido exista." },
+            label: { en: "Nothing heavy. Just glad this warm light exists.", zh: "倒也没什么沉重的，只是庆幸街角还有这样一盏灯。", es: "Nada grave. Solo me alegra que este rincón cálido exista." },
             deltaEnergy: 0, drink: "jasmine_gulou", nextMood: "poetic", bond: 2
           },
           {

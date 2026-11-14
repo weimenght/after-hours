@@ -6,7 +6,7 @@
         text: {
           en: "\"Good morning! The sun is spilling through the courtyard trellis. I just dialed in an anaerobic natural Gesha with notes of white peach and bergamot. Pour you a cup?\"",
           zh: "\"早晨好！晨光正好透过四合院的葡萄架。我刚校准完一款厌氧日晒瑰夏，有着白桃与佛手柑的明亮花果香。给你手冲一杯？\"",
-          es: "\"¡Buenos días! El sol entra por el patio del hutong. Acabo de calibrar un Gesha natural con notas de melocotón blanco y bergamota. ¿Te sirvo una taza?\""
+          es: "\"¡Buenos días! El sol entra por la parra del patio. Acabo de calibrar un Gesha natural con notas de melocotón blanco y bergamota. ¿Te sirvo una taza?\""
         },
         options: [
           {
@@ -27,9 +27,9 @@
         id: "courtyard_sparrows",
         mood: "poetic",
         text: {
-          en: "\"Listen to the sparrows chirping on the grey roof tiles. Hutong mornings are the only time the city truly inhales. What speed do you want your morning to take?\"",
-          zh: "\"听听灰瓦屋檐上麻雀的清脆叫声。北京胡同的清晨是这座城市唯一定下心来呼吸的时刻。今天想以怎样的节奏开启？\"",
-          es: "\"Escucha a los gorriones en las tejas grises. Las mañanas en el hutong son el único momento en que la ciudad respira en paz. ¿A qué ritmo quieres empezar?\""
+          en: "\"Listen to the sparrows on the roof tiles. They take me back to hutong mornings in Beijing, on my travels: the only time that city truly inhales. What speed do you want your morning to take?\"",
+          zh: "\"听听屋檐上麻雀的叫声。让我想起旅行时住过的北京胡同：清晨是那座城市唯一定下心来呼吸的时刻。今天想以怎样的节奏开启？\"",
+          es: "\"Escucha a los gorriones en las tejas. Me recuerdan las mañanas en los hutong de Pekín, cuando viajaba: el único momento en que esa ciudad respira en paz. ¿A qué ritmo quieres empezar?\""
         },
         options: [
           {
@@ -96,8 +96,8 @@
         id: "gaudi_courtyard",
         mood: "baristaJoy",
         text: {
-          en: "\"The morning shadows across our hutong courtyard tiles resemble the mosaic trencadís of Park Güell in Barcelona. There's a sunny Catalan warmth in the air today.\"",
-          zh: "\"清晨斜照在院子地砖上的树影，倒真有点像巴塞罗那奎尔公园里的彩色马赛克拼贴。今天四合院里有种地中海阳光般的明媚感。\"",
+          en: "\"The morning shadows across the courtyard tiles look like the trencadís of Park Güell, up the hill. There's a sunny Catalan warmth in the air today.\"",
+          zh: "\"清晨斜照在院子地砖上的树影，倒真有点像巴塞罗那奎尔公园里的彩色马赛克拼贴。今天院子里有种地中海阳光般的明媚感。\"",
           es: "\"Las sombras matutinas en el patio parecen el trencadís de Gaudí en Barcelona. Hay una calidez luminosa y mediterránea en el ambiente hoy.\""
         },
         options: [

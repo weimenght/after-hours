@@ -7,16 +7,16 @@
     // [text, option1, option2, option3]
     const TOPIC_PATCH = {
       gulou_bells: {
-        ca: ["\"Les campanes de Gulou acaben de tocar mitjanit pels carrerons del hutong. Fuges del vent fred o vens a caçar històries?\"", "Un gin amb te de gessamí per escalfar-me.", "Explica'm els gats de carrer de la Torre del Tambor.", "Només vull silenci, gel clar i un tamboret."],
-        yue: ["\"鼓樓嗰邊啱啱敲咗十二點，鐘聲成條胡同都聽到。你係嚟避北風，定係嚟搵故仔聽？\"", "嚟杯茉莉花茶金酒暖吓身。", "講吓鼓樓附近嗰幾隻流浪貓聽吓。", "我淨係想要一舊靚冰、一張櫈，同埋靜。"]
+        ca: ["\"Mitjanit. A aquesta hora a Pequín les campanes de Gulou deuen sonar pels carrerons del hutong: hi vaig viure un hivern, de viatge. Fuges del vent fred o vens a caçar històries?\"", "Un gin amb te de gessamí per escalfar-me.", "Explica'm els gats de carrer de la Torre del Tambor.", "Només vull silenci, gel clar i un tamboret."],
+        yue: ["\"半夜喇。呢個鐘數，北京鼓樓嘅鐘應該敲緊入胡同，我去旅行嗰年喺嗰度住過一個冬天。你係嚟避北風，定係嚟搵故仔聽？\"", "嚟杯茉莉花茶金酒暖吓身。", "講吓鼓樓附近嗰幾隻流浪貓聽吓。", "我淨係想要一舊靚冰、一張櫈，同埋靜。"]
       },
       gingko_autumn: {
         ca: ["\"Les fulles daurades de ginkgo s'enganxen a les lloses molles. Si aquesta nit tingués aroma, seria osmant torrat o ginebre fred?\"", "Osmant torrat i espècies de tardor.", "Dona'm alguna cosa rebel i fumada.", "Posa el que vagi bé amb aquest plugim melangiós."],
         yue: ["\"出面啲銀杏葉黐晒落濕石板度。如果今晚有種味道，你覺得係焗桂花，定係凍杜松子？\"", "焗桂花，加少少秋天香料。", "俾杯有煙燻味、夠反叛嘅嘢我。", "隨便啦，配得起出面啲毛毛雨就得。"]
       },
       line2_last_train: {
-        ca: ["\"L'última de la línia 2 acaba de passar. Si encara ets a la meva barra, o el dia ha estat brutal o la teva ànima no vol tornar a casa.\"", "El full de càlcul s'ha penjat a les 21:59. Pietat.", "Aquestes ulleres rodones et fan molt savi avui, Wei.", "He perdut el metro expressament. Alguna cosa forta."],
-        yue: ["\"二號綫尾班車啱啱開走。你仲坐喺我吧枱，一係今日返工返到癲，一係個靈魂唔肯返屋企。\"", "我份 Excel 九點五十九分死咗機，救命。", "Wei，你副圓框眼鏡今晚特別有書卷味喎。", "我係特登唔搭尾班車㗎，嚟杯勁嘅。"]
+        ca: ["\"L'últim metro acaba de passar sota el carrer. A Pequín era la línia 2, voltant les muralles velles, el meu hivern allà. Si encara ets a la meva barra, o el dia ha estat brutal o la teva ànima no vol tornar a casa.\"", "El full de càlcul s'ha penjat a les 21:59. Pietat.", "Aquestes ulleres rodones et fan molt savi avui, Wei.", "He perdut el metro expressament. Alguna cosa forta."],
+        yue: ["\"尾班地鐵啱啱喺街底開過。我喺北京嗰個冬天，搭嘅係繞住舊城牆嘅二號綫。你仲坐喺我吧枱，一係今日返工返到癲，一係個靈魂唔肯返屋企。\"", "我份 Excel 九點五十九分死咗機，救命。", "Wei，你副圓框眼鏡今晚特別有書卷味喎。", "我係特登唔搭尾班車㗎，嚟杯勁嘅。"]
       },
       barcelona_gothic: {
         ca: ["\"Aquest vermut m'ha recordat el Barri Gòtic a la una de la matinada: arcs de pedra, marinada i guitarres. Mai has enyorat una ciutat que fa anys que no veus?\"", "Posa'm un vermut de la casa amb gel i oliva.", "Barreja aquesta enyorança amb gin mediterrani.", "Ara mateix només enyoro dormir sense despertador."],
@@ -43,8 +43,8 @@
         yue: ["\"早晨！太陽啱啱穿過個葡萄棚。我頭先調好咗支厭氧日曬瑰夏，有白桃同佛手柑味。沖杯俾你？\"", "好呀！淺啲萃取，等啲花香出嚟。", "我要勁啲咖啡因：燕麥 Dirty。", "再配個啱啱焗好嘅牛角包。"]
       },
       courtyard_sparrows: {
-        ca: ["\"Escolta els pardals a les teules grises. Els matins al hutong són l'únic moment en què la ciutat respira. A quin ritme vols començar?\"", "Lent i contemplatiu: cold brew amb tònica i cítrics.", "Ràpid i intens: doble espresso de Yunnan.", "Wei, la Miso i la Yuzu han tornat a robar grans?"],
-        yue: ["\"聽吓瓦頂啲麻雀仔。胡同朝早係成個城市唯一抖到氣嘅時間。你想今日用咩速度開始？\"", "慢慢嚟：冷萃湯力加橙皮。", "快靚正：雲南雙份 espresso 一啖過。", "Wei，味噌同柚子係咪又偷咖啡豆？"]
+        ca: ["\"Escolta els pardals a les teules. Em recorden els matins als hutong de Pequín, quan viatjava: l'únic moment en què aquella ciutat respira. A quin ritme vols començar?\"", "Lent i contemplatiu: cold brew amb tònica i cítrics.", "Ràpid i intens: doble espresso de Yunnan.", "Wei, la Miso i la Yuzu han tornat a robar grans?"],
+        yue: ["\"聽吓瓦頂啲麻雀仔。令我諗返旅行時住過嘅北京胡同：朝早係嗰個城市唯一抖到氣嘅時間。你想今日用咩速度開始？\"", "慢慢嚟：冷萃湯力加橙皮。", "快靚正：雲南雙份 espresso 一啖過。", "Wei，味噌同柚子係咪又偷咖啡豆？"]
       },
       ek43_hyperfixation: {
         ca: ["\"He passat dues hores abans de l'alba alineant les mòles de titani a 15 micres. Els amics diuen que necessito teràpia; jo dic que el seu cafè està subextret. Qui té raó?\"", "Tu, sens dubte. Posa'm un filtre de Baoshan.", "Les dues coses poden ser certes, Wei. Beu aigua.", "Tanta física fa que la crema sàpiga a caramel?"],
