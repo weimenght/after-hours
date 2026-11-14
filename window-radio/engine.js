@@ -18,7 +18,8 @@ const HQ=/[?&]h=(\d{1,2})/.exec(location.search);   // ?h= sets the hour for tes
 const hourNow=()=>HQ?+HQ[1]%24:new Date().getHours();
 function timeBlock(h){return h<5?'late':h<8?'dawn':h<12?'morning':h<17?'afternoon':h<20?'evening':'night'}
 const FEST_DATES={lny:['2026-02-17','2027-02-06','2028-01-26'],midautumn:['2026-09-25','2027-09-15','2028-10-03'],
-  diwali:['2026-11-08','2027-10-29','2028-10-17'],dongzhi:['2026-12-22','2027-12-22','2028-12-21'],dragonboat:['2026-06-19','2027-06-09','2028-05-28']};
+  diwali:['2026-11-08','2027-10-29','2028-10-17'],dongzhi:['2026-12-22','2027-12-22','2028-12-21'],dragonboat:['2026-06-19','2027-06-09','2028-05-28'],
+  lantern:['2026-03-03','2027-02-20','2028-02-09'],chongyang:['2026-10-18','2027-10-08','2028-10-26']};   /* + Thanksgiving and La Mercè in festivalFor (Nov 14, the owner: the family's cities) */
 const FQ=/[?&]fest=([a-z]+)/.exec(location.search);   // ?fest=diwali to test a festival
 /* the season by the tape's own date, turned round in the southern hemisphere (guessed from the time zone, nothing asked) */
 const SOUTH=(()=>{try{return/^(Australia|Antarctica)\/|^Pacific\/(Auckland|Chatham|Fiji)|^America\/(Santiago|Argentina|Sao_Paulo|Montevideo|Asuncion|La_Paz|Lima)|^Africa\/(Johannesburg|Maputo|Harare|Windhoek|Gaborone|Lusaka)|^Indian\/(Mauritius|Reunion)/.test(Intl.DateTimeFormat().resolvedOptions().timeZone||'')}catch(e){return false}})();
@@ -29,7 +30,8 @@ function festivalFor(d){
   const md=pad(d.getMonth()+1)+'-'+pad(d.getDate());
   if(md==='12-31')return{id:'nye'};if(md==='01-01')return{id:'newyear'};
   if(md==='12-24')return{id:'christmas',eve:true};if(md==='12-25')return{id:'christmas'};
-  if(md==='10-31')return{id:'halloween'};if(md==='02-14')return{id:'valentine'};
+  if(md==='10-31')return{id:'halloween'};if(md==='02-14')return{id:'valentine'};if(md==='09-24')return{id:'merce'};if(md==='09-23')return{id:'merce',eve:true};
+  if(d.getMonth()===10){const tg=1+(4-new Date(d.getFullYear(),10,1).getDay()+7)%7+21;if(d.getDate()===tg)return{id:'thanksgiving'};if(d.getDate()===tg-1)return{id:'thanksgiving',eve:true}}
   const today=dayNum(ymd(d));
   for(const id in FEST_DATES)for(const ds of FEST_DATES[id]){
     const diff=today-dayNum(ds);
@@ -80,7 +82,7 @@ function buildCfg(ov){
           const dur=feel==='flow'?1+Math.floor(r()*2):1+Math.floor(r()*3);row[s]={deg,dur};s+=dur-1;}}
       M.push(row);}return M;};
   const motifs=[makeMotif(0),makeMotif(1),makeMotif(-1)],form=pick(r,[[0,0,1,0],[0,1,0,1],[0,1,0,2],[0,0,1,2]]);
-  const pluckFest=['lny','midautumn','dragonboat'].includes(fid);
+  const pluckFest=['lny','midautumn','dragonboat','lantern','chongyang'].includes(fid);
   const lead=pluckFest?'zheng':pick(r,BAND.lead[mood]),comp=pick(r,BAND.comp[mood]),bassI=pick(r,['tri','sub','upright']),
     kit=fid==='christmas'?'bap':tb==='late'?pick(r,['brush','soft']):pick(r,BAND.kit[mood]),arp=r()<.35;
   const objIdx=Math.floor(r()*W.obj.length),useFest=fest&&r()<.6;

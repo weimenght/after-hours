@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-pg ahp-paper ahp-ink" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=bf14e29c36"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Window Radio</title>
 <meta name="description" content="Lo-fi from your window. The day, the hour, the sky and your mood write the tape. Play it for one cup of tea, then go find someone to share the pot.">
@@ -196,7 +196,8 @@ const HQ=/[?&]h=(\d{1,2})/.exec(location.search);   // ?h= sets the hour for tes
 const hourNow=()=>HQ?+HQ[1]%24:new Date().getHours();
 function timeBlock(h){return h<5?'late':h<8?'dawn':h<12?'morning':h<17?'afternoon':h<20?'evening':'night'}
 const FEST_DATES={lny:['2026-02-17','2027-02-06','2028-01-26'],midautumn:['2026-09-25','2027-09-15','2028-10-03'],
-  diwali:['2026-11-08','2027-10-29','2028-10-17'],dongzhi:['2026-12-22','2027-12-22','2028-12-21'],dragonboat:['2026-06-19','2027-06-09','2028-05-28']};
+  diwali:['2026-11-08','2027-10-29','2028-10-17'],dongzhi:['2026-12-22','2027-12-22','2028-12-21'],dragonboat:['2026-06-19','2027-06-09','2028-05-28'],
+  lantern:['2026-03-03','2027-02-20','2028-02-09'],chongyang:['2026-10-18','2027-10-08','2028-10-26']};   /* + Thanksgiving and La Mercè in festivalFor (Nov 14, the owner: the family's cities) */
 const FQ=/[?&]fest=([a-z]+)/.exec(location.search);   // ?fest=diwali to test a festival
 /* the season by the tape's own date, turned round in the southern hemisphere (guessed from the time zone, nothing asked) */
 const SOUTH=(()=>{try{return/^(Australia|Antarctica)\/|^Pacific\/(Auckland|Chatham|Fiji)|^America\/(Santiago|Argentina|Sao_Paulo|Montevideo|Asuncion|La_Paz|Lima)|^Africa\/(Johannesburg|Maputo|Harare|Windhoek|Gaborone|Lusaka)|^Indian\/(Mauritius|Reunion)/.test(Intl.DateTimeFormat().resolvedOptions().timeZone||'')}catch(e){return false}})();
@@ -207,7 +208,8 @@ function festivalFor(d){
   const md=pad(d.getMonth()+1)+'-'+pad(d.getDate());
   if(md==='12-31')return{id:'nye'};if(md==='01-01')return{id:'newyear'};
   if(md==='12-24')return{id:'christmas',eve:true};if(md==='12-25')return{id:'christmas'};
-  if(md==='10-31')return{id:'halloween'};if(md==='02-14')return{id:'valentine'};
+  if(md==='10-31')return{id:'halloween'};if(md==='02-14')return{id:'valentine'};if(md==='09-24')return{id:'merce'};if(md==='09-23')return{id:'merce',eve:true};
+  if(d.getMonth()===10){const tg=1+(4-new Date(d.getFullYear(),10,1).getDay()+7)%7+21;if(d.getDate()===tg)return{id:'thanksgiving'};if(d.getDate()===tg-1)return{id:'thanksgiving',eve:true}}
   const today=dayNum(ymd(d));
   for(const id in FEST_DATES)for(const ds of FEST_DATES[id]){
     const diff=today-dayNum(ds);
@@ -258,7 +260,7 @@ function buildCfg(ov){
           const dur=feel==='flow'?1+Math.floor(r()*2):1+Math.floor(r()*3);row[s]={deg,dur};s+=dur-1;}}
       M.push(row);}return M;};
   const motifs=[makeMotif(0),makeMotif(1),makeMotif(-1)],form=pick(r,[[0,0,1,0],[0,1,0,1],[0,1,0,2],[0,0,1,2]]);
-  const pluckFest=['lny','midautumn','dragonboat'].includes(fid);
+  const pluckFest=['lny','midautumn','dragonboat','lantern','chongyang'].includes(fid);
   const lead=pluckFest?'zheng':pick(r,BAND.lead[mood]),comp=pick(r,BAND.comp[mood]),bassI=pick(r,['tri','sub','upright']),
     kit=fid==='christmas'?'bap':tb==='late'?pick(r,['brush','soft']):pick(r,BAND.kit[mood]),arp=r()<.35;
   const objIdx=Math.floor(r()*W.obj.length),useFest=fest&&r()<.6;
@@ -801,7 +803,7 @@ function draw(now){
   else if(!grey||w==='cloud'){const sy=tb==='dawn'?120:tb==='evening'?118:48;poly(ellPts(232,sy,13,13));ink(tb==='evening'?'#f7b267':'#fbd56a',0)}
   if(grey||w==='wind'){const cc=night?'#4a4d68':w==='storm'?'#7d8090':'#f4f2f0';for(let i=0;i<(w==='cloud'||w==='storm'?3:2);i++){const x=((t*(w==='wind'?14:4)+i*95)%300)+30,y=40+i*16;
     poly([...ellPts(x,y,22,8,10)]);ink(cc,0);poly(ellPts(x+12,y-6,13,8,10));ink(cc,0)}}
-  if((c.fid==='nye'||c.fid==='newyear'||c.fid==='diwali'&&night)&&!RM){if(t>nextFw){nextFw=t+1.4+Math.random()*1.5;const fx=90+Math.random()*160,fy=40+Math.random()*40,col=['#f6c046','#f28a8a','#9fe0d4','#f7f3e8'][Math.floor(Math.random()*4)];
+  if((c.fid==='nye'||c.fid==='newyear'||(c.fid==='diwali'||c.fid==='merce')&&night)&&!RM){if(t>nextFw){nextFw=t+1.4+Math.random()*1.5;const fx=90+Math.random()*160,fy=40+Math.random()*40,col=['#f6c046','#f28a8a','#9fe0d4','#f7f3e8'][Math.floor(Math.random()*4)];
     for(let i=0;i<22;i++){const a=i/22*Math.PI*2;sparks.push({x:fx,y:fy,vx:Math.cos(a)*30,vy:Math.sin(a)*30,l:1,col})}}
     sparks=sparks.filter(p=>(p.l-=dt*.8)>0);sparks.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=20*dt;g.globalAlpha=p.l;g.fillStyle=p.col;g.fillRect(p.x,p.y,2,2)});g.globalAlpha=1}
   // the neighbours
@@ -830,12 +832,16 @@ function draw(now){
   if(c.fid==='diwali')[84,104,124,144,164].forEach((x,i)=>{poly(ellPts(x,157,7,3.4,10));ink('#c9743c',1.6);
     const fl=1+.18*Math.sin(t*9+i*2);g.beginPath();g.moveTo(x,155);g.quadraticCurveTo(x+4,151,x,155-8*fl);g.quadraticCurveTo(x-4,151,x,155);ink('#ffcf5a',1.2);
     if(night){g.globalAlpha=.18;poly(ellPts(x,150,12,12,10));ink('#ffcf5a',0);g.globalAlpha=1}});
-  if(c.fid==='lny'||c.fid==='midautumn'){const col=c.fid==='lny'?'#d8473a':'#f08a3c',sw=Math.sin(t*1.2)*2;g.strokeStyle=INK;g.lineWidth=1.4;g.beginPath();g.moveTo(28,0);g.lineTo(28+sw,42);g.stroke();
+  if(c.fid==='lny'||c.fid==='midautumn'||c.fid==='lantern'){const col=c.fid==='midautumn'?'#f08a3c':'#d8473a',sw=Math.sin(t*1.2)*2;g.strokeStyle=INK;g.lineWidth=1.4;g.beginPath();g.moveTo(28,0);g.lineTo(28+sw,42);g.stroke();
     poly(rectPts(22+sw,40,12,4));ink('#f2c14e',1.4);poly(ellPts(28+sw,60,15,17,16));ink(col,2);poly(rectPts(22+sw,76,12,4));ink('#f2c14e',1.4);g.beginPath();g.moveTo(28+sw,80);g.lineTo(28+sw*1.4,94);ink(null,1.6)}
   if(c.fid==='christmas'){for(let i=0;i<10;i++){const x=62+i*24;const on=Math.floor(t*2+i)%3!==0;poly(ellPts(x,18,3,4,8));ink(on?['#f26b5b','#f6c046','#7cc6a4'][i%3]:'#8d7d86',1.2)}}
   if(c.fid==='halloween'){poly(ellPts(110,150,13,10,16));ink('#ef8a2f',2);g.beginPath();g.moveTo(110,140);g.lineTo(112,134);ink(null,2)}
   if(c.fid==='dongzhi'){poly(ellPts(110,154,14,5,12));ink('#f5efe6',1.8);[104,110,116].forEach(x=>{poly(ellPts(x,151,3,3,8));ink('#fbe4ea',1)})}
   if(c.fid==='dragonboat'){[100,118].forEach(x=>{poly([[x-8,158],[x+8,158],[x,144]]);ink('#7aa65a',1.8)})}
+  if(c.fid==='lantern'){poly(ellPts(110,154,14,5,12));ink('#3a6aa8',1.8);[104,110,116].forEach(x=>{poly(ellPts(x,151,3,3,8));ink('#fbf6ee',1)})}   // a blue-and-white bowl of tangyuan
+  if(c.fid==='chongyang'){poly(rectPts(100,146,18,12));ink('#b8683a',1.6);[[104,140],[112,137],[108,133]].forEach(([x,y])=>{poly(ellPts(x,y,5,4,12));ink('#f2c030',1.4)})}   // chrysanthemums
+  if(c.fid==='thanksgiving'){poly(ellPts(110,154,16,5,14));ink('#d8903a',1.8);poly(ellPts(110,152,13,3,12));ink('#c8702a',1.2)}   // a pumpkin pie
+  if(c.fid==='merce'){poly(rectPts(106,136,8,22));ink('#b3261e',1.6);poly(ellPts(110,131,4,5,10));ink('#e8b48a',1.4);poly(rectPts(106,128,8,2));ink('#f2c030',1.2)}   // a little gegant
   sill(c,t,night);
   // plant
   poly([[250,146],[270,146],[267,158],[253,158]]);ink('#d6845a',1.8);
