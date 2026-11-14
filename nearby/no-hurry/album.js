@@ -1144,4 +1144,228 @@ c.strokeStyle='rgba(150,140,140,.5)';c.lineWidth=1.2;c.beginPath();c.moveTo(-.5*
 });
 }
 };
+})());Object.assign(window.POPO_PHOTOS = window.POPO_PHOTOS || {}, (function () {   /* Nov 14: Kowloon 1967 and Queens 1997, the family's other cities */
+  function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function lin(c, x0, y0, x1, y1, st) { var g = c.createLinearGradient(x0, y0, x1, y1); st.forEach(function (s) { g.addColorStop(s[0], s[1]); }); return g; }
+  function rad(c, x, y, r0, r1, st) { var g = c.createRadialGradient(x, y, r0, x, y, r1); st.forEach(function (s) { g.addColorStop(s[0], s[1]); }); return g; }
+  function ell(c, x, y, rx, ry, col) { c.beginPath(); c.ellipse(x, y, Math.max(rx, .1), Math.max(ry, .1), 0, 0, 7); c.fillStyle = col; c.fill(); }
+  function poly(c, pts, col) { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (var i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.closePath(); c.fillStyle = col; c.fill(); }
+  function line(c, x0, y0, x1, y1, w, col) { c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.lineWidth = w; c.strokeStyle = col; c.lineCap = 'round'; c.stroke(); }
+  // fill a path, then shade it from light side (x0) to dark side (x1)
+  function shape(c, build, col, x0, x1, dark) {
+    c.save(); c.beginPath(); build(); c.fillStyle = col; c.fill(); c.clip();
+    c.fillStyle = lin(c, x0, 0, x1, 0, [[0, 'rgba(255,255,255,.22)'], [.45, 'rgba(255,255,255,0)'], [1, 'rgba(0,0,0,' + (dark || .38) + ')']]);
+    c.fillRect(-2000, -2000, 5000, 5000); c.restore();
+  }
+  function limb(c, pts, w, col, sh) {
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (var i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]);
+    c.lineWidth = w; c.strokeStyle = col; c.stroke();
+    if (sh !== false) { c.save(); c.translate(w * .18, w * .12); c.lineWidth = w * .45; c.strokeStyle = 'rgba(0,0,0,.18)'; c.stroke(); c.restore(); }
+  }
+  function hand(c, x, y, r, skin) { ell(c, x, y, r, r * 1.1, skin); ell(c, x + r * .25, y + r * .3, r * .6, r * .6, 'rgba(0,0,0,.12)'); }
+
+  // ---- a head: x,y centre, u = head height
+  function head(c, x, y, u, o) {
+    var rx = u * .4, ry = u * .5, skin = o.skin || '#e9bf98', hair = o.hair || '#1b1612', t = o.turn || 0, fx = t * rx * .28;
+    var lk = o.look || [0, 0];
+    c.save(); c.translate(x, y); c.rotate(o.tilt || 0);
+    if (o.style === 'bob') {
+      c.beginPath(); c.ellipse(0, -u * .06, rx * 1.22, ry * 1.04, 0, Math.PI * .92, Math.PI * 2.08);
+      c.quadraticCurveTo(rx * 1.3, u * .36, rx * 1.02, u * .4); c.lineTo(-rx * 1.02, u * .4); c.quadraticCurveTo(-rx * 1.3, u * .36, -rx * 1.22, u * .02);
+      c.fillStyle = hair; c.fill();
+    }
+    if (o.style === 'scarf') { c.beginPath(); c.ellipse(0, -u * .02, rx * 1.25, ry * 1.08, 0, Math.PI * .85, Math.PI * 2.15); c.lineTo(rx * .7, u * .55); c.lineTo(-rx * .7, u * .55); c.closePath(); c.fillStyle = o.scarf; c.fill(); }
+    // ears
+    if (t < .6) ell(c, -rx * .98, u * .04, rx * .14, ry * .2, skin);
+    if (t > -.6) ell(c, rx * .98, u * .04, rx * .14, ry * .2, skin);
+    // face
+    c.beginPath(); c.moveTo(-rx, -u * .05); c.bezierCurveTo(-rx, -ry * 1.05, rx, -ry * 1.05, rx, -u * .05);
+    c.bezierCurveTo(rx, u * .32, rx * .45, ry, 0 + fx * .3, ry); c.bezierCurveTo(-rx * .45, ry, -rx, u * .32, -rx, -u * .05);
+    c.fillStyle = skin; c.fill();
+    c.save(); c.clip();
+    c.fillStyle = rad(c, -rx * .3 + fx, -u * .1, u * .05, u * .7, [[0, 'rgba(255,240,225,.35)'], [.6, 'rgba(0,0,0,0)'], [1, 'rgba(60,20,0,.35)']]); c.fillRect(-u, -u, 2 * u, 2 * u);
+    ell(c, -rx * .55 + fx, u * .15, rx * .22, ry * .12, 'rgba(225,110,100,.22)'); ell(c, rx * .55 + fx, u * .15, rx * .22, ry * .12, 'rgba(225,110,100,.22)');
+    c.restore();
+    // eyes
+    var ey = u * .02, es = u * .17, ink = '#2a1a12';
+    [-1, 1].forEach(function (s) {
+      var ex = s * es + fx, w = u * .075 * (1 - s * t * .25);
+      if (o.eyes === 'happy') {
+        c.beginPath(); c.moveTo(ex - w, ey + u * .01); c.quadraticCurveTo(ex, ey - u * .05, ex + w, ey + u * .01); c.lineWidth = u * .028; c.strokeStyle = ink; c.lineCap = 'round'; c.stroke();
+        c.beginPath(); c.moveTo(ex - w * .7, ey + u * .07); c.quadraticCurveTo(ex, ey + u * .05, ex + w * .7, ey + u * .07); c.lineWidth = u * .012; c.strokeStyle = 'rgba(80,30,10,.5)'; c.stroke();
+      } else {
+        ell(c, ex, ey, w, u * .042, '#f4efe8');
+        ell(c, ex + lk[0] * w * .45, ey + lk[1] * u * .016, u * .036, u * .037, '#3a2416');
+        ell(c, ex + lk[0] * w * .45, ey + lk[1] * u * .016, u * .018, u * .018, '#0d0806');
+        ell(c, ex + lk[0] * w * .45 - u * .012, ey + lk[1] * u * .016 - u * .014, u * .009, u * .009, 'rgba(255,255,255,.85)');
+        c.beginPath(); c.ellipse(ex, ey + u * .004, w * 1.05, u * .046, 0, Math.PI * 1.05, Math.PI * 1.95); c.lineWidth = u * .022; c.strokeStyle = ink; c.stroke();
+        if (o.crinkle) { line(c, ex + s * w * 1.1, ey + u * .01, ex + s * w * 1.4, ey - u * .015, u * .01, 'rgba(80,40,20,.5)'); line(c, ex + s * w * 1.1, ey + u * .03, ex + s * w * 1.4, ey + u * .045, u * .01, 'rgba(80,40,20,.5)'); }
+      }
+      // brows
+      var by = ey - u * (o.brUp ? .14 : .1);
+      c.beginPath(); c.moveTo(ex - w * 1.1, by + u * .02); c.quadraticCurveTo(ex, by - u * .025, ex + w * 1.15, by + u * .012 * s);
+      c.lineWidth = u * (o.thick ? .045 : .026); c.strokeStyle = o.brow || hair; c.lineCap = 'round'; c.stroke();
+    });
+    // nose
+    c.beginPath(); c.moveTo(fx + u * .01, ey + u * .02); c.quadraticCurveTo(fx + u * .045 + t * u * .04, ey + u * .13, fx + u * .02, ey + u * .16);
+    c.lineWidth = u * .02; c.strokeStyle = 'rgba(110,55,30,.45)'; c.stroke();
+    ell(c, fx - u * .03, ey + u * .165, u * .018, u * .01, 'rgba(90,40,20,.5)'); ell(c, fx + u * .04, ey + u * .165, u * .018, u * .01, 'rgba(90,40,20,.5)');
+    // moustache
+    if (o.moust) { c.beginPath(); c.moveTo(fx - u * .13, ey + u * .245); c.quadraticCurveTo(fx, ey + u * .17, fx + u * .13, ey + u * .245); c.quadraticCurveTo(fx, ey + u * .215, fx - u * .13, ey + u * .245); c.fillStyle = hair; c.fill(); }
+    // mouth
+    var my = ey + u * .27;
+    if (o.mouth === 'laugh') {
+      c.beginPath(); c.moveTo(fx - u * .11, my - u * .01); c.quadraticCurveTo(fx, my + u * .16, fx + u * .11, my - u * .01); c.quadraticCurveTo(fx, my + u * .02, fx - u * .11, my - u * .01); c.fillStyle = '#5a1e1a'; c.fill();
+      c.beginPath(); c.moveTo(fx - u * .09, my); c.quadraticCurveTo(fx, my + u * .035, fx + u * .09, my); c.lineTo(fx + u * .085, my + u * .02); c.quadraticCurveTo(fx, my + u * .05, fx - u * .085, my + u * .02); c.fillStyle = '#f2ece2'; c.fill();
+    } else {
+      var d = o.mouth === 'smile' ? .06 : .028;
+      c.beginPath(); c.moveTo(fx - u * .09, my); c.quadraticCurveTo(fx, my + u * d, fx + u * .09, my); c.lineWidth = u * .025; c.strokeStyle = '#8a3b33'; c.lineCap = 'round'; c.stroke();
+      ell(c, fx, my + u * (d * .7 + .03), u * .05, u * .015, 'rgba(200,110,100,.35)');
+    }
+    // hair front
+    if (o.style === 'bob') {
+      c.beginPath(); c.moveTo(-rx * 1.06, u * .12); c.bezierCurveTo(-rx * 1.25, -ry * 1.25, rx * 1.25, -ry * 1.25, rx * 1.06, u * .12);
+      c.quadraticCurveTo(rx * .95, -u * .2, rx * .3, -u * .24); c.quadraticCurveTo(-rx * .4, -u * .26, -rx * .62, -u * .38); c.quadraticCurveTo(-rx * .95, -u * .15, -rx * 1.06, u * .12);
+      c.fillStyle = hair; c.fill();
+      c.beginPath(); c.moveTo(-rx * .45, -ry * .92); c.quadraticCurveTo(rx * .3, -ry * 1.02, rx * .8, -u * .25); c.lineWidth = u * .03; c.strokeStyle = 'rgba(255,255,255,.22)'; c.stroke();
+    } else if (o.style === 'wavy') {
+      c.beginPath(); c.moveTo(-rx * 1.03, -u * .02); c.bezierCurveTo(-rx * 1.2, -ry * 1.35, rx * 1.2, -ry * 1.35, rx * 1.03, -u * .02);
+      c.quadraticCurveTo(rx * .9, -u * .3, rx * .35, -u * .33); c.quadraticCurveTo(0, -u * .3, -rx * .35, -u * .34); c.quadraticCurveTo(-rx * .9, -u * .3, -rx * 1.03, -u * .02); c.fillStyle = hair; c.fill();
+      for (var i = 0; i < 3; i++) { c.beginPath(); c.moveTo(-rx * .7 + i * rx * .45, -u * .36); c.quadraticCurveTo(-rx * .5 + i * rx * .45, -u * .55, -rx * .1 + i * rx * .45, -u * .58); c.lineWidth = u * .025; c.strokeStyle = 'rgba(255,255,255,.18)'; c.stroke(); }
+    } else if (o.style === 'short') {
+      c.beginPath(); c.moveTo(-rx * 1.02, 0); c.bezierCurveTo(-rx * 1.15, -ry * 1.3, rx * 1.15, -ry * 1.3, rx * 1.02, 0); c.quadraticCurveTo(rx * .8, -u * .32, 0, -u * .32); c.quadraticCurveTo(-rx * .8, -u * .32, -rx * 1.02, 0); c.fillStyle = hair; c.fill();
+    } else if (o.style === 'scarf') {
+      c.beginPath(); c.moveTo(-rx * 1.1, u * .2); c.bezierCurveTo(-rx * 1.3, -ry * 1.35, rx * 1.3, -ry * 1.35, rx * 1.1, u * .2); c.quadraticCurveTo(rx * .9, -u * .3, 0, -u * .32); c.quadraticCurveTo(-rx * .9, -u * .3, -rx * 1.1, u * .2); c.fillStyle = o.scarf; c.fill();
+      ell(c, 0, u * .5, rx * .35, u * .08, o.scarf);
+    }
+    if (o.hat) { // trilby
+      ell(c, 0, -u * .3, rx * 1.65, u * .1, o.hat);
+      c.beginPath(); c.moveTo(-rx * 1.05, -u * .3); c.quadraticCurveTo(-rx * 1.1, -u * .8, 0, -u * .72); c.quadraticCurveTo(rx * 1.1, -u * .8, rx * 1.05, -u * .3); c.fillStyle = o.hat; c.fill();
+      c.fillRect(-rx * 1.05, -u * .4, rx * 2.1, u * .08); c.fillStyle = 'rgba(0,0,0,.35)'; c.fillRect(-rx * 1.05, -u * .4, rx * 2.1, u * .08);
+    }
+    if (o.cap) { // porter's peaked cap
+      c.beginPath(); c.moveTo(-rx * 1.1, -u * .25); c.lineTo(-rx * 1.0, -u * .62); c.lineTo(rx * 1.0, -u * .62); c.lineTo(rx * 1.1, -u * .25); c.fillStyle = o.cap; c.fill();
+      ell(c, fx, -u * .23, rx * .9, u * .06, '#111'); c.fillStyle = '#c8b46a'; c.fillRect(-rx * .3, -u * .45, rx * .6, u * .06);
+    }
+    c.restore();
+  }
+
+  // ---- a standing body; returns anchors. f: x, y (feet), h, dress, top, bottom, coat, legs override, collar, print
+  function body(c, f, R) {
+    var u = f.h / 7.4, top = f.y - f.h, m = !f.dress, sw = (m ? .95 : .78) * u, x = f.x, skin = f.skin || '#e9bf98';
+    var shY = top + 1.3 * u, wY = top + 2.95 * u, hip = top + 3.7 * u, hem = top + (f.dress ? 5.35 : (f.coat || 4.0)) * u;
+    var legs = f.legs || [[[x - .24 * u, hip], [x - .26 * u, f.y - .2 * u]], [[x + .24 * u, hip], [x + .26 * u, f.y - .2 * u]]];
+    legs.forEach(function (L) {
+      limb(c, L, (m ? .38 : .2) * u, m ? (f.bottom || '#555') : (f.stock || '#d9b694'));
+      var e = L[L.length - 1]; ell(c, e[0] + .06 * u, e[1] + .14 * u, (m ? .26 : .17) * u, .11 * u, f.shoe || '#1d1714');
+    });
+    c.fillStyle = skin; c.fillRect(x - .15 * u, top + .85 * u, .3 * u, .5 * u);
+    shape(c, function () {
+      c.moveTo(x - sw, shY + .1 * u); c.quadraticCurveTo(x - sw, shY - .15 * u, x - sw * .5, shY - .2 * u); c.lineTo(x + sw * .5, shY - .2 * u); c.quadraticCurveTo(x + sw, shY - .15 * u, x + sw, shY + .1 * u);
+      if (f.dress) { c.lineTo(x + .52 * u, wY); c.quadraticCurveTo(x + .7 * u, hip, x + .9 * u, hem); c.quadraticCurveTo(x, hem + .12 * u, x - .9 * u, hem); c.quadraticCurveTo(x - .7 * u, hip, x - .52 * u, wY); }
+      else { c.lineTo(x + .78 * u, wY); c.lineTo(x + .8 * u, hem); c.lineTo(x - .8 * u, hem); c.lineTo(x - .78 * u, wY); }
+      c.closePath();
+    }, f.top, x - sw, x + sw);
+    if (f.print) { var r = R || rng(7); c.save(); c.beginPath(); c.rect(x - u, shY - .2 * u, 2 * u, hem - shY + .2 * u); c.clip(); for (var i = 0; i < 70; i++) { var px = x - .9 * u + r() * 1.8 * u, py = shY + r() * (hem - shY); ell(c, px, py, u * .035, u * .035, f.print); } c.restore(); }
+    if (f.dress) { c.fillStyle = 'rgba(0,0,0,.18)'; c.fillRect(x - .55 * u, wY - .04 * u, 1.1 * u, .08 * u); }
+    if (f.collar) { c.fillStyle = f.collar; c.fillRect(x - .2 * u, top + 1.02 * u, .4 * u, .16 * u); line(c, x + .02 * u, top + 1.18 * u, x + .25 * u, top + 1.45 * u, u * .03, 'rgba(0,0,0,.25)'); }
+    return { u: u, top: top, shL: [x - sw * .85, shY + .05 * u], shR: [x + sw * .85, shY + .05 * u], wY: wY, hip: hip, hem: hem, hx: x, hy: top + .55 * u };
+  }
+
+  // ---- the station's round clock
+  function puff(c, R, x, y, n, s, a) { for (var i = 0; i < n; i++) ell(c, x + (R() - .5) * s * 2.2, y - i * s * .25 + (R() - .5) * s, s * (.5 + R() * .6), s * (.4 + R() * .5), 'rgba(235,235,228,' + (a * (0.4 + R() * .6)) + ')'); }
+  function person(c, R, x, y, h, o) {
+    var b = body(c, { x: x, y: y, h: h, dress: o.dress, top: o.top, bottom: o.bottom, coat: o.coat, stock: o.stock }, R);
+    limb(c, [b.shL, [b.shL[0] - b.u * .1, b.wY + b.u * .5]], b.u * .32, o.top); limb(c, [b.shR, [b.shR[0] + b.u * .1, b.wY + b.u * .5]], b.u * .32, o.top);
+    hand(c, b.shL[0] - b.u * .1, b.wY + b.u * .6, b.u * .12, '#e2b48c'); hand(c, b.shR[0] + b.u * .1, b.wY + b.u * .6, b.u * .12, '#e2b48c');
+    head(c, b.hx, b.hy, b.u, o.head);
+    return b;
+  }
+
+  var POPO_SKIN = '#ecc49e';
+  function sign(c, x, y, w, h, bg, fg, txt, vert) {   /* a hanging shop sign: characters set top to bottom */
+    c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(x + 2, y + 2, w, h); c.fillStyle = bg; c.fillRect(x, y, w, h);
+    c.strokeStyle = fg; c.lineWidth = 1; c.strokeRect(x + 2, y + 2, w - 4, h - 4);
+    c.fillStyle = fg; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = 'bold ' + Math.round(w * .62) + 'px serif';
+    if (vert) for (var i = 0; i < txt.length; i++) c.fillText(txt[i], x + w / 2, y + (i + .5) * h / txt.length + 1);
+    else { c.font = 'bold ' + Math.round(h * .55) + 'px serif'; c.fillText(txt, x + w / 2, y + h / 2 + 1); }
+  }
+  function brick(c, x, y, w, h, col, R) {
+    c.fillStyle = col; c.fillRect(x, y, w, h);
+    for (var yy = y; yy < y + h; yy += 6) { line(c, x, yy, x + w, yy, .6, 'rgba(60,30,20,.35)'); for (var xx = x + ((yy - y) / 6 % 2) * 7; xx < x + w; xx += 14) line(c, xx, yy, xx, yy + 6, .6, 'rgba(60,30,20,.3)'); }
+    for (var k = 0; k < 40; k++) { c.fillStyle = 'rgba(' + (R() < .5 ? '255,220,200' : '40,10,0') + ',.08)'; c.fillRect(x + R() * w, y + R() * h, 12, 5); }
+  }
+  return {
+    kowloon: function (c, W, H) {   /* 1967, Kowloon: Popo at eighteen and Miss Leung at the night school's door; the dictionary */
+      var R = rng(1967);
+      c.fillStyle = lin(c, 0, 0, 0, H, [[0, '#b9c2c8'], [.5, '#d8d6cc'], [1, '#8c877c']]); c.fillRect(0, 0, W, H);
+      // tenements down the street, balconies and washing on poles
+      [[-10, 20, 120, '#b4a894'], [100, 40, 110, '#a89c88'], [300, 10, 100, '#bcae96'], [390, 30, 100, '#a49680']].forEach(function (b, bi) {
+        c.fillStyle = b[3]; c.fillRect(b[0], b[1], b[2], 260);
+        for (var fy = b[1] + 14; fy < 250; fy += 30) { c.fillStyle = 'rgba(40,36,30,.55)'; for (var fx = b[0] + 8; fx < b[0] + b[2] - 14; fx += 24) c.fillRect(fx, fy, 14, 16);
+          c.fillStyle = 'rgba(70,64,56,.7)'; c.fillRect(b[0], fy + 18, b[2], 3);
+          if (R() < .6) { line(c, b[0] + 4, fy + 6, b[0] + b[2] - 4, fy + 2, 1, '#6a6050'); for (var cl = 0; cl < 4; cl++) { c.fillStyle = ['#e8e4d8', '#7d8fb0', '#c8a080', '#d8d0c0'][(cl + bi) % 4]; c.fillRect(b[0] + 12 + cl * 22 + R() * 6, fy + 5, 9, 11 + R() * 5); } } }
+      });
+      // signs hanging out over the street
+      sign(c, 76, 34, 22, 96, '#c8a238', '#2a1a10', '酒家', 1); sign(c, 128, 60, 18, 70, '#8a2a24', '#f4ead0', '當', 1);
+      sign(c, 330, 26, 22, 90, '#3a5a4a', '#f4ead0', '英文', 1); sign(c, 372, 70, 18, 62, '#c8a238', '#2a1a10', '理髮', 1); sign(c, 420, 44, 24, 100, '#8a2a24', '#f4ead0', '茶樓', 1);
+      // the street, a bus far off and passers-by
+      c.fillStyle = lin(c, 0, 250, 0, H, [[0, '#8e887c'], [1, '#5e5a52']]); c.fillRect(0, 250, W, 90);
+      c.fillStyle = '#c03a30'; c.fillRect(214, 196, 52, 44); c.fillStyle = '#e8e0cc'; c.fillRect(214, 216, 52, 3); c.fillStyle = '#4a5560'; for (var bw = 0; bw < 4; bw++) { c.fillRect(218 + bw * 12, 200, 9, 7); c.fillRect(218 + bw * 12, 222, 9, 7); }
+      ell(c, 224, 241, 4, 4, '#222'); ell(c, 256, 241, 4, 4, '#222');
+      person(c, R, 190, 262, 46, { top: '#ddd8cc', bottom: '#4a4a52', head: { skin: '#e2b48c', hair: '#1c1612', style: 'short' } });
+      person(c, R, 290, 260, 42, { dress: 1, top: '#7a8aa0', stock: '#d9b694', head: { skin: '#e2b48c', hair: '#1c1612', style: 'bob', turn: .3 } });
+      // the night school's door: a lit doorway, its board beside it
+      c.fillStyle = '#5a4a38'; c.fillRect(166, 130, 120, 128); c.fillStyle = lin(c, 0, 140, 0, 258, [[0, '#f4e2a8'], [1, '#c8a868']]); c.fillRect(178, 142, 96, 116);
+      for (var st = 0; st < 5; st++) line(c, 186, 160 + st * 18, 266, 160 + st * 18, 1.2, 'rgba(90,70,40,.45)');
+      sign(c, 290, 136, 20, 92, '#efe8d6', '#2a2620', '夜校', 1);
+      // Miss Leung: cat-eye glasses, a short set perm, cardigan and a straight skirt
+      var ml = body(c, { x: 352, y: 330, h: 190, dress: 1, top: '#6a7a8c', stock: '#cfa888', collar: '#efe8d6', skin: '#e6ba94' }, R);
+      limb(c, [ml.shL, [ml.shL[0] - ml.u * .05, ml.wY + ml.u * .7]], ml.u * .34, '#6a7a8c'); hand(c, ml.shL[0] - ml.u * .05, ml.wY + ml.u * .8, ml.u * .13, '#e6ba94');
+      limb(c, [ml.shR, [ml.shR[0] - ml.u * .3, ml.wY - ml.u * .1], [ml.shR[0] - ml.u * 1.1, ml.wY - ml.u * .3]], ml.u * .32, '#6a7a8c');
+      head(c, ml.hx, ml.hy, ml.u, { skin: '#e6ba94', hair: '#241c16', style: 'bob', turn: -.35, look: [-.8, .2], mouth: 'smile', crinkle: 1 });
+      [-1, 1].forEach(function (s) { c.beginPath(); c.ellipse(ml.hx - ml.u * .09 + s * ml.u * .14, ml.hy - ml.u * .03, ml.u * .1, ml.u * .065, s * .3, 0, 7); c.lineWidth = ml.u * .025; c.strokeStyle = '#1a1410'; c.stroke(); });
+      // Popo at eighteen: a bob, the day dress with the small print, the little dictionary held to her chest
+      var p = body(c, { x: 150, y: 334, h: 182, dress: 1, top: '#e8dcc0', print: '#7d8fb0', collar: '#e8dcc0', skin: POPO_SKIN }, R);
+      var bx = p.hx + p.u * .2, by = p.wY - p.u * .55;
+      limb(c, [p.shL, [p.shL[0] + p.u * .1, p.wY - p.u * .2], [bx - p.u * .2, by + p.u * .15]], p.u * .28, '#e8dcc0');
+      limb(c, [p.shR, [p.shR[0] + p.u * .15, p.wY + p.u * .3], [bx + p.u * .45, by + p.u * .4]], p.u * .28, '#e8dcc0');
+      c.save(); c.translate(bx, by); c.rotate(-.12); c.fillStyle = '#9a2a2a'; c.fillRect(-p.u * .32, -p.u * .45, p.u * .64, p.u * .9); c.fillStyle = '#f2ead6'; c.fillRect(p.u * .26, -p.u * .42, p.u * .06, p.u * .84);
+      c.fillStyle = '#e8d8a8'; c.fillRect(-p.u * .32, -p.u * .1, p.u * .64, p.u * .08); c.restore();
+      hand(c, bx - p.u * .2, by + p.u * .15, p.u * .12, POPO_SKIN); hand(c, bx + p.u * .4, by + p.u * .35, p.u * .12, POPO_SKIN);
+      head(c, p.hx, p.hy, p.u, { skin: POPO_SKIN, style: 'bob', tilt: .06, turn: .2, look: [.3, .2], mouth: 'smile', brUp: 1 });
+    },
+    queens: function (c, W, H) {   /* 1997, Queens: Mei's mum on a stoop in the snow, sent with her first card */
+      var R = rng(1997);
+      c.fillStyle = lin(c, 0, 0, 0, 120, [[0, '#a8b0bc'], [1, '#d4d6da']]); c.fillRect(0, 0, W, 120);
+      // the elevated train on its steel, behind the houses
+      c.fillStyle = '#4a4e54'; c.fillRect(0, 54, W, 10); for (var gx = 10; gx < W; gx += 46) { c.fillRect(gx, 64, 6, 60); line(c, gx + 3, 64, gx + 26, 54, 2, '#4a4e54'); }
+      for (var car = 0; car < 3; car++) { var cx = 40 + car * 130; c.fillStyle = '#9aa0a6'; c.fillRect(cx, 30, 122, 24); c.fillStyle = '#c8402a'; c.fillRect(cx, 48, 122, 3); c.fillStyle = '#e8e2c8'; for (var wi = 0; wi < 6; wi++) c.fillRect(cx + 6 + wi * 19, 34, 12, 9); }
+      c.fillStyle = '#c8402a'; ell(c, 58, 41, 6, 6, '#c8402a'); c.fillStyle = '#fff'; c.font = 'bold 9px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('7', 58, 41.5);
+      // the brick house and its stoop
+      brick(c, 0, 100, W, 180, '#9a5a44', R);
+      c.fillStyle = '#e8e2d4'; c.fillRect(40, 118, 70, 84); c.fillStyle = lin(c, 0, 122, 0, 198, [[0, '#f4d898'], [1, '#d8a860']]); c.fillRect(46, 124, 58, 72); line(c, 75, 124, 75, 196, 2, '#e8e2d4'); line(c, 46, 160, 104, 160, 2, '#e8e2d4');
+      c.fillStyle = '#efeae0'; c.fillRect(36, 200, 78, 6);
+      c.fillStyle = '#3a3026'; c.fillRect(330, 112, 80, 150); c.fillStyle = '#5a4a38'; c.fillRect(338, 120, 64, 142); ell(c, 392, 196, 3, 3, '#c8a050');
+      c.fillStyle = '#e8e2d4'; c.fillRect(326, 104, 88, 10); c.fillText && (c.fillStyle = '#3a3026', c.font = 'bold 10px serif', c.fillText('41-17', 370, 110));
+      for (var s = 0; s < 4; s++) { c.fillStyle = '#8a8478'; c.fillRect(300 - s * 16, 262 + s * 18, 140 + s * 32, 18); c.fillStyle = '#f6f6f2'; c.fillRect(300 - s * 16, 262 + s * 18, 140 + s * 32, 5); }
+      line(c, 296, 262, 236, 340, 4, '#2a2a2c'); line(c, 296, 238, 296, 262, 4, '#2a2a2c'); line(c, 296, 238, 236, 316, 3, '#2a2a2c');
+      c.fillStyle = '#f6f6f2'; c.fillRect(0, 300, 240, 40); ell(c, 120, 302, 140, 8, '#f6f6f2');
+      // her suitcase on the step, a paper cup in her hand
+      c.fillStyle = '#6a2a3a'; c.fillRect(392, 222, 46, 58); c.fillStyle = '#4a1e2a'; c.fillRect(392, 222, 46, 5); line(c, 406, 222, 406, 214, 2.5, '#222'); line(c, 424, 222, 424, 214, 2.5, '#222'); line(c, 406, 214, 424, 214, 2.5, '#222');
+      c.fillStyle = '#f6f6f2'; c.fillRect(392, 220, 46, 3);
+      // Mei's mum, twenty-two: black hair with a fringe, a coat too thin for it, a long red scarf
+      var m = body(c, { x: 214, y: 336, h: 200, top: '#8a8a7a', bottom: '#2a2e3a', coat: 5.4, skin: '#e6bc98' }, R);
+      c.fillStyle = '#b8302e'; c.fillRect(m.hx - m.u * .3, m.hy + m.u * .62, m.u * .6, m.u * .3); c.fillRect(m.hx + m.u * .05, m.hy + m.u * .8, m.u * .22, m.u * 2.2);
+      limb(c, [m.shL, [m.shL[0] - m.u * .05, m.wY + m.u * .7]], m.u * .34, '#8a8a7a'); hand(c, m.shL[0] - m.u * .05, m.wY + m.u * .8, m.u * .13, '#e6bc98');
+      limb(c, [m.shR, [m.shR[0] + m.u * .25, m.wY], [m.shR[0] + m.u * .05, m.wY - m.u * .6]], m.u * .32, '#8a8a7a');
+      c.fillStyle = '#f2ece0'; poly(c, [[m.shR[0] - m.u * .15, m.wY - m.u * 1.1], [m.shR[0] + m.u * .3, m.wY - m.u * 1.1], [m.shR[0] + m.u * .25, m.wY - m.u * .5], [m.shR[0] - m.u * .1, m.wY - m.u * .5]], '#f2ece0'); c.fillStyle = '#3a6a9a'; c.fillRect(m.shR[0] - m.u * .13, m.wY - m.u * .9, m.u * .4, m.u * .14);
+      hand(c, m.shR[0] + m.u * .07, m.wY - m.u * .62, m.u * .13, '#e6bc98');
+      head(c, m.hx, m.hy, m.u, { skin: '#e6bc98', hair: '#17120e', style: 'bob', turn: -.15, look: [-.2, .1], mouth: 'smile', brUp: 1 });
+      c.fillStyle = '#17120e'; c.fillRect(m.hx - m.u * .32, m.hy - m.u * .4, m.u * .64, m.u * .14);
+      // snow falling, snow on the sills
+      c.fillStyle = 'rgba(255,255,255,.9)'; for (var f = 0; f < 140; f++) ell(c, R() * W, R() * H, .8 + R() * 1.6, .8 + R() * 1.6, 'rgba(255,255,255,' + (.6 + R() * .4) + ')');
+    }
+  };
 })());
