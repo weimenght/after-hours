@@ -286,11 +286,132 @@ window.PCScenes = (function () {
       for (var s = 0; s < 40; s++) p.r(R() * W, R() * 60, 1, 1, R() < .3 ? "#fff6c0" : "#a8b4ff");
       ell(p, 122, 20, 8, 8, "#fff2c8"); ell(p, 126, 18, 7, 7, "#121232");
       var x = 0; while (x < W) { var w = 10 + R() * 18, h = 30 + R() * 50; p.r(x, H - h, w, h, "#0a0a14"); for (var wy = H - h + 4; wy < H - 4; wy += 5) for (var wx = x + 2; wx < x + w - 2; wx += 4) if (R() < .35) p.r(wx, wy, 2, 2, R() < .8 ? "#f6c84a" : "#7affc1"); x += w + 1; }
+    },
+    /* where the family writes from (Nov 14, the owner): Hong Kong, Catalonia, Mei's mum's New York, Beijing; two cards each */
+    ferry: function (p, R) {
+      bands(p, ["#3a2a5e", "#6a3a6e", "#b0506a", "#e8805a", "#f4b070"], 0, 62);
+      for (var x = 0; x < W; x++) { var h = 24 + Math.abs(x - 44) * .32 + Math.sin(x * .09) * 3; p.r(x, h, 1, 62 - h, "#2a3a3a"); }
+      x = 0; while (x < W) { var w = 5 + Math.floor(R() * 9), h2 = 12 + Math.floor(R() * 22); if (x > 88 && x < 100) h2 = 30;
+        p.r(x, 62 - h2, w, h2, R() < .5 ? "#1e2438" : "#262c44"); for (var wy = 64 - h2; wy < 60; wy += 3) for (var wx = x + 1; wx < x + w - 1; wx += 2) if (R() < .4) p.r(wx, wy, 1, 1, R() < .75 ? "#f6c84a" : "#9ad0ff"); x += w + 1; }
+      p.r(97, 16, 8, 46, "#2a3048"); p.r(100, 9, 2, 7, "#2a3048"); for (var i = 0; i < 11; i++) { p.r(97 + Math.round(i * .7), 18 + i * 4, 1, 1, "#9ad0ff"); p.r(104 - Math.round(i * .7), 18 + i * 4, 1, 1, "#9ad0ff"); }
+      bands(p, ["#2a3a6a", "#243462", "#1e2e58", "#1a284e"], 62, 110);
+      for (var j = 0; j < 46; j++) p.r(R() * W, 64 + R() * 44, 2 + R() * 6, 1, R() < .5 ? "rgba(246,200,74,.45)" : "rgba(154,208,255,.3)");
+      p.r(126, 72, 22, 3, "#3a2418"); p.r(130, 54, 7, 18, "#b8402a"); p.r(139, 58, 6, 14, "#c8502a"); for (var b = 0; b < 4; b++) { p.r(130, 57 + b * 4, 7, 1, "#7a2a1a"); p.r(139, 61 + b * 3, 6, 1, "#7a2a1a"); }
+      p.r(14, 86, 100, 8, "#2a6a4a"); p.r(18, 94, 92, 2, "#1e4a34"); p.r(14, 84, 100, 2, "#f4f0e4"); p.r(44, 86, 50, 2, "#f4f0e4");
+      p.r(40, 72, 72, 12, "#f4f0e4"); p.r(38, 70, 76, 2, "#2a6a4a"); for (var k = 0; k < 8; k++) p.r(44 + k * 8, 75, 5, 5, "#ffd27a");
+      p.r(14, 82, 26, 1, "#f4f0e4"); for (var q = 14; q < 40; q += 4) p.r(q, 82, 1, 3, "#f4f0e4");
+      stand(p, 18, 84, { c: "#c8402a", h: "#1a1010", s: "#e8b48a", hl: 1 }); stand(p, 27, 84, { c: "#2c4a86", h: "#2a1a14", s: "#d8a070", sc: "#f6b73c" });
+      for (var v = 0; v < 6; v++) p.r(114 + v * 6, 92 + (v % 2), 5, 1, "rgba(255,255,255,.45)");
+    },
+    dpd: function (p, R) {
+      p.r(0, 0, W, H, "#1a1424");
+      var x = 0; while (x < W) { var w = 18 + Math.floor(R() * 16), c = R() < .5 ? "#2a2030" : "#30243a"; p.r(x, 0, w, 74, c);
+        for (var wy = 4; wy < 40; wy += 7) for (var wx = x + 3; wx < x + w - 4; wx += 6) if (R() < .5) p.r(wx, wy, 3, 4, R() < .7 ? "#e8b04a" : "#6a8aa8"); x += w; }
+      [[18, 8, 9, 24, "#ff4a5a"], [62, 4, 11, 22, "#4af0c0"], [112, 10, 9, 20, "#ffd040"], [138, 4, 10, 26, "#ff6ad0"]].forEach(function (n) {
+        ell(p, n[0] + n[2] / 2, n[1] + n[3] / 2, n[2] + 4, n[3] / 2 + 4, "rgba(255,255,255,.04)");
+        p.r(n[0], n[1], n[2], n[3], "#160e16"); p.r(n[0], n[1], n[2], 1, n[4]); p.r(n[0], n[1] + n[3] - 1, n[2], 1, n[4]); p.r(n[0], n[1], 1, n[3], n[4]); p.r(n[0] + n[2] - 1, n[1], 1, n[3], n[4]);
+        for (var k = 0; k + 6 < n[3]; k += 6) { p.r(n[0] + 2, n[1] + 3 + k, n[2] - 4, 1, n[4]); p.r(n[0] + Math.floor(n[2] / 2), n[1] + 2 + k, 1, 4, n[4]); }
+        p.r(n[0] - 4, n[1] + 4, 4, 1, "#3a3040"); });
+      p.r(0, 26, W, 1, "#3a3440");
+      p.r(0, 74, W, 36, "#2a2630"); for (var s = 0; s < 22; s++) p.r(R() * W, 78 + R() * 30, 1, 3 + R() * 5, ["rgba(255,74,90,.35)", "rgba(74,240,192,.3)", "rgba(255,208,64,.3)"][s % 3]);
+      p.r(6, 38, 62, 38, "#1f6a44"); p.r(8, 36, 58, 3, "#174f33"); p.r(6, 55, 62, 3, "#e8dcb8"); p.r(36, 27, 1, 10, "#111");
+      for (var i = 0; i < 6; i++) { p.r(10 + i * 9, 42, 6, 8, "#ffd27a"); p.r(10 + i * 9, 60, 6, 9, "#ffd27a"); }
+      p.r(26, 39, 20, 2, "#0e0e0e"); p.r(28, 39, 3, 1, "#f6b73c"); p.r(12, 76, 7, 2, "#0e0e0e"); p.r(54, 76, 7, 2, "#0e0e0e");
+      p.r(80, 46, 80, 6, "#2a6a3a"); for (var a = 80; a < W; a += 8) p.r(a, 46, 4, 6, "#e8e0c8"); p.r(80, 52, 80, 1, "#1a3a22");
+      p.r(84, 52, 2, 34, "#3a3a40"); p.r(156, 52, 2, 34, "#3a3a40");
+      p.r(119, 52, 1, 5, "#111"); ell(p, 119, 59, 3, 3, "#ffe3a0"); ell(p, 119, 66, 22, 12, "rgba(255,210,120,.12)");
+      p.r(98, 76, 44, 3, "#d8d0c0"); p.r(100, 79, 2, 12, "#8a8a90"); p.r(138, 79, 2, 12, "#8a8a90");
+      [[110, 72], [128, 72]].forEach(function (b) { ell(p, b[0], b[1] + 2, 5, 2, "#f4ecdc", 1); p.r(b[0] - 5, b[1] + 1, 10, 2, "#f4ecdc"); p.r(b[0] - 4, b[1], 8, 1, "#c8702a");
+        for (var k = 0; k < 3; k++) p.r(b[0] - 2 + k * 2, b[1] - 4 - (k % 2) * 2, 1, 3, "rgba(255,255,255,.5)"); });
+      p.r(118, 68, 1, 8, "#c8a070"); p.r(120, 68, 1, 8, "#c8a070");
+      sit(p, 90, 84, 1, { c: "#e8a03a", h: "#1a1010", s: "#e8b48a" }); sit(p, 146, 84, -1, { c: "#5a3a7a", h: "#2a1a14", s: "#d8a070", hl: 1 });
+      p.r(86, 85, 10, 2, "#c8302a"); p.r(87, 87, 2, 6, "#a8261e"); p.r(93, 87, 2, 6, "#a8261e"); p.r(142, 85, 10, 2, "#c8302a"); p.r(143, 87, 2, 6, "#a8261e"); p.r(149, 87, 2, 6, "#a8261e");
+    },
+    castell: function (p, R) {
+      bands(p, ["#6aaee0", "#84bfe8", "#a4d0ee"], 0, 30);
+      p.r(0, 18, W, 92, "#e2c48e"); p.r(0, 18, W, 2, "#c8a46e");
+      for (var x = 6; x < W; x += 30) { for (var fl = 0; fl < 3; fl++) { var y = 24 + fl * 22; p.r(x, y, 12, 16, "#2a5a3a"); p.r(x + 5, y, 2, 16, "#1e4a2e"); p.r(x - 2, y + 15, 16, 2, "#2a2a2e"); for (var k = x - 2; k < x + 14; k += 2) p.r(k, y + 11, 1, 4, "#2a2a2e"); } }
+      p.r(0, 22, W, 1, "#3a3a40"); [[2, "#c8402a"], [16, "#f6c84a"], [30, "#2c6a8a"], [44, "#e8e0d0"], [58, "#3a8a4a"], [72, "#c8402a"], [86, "#f6c84a"], [100, "#2c6a8a"], [114, "#e8e0d0"], [128, "#3a8a4a"], [142, "#c8402a"], [156, "#f6c84a"]].forEach(function (f) { p.r(f[0], 23, 5, 2, f[1]); p.r(f[0] + 1, 25, 3, 1, f[1]); p.r(f[0] + 2, 26, 1, 1, f[1]); });
+      var SH = "#b3261e", skins = ["#e8b48a", "#d8a070", "#c88a5a", "#f0c8a0", "#a87048"], hairs = ["#1a1010", "#3a2414", "#6a4a2a", "#2a1a14", "#9a8a7a"];
+      function man(cx, by, i) { var s = skins[i % 5], hh = hairs[(i * 3) % 5]; p.r(cx - 3, by - 5, 6, 5, "#f4f0e4"); p.r(cx - 3, by - 6, 6, 2, "#141414"); p.r(cx - 3, by - 11, 6, 5, SH); p.r(cx - 2, by - 14, 4, 3, s); p.r(cx - 2, by - 15, 4, 1, hh); }
+      var lv = [[4, 92], [3, 80], [3, 68], [2, 56], [2, 44], [1, 33]];
+      lv.forEach(function (l, li) { for (var n = 0; n < l[0]; n++) man(80 + (n - (l[0] - 1) / 2) * 7, l[1], li * 4 + n); });
+      p.r(78, 18, 4, 4, "#e8b48a"); p.r(78, 17, 4, 1, "#3a2414"); p.r(78, 22, 4, 5, "#f6c84a"); p.r(82, 14, 1, 5, "#e8b48a"); p.r(77, 27, 2, 4, "#f4f0e4"); p.r(81, 27, 2, 4, "#f4f0e4");
+      for (var c = 0; c < 70; c++) { var cx = R() * W, cy = 92 + R() * 18, i2 = Math.floor(R() * 5); p.r(cx, cy, 6, 9, R() < .55 ? SH : ["#2c4a86", "#3a8a4a", "#e8e0d0", "#5a3a7a"][i2 % 4]); p.r(cx + 1, cy - 4, 4, 4, skins[i2]); p.r(cx + 1, cy - 5, 4, 1, hairs[i2]); }
+    },
+    rose: function (p, R) {
+      bands(p, ["#a8d4f0", "#c4e2f4"], 0, 16);
+      p.r(0, 10, W, 70, "#e8d4b0"); for (var x = 4; x < W; x += 38) { p.r(x, 20, 18, 22, "#5a7a8a"); p.r(x + 2, 22, 14, 18, "#8ab8c8"); p.r(x + 8, 22, 2, 18, "#5a7a8a"); ell(p, x + 9, 20, 9, 5, "#e8d4b0", 0); p.r(x - 3, 42, 24, 3, "#3a3a40");
+        for (var k = 0; k < 10; k++) p.r(x - 2 + k * 2.2, 45, 1, 3, "#3a3a40"); for (var m = 0; m < 8; m++) p.r(x + R() * 18, 12 + R() * 6, 2, 2, ["#2c6a8a", "#f6c84a", "#3a8a4a", "#c8402a"][m % 4]); }
+      p.r(0, 80, W, 30, "#b8a890"); for (var y = 82; y < 110; y += 4) p.r(0, y, W, 1, "#a8987e");
+      p.r(6, 54, 72, 4, "#c8402a"); for (var a = 6; a < 78; a += 8) p.r(a, 54, 4, 4, "#f4f0e4"); p.r(8, 58, 2, 22, "#5a3a26"); p.r(74, 58, 2, 22, "#5a3a26");
+      p.r(8, 70, 68, 3, "#7a4f2c"); [[12, 64], [22, 63], [32, 65], [42, 64], [52, 63], [62, 65]].forEach(function (b) {
+        p.r(b[0] - 2, b[1], 7, 6, "#9aa0a8"); for (var k = 0; k < 6; k++) { var rx = b[0] - 3 + R() * 9, ry = b[1] - 7 + R() * 6; p.r(rx + 1, ry + 2, 1, 4, "#3a7a3a"); p.r(rx, ry, 3, 2, R() < .85 ? "#d0202e" : "#f4a0b8"); p.r(rx + 1, ry, 1, 1, "#8a1018"); } });
+      for (var bk = 0; bk < 9; bk++) p.r(12 + bk * 7, 73, 6, 2, ["#2c4a86", "#c8a040", "#3a6a4a", "#8a2a1e", "#e8e0d0"][bk % 5]);
+      stand(p, 98, 96, { c: "#2c4a86", h: "#2a1a14", s: "#d8a070" }); stand(p, 124, 96, { c: "#e8a03a", h: "#1a1010", s: "#e8b48a", hl: 1, k: "#5a3a7a" });
+      p.r(106, 82, 6, 1, "#3a7a3a"); p.r(111, 80, 3, 3, "#d0202e"); p.r(118, 84, 6, 5, "#8a2a1e"); p.r(119, 85, 4, 3, "#e8e0d0");
+    },
+    stoop: function (p, R) {
+      bands(p, ["#c4d4e4", "#d8e2ec"], 0, 12);
+      p.r(0, 6, W, 82, "#7a3e2a"); for (var y = 8; y < 88; y += 3) p.r(0, y, W, 1, "#6e3624");
+      [[14, 14], [52, 14], [104, 14], [14, 44], [104, 44]].forEach(function (w) { p.r(w[0] - 2, w[1] - 2, 22, 2, "#d8c8a8"); p.r(w[0], w[1], 18, 22, "#2a1e1a"); p.r(w[0] + 1, w[1] + 1, 7, 9, "#f2c46a"); p.r(w[0] + 10, w[1] + 1, 7, 9, "#f2c46a"); p.r(w[0] + 1, w[1] + 12, 16, 9, "#e8a83a"); p.r(w[0] + 2, w[1] + 2, 3, 3, "rgba(255,255,255,.3)"); });
+      p.r(100, 10, 30, 2, "#141414"); p.r(100, 38, 30, 2, "#141414"); for (var r = 100; r < 131; r += 3) { p.r(r, 6, 1, 6, "#141414"); p.r(r, 34, 1, 6, "#141414"); }
+      for (var z = 0; z < 26; z++) p.r(104 + z, 12 + z * .9, 2, 1, "#141414");
+      p.r(48, 44, 26, 30, "#3a2018"); p.r(50, 46, 22, 28, "#6a2a1e"); p.r(60, 46, 2, 28, "#3a2018"); p.r(56, 58, 2, 2, "#f6b73c"); p.r(46, 40, 30, 4, "#d8c8a8");
+      for (var s = 0; s < 6; s++) p.r(42 - s * 4, 74 + s * 4, 38 + s * 8, 4, s % 2 ? "#8a4a34" : "#9a5440");
+      p.r(36, 66, 1, 30, "#141414"); p.r(88, 66, 1, 30, "#141414"); for (var q = 0; q < 6; q++) { p.r(36 - q * 4, 72 + q * 4, 5, 1, "#141414"); p.r(84 + q * 4, 72 + q * 4, 5, 1, "#141414"); }
+      sit(p, 50, 86, 1, { c: "#c8402a", h: "#1a1010", s: "#c88a5a", hl: 1 }); sit(p, 72, 86, -1, { c: "#3a6a6a", h: "#4a2a1a", s: "#e8b48a" });
+      p.r(62, 80, 2, 3, "#f4f0e4"); p.r(67, 80, 2, 3, "#f4f0e4");
+      p.r(0, 98, W, 12, "#4a4a52"); p.r(116, 84, 40, 12, "#f6c21a"); p.r(124, 78, 22, 7, "#f6c21a"); p.r(126, 79, 8, 5, "#9ad0e8"); p.r(136, 79, 8, 5, "#9ad0e8"); p.r(130, 76, 8, 2, "#2a2a2a");
+      p.r(118, 88, 36, 1, "#141414"); for (var c = 0; c < 6; c++) p.r(120 + c * 6, 90, 3, 1, "#141414"); ell(p, 124, 96, 4, 3, "#141414"); ell(p, 148, 96, 4, 3, "#141414");
+      p.r(4, 50, 3, 48, "#4a2e1e"); ell(p, 8, 46, 14, 12, "#d8702a"); ell(p, 2, 40, 7, 6, "#e8963a"); for (var l = 0; l < 10; l++) p.r(R() * 30, 60 + R() * 40, 2, 1, "#e8963a");
+    },
+    bridge: function (p, R) {
+      bands(p, ["#0e1230", "#161a40", "#20244e", "#2c2c5a"], 0, 72);
+      for (var s = 0; s < 30; s++) p.r(R() * W, R() * 40, 1, 1, "#a8b4ff");
+      var x = 70; while (x < W) { var w = 6 + Math.floor(R() * 10), h = 16 + Math.floor(R() * 40); if (x > 118 && x < 128) h = 58; p.r(x, 72 - h, w, h, "#121628");
+        for (var wy = 74 - h; wy < 70; wy += 3) for (var wx = x + 1; wx < x + w - 1; wx += 2) if (R() < .35) p.r(wx, wy, 1, 1, "#f6c84a"); x += w + 1; }
+      p.r(121, 8, 2, 6, "#121628");
+      bands(p, ["#1a2040", "#161c3a", "#121834", "#0e142c"], 72, 110);
+      for (var j = 0; j < 40; j++) p.r(R() * W, 74 + R() * 34, 2 + R() * 4, 1, "rgba(246,200,74,.35)");
+      p.r(26, 18, 26, 74, "#8a7a6a"); p.r(26, 18, 26, 2, "#a89a88"); p.r(30, 30, 7, 26, "#20244e"); p.r(41, 30, 7, 26, "#20244e"); ell(p, 33, 30, 3, 4, "#20244e"); ell(p, 44, 30, 3, 4, "#20244e");
+      p.r(24, 16, 30, 3, "#6a5c4e"); for (var c = 0; c < 10; c++) p.r(28 + c * 2.4, 20, 1, 6, "#6a5c4e");
+      for (var cx = 0; cx < W; cx++) { var cy = cx < 39 ? 18 + Math.pow((39 - cx) / 39, 2) * 50 : 18 + Math.pow((cx - 39) / 121, 2) * 66; if (cy < 78) { p.r(cx, cy, 1, 1, "#c8c0b0"); if (cx % 5 === 0) p.r(cx, cy, 1, 78 - cy, "rgba(200,192,176,.35)"); } }
+      p.r(0, 78, W, 4, "#3a3440"); p.r(0, 77, W, 1, "#c8c0b0"); for (var l = 4; l < W; l += 16) { p.r(l, 72, 1, 6, "#2a2a30"); p.r(l - 1, 70, 3, 2, "#ffe3a0"); }
+      stand(p, 92, 78, { c: "#b3261e", h: "#1a1010", s: "#c88a5a", hl: 1, sc: "#e8e0d0" }); stand(p, 101, 78, { c: "#2a3a5a", h: "#3a2414", s: "#e8b48a" });
+    },
+    skate: function (p, R) {
+      bands(p, ["#b8c4d4", "#c8d2de", "#d8e0e8"], 0, 44);
+      p.r(58, 26, 44, 20, "#b03024"); p.r(64, 34, 8, 12, "#5a1a14"); p.r(76, 34, 8, 12, "#5a1a14"); p.r(88, 34, 8, 12, "#5a1a14");
+      p.r(52, 22, 56, 4, "#4a4a52"); p.r(48, 20, 6, 2, "#4a4a52"); p.r(106, 20, 6, 2, "#4a4a52"); p.r(54, 20, 52, 2, "#f4f6f8");
+      p.r(62, 12, 36, 10, "#8a2a1e"); p.r(56, 9, 48, 3, "#4a4a52"); p.r(52, 7, 6, 2, "#4a4a52"); p.r(102, 7, 6, 2, "#4a4a52"); p.r(58, 7, 44, 2, "#f4f6f8"); p.r(66, 4, 28, 3, "#4a4a52"); p.r(66, 3, 28, 1, "#f4f6f8");
+      p.r(0, 44, W, 6, "#8a8a90"); p.r(0, 43, W, 1, "#f4f6f8");
+      [[14, 30], [136, 28]].forEach(function (t) { p.r(t[0], t[1], 2, 16, "#4a3a2e"); for (var k = 0; k < 14; k++) { var bx = t[0] - 10 + k * 1.6; p.r(bx, t[1] - 2 + Math.abs(k - 7) * .6, 1, 12 + (k % 3) * 2, "rgba(90,74,60,.55)"); } });
+      p.r(0, 50, W, 60, "#d8e4ee"); for (var i = 0; i < 18; i++) { var y = 54 + R() * 54, x = R() * W; for (var m = 0; m < 14; m++) p.r(x + m * 1.5, y + Math.sin(m * .5 + i) * 1.5, 1, 1, "#b0c4d4"); }
+      for (var f = 0; f < 12; f++) p.r(R() * W, 52 + R() * 56, 4, 1, "rgba(255,255,255,.7)");
+      stand(p, 70, 90, { c: "#c8402a", h: "#1a1010", s: "#e8b48a", sc: "#f6c84a", hood: 1 }); stand(p, 80, 90, { c: "#2c4a86", h: "#2a1a14", s: "#d8a070", sc: "#e8e0d0" }); p.r(76, 78, 5, 2, "#e8b48a");
+      p.r(69, 90, 8, 1, "#c8d0d8"); p.r(79, 90, 8, 1, "#c8d0d8");
+      p.r(116, 96, 16, 6, "#8a5a2a"); p.r(116, 102, 16, 1, "#9aa0a8"); p.r(118, 90, 2, 6, "#8a5a2a"); sit(p, 120, 96, 0, { c: "#3a8a4a", h: "#1a1010", s: "#f0c8a0", hood: 1 });
+    },
+    yard: function (p, R) {
+      bands(p, ["#9cc4e4", "#b4d4ec"], 0, 22);
+      p.r(0, 18, W, 6, "#5a5a62"); for (var t = 0; t < W; t += 4) p.r(t, 18, 2, 6, "#4a4a52"); p.r(0, 16, W, 2, "#3a3a40"); p.r(0, 24, W, 3, "#2a2a30");
+      p.r(0, 27, W, 50, "#8a8580"); for (var y = 29; y < 77; y += 4) for (var x = (y / 4 % 2) * 5; x < W; x += 10) p.r(x, y, 9, 3, R() < .5 ? "#96918b" : "#8e8984");
+      p.r(20, 27, 4, 50, "#a8281e"); p.r(136, 27, 4, 50, "#a8281e"); p.r(28, 30, 104, 40, "#7a2a1e");
+      for (var lx = 30; lx < 130; lx += 6) p.r(lx, 32, 1, 36, "#c8a050"); for (var ly = 32; ly < 68; ly += 6) p.r(30, ly, 100, 1, "#c8a050"); p.r(70, 44, 20, 26, "#3a1a14"); p.r(66, 40, 28, 4, "#2a6a6a");
+      p.r(0, 77, W, 33, "#a8a29a"); for (var g = 0; g < W; g += 12) p.r(g, 77, 1, 33, "#9a948c");
+      p.r(132, 38, 3, 52, "#4a3020"); for (var b = 0; b < 7; b++) { var bx = 133 + (b % 2 ? 1 : -1) * (6 + b * 2), by = 30 + b * 5; p.r(Math.min(133, bx), by, Math.abs(bx - 133), 1, "#4a3020"); }
+      for (var f = 0; f < 14; f++) { var fx = 112 + R() * 44, fy = 22 + R() * 36; p.r(fx, fy, 3, 3, "#f08a2a"); p.r(fx + 1, fy - 1, 1, 1, "#3a5a2a"); }
+      p.r(46, 8, 1, 30, "#2a2a30"); ell(p, 46, 44, 6, 7, "#c8a050"); p.r(40, 44, 12, 1, "#7a5a2a"); p.r(43, 45, 6, 5, "#c8a050"); p.r(45, 43, 2, 2, "#f6c84a");
+      p.r(64, 84, 32, 3, "#6a4224"); p.r(66, 87, 2, 8, "#5a3420"); p.r(92, 87, 2, 8, "#5a3420"); for (var c = 0; c < 6; c++) { ell(p, 70 + c * 4, 83, 1, 1, c % 2 ? "#b3261e" : "#2a2420"); ell(p, 72 + c * 4, 81, 1, 1, c % 2 ? "#2a2420" : "#b3261e"); }
+      p.r(88, 78, 6, 5, "#e8e0d0"); p.r(94, 79, 2, 2, "#e8e0d0"); p.r(89, 77, 4, 1, "#2a6a6a");
+      sit(p, 56, 92, 1, { c: "#2a3a5a", h: "#9a8a7a", s: "#d8a070" }); sit(p, 104, 92, -1, { c: "#c8402a", h: "#1a1010", s: "#e8b48a" });
+      p.r(10, 70, 18, 1, "#2a2a30"); ell(p, 12, 76, 5, 5, "#2a2a30"); ell(p, 12, 76, 4, 4, "#a8a29a"); ell(p, 26, 76, 5, 5, "#2a2a30"); ell(p, 26, 76, 4, 4, "#a8a29a"); p.r(12, 72, 14, 1, "#2a6a4a"); p.r(18, 68, 2, 8, "#2a6a4a"); p.r(10, 68, 4, 1, "#2a2a30");
     }
   };
   function draw(cv, scene, seed) { var g = cv.getContext("2d"); cv.width = W; cv.height = H; g.imageSmoothingEnabled = false; (S[scene] || S.hutong)(mk(g), rng(scene + (seed || ""))); }
   return { W: W, H: H, LIST: Object.keys(S), draw: draw,
-    ICON: { table: "🍲", bench: "🪑", walk: "🐕", door: "🚪", picnic: "🧺", stars: "✨", postbox: "📮", tea: "☕", hutong: "🏮", sky: "☁️", peak: "⛰️", sea: "🌊", train: "🚃", bowl: "🍵", bar: "🍸", night: "🌙" },
+    ICON: { table: "🍲", bench: "🪑", walk: "🐕", door: "🚪", picnic: "🧺", stars: "✨", postbox: "📮", tea: "☕", hutong: "🏮", sky: "☁️", peak: "⛰️", sea: "🌊", train: "🚃", bowl: "🍵", bar: "🍸", night: "🌙", ferry: "⛴️", dpd: "🍜", castell: "🤸", rose: "🌹", stoop: "🚕", bridge: "🌉", skate: "⛸️", yard: "🍂" },
     STAMPS: { cat: ["🐈", "#c8402a"], cocktail: ["🍸", "#2c6a8a"], train: ["🚃", "#3a7a4a"], peak: ["🏔️", "#5a5a9a"], cloud: ["☁️", "#4a8ac8"], bowl: ["🍵", "#a8782a"], record: ["💿", "#6a2a5a"], book: ["📖", "#8a4a24"], lantern: ["🏮", "#b3261e"] },
     INK: { blue: "#2c4a86", black: "#2a2420", red: "#a8321e", green: "#2a6a4a" } };
 })();
@@ -302,12 +423,12 @@ window.PCScenes = (function () {
   /* the family's cards, oldest first (handoff/STORY_LINES.md and Popo's story; never reorder, never counted).
      t: words in [en, zh, zh-Hant, es, ca]; Popo's lines (p) keep her voice: HK English, broken Mandarin and Spanish, Cantonese in zh-Hant, fluent Catalan; Mei writes in lowercase. */
   var C = [
-    { y: 1969, sc: "sea", st: "lantern", age: "old",
+    { y: 1969, sc: "ferry", st: "lantern", age: "old",
       pl: ["Hong Kong", "香港", "香港", "Hong Kong", "Hong Kong"],
       fr: ["your sister", "你妹妹", "你妹妹", "tu hermana", "la teva germana"],
       m: ["Got your noodles photo. Next time send the soup.\n\nSunday, same time. Three minutes, don't be late.", "收到你吃面的照片了。下次把汤也寄来。\n\n礼拜天，老时间。三分钟，别迟到。", "收到你食麵嘅相。下次連湯都寄埋嚟。\n\n禮拜日，老時間。三分鐘，唔好遲。", "Recibí la foto de tus fideos. La próxima vez manda la sopa.\n\nEl domingo, a la misma hora. Tres minutos, no llegues tarde.", "He rebut la foto dels teus fideus. La propera vegada envia la sopa.\n\nDiumenge, a la mateixa hora. Tres minuts, no facis tard."],
       p: ["My sister. Every Sunday, three minutes on the phone, very expensive. In between, cards like this lor.", "我姐姐。每个礼拜天，电话三分钟，很贵的。中间呢，就寄这种卡片咯。", "我家姐。逢禮拜日，電話三分鐘，好貴㗎。中間呢，就寄啲咁嘅卡囉。", "Mi hermana. Cada domingo, tres minutos teléfono, muy caro. En medio, tarjetas así.", "La meva germana. Cada diumenge, tres minuts al telèfon, caríssim. Entremig, postals com aquesta."] },
-    { y: 1975, sc: "hutong", st: "lantern", age: "old",
+    { y: 1975, sc: "dpd", st: "lantern", age: "old",
       pl: ["Kowloon", "九龙", "九龍", "Kowloon", "Kowloon"],
       fr: ["Fong", "阿芳", "阿芳", "Fong", "Fong"],
       m: ["Typhoon again. Your mother is well, I took her oranges. Eat properly. A letter is coming, a long one.", "又刮台风了。你妈妈很好，我给她送了橙子。好好吃饭。信在路上，很长的一封。", "又打風。你阿媽好好，我拎咗橙俾佢。食飯要食好啲。信喺路上，好長一封。", "Otra vez tifón. Tu madre está bien, le llevé naranjas. Come como es debido. Te llega una carta, larga.", "Un altre tifó. La teva mare està bé, li he portat taronges. Menja com cal. Et ve una carta, llarga."],
@@ -317,12 +438,12 @@ window.PCScenes = (function () {
       fr: ["your girls", "你的两个女儿", "你兩個女", "tus niñas", "les teves nenes"],
       m: ["Mama! The castle has a wall all the way round and a tower with a clock. Tell Papa the clock is wrong. Back Sunday.", "妈妈！城堡一整圈都有城墙，还有一座带钟的塔。告诉爸爸那个钟不准。礼拜天回来。", "媽媽！個城堡成個圍住都有城牆，仲有座有鐘嘅塔。話俾爸爸聽個鐘唔準。禮拜日返嚟。", "¡Mamá! El castillo tiene una muralla todo alrededor y una torre con reloj. Dile a papá que el reloj va mal. Volvemos el domingo.", "Mama! El castell té una muralla tot al voltant i una torre amb rellotge. Digues al papa que el rellotge va malament. Tornem diumenge."],
       p: ["The school trip. Josep read it ten times, then take the train to Tossa to see the clock himself.", "学校旅行。Josep 读了十遍，然后自己坐火车去托萨看那个钟。", "學校旅行。Josep 睇咗十次，跟住自己搭火車去托薩睇個鐘。", "Excursión del colegio. Josep lo leyó diez veces, después coge el tren a Tossa a ver el reloj él mismo.", "L'excursió de l'escola. En Josep la va llegir deu vegades i després va agafar el tren cap a Tossa a veure el rellotge ell mateix."] },
-    { y: 1997, sc: "night", st: "cat", age: "faded",
+    { y: 1997, sc: "bridge", st: "cat", age: "faded",
       pl: ["New York", "纽约", "紐約", "Nueva York", "Nova York"],
       fr: ["your daughter", "你女儿", "你個女", "tu hija", "la teva filla"],
       m: ["Arrived. Cold. The bowl was my fault too.", "到了。很冷。那只碗，我也有错。", "到咗。好凍。隻碗，我都有錯。", "Llegué. Frío. Lo del cuenco también fue culpa mía.", "He arribat. Fa fred. El bol també va ser culpa meva."],
       p: ["The two of them break it, the two of them say sorry by post. Same mother, what to do. Josep mend it in gold.", "两个一起打碎，两个都寄卡片说对不起。同一个妈生的，有什么办法。Josep 用金子补好了。", "兩個一齊打爛，兩個都寄卡講對唔住。同一個阿媽生，有咩辦法。Josep 用金補返好。", "Las dos lo rompen, las dos piden perdón por correo. Misma madre, qué hacer. Josep lo arregla con oro.", "Les dues el van trencar i les dues van demanar perdó per correu. Mateixa mare, què hi farem. En Josep el va adobar amb or."] },
-    { y: 2007, sc: "door", st: "cat", age: "",
+    { y: 2007, sc: "stoop", st: "cat", age: "",
       pl: ["New York", "纽约", "紐約", "Nueva York", "Nova York"],
       fr: ["your daughter", "你女儿", "你個女", "tu hija", "la teva filla"],
       m: ["She's here. Photo inside. She has your nose. Don't tell Papa, he'll say she has his.", "她来了。照片在里面。她的鼻子像你。别告诉爸爸，他会说像他。", "佢嚟咗。相喺入面。佢個鼻似你。唔好話俾爸爸聽，佢實話似佢。", "Ya está aquí. La foto dentro. Tiene tu nariz. No se lo digas a papá, dirá que tiene la suya.", "Ja és aquí. La foto, a dins. Té el teu nas. No ho diguis al papa, dirà que té el seu."],
