@@ -262,9 +262,9 @@
       const sub = document.getElementById('modal-sub-title'); if (sub) sub.style.visibility = own ? 'hidden' : '';
       if (!pane) return; pane.classList.toggle('hidden', !own); if (!own) return;
       pane.innerHTML = '';
-      src().forEach(it => { let el = menuItem('', it.name, it.desc, () => { toggleCodexModal(false); go('counter'); it.go(); }); const t = el.querySelector('div'); if (t && it.ic) { const sp = document.createElement('span'); sp.setAttribute('aria-hidden', 'true'); sp.style.cssText = 'display:inline-block;width:18px;height:18px;vertical-align:-3px;margin-right:6px'; sp.innerHTML = it.ic; const sv = sp.querySelector('svg'); if (sv) { sv.style.width = '18px'; sv.style.height = '18px'; } t.prepend(sp); } pane.appendChild(it.real ? nearYou(el, it.real) : el); });
+      src().forEach(it => { let el = menuItem('', it.name, it.desc, () => { toggleCodexModal(false); go('counter'); it.go(); }); const t = el.querySelector('div'); if (t && it.ic) { const sp = document.createElement('span'); sp.setAttribute('aria-hidden', 'true'); sp.style.cssText = 'display:inline-block;width:18px;height:18px;vertical-align:-3px;margin-right:6px'; sp.innerHTML = it.ic; const sv = sp.querySelector('svg'); if (sv) { sv.style.width = '18px'; sv.style.height = '18px'; } t.prepend(sp); } pane.appendChild(el); });
     }
-    /* every house drink can be had for real: a small 🗺️ under it searches the visitor's own maps (BarPicks.near) */
+    /* (unused since Nov 14: the menu carries no map link; Wei brings it up after the drink, `real` in after-drink.js) */
     function nearYou(el, key) {
       const href = window.BarPicks && BarPicks.near ? BarPicks.near(key) : '';
       if (!href) return el;
@@ -287,10 +287,10 @@
         if (d.type !== (isBar ? 'bar' : 'cafe')) return;
         if (!signatureKeys.includes(key)) return;   /* the classics aren't on the menu: the host offers them in conversation */
         const el = menuItem(d.icon, L(d.name), L(d.desc).replace(/^"|"$/g, ''), () => { toggleCodexModal(false); go('counter'); hostMakes(key); });
-        sig.appendChild(nearYou(el, key));
+        sig.appendChild(el);
       });
       const nb = DrinkManifest.wei_notebook;   /* Wei's notebook: off the menu, on the stand for everyone */
-      sig.appendChild(nearYou(menuItem(nb.icon, L(nb.name), L(nb.desc).replace(/^"|"$/g, ''), () => { toggleCodexModal(false); go('counter'); hostMakes('wei_notebook'); }), 'wei_notebook'));
+      sig.appendChild(menuItem(nb.icon, L(nb.name), L(nb.desc).replace(/^"|"$/g, ''), () => { toggleCodexModal(false); go('counter'); hostMakes('wei_notebook'); }));
     }
 
     async function loadGuestMenu() {

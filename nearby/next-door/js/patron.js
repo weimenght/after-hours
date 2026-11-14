@@ -240,6 +240,7 @@
       }
 
       const d = DrinkManifest[key] || DrinkManifest.jasmine_gulou;
+      AppState.lastKey = DrinkManifest[key] ? key : 'jasmine_gulou';
       const mode = AppState.isBarOpen ? 'bar' : 'cafe';
       if (d.type === mode) {
         Bond.lastOrder[mode] = key;

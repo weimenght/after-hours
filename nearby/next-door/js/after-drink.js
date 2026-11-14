@@ -68,11 +68,24 @@
       [B(S("🎣 Catch another", "🎣 再去钓一条", "🎣 Pesca otro", "🎣 Pesca'n un altre"), () => go('lake')), again()]);
     return true;
   }
+  /* the drink is a real one: once a visit, after a house drink, Wei says what to look for near you (the menu carries no map link) */
+  let realTold = false;
+  function real() {
+    const k = AppState.lastKey, q = k && window.BarPicks && BarPicks.real ? BarPicks.real(k) : '';
+    if (realTold || !q || AppState.lastFood) return false;
+    realTold = true;
+    say(S("*taps the rim of your glass* This one's real, you know. Ask for a {q} somewhere near you, and take someone who'd like it.".replace('{q}', q),
+          "*敲了敲你的杯沿* 这杯在外面也有，你知道吗？去附近找一杯{q}，带上一个会喜欢的人。".replace('{q}', q),
+          "*da un toque al borde de tu vaso* Esta existe de verdad, ¿sabes? Pide un {q} cerca de ti, y lleva a alguien a quien le guste.".replace('{q}', q),
+          "*toca la vora del teu got* Aquesta existeix de veritat, saps? Demana un {q} a prop teu, i porta-hi algú a qui li agradi.".replace('{q}', q)),
+      [B(lx(["🗺️ Find one near you", "🗺️ 找附近的一杯", "🗺️ 找附近的一杯", "🗺️ 搵附近嘅一杯", "🗺️ Busca uno cerca", "🗺️ Busca'n un a prop"]), () => BarPicks.go(k)), again()]);
+    return true;
+  }
   let bag = [];
   function next() { if (!bag.length) bag = BITS.map((f, i) => i).sort(() => Math.random() - .5); return BITS[bag.pop()]; }   /* every bit once before any repeats */
   let timer = null;
   window.weiFollowUp = function (delay) {
     clearTimeout(timer);
-    timer = setTimeout(() => { if (AppState.uiMode !== 'served' || AppState.weiState !== 'awake' || (window.NDChat && NDChat.busy())) return; if (fish()) return; next()(); }, delay);
+    timer = setTimeout(() => { if (AppState.uiMode !== 'served' || AppState.weiState !== 'awake' || (window.NDChat && NDChat.busy())) return; if (fish()) return; if (real()) return; next()(); }, delay);
   };
 })();

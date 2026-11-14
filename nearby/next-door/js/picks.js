@@ -115,5 +115,5 @@
     if (p && p.id) { const rp = el('button', 'btn btn-sm', '⚑'); rp.type = 'button'; rp.title = X(T.report); rp.setAttribute('aria-label', rp.title); rp.onclick = () => { rp.disabled = true; rpc('bar_pick_report', { p_secret: key(), p_id: p.id }).then(() => { rp.textContent = '✓'; }).catch(() => { rp.disabled = false; }); }; row.appendChild(rp); }
     const desc = document.getElementById('res-description'); (document.getElementById('gift-row') || desc).after(row);
   };
-  window.BarPicks = { open, add: form, near: k => REAL[k] ? mapsUrl(realQ(k)) : '', nearLabel: () => X(T.nearYou) };
+  window.BarPicks = { open, add: form, near: k => REAL[k] ? mapsUrl(realQ(k)) : '', real: k => realQ(k), go: k => { const q = realQ(k); if (!q) return; try { if (window.FBC && FBC.map) return FBC.map(q); } catch (e) {} const h = mapsUrl(q); if (/^https:/.test(h)) window.open(h, '_blank', 'noopener'); else location.href = h; }, nearLabel: () => X(T.nearYou) };
 })();

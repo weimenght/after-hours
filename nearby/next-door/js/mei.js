@@ -54,7 +54,19 @@
     M("\"The tea bag is still in. So is the label. So is, briefly, her phone.\"", "\"茶包还在里面。标签也在。她的手机也短暂地掉进去过。\"", "\"茶包還在裡面。標籤也在。她的手機也短暫地掉進去過。\"", "\"La bolsita sigue dentro. La etiqueta también. Su móvil, por un momento, también.\"", "\"La bossa de te encara hi és. L'etiqueta també. El seu mòbil, per un moment, també.\"")];
   T.served = M("*slides it over and watches you* …Well? Be nice. Wei makes it look easy.", "*把杯子推过来，盯着你* ……怎样？说点好听的。Wei 做起来看着很简单。", "*把杯子推過來，盯著你* ……怎樣？說點好聽的。Wei 做起來看著很簡單。", "*te lo desliza y te mira* …¿Y bien? Sé amable. Wei hace que parezca fácil.", "*te'l llisca i et mira* …I bé? Sigues amable. En Wei fa que sembli fàcil.");
   window.NDMeiMenu = function () { return Object.keys(DrinkManifest).filter(function (k) { return DrinkManifest[k].type === "cafe"; }).map(function (k) { var d = DrinkManifest[k]; return { ic: d.icon || "", name: L(d.name), desc: L(d.desc).replace(/^"|"$/g, ""), real: k, go: function () { NDMeiMake(k); } }; }).concat([{ ic: "", name: L(T.booze), desc: "", go: function () { say(L(T.noBooze)); } }]); };
-  window.NDMeiMake = function (k) { var d = DrinkManifest[k]; if (!d || d.type === "bar") { say(L(T.noBooze)); return; } serveItemByKey(k); badCoffee(); setTimeout(function () { say(L(T.served)); }, 900); };
+  window.NDMeiMake = function (k) { var d = DrinkManifest[k]; if (!d || d.type === "bar") { say(L(T.noBooze)); return; } serveItemByKey(k); badCoffee(); setTimeout(function () { say(L(T.served)); }, 900); setTimeout(function () { meiReal(k); }, 5200); };
+  /* her coffee is bad and she knows it: once a visit she tells you where to get the real thing (the menu carries no map link) */
+  var realTold = false;
+  function meiReal(k) {
+    var q = window.BarPicks && BarPicks.real ? BarPicks.real(k) : "", r = document.getElementById("res-wei-reply"), card = document.getElementById("served-result-screen");
+    if (realTold || !q || !r || !card || card.classList.contains("hidden")) return;
+    realTold = true;
+    r.textContent = L(M("*slides her phone across* ok real talk. find a proper {q} near you. take someone. tell them mei sent you.", "*把手机推过来* 好吧说真的。去附近找一杯正经的{q}，带个人一起。就说是 Mei 让你去的。", "*把手機推過來* 好吧說真的。去附近找一杯正經的{q}，帶個人一起。就說是 Mei 讓你去的。", "*te pasa el móvil* vale, en serio. busca un {q} de verdad cerca. lleva a alguien. di que te manda mei.", "*et passa el mòbil* va, de debò. busca un {q} de veritat a prop. porta-hi algú. digues que t'envia la mei.")).replace("{q}", q);
+    r.classList.remove("hidden");
+    var a = document.createElement("button"); a.type = "button"; a.className = "nd-near"; a.style.cssText = "display:flex;margin-top:6px;background:none;border:0;cursor:pointer";
+    a.textContent = L(M("🗺️ Find one near you", "🗺️ 找附近的一杯", "🗺️ 找附近的一杯", "🗺️ Busca uno cerca", "🗺️ Busca'n un a prop")); a.onclick = function () { BarPicks.go(k); };
+    r.appendChild(a);
+  }
   function badCoffee() { try { var n = document.getElementById("res-name"), d = document.getElementById("res-description"); if (n && n.textContent.indexOf(L(T.tried)) !== 0) n.textContent = L(T.tried) + n.textContent; if (d) d.textContent = L(T.bad[(Math.random() * T.bad.length) | 0]); } catch (e) {} }
   /* tap her: hello, or (sometimes) she's on her phone and you wait a beat */
   var tap0 = window.tapBartender;
