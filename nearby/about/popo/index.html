@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-HK" class="film">
 <head>
 <meta charset="utf-8">
 <script>/* a page of the town: opened on its own (a shared link, a bookmark, another site), it opens inside Nearby instead */(function(){try{if(window.self===window.top&&!/[?&]solo=1/.test(location.search))location.replace("/nearby/?at="+encodeURIComponent(location.pathname+location.search+location.hash))}catch(e){}})();</script>
@@ -98,6 +98,37 @@ footer p{margin:8px 0 0;opacity:.8}
 html.inshell .top,html.inshell .photo,html.inshell .end,html.inshell footer{display:none}html.inshell .hero{padding-top:18px}html.inshell .wrap{padding-bottom:max(28px,env(safe-area-inset-bottom))}
 .rv{opacity:0;translate:0 14px;transition:opacity .6s ease,translate .6s ease}.rv.in{opacity:1;translate:0 0}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;translate:none;transition:none}.steam{animation:none;opacity:.5}}
+
+/* Popo's story is a film (Nov 14, the owner): one screen, her words a sentence at a time under it, the controls below;
+   ≡ reads it as the old notes instead (html.read) */
+html.film,html.film body{height:100%}html.film body{overflow:hidden;display:flex;flex-direction:column;background-attachment:fixed}
+html.film main{display:none}html.film footer{display:none}html.film .wrap{display:flex;flex-direction:column;flex:1;min-height:0;max-width:none;width:100%}
+#film{display:none}html.film #film{display:flex;flex:1;min-height:0;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:8px 0 max(10px,env(safe-area-inset-bottom))}
+.scr{position:relative;width:100%;aspect-ratio:16/9;background:#0a0608;border:4px solid #000;box-shadow:6px 6px 0 #000,inset 0 0 0 2px #3a2414;cursor:pointer;overflow:hidden;flex:none}
+.scr canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
+.cap{position:absolute;left:12px;top:12px;max-width:70%;padding:7px 11px 8px;background:var(--paper);color:var(--ink);border:3px solid #000;box-shadow:3px 3px 0 #000;opacity:0;transform:translateY(-6px) rotate(-1.5deg);transition:opacity .6s,transform .6s;pointer-events:none}
+.cap.on{opacity:1;transform:rotate(-1.5deg);animation:capOut 1s 6s forwards}@keyframes capOut{to{opacity:0}}
+.cap b{display:block;font:400 9px/1.5 var(--px);color:var(--red);letter-spacing:.06em}.cap span{display:block;font:400 22px/1.05 var(--vt)}
+html:lang(zh-Hans) .cap b,html:lang(zh-Hant) .cap b{font:600 12px/1.4 var(--cjk);letter-spacing:.15em}html:lang(zh-Hans) .cap span,html:lang(zh-Hant) .cap span{font:700 17px/1.35 var(--cjk)}
+.hint{position:absolute;right:10px;bottom:8px;font:400 15px/1 var(--vt);color:rgba(251,238,221,.55);pointer-events:none;transition:opacity .6s}.hint.gone{opacity:0}
+.sub{display:flex;gap:12px;align-items:flex-start;width:100%;min-height:5.4em;flex:none}
+.sub img{flex:none;width:44px;height:44px;image-rendering:pixelated;background:var(--wood);border:3px solid #000;box-shadow:3px 3px 0 #000}
+#line{margin:0;flex:1;font-size:22px;line-height:1.3;color:var(--cream);text-wrap:pretty}#line.in{animation:lineIn .45s ease both}@keyframes lineIn{from{opacity:0;transform:translateY(4px)}}
+#line em{font-style:italic;color:var(--amber);opacity:.9}#line.as{color:#fff3d8}
+html:lang(zh-Hans) #line,html:lang(zh-Hant) #line{font-size:18px;line-height:1.7}
+.bar{display:flex;align-items:center;gap:8px;width:100%;flex:none}
+.bar button{min-width:44px;min-height:40px;padding:4px 10px;border:3px solid #000;background:var(--wood);color:var(--cream);font:400 18px/1 var(--vt);cursor:pointer;box-shadow:inset -3px -3px 0 rgba(0,0,0,.38),inset 3px 3px 0 rgba(255,255,255,.1),3px 3px 0 #000}
+.bar button:active{transform:translate(2px,2px)}.bar button:focus-visible,.dots button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.bar{flex-wrap:wrap}.dots{display:flex;flex:1;min-width:150px;gap:5px;justify-content:center;flex-wrap:wrap}
+.dots button{width:12px;height:12px;min-width:0;min-height:0;padding:0;border:2px solid #000;background:#4a3424;box-shadow:none;cursor:pointer}.dots button[aria-current="true"]{background:var(--amber)}
+#fin{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;padding:16px;text-align:center;background:rgba(14,8,6,.62);cursor:default}#fin[hidden]{display:none}
+#fin q{quotes:none;max-width:30rem;font-size:24px;line-height:1.25;color:var(--glow);text-shadow:2px 2px 0 #000}html:lang(zh-Hans) #fin q,html:lang(zh-Hant) #fin q{font-size:19px;line-height:1.6}
+html.read #film{display:none}html.read main{display:block}html.read body{overflow:auto}html.read .watch{display:inline-flex}
+.watch{display:none;position:sticky;top:8px;z-index:20;margin:10px auto 0;width:max-content}
+html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
+@media (max-height:520px) and (min-aspect-ratio:4/3){html.film #film{flex-direction:row;align-items:center;padding:8px 12px}html.film .side{flex:1;min-width:220px;align-self:stretch;justify-content:center}html.film .side .sub,html.film .side .bar{width:100%!important}.sub{min-height:0}#line{font-size:19px}.dots{order:-1;flex-basis:100%}}
+@media (max-width:560px){.dots{order:-1;flex-basis:100%;min-width:0}.bar{justify-content:center}}
+@media (prefers-reduced-motion:reduce){#line.in{animation:none}.cap{transition:none}}
 </style>
 </head>
 <body>
@@ -109,7 +140,16 @@ html.inshell .top,html.inshell .photo,html.inshell .end,html.inshell footer{disp
       <div class="lm" id="lm" role="menu" hidden></div>
     </div>
   </header>
+  <section id="film" aria-label="">
+    <div class="scr" id="scr"><canvas id="cv" width="240" height="135" role="img" aria-hidden="true"></canvas>
+      <div class="cap" id="cap" aria-hidden="true"><b id="capw"></b><span id="capt"></span></div><span class="hint" id="hint"></span>
+      <div id="fin" hidden><q id="fend"></q><div class="go"><a class="px pri" href="/nearby/next-door/" id="fgo1"></a><a class="px" href="/nearby/" id="fgo2"></a><button class="px" type="button" id="again"></button></div></div>
+    </div>
+    <div class="side"><div class="sub" id="sub"><img id="face" src="face-popo.png" width="32" height="32" alt=""><p id="line" aria-live="polite"></p></div>
+    <div class="bar"><button type="button" id="prev">‹‹</button><button type="button" id="pp">❚❚</button><button type="button" id="nextc">››</button><div class="dots" id="dots"></div><button type="button" id="rd"></button></div></div>
+  </section>
   <main>
+    <button class="px pri watch" type="button" id="watch"></button>
     <section class="hero">
       <span class="kick" id="kick"></span>
       <h1 id="h1">婆婆嘅故事</h1>
@@ -214,7 +254,25 @@ html.inshell .top,html.inshell .photo,html.inshell .end,html.inshell footer{disp
   document.addEventListener("click", function (e) { if (!lm.hidden && !lm.contains(e.target)) closeM(); });
   document.addEventListener("keydown", function (e) { if (lm.hidden) return; var it = [].slice.call(lm.querySelectorAll("button")), k = it.indexOf(document.activeElement);
     if (e.key === "Escape") closeM(true); else if (e.key === "ArrowDown") { e.preventDefault(); it[(k + 1) % it.length].focus(); } else if (e.key === "ArrowUp") { e.preventDefault(); it[(k - 1 + it.length) % it.length].focus(); } });
+  var FT = { watch: ["▶ Watch it", "▶ 看动画", "▶ Verlo", "▶ 睇動畫", "▶ Mira-ho"], read: ["≡ Read", "≡ 读文字", "≡ Leer", "≡ 睇文字", "≡ Llegir"], again: ["Again", "再看一次", "Otra vez", "再睇一次", "Un altre cop"],
+    hint: ["tap for the next line", "点一下，下一句", "toca para seguir", "點一下，下一句", "toca per seguir"], pause: ["Pause", "暂停", "Pausa", "暫停", "Pausa"], play: ["Play", "播放", "Reproducir", "播放", "Reprodueix"],
+    prev: ["Previous chapter", "上一章", "Capítulo anterior", "上一章", "Capítol anterior"], next: ["Next chapter", "下一章", "Capítulo siguiente", "下一章", "Capítol següent"] };
+  var FI = { en: 0, zh: 1, es: 2, tw: 3, yue: 3, ca: 4 };
+  window.POPO = { D: D, lang: function () { return lang; }, U: function (k) { return D.ui[k] && D.ui[k][lang] != null ? D.ui[k][lang] : (D.ui[k] && D.ui[k].en) || ""; },
+    T: function (k) { return (FT[k] || [])[FI[lang] == null ? 0 : FI[lang]] || ""; },
+    read: function (on) { document.documentElement.classList.toggle("read", !!on); if (on) { scrollTo(0, 0); document.querySelectorAll(".rv").forEach(function (e) { e.classList.add("in"); }); } else dispatchEvent(new Event("popowatch")); } };
+  function fwords() { var U = window.POPO.U; document.getElementById("watch").textContent = window.POPO.T("watch"); document.getElementById("fend").textContent = U("end");
+    document.getElementById("fgo1").textContent = U("go1") + " →"; document.getElementById("fgo2").textContent = U("go2") || D.ui.town[lang]; }
+  document.getElementById("watch").onclick = function () { window.POPO.read(false); };
+  var _paint = paint; paint = function () { _paint(); fwords(); dispatchEvent(new Event("popolang")); };
   paint();
+  /* the screen as big as the window allows, the line and the controls under it */
+  function fit() { var f = document.getElementById("film"); if (!f || !f.offsetParent) return;
+    if (innerHeight <= 520 && innerWidth / innerHeight >= 4 / 3) { var ww = Math.max(220, Math.min(f.clientWidth - 280, (f.clientHeight - 24) * 16 / 9)); document.getElementById("scr").style.width = ww + "px"; return; }
+    var sub = document.getElementById("sub"), bar = f.querySelector(".bar"),
+      h = f.clientHeight - sub.offsetHeight - bar.offsetHeight - 40, w = Math.min(f.clientWidth - 28, h * 16 / 9, 1100); w = Math.max(220, w);
+    document.getElementById("scr").style.width = w + "px"; sub.style.width = bar.style.width = Math.max(w, Math.min(f.clientWidth - 28, 560)) + "px"; }
+  addEventListener("resize", fit); fit(); setTimeout(fit, 300);
   var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if ("IntersectionObserver" in window && !still) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -6% 0px" });
@@ -222,5 +280,6 @@ html.inshell .top,html.inshell .photo,html.inshell .end,html.inshell footer{disp
   } else document.querySelectorAll(".rv").forEach(function (e) { e.classList.add("in"); });
 })();
 </script>
+<script src="./film.js?v=45a2cf6bf1"></script>
 </body>
 </html>
