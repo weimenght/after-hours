@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=7cce7b062b" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=25075a7f08" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Josep's Clock · Nearby</title>
 <meta name="description" content="Climb the clock tower and set Nearby's hour and weather: every game you visit next follows it.">
@@ -21,7 +21,7 @@ main{max-width:560px;margin:0 auto;padding:6px 16px 100px}
 .tower{position:relative;margin:4px auto 0;width:min(100%,380px);padding:14px 14px 18px;background:var(--stone);border:4px solid #000;box-shadow:6px 6px 0 #000,inset 0 0 0 4px #8a8276;background-image:linear-gradient(rgba(0,0,0,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.08) 1px,transparent 1px);background-size:100% 12px,24px 100%}
 .tower::before{content:"";position:absolute;left:50%;top:-34px;width:120px;height:30px;margin-left:-60px;background:#5a4a3a;border:4px solid #000;border-bottom:0;clip-path:polygon(50% 0,100% 100%,0 100%)}
 .sky{position:relative;aspect-ratio:160/72;border:4px solid #000;overflow:hidden;background:#20204a;box-shadow:inset 0 0 0 3px #5a4a3a}
-.sky canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
+.sky canvas{display:block;width:100%;height:100%;image-rendering:pixelated;object-fit:cover;object-position:50% 62%}   /* the window's shape changes with the screen; the view keeps its own ratio (cropped, never stretched) */
 /* the window: a stone arch, a cross of leading, a sill */
 .sky::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(#3a2a1c,#3a2a1c) 50% 0/4px 100% no-repeat,linear-gradient(#3a2a1c,#3a2a1c) 0 44%/100% 4px no-repeat;opacity:.85}
 .sky::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 2px rgba(255,240,200,.18),inset 0 -6px 0 rgba(0,0,0,.22)}

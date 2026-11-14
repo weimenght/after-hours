@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-nb-plain=".bk,.ghost,.obj,.slot,.pile,.cat,.zoom,.decor,.skylight,.pv" data-nb-round=".skylight,.moon">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=7cce7b062b" defer></script><script src="/nearby/townskin.js?v=64742301ce"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=25075a7f08" defer></script><script src="/nearby/townskin.js?v=64742301ce"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Josep's Books · Nearby</title>
 <meta name="description" content="A four-room book house next door to the bar. Wander the attic, parlour, garden and basement, read the notes tucked into books, ask for one, and pass it on by hand.">
@@ -470,7 +470,10 @@ html.fbsh-in.bp-one body > header.sign { position: fixed; }
       }
     });
     secret();
+    if (window.BP && BP.onRender) try { BP.onRender(); } catch (e) {}
   }
+  /* Josep's study (study.js, Nov 14) draws its own shelves from the same books and opens them with the same sheets */
+  window.BP = { books: function () { return books; }, spine: spine, open: openBook, bring: function () { tuckForm(); }, shelf: function () { ledger(); }, sheet: sheet, close: close, t: t, lang: lang, esc: esc, onRender: null };
   /* now and then a book in view slides out a little, as if someone just put it back */
   var touched = false;
   function peek() {
@@ -801,6 +804,7 @@ html.fbsh-in.bp-one body > header.sign { position: fixed; }
 </script>
 
 <script>(function () { var p = document.getElementById("parlor"); if (!p || !window.JBW) return; p.style.position = "relative"; JBW.corner({ dock: p, pos: { right: "10px", top: "4px" } }); })();</script>
+<script src="./study.js?v=4d835c8e10"></script>
 <style id="bp-one">
 /* in town: one room at a time, the whole screen; the floor dial (or a swipe) goes up and down the house */
 html.bp-one, html.bp-one body { height: 100%; overflow: hidden; }
