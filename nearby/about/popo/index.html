@@ -118,7 +118,7 @@ html:lang(zh-Hans) .cap b,html:lang(zh-Hant) .cap b{font:600 12px/1.4 var(--cjk)
 html:lang(zh-Hans) #line,html:lang(zh-Hant) #line{font-size:18px;line-height:1.7}
 .bar{display:flex;align-items:center;gap:8px;width:100%;flex:none}
 .bar button{min-width:44px;min-height:40px;padding:4px 10px;border:3px solid #000;background:var(--wood);color:var(--cream);font:400 18px/1 var(--vt);cursor:pointer;box-shadow:inset -3px -3px 0 rgba(0,0,0,.38),inset 3px 3px 0 rgba(255,255,255,.1),3px 3px 0 #000}
-.bar button:active{transform:translate(2px,2px)}.bar button:focus-visible,.dots button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.bar #snd.off{opacity:.45;text-decoration:line-through}.bar button:active{transform:translate(2px,2px)}.bar button:focus-visible,.dots button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 .bar{flex-wrap:wrap}.dots{display:flex;flex:1;min-width:150px;gap:5px;justify-content:center;flex-wrap:wrap}
 .dots button{width:12px;height:12px;min-width:0;min-height:0;padding:0;border:2px solid #000;background:#4a3424;box-shadow:none;cursor:pointer}.dots button[aria-current="true"]{background:var(--amber)}
 #fin{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;padding:16px;text-align:center;background:rgba(14,8,6,.62);cursor:default}#fin[hidden]{display:none}
@@ -146,7 +146,7 @@ html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
       <div id="fin" hidden><q id="fend"></q><div class="go"><a class="px pri" href="/nearby/next-door/" id="fgo1"></a><a class="px" href="/nearby/" id="fgo2"></a><button class="px" type="button" id="again"></button></div></div>
     </div>
     <div class="side"><div class="sub" id="sub"><img id="face" src="face-popo.png" width="32" height="32" alt=""><p id="line" aria-live="polite"></p></div>
-    <div class="bar"><button type="button" id="prev">‹‹</button><button type="button" id="pp">❚❚</button><button type="button" id="nextc">››</button><div class="dots" id="dots"></div><button type="button" id="rd"></button></div></div>
+    <div class="bar"><button type="button" id="prev">‹‹</button><button type="button" id="pp">❚❚</button><button type="button" id="nextc">››</button><div class="dots" id="dots"></div><button type="button" id="snd">♪</button><button type="button" id="rd"></button></div></div>
   </section>
   <main>
     <button class="px pri watch" type="button" id="watch"></button>
@@ -256,7 +256,7 @@ html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
     if (e.key === "Escape") closeM(true); else if (e.key === "ArrowDown") { e.preventDefault(); it[(k + 1) % it.length].focus(); } else if (e.key === "ArrowUp") { e.preventDefault(); it[(k - 1 + it.length) % it.length].focus(); } });
   var FT = { watch: ["▶ Watch it", "▶ 看动画", "▶ Verlo", "▶ 睇動畫", "▶ Mira-ho"], read: ["≡ Read", "≡ 读文字", "≡ Leer", "≡ 睇文字", "≡ Llegir"], again: ["Again", "再看一次", "Otra vez", "再睇一次", "Un altre cop"],
     hint: ["tap for the next line", "点一下，下一句", "toca para seguir", "點一下，下一句", "toca per seguir"], pause: ["Pause", "暂停", "Pausa", "暫停", "Pausa"], play: ["Play", "播放", "Reproducir", "播放", "Reprodueix"],
-    prev: ["Previous chapter", "上一章", "Capítulo anterior", "上一章", "Capítol anterior"], next: ["Next chapter", "下一章", "Capítulo siguiente", "下一章", "Capítol següent"] };
+    prev: ["Previous chapter", "上一章", "Capítulo anterior", "上一章", "Capítol anterior"], sound: ["Sound", "声音", "Sonido", "聲音", "So"], next: ["Next chapter", "下一章", "Capítulo siguiente", "下一章", "Capítol següent"] };
   var FI = { en: 0, zh: 1, es: 2, tw: 3, yue: 3, ca: 4 };
   window.POPO = { D: D, lang: function () { return lang; }, U: function (k) { return D.ui[k] && D.ui[k][lang] != null ? D.ui[k][lang] : (D.ui[k] && D.ui[k].en) || ""; },
     T: function (k) { return (FT[k] || [])[FI[lang] == null ? 0 : FI[lang]] || ""; },
@@ -280,6 +280,6 @@ html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
   } else document.querySelectorAll(".rv").forEach(function (e) { e.classList.add("in"); });
 })();
 </script>
-<script src="./film.js?v=45a2cf6bf1"></script>
+<script src="./film.js?v=d2f9259fb0"></script>
 </body>
 </html>

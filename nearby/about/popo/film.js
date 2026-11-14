@@ -52,7 +52,9 @@
     if (o.apron) { R(L + 2, ty + 3, tw - 4, th - 2, o.apron); R(L + 3, ty + 1, tw - 6, 2, o.apron); }
     if (o.vest) { R(L, ty, 2, th, o.vest); R(L + tw - 2, ty, 2, th, o.vest); }
     if (o.card) { R(L, ty, 3, th, o.card); R(L + tw - 3, ty, 3, th, o.card); }
-    var arm = o.arm || "down", ac = o.card || o.sleeve || tc;
+    if (o.coat) { R(L - 1, ty, tw + 2, th + Math.round(lh * .55), o.coat); R(cx, ty + 2, 1, th - 2, "rgba(0,0,0,.25)"); if (o.scarf) R(L, ty, tw, 2, o.scarf); }
+    else if (o.scarf) { R(L, ty, tw, 2, o.scarf); R(L + tw - 3, ty + 2, 2, 4, o.scarf); }
+    var arm = o.arm || "down", ac = o.card || o.coat || o.sleeve || tc;
     function armAt(side) {
       var ax = side < 0 ? L - 2 : L + tw, mode = side < 0 ? (o.armL || arm) : (o.armR || arm);
       if (mode === "out") { R(side < 0 ? ax - 4 : ax, ty + 3, 6, 2, ac); R(side < 0 ? ax - 6 : ax + 6, ty + 3, 2, 2, skin); }
@@ -63,6 +65,11 @@
       else { R(ax, ty + 1, 2, th - 3, ac); R(ax, ty + th - 2, 2, 2, skin); }
     }
     armAt(-1); armAt(1);
+    var hx1 = f < 0 ? L - 3 : L + tw + 1, hy1 = ty + th - 1;
+    if (o.paper) { R(hx1 - 2, hy1 - 6, 6, 8, "#ece6d6"); R(hx1 - 1, hy1 - 4, 4, 1, "#9a948a"); R(hx1 - 1, hy1 - 2, 3, 1, "#9a948a"); }
+    if (o.bag) { R(hx1 - 1, hy1, 5, 6, o.bag); R(hx1, hy1 - 2, 3, 1, o.bag); }
+    if (o.cane) { R(hx1 + 1, hy1, 1, fy - hy1, "#5a3a22"); }
+    if (o.flowers) { R(hx1, hy1 - 6, 1, 6, "#3a6a3a"); R(hx1 - 1, hy1 - 8, 3, 3, o.flowers); }
     /* head */
     R(cx - 1, top + hd, 2, 1, skin); var hx0 = cx - (hd >> 1); R(hx0, top, hd, hd, skin);
     var hc = o.hairC || "#1a120d", hair = o.hair || "short";
@@ -71,7 +78,11 @@
     else if (hair === "bun") { R(hx0, top - 1, hd, 3, hc); R(hx0 - 1, top + 1, 1, 4, hc); R(hx0 + hd, top + 1, 1, 4, hc); R(cx - 2, top - 4, 4, 3, hc); R(cx + 2, top - 4, 2, 1, "#4aa07a"); }
     else if (hair === "pink") { R(hx0 - 1, top - 1, hd + 2, 3, hc); R(hx0, top + 2, hd, 1, hc); R(hx0 - 1, top, 2, hd - 2, hc); R(hx0 + hd - 1, top, 2, hd - 2, hc); R(cx + (hd >> 1), top - 3, 3, 6, hc); R(cx + (hd >> 1) + 1, top + 3, 2, 4, "#d9679a"); }
     else if (hair === "cap") { R(hx0 - 1, top - 1, hd + 2, 3, o.capC || "#4a4038"); R(f < 0 ? hx0 - 3 : hx0 + hd - 1, top + 1, 3, 1, o.capC || "#4a4038"); R(hx0, top + 2, 1, 2, hc); R(hx0 + hd - 1, top + 2, 1, 2, hc); }
+    else if (hair === "hat") { var hcc = o.capC || "#3a3030"; R(hx0, top + 2, 1, 3, hc); R(hx0 + hd - 1, top + 2, 1, 3, hc); R(hx0 - 2, top + 1, hd + 4, 1, hcc); R(hx0, top - 3, hd, 4, hcc); R(hx0, top - 1, hd, 1, o.band || "#8a2a2a"); }
+    else if (hair === "beret") { R(hx0, top + 2, 1, 2, hc); R(hx0 + hd - 1, top + 2, 1, 2, hc); R(hx0 - 1, top - 2, hd + 2, 4, o.capC || "#2a2a3a"); R(cx, top - 3, 1, 1, o.capC || "#2a2a3a"); }
+    else if (hair === "bald") { R(hx0, top + 2, 1, 3, hc); R(hx0 + hd - 1, top + 2, 1, 3, hc); }
     else { R(hx0, top - 1, hd, 3, hc); R(hx0, top + 2, 1, 2, hc); R(hx0 + hd - 1, top + 2, 1, 2, hc); }
+    if (o.hood) { R(hx0 - 1, top - 2, hd + 2, 3, o.hood); R(hx0 - 2, top, 2, hd, o.hood); R(hx0 + hd, top, 2, hd, o.hood); }
     var ey = top + Math.round(hd * .55), e1 = f > 0 ? cx + 1 : f < 0 ? cx - 3 : cx - 2, e2 = f > 0 ? cx + 3 : f < 0 ? cx - 1 : cx + 1, ec = "#2a1a10";
     if (o.shut) { R(e1, ey, 2, 1, ec); R(e2, ey, 1, 1, ec); } else { R(e1, ey, 1, 1, ec); R(e2, ey, 1, 1, ec); }
     if (o.gl) { R(e1 - 1, ey - 1, 3, 3, o.gl); R(e2 - 1, ey - 1, 3, 3, o.gl); R(e1, ey, 1, 1, ec); R(e2, ey, 1, 1, ec); }
@@ -87,6 +98,25 @@
   var GIRL1 = { hair: "pig", top: "#e2a040", skirt: 1, bot: "#c06a2a", ribbon: "#c8402a" }, GIRL2 = { hair: "bob", top: "#6a9ac0", skirt: 1, bot: "#3d5a80" };
   var OPOPO = { hair: "bun", hairC: "#d6d2ca", gl: "#5a8a70", top: "#efe4c8", card: "#8a2a3a", skirt: 1, bot: "#6a4a3a", skin: "#f2cfa8", tights: "#5a4a40" };
   var WEI = { hair: "short", gl: "#e8a838", top: "#f3ead8", vest: "#5a3a26", bot: "#2a2a34" }, MEI = { hair: "pink", hairC: "#f48fb8", top: "#c8303a", bot: "#2a2a3a", skin: "#f6d6b8" };
+  /* anyone else on the street: a different person each visit (VS), all ages, skins, hair, coats, skirts and hats */
+  var VS = (Math.random() * 997) | 0;
+  var SKINS = ["#f4d6b4", "#eac39c", "#e0b088", "#c99468", "#a8734a", "#7e4f30", "#5a3620"], HAIRC = ["#1a120d", "#2a1c12", "#4a2e1c", "#7a4a26", "#b0844a", "#d8b878", "#8a2e1e"];
+  var TOPS = ["#c8b89a", "#7a6a5a", "#5a6a7a", "#8a5a5a", "#5a7a5a", "#6a5a7a", "#b88a4a", "#3a4a6a", "#a84a3a", "#d8d0c0", "#4a6a6a"], BOTS = ["#3a3a48", "#4a3a2a", "#2a2a2a", "#5a4a3a", "#3a4a3a", "#6a5a4a", "#7a3a3a", "#3a3a5a"];
+  var COATS = ["#5a4a3a", "#3a3a48", "#7a6248", "#4a5a4a", "#6a3a32", "#8a7a62"], HATS = ["short", "long", "bun", "bob", "cap", "hat", "beret", "pig", "short", "long", "bald"];
+  function folk(sd, x, fy, o) {
+    var r = function (k) { return rnd(sd * 13.71 + k * 7.3); }, old = r(1) < .2, kid = !old && r(2) < .16, h = HATS[(r(4) * HATS.length) | 0];
+    if (kid && (h === "hat" || h === "bald" || h === "beret")) h = "pig"; if (!old && h === "bald") h = "short";
+    var skirt = r(6) < .45, cold = o && o.cold;
+    var base = { sz: kid ? .42 + r(7) * .22 : .84 + r(7) * .16, skin: SKINS[(r(3) * SKINS.length) | 0], hair: h, hairC: old ? (r(5) < .5 ? "#c8c4bc" : "#9a948a") : HAIRC[(r(5) * HAIRC.length) | 0],
+      top: TOPS[(r(8) * TOPS.length) | 0], bot: BOTS[(r(9) * BOTS.length) | 0], skirt: skirt, tights: skirt && r(10) < .55 ? (r(11) < .5 ? "#3a3036" : "#6a5a5a") : null,
+      capC: ["#3a3030", "#5a4a3a", "#2a2a3a", "#7a2a2a", "#c8b48a"][(r(12) * 5) | 0], f: r(13) < .5 ? 1 : -1,
+      coat: (cold ? r(14) < .8 : r(14) < .25) ? COATS[(r(15) * COATS.length) | 0] : null, scarf: cold && r(16) < .5 ? ["#a8302a", "#3a6aa0", "#e8c46a", "#5a8a5a"][(r(17) * 4) | 0] : null,
+      paper: !kid && r(18) < .14, bag: !kid && r(19) < .22 ? ["#6a4a2c", "#2a2a2a", "#a8402a", "#c8a870"][(r(20) * 4) | 0] : null, cane: old && r(21) < .5, smile: r(22) < .4, gl: !kid && r(23) < .18 ? "#5a5a5a" : null };
+    return who(x, fy, mix(base, o || {}));
+  }
+  function pigeon(x, y, t, sd) { var pk = Math.sin(t * 6 + sd) > .6 ? 1 : 0; R(x, y - 3, 5, 3, "#8a8a92"); R(x + (sd % 2 ? -1 : 4), y - 4 - pk + 1, 2, 2, "#6a6a74"); R(x + 1, y, 1, 1, "#c86a5a"); R(x + 3, y, 1, 1, "#c86a5a"); R(x + 1, y - 2, 3, 1, "#7a9a8a"); }
+  function bird(x, y, t, c) { var w = Math.sin(t * 9 + x) > 0; R(x, y, 1, 1, c); R(x - 2, y - (w ? 1 : 0), 2, 1, c); R(x + 1, y - (w ? 1 : 0), 2, 1, c); }
+  function puff(x, y, t, n, c) { for (var i = 0; i < n; i++) { var k = (t * .25 + i / n) % 1; g.fillStyle = (c || "rgba(240,236,228,") + (.7 * (1 - k)) + ")"; var r2 = 2 + k * 6; disc(Math.round(x + k * 14 + Math.sin(i) * 2), Math.round(y - k * 18), Math.round(r2), g.fillStyle); } }
   function mix(a, b) { var o = {}, k; for (k in a) o[k] = a[k]; for (k in b) o[k] = b[k]; return o; }
 
   /* the town's animals, its own drawing (FBWorld.drawPet); x the middle, fy the ground */
@@ -130,7 +160,12 @@
       for (var y = 70; y < 104; y += 2) R(0, y, W, 2, y % 4 ? "#6a5a5a" : "#5a4a50");
       for (var i = 0; i < 22; i++) R((rnd(i) * W + t * (6 + i % 4)) % W, 72 + rnd(i + 3) * 30, 3 + i % 3, 1, "#d8b088");
       for (i = 0; i < 4; i++) { var bx = (60 + i * 50 + t * 9) % 260 - 10, by = 24 + rnd(i) * 18 + Math.sin(t * 3 + i) * 2; R(bx, by, 2, 1, "#3a2a2a"); R(bx + 2, by - 1, 1, 1, "#3a2a2a"); R(bx - 1, by - 1, 1, 1, "#3a2a2a"); }
+      var fsx = 200 - t * 2; R(fsx, 60, 22, 4, "#4a3a3a"); R(fsx + 4, 56, 12, 4, "#5a4a44"); R(fsx + 8, 50, 3, 6, "#3a2a2a"); puff(fsx + 9, 48, t, 4, "rgba(90,80,80,");
+      R(0, 0, W, 3, "#3a2a2a"); for (var fl = 0; fl < 12; fl++) R(8 + fl * 20, 3 + (fl % 2), 6, 4, ["#c8302a", "#e8c040", "#3a6aa0", "#f4ecd6"][fl % 4]);
       R(0, 104, W, 31, "#6a4a30"); for (var x = 0; x < W; x += 12) R(x, 104, 1, 31, "#54381f"); R(0, 88, W, 2, "#e8e0d0"); for (x = 4; x < W; x += 16) R(x, 88, 2, 16, "#e8e0d0"); R(0, 96, W, 1, "#c8c0b0");
+      disc(30, 96, 6, "#e8e0d0"); disc(30, 96, 4, "#c8302a"); disc(30, 96, 2, "#6a4a30"); R(24, 95, 12, 2, "#e8e0d0");   /* the lifebuoy */
+      folk(VS + 1, 170, 124, { f: -1, sz: .95 }); folk(VS + 2, 196, 124, { f: -1 }); folk(VS + 3, 58, 124, { f: 1, armR: "out" });
+      R(140, 118, 18, 6, "#5a4a3a"); R(142, 114, 14, 4, "#6a5a48");   /* a trunk */
       who(100, 122, mix(YPOPO, { f: 1, tear: p > .12 ? (t * 3 | 0) : 0, armR: "out" })); R(116, 112, 14, 10, "#6a4a2c"); R(116, 112, 14, 1, "#8a6a44"); R(121, 110, 4, 2, "#2a1a10");
       R(86, 112, 4, 6, "#a52a2a"); R(86, 112, 4, 1, "#e0c070");
     } else if (p < .62) {   /* the train along the coast: she cries as far as Girona, then the salt lemon */
@@ -144,8 +179,12 @@
       for (i = 0; i < 4; i++) { var px = ((i * 120 - ox * 2.2) % 480 + 480) % 480; R(px, 18, 2, 66, "#4a3a2a"); }
       g.restore();
       R(44, 16, 154, 2, "#2a1c10"); R(44, 84, 154, 4, "#2a1c10"); R(44, 16, 2, 70, "#2a1c10"); R(196, 16, 2, 70, "#2a1c10"); R(119, 16, 3, 70, "#2a1c10");
+      R(44, 8, 154, 2, "#2a1c10"); for (var lr = 46; lr < 196; lr += 4) R(lr, 10, 1, 4, "#2a1c10"); R(60, 2, 30, 8, "#6a4a2c"); R(150, 4, 22, 6, "#3a4a5a");   /* the luggage rack */
+      R(46, 18, 8, 66, "#8a3a2a"); R(188, 18, 8, 66, "#8a3a2a"); R(50, 18, 2, 66, "#6a2a20"); R(190, 18, 2, 66, "#6a2a20");   /* curtains */
       R(150, 88, 46, 4, "#6a4a2a"); R(160, 80, 8, 8, "#e8d070"); R(161, 79, 6, 2, "#c8a040"); R(162, 82, 2, 2, "#f4e090"); R(165, 84, 2, 2, "#f4e090");   /* the jar of salt lemons */
       R(0, 92, W, 43, "#5a3a2a"); R(52, 74, 30, 46, "#7a2a2a"); R(52, 74, 30, 3, "#5a1a1a"); R(48, 108, 40, 6, "#6a2222");
+      R(158, 74, 38, 46, "#7a2a2a"); R(158, 74, 38, 3, "#5a1a1a"); R(154, 108, 46, 6, "#6a2222"); folk(VS + 4, 176, 116, { sit: 1, f: -1, shut: 1, hair: "hat" });
+      if ((t * .5 | 0) % 2) txt("Z", 184, 70 - (t * 4 % 6), "rgba(255,255,255,.7)");
       var lem = p > .5, chew = lem && p < .56;
       who(92, 116, mix(YPOPO, { sit: 1, f: 1, tear: !lem ? (t * 4 | 0) : 0, armR: chew ? "mouth" : "down", smile: p > .55 }));
       if (chew) R(98, 80, 3, 3, "#f0d040");
@@ -158,7 +197,11 @@
       R(0, 66, 92, 44, "#2e4a3a"); for (x = 4; x < 92; x += 16) R(x, 72, 10, 8, "#c8d0b0"); R(0, 104, 92, 6, "#1a1a1a");
       R(150, 22, 64, 10, "#2a3a5a"); txt("BARCELONA", 155, 25, "#f4ecd6"); R(30, 22, 44, 8, "#2a3a5a"); txt("ANDEN 2", 34, 24, "#f4ecd6");
       R(0, 110, W, 25, "#7a6a5a"); for (x = 0; x < W; x += 20) R(x, 110, 1, 25, "#6a5a4a");
-      for (i = 0; i < 4; i++) who(170 + i * 16 + Math.sin(t + i) * 3, 124, { sz: .9, top: ["#5a5a5a", "#4a3a3a", "#3a4a5a", "#6a5a4a"][i], bot: "#2a2a2a", hair: i % 2 ? "cap" : "short", step: (t * 4 + i) | 0, f: i % 2 ? 1 : -1 });
+      puff(70, 64, t, 5); puff(40, 62, t + 2, 4);
+      R(196, 70, 30, 34, "#5a3a24"); R(198, 72, 26, 14, "#e8dcc0"); for (i = 0; i < 4; i++) R(200 + i * 6, 74, 4, 10, ["#c8302a", "#3a6aa0", "#e8c040", "#f4ecd6"][i]); txt("PRENSA", 199, 88, "#f4ecd6");   /* the kiosk */
+      for (i = 0; i < 5; i++) folk(VS + 10 + i, ((148 + i * 22 + t * (i % 2 ? 6 : -5)) % 260 + 260) % 260 - 10, 124 + (i % 2), { step: (t * 4 + i) | 0, f: i % 2 ? 1 : -1 });
+      var px2 = 20 + (t * 6) % 80; R(px2, 118, 18, 3, "#4a3a2a"); disc(px2 + 3, 122, 2, "#2a2a2a"); disc(px2 + 15, 122, 2, "#2a2a2a"); R(px2 + 1, 108, 8, 10, "#6a4a2c"); R(px2 + 10, 112, 7, 6, "#3a4a5a"); folk(VS + 20, px2 - 6, 124, { hair: "cap", capC: "#2a2a3a", top: "#3a3a48", bot: "#3a3a48", f: 1, step: (t * 4) | 0, armR: "out", sz: 1 });   /* a porter */
+      for (i = 0; i < 3; i++) pigeon(150 + i * 13 + (Math.sin(t + i) * 3 | 0), 132, t, i);
       who(96 + k * 22, 126, mix(YPOPO, { f: 1, step: k < 1 ? (t * 5) | 0 : 0 })); R(108 + k * 22, 114, 12, 10, "#6a4a2c"); R(108 + k * 22, 114, 12, 1, "#8a6a44");
       if (p > .82) { R(108 + k * 22 - 18, 80, 9, 9, "#f4ecd6"); txt("?", 112 + k * 22 - 18, 82, "#3a2a1a"); }
     }
@@ -169,6 +212,8 @@
     if (p < .42) {   /* under the big clock: a young man who smells of machine oil asks where she's going */
       band(0, 70, "#d8d0bc", "#b8ac94", 3); for (i = 0; i < 6; i++) { var ax = i * 48; for (var a = 0; a < 48; a += 2) R(ax + a, 6 + Math.pow((a - 24) / 24, 2) * 12, 2, 2, "#5a4a3a"); }
       R(118, 0, 2, 22, "#3a2a1a"); clock(119, 36, 16, 8, 2 + t * .4, "#3a2a1a"); R(117, 52, 4, 8, "#3a2a1a");
+      for (i = 0; i < 3; i++) folk(VS + 30 + i, ((i * 90 + t * (i % 2 ? 7 : -7)) % 280 + 280) % 280 - 20, 112, { sz: .7, step: (t * 4 + i) | 0, f: i % 2 ? 1 : -1 });
+      for (i = 0; i < 2; i++) pigeon(20 + i * 14 + (Math.sin(t * .7 + i) * 4 | 0), 128, t, i + 3);
       R(0, 96, W, 39, "#7a6a5a"); for (x = 0; x < W; x += 20) R(x, 96, 1, 39, "#6a5a4a"); R(0, 94, W, 2, "#e8d070");
       var k = ease(seg(p, .02, .22)), jx = 190 - k * 52;
       who(84, 124, mix(YPOPO, { f: 1 })); R(66, 112, 12, 10, "#6a4a2c"); R(66, 112, 12, 1, "#8a6a44");
@@ -178,6 +223,7 @@
     } else if (p < .72) {   /* through the old town at night to her cousin's door; he carries the suitcase */
       band(0, 135, "#1a1830", "#2a2440", 3); var sx = (t * 14) % 60;
       for (i = -1; i < 6; i++) { var bx = i * 60 - sx, hh = 24 + rnd(i + 10 + Math.floor(t * 14 / 60)) * 10; R(bx, hh, 58, 110 - hh, "#3a3444"); for (var wy = hh + 8; wy < 96; wy += 16) for (var wx = bx + 8; wx < bx + 52; wx += 14) { R(wx, wy, 6, 9, rnd(wx * 3 + wy) > .6 ? "#e8b860" : "#24202e"); R(wx - 2, wy + 9, 10, 1, "#1a1620"); } }
+      for (i = 0; i < 3; i++) { var wl = ((i * 80 + 30 - t * 14) % 240 + 240) % 240 - 20; line(wl, 30, wl + 50, 34, "#5a5468"); for (var cl = 0; cl < 4; cl++) R(wl + 6 + cl * 11, 32, 5, 6, ["#c8c0b0", "#a85a4a", "#5a7aa0", "#d8c070"][(cl + i) % 4]); }
       for (i = 0; i < 3; i++) { var lx = ((i * 90 - t * 14) % 270 + 270) % 270 - 10; R(lx, 60, 2, 50, "#1a1620"); R(lx - 2, 58, 6, 4, "#f4d48a"); g.fillStyle = "rgba(255,210,130,.12)"; g.fillRect(lx - 14, 62, 30, 48); }
       R(0, 110, W, 25, "#2a2630"); for (x = 0; x < W; x += 10) R(x - sx % 10, 112 + (x / 10 % 2) * 5, 8, 3, "#34303c");
       var st = (t * 4) | 0; who(104, 126, mix(YPOPO, { f: 1, step: st })); who(128, 126, mix(JOSEP, { f: 1, step: st + 1, armR: "out" })); R(136, 112, 12, 10, "#6a4a2c");
@@ -187,6 +233,8 @@
       R(0, 96, W, 39, "#6a4a2c"); R(0, 96, W, 2, "#8a6a44");
       [[40, 30], [200, 40], [60, 62], [180, 70]].forEach(function (c, j) { disc(c[0], c[1], 7, "#2a1a10"); clock(c[0], c[1], 6, j * 3, (t * 60 * (j + 1)) % 60); });
       clock(120, 44, 22, 10, 10 + t * .15, "#2a1a10"); txt("LENT", 112, 56, "#a8322a");
+      var pa = Math.sin(t * 1.6) * .35; line(120, 67, 120 + Math.sin(pa) * 20, 67 + Math.cos(pa) * 20, "#c8a040"); disc(Math.round(120 + Math.sin(pa) * 20), Math.round(67 + Math.cos(pa) * 20), 3, "#e8c46a");
+      R(10, 92, 60, 4, "#5a3a22"); R(14, 86, 8, 6, "#8a8a90"); R(26, 88, 3, 4, "#c8a040"); R(34, 89, 10, 3, "#3a3a3a"); R(50, 84, 6, 8, "#9a9aa0"); R(52, 82, 1, 2, "#9a9aa0");
       who(84, 126, mix(JOSEP, { f: 1, hair: "short", armR: "out" })); who(156, 126, mix(YPOPO, { f: -1, armL: "mouth", smile: 1 }));
     }
     return { tone: .86, cut: cuts(p, [.42, .72]) };
@@ -199,7 +247,8 @@
       for (x = 0; x < W; x += 6) { var by = 22 + Math.sin(x / 20) * 3; R(x, by, 3, 4, (x / 6) % 2 ? "#e8c040" : "#c8302a"); }
       R(0, 90, W, 45, "#b8a890"); for (x = 0; x < W; x += 12) R(x, 92, 10, 1, "#a89878");
       [[18, "#c8302a"], [186, "#5a7aa0"]].forEach(function (s, j) { R(s[0], 70, 40, 22, "#e8dcc4"); R(s[0] - 2, 62, 44, 8, j ? "#3a5a80" : "#a8302a"); for (var r = 0; r < 12; r++) R(s[0] + 3 + (r % 6) * 6, 72 + ((r / 6) | 0) * 6, 3, 3, j ? ["#8a5a3a", "#3a6a5a", "#c8a040", "#6a3a6a"][r % 4] : "#d8303a"); });
-      for (i = 0; i < 5; i++) who(((i * 61 + t * (i % 2 ? 8 : -8)) % 280 + 280) % 280 - 20, 104, { sz: .85, top: ["#7a6a5a", "#5a6a7a", "#8a5a5a", "#5a7a5a", "#6a5a7a"][i], bot: "#3a3a3a", hair: i % 2 ? "long" : "short", skirt: i % 2, step: (t * 4 + i) | 0, f: i % 2 ? 1 : -1 });
+      for (i = 0; i < 7; i++) folk(VS + 40 + i, ((i * 47 + t * (i % 2 ? 8 : -8)) % 290 + 290) % 290 - 25, 104 + (i % 3), { sz: .8 + (i % 2) * .1, step: (t * 4 + i) | 0, f: i % 2 ? 1 : -1, flowers: i % 3 === 0 ? "#d8303a" : null, paper: i % 3 === 1 });
+      for (i = 0; i < 4; i++) { R(66 + i * 7, 84, 5, 6, "#5a4a3a"); disc(68 + i * 7, 82, 2, "#d8303a"); }   /* buckets of roses */
       var k1 = ease(seg(p, .1, .2)), k2 = ease(seg(p, .26, .36));
       who(104, 128, mix(YPOPO, { f: 1, armR: k2 > 0 && k2 < 1 ? "out" : "down", smile: p > .36 })); who(140, 128, mix(JOSEP, { f: -1, armL: k1 < 1 ? "out" : "down", smile: 1 }));
       var rx = 128 - k1 * 18, ry = 103 + k1 * 2; if (k1 < 1 || p > .2) { R(rx, ry, 1, 8, "#3a6a3a"); R(rx - 1, ry - 2, 3, 3, "#d8202a"); R(rx, ry - 3, 1, 1, "#f05060"); }
@@ -213,7 +262,7 @@
         txt(w[0], bx, yy, "#2a2018"); for (var c = 0; c < 3; c++) R(bx + 26 + c * 5, yy + 1, 4, 3, "#6a5a4a");
         if (j < shown) txt(w[1], bx + 2, yy + 6, "#7a7a80"); else if (j === shown) { var n = Math.floor(((p - .52) / .33 * W2.length - j) * w[1].length); txt(w[1].slice(0, Math.max(0, n)), bx + 2, yy + 6, "#7a7a80"); }
       });
-      R(30, 108, 56, 1, "#c8b896"); txt("APRENDE.", 128, 98, "#a8322a"); txt("I PARLA.", 128, 106, "#a8322a");
+      R(30, 108, 56, 1, "#c8b896"); for (var cr = 0; cr < 24; cr++) { var ca = cr / 24 * Math.PI * 2; R(78 + Math.cos(ca) * 9, 88 + Math.sin(ca) * 9, 1, 1, "rgba(120,80,40,.35)"); } txt("APRENDE.", 128, 98, "#a8322a"); txt("I PARLA.", 128, 106, "#a8322a");
       if (p > .86) { var k = ease(seg(p, .86, .95)); g.globalAlpha = k; R(150, 60, 2, 30, "#5a6a3a"); disc(151, 56, 5, "#8a2a2a"); disc(150, 55, 3, "#a8323a"); R(144, 70, 6, 3, "#5a6a3a"); g.globalAlpha = 1; }
     }
     return { tone: .8, cut: cuts(p, [.5]) };
@@ -224,6 +273,10 @@
     R(0, 60, W, 2, "#3a2414"); R(0, 62, W, 38, "#5a3a24");
     R(170, 14, 50, 34, "#141a2a"); R(170, 14, 50, 2, "#2a1a10"); R(194, 14, 2, 34, "#2a1a10"); for (i = 0; i < 5; i++) R(174 + i * 9, 40 - (i % 2) * 6, 4, 8, "#2a2a3a"); R(204, 22, 2, 2, "#f4e6a0");
     R(0, 100, W, 35, "#8a6a48"); for (x = 0; x < W; x += 16) R(x, 100, 1, 35, "#7a5a3a");
+    R(64, 18, 40, 30, "#2a1a10"); R(66, 20, 36, 26, "#f2e6c8"); for (i = 0; i < 4; i++) { R(70, 23 + i * 6, 6, 4, "#7b1e1e"); R(80, 24 + i * 6, 18, 1, "#5a4a3a"); }   /* the menu board, in red characters */
+    R(108, 26, 2, 22, "#2a1a10"); for (i = 0; i < 6; i++) R(105 + i, 30, 1, 14 + (i % 3) * 2, "#f2e2a8");   /* noodles drying */
+    [[150, 8], [234, 8]].forEach(function (l) { R(l[0], 0, 1, l[1], "#2a1a10"); R(l[0] - 3, l[1], 7, 8, "#c8302a"); R(l[0] - 2, l[1] + 1, 5, 6, "#e8603a"); R(l[0] - 1, l[1] + 8, 3, 2, "#e8c040"); });
+    for (i = 0; i < 4; i++) { R(24, 92 - i * 3, 14, 3, "#f2f2f6"); R(25, 93 - i * 3, 12, 1, "#3a5aa8"); }   /* blue-and-white bowls stacked */
     R(0, 50, 54, 50, "#4a2c1a"); R(0, 50, 54, 3, "#6a4a2a"); R(6, 40, 14, 10, "#8a8a8a"); R(8, 38, 10, 2, "#aaaaaa"); steam(12, 36, t, 2);
     R(28, 42, 20, 8, "#3a2a20"); disc(38, 44, 5, "#1a1414"); disc(38, 44, 1, "#c8302a"); R(38 + Math.cos(t * 6) * 4, 44 + Math.sin(t * 6) * 4, 1, 1, "#6a5a5a");   /* the record player */
     for (i = 0; i < 4; i++) { var k = (t * .35 + i / 4) % 1; note(36 + Math.sin(t + i) * 8 + i * 8, 34 - k * 30, "rgba(255,226,160," + (1 - k) + ")"); }
@@ -250,6 +303,10 @@
     who(76, 126, mix(GIRL1, { sz: gsz, f: 1, hair: gz > .5 ? "long" : "pig" })); who(114, 126, mix(GIRL2, { sz: Math.max(.05, gsz - .08), f: -1, hair: gz > .5 ? "long" : "bob" }));
     who(150, 126, mix(YPOPO, { sz: .9, f: -1, hairC: gr, hair: p > .55 ? "bun" : "bob", armL: "out", apron: "#f2ead8" }));
     R(140, 104, 4, 1, "#c8c8d0");
+    line(150, 48, 236, 44, "#8a7a6a"); for (i = 0; i < 4; i++) R(158 + i * 18, 47 - i, 9, 11 - (i % 2) * 3, ["#f4ecd6", "#e2a040", "#6a9ac0", "#c8302a"][i]);   /* the washing */
+    [[180, "#c8402a"], [196, "#e8c040"], [212, "#d8303a"]].forEach(function (f) { R(f[0], 118, 10, 8, "#b8623a"); R(f[0] + 1, 116, 8, 2, "#3a6a3a"); R(f[0] + 2, 112, 2, 4, "#3a6a3a"); R(f[0] + 6, 113, 2, 3, "#3a6a3a"); R(f[0] + 1, 111, 3, 2, f[1]); R(f[0] + 6, 112, 3, 2, f[1]); });
+    var bf = t * .7; R(30 + Math.sin(bf) * 20, 60 + Math.sin(bf * 2.3) * 8, 2, 1, "#f4ecd6"); R(30 + Math.sin(bf) * 20 + ((t * 8 | 0) % 2 ? -1 : 1), 59 + Math.sin(bf * 2.3) * 8, 1, 1, "#f4ecd6");
+    disc(36, 124, 3, gz < .5 ? "#c8302a" : "#3a6aa0"); R(35, 122, 2, 1, "#f4ecd6");
     txt(String(yr), 10, 10, "#5a4a3a");
     if (p > .84) { for (i = 0; i < 2; i++) { var k = seg(p, .84 + i * .04, 1), bx = 110 + k * 160, by = 20 - k * 30 + Math.sin(t * 9 + i) * 2; R(bx, by, 3, 1, "#3a3030"); R(bx + 1, by - 1 - ((t * 8 | 0) % 2), 1, 1, "#3a3030"); } }
     return { tone: .45 - p * .1 };
@@ -261,6 +318,8 @@
       R(20, 14, 40, 30, "#141a2a"); R(20, 14, 40, 2, "#2a1a10"); R(39, 14, 2, 30, "#2a1a10"); disc(30, 24, 2, "#d8d8e8");
       R(80, 30, 80, 3, "#5a3a24"); for (i = 0; i < 5; i++) { R(86 + i * 15, 24, 10, 6, "#f0f0f4"); R(88 + i * 15, 26, 6, 1, "#3a5aa8"); R(90 + i * 15, 28, 2, 1, "#3a5aa8"); }
       R(0, 108, W, 27, "#6a5040");
+      R(176, 94, 20, 14, "#5a3a2a"); R(176, 94, 20, 2, "#7a5a3a"); R(184, 91, 4, 3, "#2a1a10"); R(180, 98, 6, 4, "#e8dcc0"); txt("NY", 181, 99, "#a8302a");   /* her suitcase, packed, NY on the tag */
+      R(200, 46, 2, 3, "#2a1a10"); R(197, 49, 8, 16, "#3a4a6a");   /* her coat on the hook */
       var pull = p < br ? Math.sin(t * 7) * 2 : 0, gap = p < br ? 0 : Math.min(14, (p - br) * 200);
       who(96 - gap + pull, 126, mix(GIRL1, { sz: 1, hair: "long", f: 1, armR: "out", tear: (t * 4) | 0, top: "#e2a040", bot: "#4a4a5a", skirt: 0 }));
       who(146 + gap + pull, 126, mix(GIRL2, { sz: 1, hair: "short", f: -1, armL: "out", tear: (t * 4 + 1) | 0, skirt: 0, bot: "#2a3a5a" }));
@@ -290,7 +349,8 @@
       function (x, y) { R(x, y, 34, 22, "#e8b8a0"); R(x, y + 14, 34, 8, "#4a6a8a"); line(x + 2, y + 14, x + 32, y + 8, "#5a4a5a"); R(x + 10, y + 6, 2, 8, "#5a4a5a"); R(x + 24, y + 6, 2, 8, "#5a4a5a"); }];
     var n = Math.min(14, Math.floor(seg(p, 0, .66) * 14) + 1);
     for (i = 0; i < n; i++) { var drop = i === n - 1 && p < .66 ? (1 - ((seg(p, 0, .66) * 14) % 1)) : 0, x = 30 + rnd(i) * 140, y = 20 + rnd(i + 4) * 70 - drop * 40;
-      R(x - 1, y - 1, 36, 24, "#f4ecd8"); C[i % 4](x, y); }
+      R(x - 1, y - 1, 36, 24, "#f4ecd8"); C[(i + VS) % 4](x, y); R(x + 27, y + 1, 6, 7, ["#c8302a", "#3a6aa0", "#5a8a3a", "#e8913a"][i % 4]); R(x + 28, y + 2, 4, 5, "#f4ecd8"); R(x + 29, y + 3, 2, 3, ["#c8302a", "#3a6aa0", "#5a8a3a", "#e8913a"][i % 4]); for (var pm = 0; pm < 3; pm++) R(x + 20 + pm * 2, y + 3 + pm, 5, 1, "rgba(40,30,30,.35)"); }
+      R(180, 92, 40, 30, "#f4ecd8"); R(180, 92, 40, 30, "rgba(0,0,0,0)"); for (i = 0; i < 6; i++) R(181, 94 + i * 4, 38, 3, i % 2 ? "#e8dcc4" : "#f4ecd8"); R(199, 92, 2, 30, "#c8a870"); R(180, 106, 40, 2, "#c8a870"); R(196, 103, 8, 3, "#c8a870");   /* the bundle tied with kitchen string */
     if (p > .68) { var k = ease(seg(p, .68, .8)); g.globalAlpha = k; R(0, 0, W, H, "rgba(60,40,24,.6)"); R(80, 34, 80, 56, "#f4ecd8"); R(82, 36, 76, 52, "#e8f0f8"); R(118, 34, 3, 56, "#e4e0d4"); R(80, 60, 80, 3, "#e4e0d4");
       line(80, 50, 160, 74, "#c8b8a0"); line(80, 74, 160, 50, "#c8b8a0"); g.globalAlpha = 1; }
     if (p > .8) { var k2 = ease(seg(p, .8, .9)); g.globalAlpha = k2; R(60, 26, 120, 76, "#fbf6ea"); R(60, 26, 120, 2, "#e8c040"); R(118, 32, 1, 64, "#d8d0c0");
@@ -305,7 +365,8 @@
     R(0, 66, W, 6, "#7a7a80"); R(0, 72, W, 30, "#4a4a52"); R(0, 100, W, 2, "#e8d070");
     if (p > .3 && p < .48) { var k = seg(p, .3, .48), tx = 260 - k * 330; R(tx, 70, 300, 28, "#3a5a4a"); for (x = 0; x < 300; x += 22) R(tx + x + 4, 76, 14, 10, "#c8d0c0"); R(tx, 96, 300, 2, "#1a1a1a"); }
     R(0, 102, W, 33, "#8a8a90"); for (x = 0; x < W; x += 20) R(x, 102, 1, 33, "#7a7a80");
-    R(120, 0, 2, 18, "#2a2a2a"); clock(121, 32, 14, 7, 34 + seg(p, 0, .62) * 6, "#2a2a2a"); R(160, 50, 14, 14, "#2a3a5a"); txt("2", 165, 55, "#f4ecd6");
+    R(196, 116, 36, 3, "#5a4a3a"); R(198, 119, 2, 8, "#3a2a1a"); R(228, 119, 2, 8, "#3a2a1a");   /* a bench */
+    if (p < .3 || p > .48) for (i = 0; i < 3; i++) { var cx2 = 168 + i * 20; folk(VS + 60 + i, cx2, 127, { cold: 1, f: -1, paper: i === 1 }); if (((t * 1.2 + i) % 3) < 1) R(cx2 - 6, 104 - (t * 6 % 4), 3, 2, "rgba(240,240,248,.6)"); } clock(121, 32, 14, 7, 34 + seg(p, 0, .62) * 6, "#2a2a2a"); R(160, 50, 14, 14, "#2a3a5a"); txt("2", 165, 55, "#f4ecd6");
     var dx = 121 + go * 120, walking = go > 0;
     pet("dog", dx, 126, { nocollar: p < .66, flip: false, step: walking ? (t * 6) | 0 : 0 });
     if (p < .62) { var px0 = dp < .5 ? -10 + dp * 2 * 100 : 90 - (dp - .5) * 2 * 100, carry = dp < .5;
@@ -324,6 +385,8 @@
       R(30, 38, 180, 70, "#e8dcc0"); R(40, 46, 60, 46, "#f4e7c4"); R(40, 46, 60, 2, "#2a1410"); R(56, 70, 20, 14, "#4a3a2a"); steam(64, 66, t, 3);
       R(118, 44, 40, 64, "#5a2c1a"); R(120, 46, 36, 62, "#6a3420"); R(150, 76, 3, 3, "#e8c46a");
       R(0, 108, W, 27, "#a8a090"); for (x = 0; x < W; x += 8) R(x, 108 + (x / 8 % 2) * 4, 6, 2, "#b8b0a0");
+      var bk = ((t * 18) % 320) - 40; disc(bk, 124, 5, "#2a2a2a"); disc(bk, 124, 3, "#a8a090"); disc(bk + 20, 124, 5, "#2a2a2a"); disc(bk + 20, 124, 3, "#a8a090"); line(bk, 124, bk + 9, 114, "#a8302a"); line(bk + 9, 114, bk + 20, 124, "#a8302a"); line(bk + 9, 114, bk + 17, 113, "#a8302a"); folk(VS + 70, bk + 10, 118, { sit: 1, f: 1, sz: .9 });
+      folk(VS + 71, 16 + Math.sin(t * .3) * 4, 128, { f: 1, bag: "#c8a870" });
       var pop = seg(p, .08, .2), kh = ease(pop) * 8;
       pet("miso", 172, 112 - kh, { px: 1 }); pet("yuzu", 190, 112 - kh, { px: 1, flip: true });
       R(162, 106, 40, 18, "#c8a070"); R(162, 106, 40, 2, "#a88050"); R(162 + Math.sin(t * 8) * (pop < 1 ? 1 : 0), 102, 14, 4, "#b8905e"); R(188, 102, 14, 4, "#b8905e");
@@ -344,9 +407,12 @@
     var i, x;
     if (p < .38) {   /* Sundays, up the hill to the cabin Josep built */
       band(0, 70, "#a8cce4", "#e4ecdc", 3); disc(200, 18, 7, "#fff6d8");
+      for (i = 0; i < 3; i++) { var clx = ((i * 90 + t * 3) % 300) - 40; R(clx, 14 + i * 9, 30, 5, "#f8f6ee"); R(clx + 6, 11 + i * 9, 16, 4, "#f8f6ee"); }
+      for (i = 0; i < 3; i++) bird(((i * 50 + t * 10) % 280) - 20, 30 + i * 6 + Math.sin(t + i) * 2, t, "#3a3a3a");
       g.fillStyle = "#7aa05a"; g.beginPath(); g.moveTo(0, 90); g.lineTo(60, 60); g.lineTo(120, 40); g.lineTo(190, 50); g.lineTo(240, 70); g.lineTo(240, 135); g.lineTo(0, 135); g.fill();
       g.fillStyle = "#6a9050"; g.beginPath(); g.moveTo(0, 110); g.lineTo(80, 90); g.lineTo(160, 96); g.lineTo(240, 84); g.lineTo(240, 135); g.lineTo(0, 135); g.fill();
       for (i = 0; i < 9; i++) { var tx = 10 + i * 26, ty = 70 + rnd(i) * 30; R(tx + 3, ty, 2, 6, "#4a3a2a"); R(tx, ty - 8, 8, 9, "#3a6a3a"); R(tx + 2, ty - 11, 4, 3, "#3a6a3a"); }
+      for (i = 0; i < 26; i++) R(rnd(i + 90) * W, 96 + rnd(i + 40) * 36, 1, 1, ["#f4ecd6", "#e8c040", "#c86aa0"][i % 3]);
       R(126, 26, 30, 16, "#8a5a3a"); g.fillStyle = "#5a3a2a"; g.beginPath(); g.moveTo(122, 27); g.lineTo(141, 14); g.lineTo(160, 27); g.fill(); R(137, 32, 6, 10, "#3a2414"); R(147, 30, 6, 5, "#f4e0a0"); R(150, 12, 3, 8, "#4a3a2a"); steam(151, 10, t, 3);
       var k = seg(p, 0, .36), path = [[20, 128], [70, 108], [60, 92], [110, 72], [100, 58], [134, 44]], s = k * (path.length - 1), j = Math.min(path.length - 2, Math.floor(s)), f = s - j;
       for (i = 0; i < path.length - 1; i++) line(path[i][0], path[i][1], path[i + 1][0], path[i + 1][1], "#d8c8a0");
@@ -379,13 +445,15 @@
     var i, x;
     R(0, 0, W, H, "#3a2416"); for (i = 0; i < 3; i++) { R(0, 14 + i * 18, W, 2, "#5a3a22"); for (x = 6; x < W; x += 14) R(x, 4 + i * 18, 4, 10, ["#4a6a8a", "#8a4a3a", "#c8a040", "#3a6a4a"][(x / 14 + i) % 4 | 0]); }
     R(196, 4, 32, 34, "#141a2a"); R(196, 4, 32, 2, "#2a1a10"); R(211, 4, 2, 34, "#2a1a10"); disc(220, 14, 2, "#f4ecd2");
+    for (x = 0; x < W; x += 12) { var ly = 50 + Math.sin(x / 38 * Math.PI) * 4; R(x, ly, 12, 1, "#2a1a10"); R(x + 5, ly + 1, 2, 2, ["#f2a33a", "#f4e6a0", "#e8603a"][(x / 12) % 3 | 0]); }
+    [[160, 40], [178, 38]].forEach(function (f) { R(f[0], f[1], 12, 10, "#c8a040"); R(f[0] + 1, f[1] + 1, 10, 8, "#d8cbb0"); R(f[0] + 4, f[1] + 3, 3, 5, "#6a5a4a"); });
     R(0, 62, W, 16, "#5a3622"); R(0, 62, W, 2, "#7a5434");
     pet("miso", 24, 62, { asleep: true }); pet("yuzu", 218, 62, { flip: true });
     for (i = 0; i < 5; i++) { R(30 + i * 44, 78, 1, 57, "#2a1a10"); } R(0, 110, W, 25, "#4a2e1c");
     who(40, 122, mix(WEI, { f: 1, smile: 1 })); who(200, 122, mix(MEI, { f: -1, armL: "out", smile: 1, step: (t * 2) | 0 }));
     who(82, 118, mix(OPOPO, { sit: 1, f: 1, smile: 1 }));
     R(56, 96, 128, 6, "#8a5a34"); R(60, 102, 4, 24, "#5a3a22"); R(176, 102, 4, 24, "#5a3a22");
-    R(96, 88, 18, 8, "#8a8a8a"); steam(104, 84, t, 3);
+    R(96, 88, 18, 8, "#8a8a8a"); steam(104, 84, t, 3); [66, 150].forEach(function (b) { R(b, 93, 12, 3, "#f2f2f6"); R(b + 1, 94, 10, 1, "#3a5aa8"); R(b + 14, 90, 1, 6, "#c8a040"); R(b + 16, 90, 1, 6, "#c8a040"); });
     R(122, 90, 24, 6, "#24456e"); R(122, 90, 24, 1, "#e8c46a"); for (i = 0; i < 6; i++) R(124 + i * 4, 88, 2, 2, ["#c8302a", "#e8c46a", "#f0f0f4", "#3a6aa0", "#e8913a", "#5a8a3a"][i]);
     var ch = 160; R(ch, 80, 3, 30, "#6a4026"); R(ch, 100, 16, 3, "#6a4026"); R(ch + 13, 100, 3, 26, "#6a4026"); R(ch, 103, 3, 23, "#6a4026");
     if (p > .45) { var gl = .2 + .15 * Math.sin(t * 2); g.fillStyle = "rgba(255,226,150," + gl + ")"; g.fillRect(ch - 4, 76, 24, 52); }
@@ -416,6 +484,202 @@
     if (k === 9 && (t * 3 | 0) % 2) { line(100, 70, 96, 64, "#f4e0a0"); line(140, 70, 144, 64, "#f4e0a0"); line(120, 66, 120, 58, "#f4e0a0"); }
     return { tone: 0 };
   }
+
+  /* ---------- sound (Nov 14, the owner: "add soundtrack + sound effects"): all made here with Web Audio, nothing fetched.
+     A small score per chapter (Popo's theme on a music box, piano or guitar; their bolero in 1979), each place's air (the sea,
+     the train, the hall, the market, the yard, the snow) and a few things you'd hear (the ship's horn, a crack, a meow, a
+     shutter). It starts at the first tap (browsers ask for one), follows the town's sound switch and ♪ below, and hushes the
+     town's own sound while it plays. */
+  var AU = null, SND = (function () { try { var v = localStorage.getItem("fb_popo_snd"); if (v) return v === "1"; var P0 = parent.FBSound; return P0 ? P0.on() : localStorage.getItem("fb_sound") !== "0"; } catch (e) { return true; } })();
+  function au() {
+    if (AU || !SND) return AU; var C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+    var A = new C(), m = A.createGain(), comp = A.createDynamicsCompressor(); m.gain.value = 0; m.connect(comp); comp.connect(A.destination);
+    var vb = A.createConvolver(), len = A.sampleRate * 2.4 | 0, ib = A.createBuffer(2, len, A.sampleRate);
+    for (var c = 0; c < 2; c++) { var d = ib.getChannelData(c); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    vb.buffer = ib; var vg = A.createGain(); vg.gain.value = .32; vb.connect(vg); vg.connect(m);
+    var mus = A.createGain(), fx = A.createGain(), air = A.createGain(); mus.gain.value = .42; fx.gain.value = .55; air.gain.value = .0;
+    [mus, fx, air].forEach(function (b) { b.connect(m); }); mus.connect(vb); fx.connect(vb);
+    var nb = A.createBuffer(1, A.sampleRate * 2, A.sampleRate), nd = nb.getChannelData(0); for (i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    AU = { A: A, m: m, mus: mus, fx: fx, air: air, nb: nb, cue: null, amb: null, ambStop: null, nextT: 0, step: 0 };
+    m.gain.setTargetAtTime(1, A.currentTime, .6); hush(true);
+    return AU;
+  }
+  function hush(b) { try { if (parent.FBSound) parent.FBSound.busy(!!b); } catch (e) {} }
+  function T0() { return AU.A.currentTime; }
+  function env(gn, t, a, peak, dec) { gn.gain.setValueAtTime(0.0001, t); gn.gain.exponentialRampToValueAtTime(peak, t + a); gn.gain.exponentialRampToValueAtTime(0.0001, t + a + dec); }
+  function osc(type, f, t, dur, vol, bus, o) {
+    o = o || {}; var A = AU.A, x = A.createOscillator(), gn = A.createGain(); x.type = type; x.frequency.setValueAtTime(f, t);
+    if (o.to) x.frequency.exponentialRampToValueAtTime(o.to, t + (o.glide || dur));
+    if (o.vib) { var l = A.createOscillator(), lg = A.createGain(); l.frequency.value = o.vib; lg.gain.value = f * .012; l.connect(lg); lg.connect(x.frequency); l.start(t); l.stop(t + dur + .1); }
+    var node = x; if (o.lp) { var fl = A.createBiquadFilter(); fl.type = "lowpass"; fl.frequency.value = o.lp; x.connect(fl); node = fl; }
+    node.connect(gn); gn.connect(bus || AU.mus); env(gn, t, o.a || .005, vol, dur); x.start(t); x.stop(t + (o.a || .005) + dur + .05);
+  }
+  function noise(t, dur, vol, ft, f, q, bus, o) {
+    o = o || {}; var A = AU.A, src = A.createBufferSource(), fl = A.createBiquadFilter(), gn = A.createGain(); src.buffer = AU.nb; src.loop = true;
+    fl.type = ft; fl.frequency.setValueAtTime(f, t); if (o.to) fl.frequency.exponentialRampToValueAtTime(o.to, t + dur); fl.Q.value = q || 1;
+    src.connect(fl); fl.connect(gn); gn.connect(bus || AU.fx); env(gn, t, o.a || .005, vol, dur); src.start(t, Math.random()); src.stop(t + (o.a || .005) + dur + .05);
+  }
+  /* instruments */
+  var hz = function (m) { return 440 * Math.pow(2, (m - 69) / 12); };
+  var INS = {
+    box: function (m, t, v) { var f = hz(m); osc("sine", f, t, 1.6, .16 * v); osc("sine", f * 2, t, .5, .05 * v); osc("sine", f * 5.4, t, .12, .02 * v); },
+    piano: function (m, t, v) { var f = hz(m); osc("triangle", f, t, 1.4, .13 * v, null, { lp: 2400 }); osc("sine", f * 2, t, .6, .04 * v); },
+    guitar: function (m, t, v) { var f = hz(m); osc("sawtooth", f, t, .9, .07 * v, null, { lp: 1400 }); osc("triangle", f, t, 1.1, .06 * v); },
+    flute: function (m, t, v, d) { osc("sine", hz(m), t, d || .5, .1 * v, null, { a: .06, vib: 5 }); },
+    harm: function (m, t, v, d) { osc("sawtooth", hz(m), t, d || 1, .022 * v, null, { a: .25, lp: 900 }); },
+    pad: function (m, t, v, d) { osc("triangle", hz(m), t, d || 2, .035 * v, null, { a: .5, lp: 1200 }); osc("sine", hz(m) * 1.003, t, d || 2, .03 * v, null, { a: .6 }); },
+    bass: function (m, t, v) { osc("sine", hz(m), t, .8, .14 * v, null, { a: .01 }); },
+    pizz: function (m, t, v) { osc("triangle", hz(m), t, .22, .1 * v, null, { lp: 1800 }); }
+  };
+  var MAJ = [0, 2, 4, 5, 7, 9, 11], MIN = [0, 2, 3, 5, 7, 8, 10];
+  function dg(root, sc, d) { var o = Math.floor(d / 7), i = ((d % 7) + 7) % 7; return root + o * 12 + sc[i]; }
+  /* Popo's theme: two bars a phrase, eighth notes, scale steps (null rests); A then B */
+  var THEME = [[4, null, 2, 3, 4, null, 7, null, 6, null, 4, 2, 3, null, null, null], [2, null, 1, 2, 3, null, 4, 2, 1, null, 0, -1, 0, null, null, null],
+    [4, 5, 7, null, 6, 4, 5, null, 3, null, 2, 3, 4, null, null, null], [7, null, 6, 4, 5, null, 3, 2, 1, null, 2, null, 0, null, null, null]];
+  /* the cues: key, scale, tempo, lead, comping, chords (scale degrees, one a bar), how much of the tune plays */
+  var CUES = {
+    open: { r: 65, sc: MAJ, bpm: 66, lead: "box", comp: "arp", ch: [0, 5, 3, 4], den: .55, v: .8 },
+    sea: { r: 69, sc: MIN, bpm: 62, lead: "flute", comp: "harm", ch: [0, 5, 2, 4], den: .5, v: .8 },
+    train: { r: 69, sc: MIN, bpm: 76, lead: "box", comp: "arp", ch: [0, 3, 5, 4], den: .6, v: .8 },
+    hall: { r: 60, sc: MAJ, bpm: 70, lead: "piano", comp: "arp", ch: [0, 4, 5, 3], den: .45, v: .7 },
+    josep: { r: 60, sc: MAJ, bpm: 74, lead: "piano", comp: "arp", ch: [0, 5, 3, 4], den: .7, v: .8 },
+    clocks: { r: 60, sc: MAJ, bpm: 74, lead: "box", comp: "pizz", ch: [0, 3, 4, 0], den: .7, v: .8 },
+    rose: { r: 62, sc: MAJ, bpm: 84, lead: "flute", comp: "strum", ch: [0, 4, 5, 3], den: .75, v: .9 },
+    book: { r: 62, sc: MAJ, bpm: 70, lead: "box", comp: "arp", ch: [0, 5, 3, 4], den: .5, v: .7 },
+    bolero: { r: 57, sc: MIN, bpm: 72, lead: "piano", comp: "bolero", ch: [0, 3, 4, 0], den: .85, v: .9, harm: 1 },
+    lemon: { r: 67, sc: MAJ, bpm: 92, lead: "box", comp: "pizz", ch: [0, 3, 4, 0], den: .7, v: .8 },
+    fight: { r: 64, sc: MIN, bpm: 58, lead: "piano", comp: "pad", ch: [0, 5, 3, 4], den: .35, v: .7 },
+    gold: { r: 64, sc: MAJ, bpm: 60, lead: "box", comp: "pad", ch: [0, 5, 3, 4], den: .55, v: .8 },
+    cards: { r: 65, sc: MAJ, bpm: 80, lead: "box", comp: "arp", ch: [0, 5, 1, 4], den: .65, v: .8 },
+    snow: { r: 62, sc: MIN, bpm: 54, lead: "piano", comp: "pad", ch: [0, 5, 3, 4], den: .3, v: .7 },
+    kittens: { r: 60, sc: MAJ, bpm: 108, lead: "pizz", comp: "pizz", ch: [0, 4, 0, 4], den: .6, v: .8 },
+    cabin: { r: 67, sc: MAJ, bpm: 68, lead: "flute", comp: "pad", ch: [0, 3, 5, 4], den: .5, v: .8 },
+    nearby: { r: 67, sc: MAJ, bpm: 72, lead: "box", comp: "arp", ch: [3, 4, 0, 0], den: .9, v: .9 },
+    tonight: { r: 65, sc: MAJ, bpm: 72, lead: "piano", comp: "strum", ch: [0, 5, 3, 4], den: .9, v: 1 },
+    table: { r: 65, sc: MAJ, bpm: 60, lead: "box", comp: "none", ch: [0, 5, 3, 4], den: .35, v: .55 },
+    photo: { r: 65, sc: MAJ, bpm: 60, lead: "box", comp: "pad", ch: [0, 0, 0, 0], den: .2, v: .7 }
+  };
+  function setCue(k) {
+    if (!AU) return; var c = CUES[k] || null; if (AU.cue === c) return;
+    var A = AU.A; AU.mus.gain.cancelScheduledValues(A.currentTime); AU.mus.gain.setTargetAtTime(0, A.currentTime, .25);
+    AU.cue = c; AU.step = 0; AU.nextT = A.currentTime + .7; setTimeout(function () { if (AU && AU.cue === c) AU.mus.gain.setTargetAtTime(.42, AU.A.currentTime, .4); }, 650);
+  }
+  function seqTick() {
+    if (!AU || !AU.cue || AU.A.state !== "running") return; var c = AU.cue, A = AU.A, e8 = 60 / c.bpm / 2;
+    while (AU.nextT < A.currentTime + .35) {
+      var t = AU.nextT, s = AU.step, bar = (s >> 3) % 4, pos = s & 7, chord = c.ch[bar], ph = THEME[((s >> 4) % 4)][s & 15];
+      var tri = [dg(c.r - 12, c.sc, chord), dg(c.r - 12, c.sc, chord + 2), dg(c.r - 12, c.sc, chord + 4)];
+      if (c.harm && chord === 4) tri[1] += 1;   /* a raised third on the dominant: the bolero's own colour */
+      var v = c.v;
+      if (pos === 0 && c.comp !== "none") INS.bass(dg(c.r - 24, c.sc, chord), t, v);
+      if (c.comp === "arp") INS.box(tri[[0, 1, 2, 1][pos % 4]] + 12, t, .45 * v);
+      else if (c.comp === "pizz" && pos % 2 === 0) INS.pizz(tri[(pos >> 1) % 3] + 12, t, .8 * v);
+      else if (c.comp === "strum" && (pos === 0 || pos === 4)) tri.forEach(function (n, j) { INS.guitar(n + 12, t + j * .025, .7 * v); });
+      else if (c.comp === "bolero" && [0, 2, 3, 4, 6].indexOf(pos) >= 0) tri.forEach(function (n, j) { INS.guitar(n + 12, t + j * .018, (pos === 0 ? .8 : .5) * v); });
+      else if ((c.comp === "pad" || c.comp === "harm") && pos === 0) tri.forEach(function (n) { INS[c.comp === "harm" ? "harm" : "pad"](n + 12, t, v, e8 * 8); });
+      if (ph != null && (rnd(s * 3.1 + c.bpm) < c.den || pos === 0)) INS[c.lead](dg(c.r, c.sc, ph), t, v, e8 * 1.8);
+      if (c.comp === "bolero" && (pos === 3 || pos === 7)) noise(t, .05, .05, "highpass", 6000, 1, AU.mus);   /* a soft maraca */
+      AU.nextT += e8 * (pos % 2 ? .9 : 1.1); AU.step++;   /* a little swing */
+    }
+  }
+  /* the air of each place: a loop of filtered noise and small things now and then */
+  function loopN(ft, f, q, vol, lfo, lfoAmt) {
+    var A = AU.A, src = A.createBufferSource(), fl = A.createBiquadFilter(), gn = A.createGain(); src.buffer = AU.nb; src.loop = true; fl.type = ft; fl.frequency.value = f; fl.Q.value = q || 1; gn.gain.value = vol;
+    src.connect(fl); fl.connect(gn); gn.connect(AU.air); src.start(0, Math.random());
+    if (lfo) { var l = A.createOscillator(), lg = A.createGain(); l.frequency.value = lfo; lg.gain.value = vol * (lfoAmt || .8); l.connect(lg); lg.connect(gn.gain); l.start(); return [src, l]; }
+    return [src];
+  }
+  var AIRS = {
+    sea: { n: [["lowpass", 500, .7, .5, .11, .9], ["bandpass", 1800, .6, .05, .23]], every: [3, 6, function (t) { var f = 1700 + Math.random() * 500; osc("triangle", f, t, .25, .05, AU.fx, { to: f * .65 }); osc("triangle", f * .95, t + .3, .2, .04, AU.fx, { to: f * .6 }); }] },
+    train: { n: [["lowpass", 260, .7, .7]], every: [1.1, 1.1, function (t) { noise(t, .04, .25, "bandpass", 900, 2); noise(t + .14, .04, .2, "bandpass", 800, 2); }] },
+    hall: { n: [["bandpass", 550, .6, .35, .07, .5]], every: [1, 1, function (t) { noise(t, .02, .05, "highpass", 3500, 1); }] },
+    night: { n: [["bandpass", 300, .5, .25, .05, .6]], every: [2.2, 3, function (t) { noise(t, .05, .08, "bandpass", 500, 3); noise(t + .45, .05, .07, "bandpass", 460, 3); }] },
+    clocks: { n: [["lowpass", 180, .5, .15]], every: [.5, .5, function (t) { noise(t, .02, .06 + Math.random() * .04, "bandpass", 2500 + Math.random() * 3000, 4); }] },
+    market: { n: [["bandpass", 700, .5, .4, .09, .5]], every: [2, 4, chirp] },
+    room: { n: [["lowpass", 160, .5, .25]], every: [.25, .9, function (t) { noise(t, .008, .12, "highpass", 3000, 1); }] },
+    yard: { n: [["bandpass", 5200, 3, .06, 22, .9]], every: [1.5, 3.5, chirp] },
+    house: { n: [["lowpass", 200, .5, .2]] },
+    tin: { n: [["lowpass", 160, .5, .15]] },
+    snow: { n: [["bandpass", 420, .8, .5, .08, .8]], every: [1, 1, function (t) { noise(t, .02, .05, "highpass", 3500, 1); }] },
+    street: { n: [["bandpass", 600, .5, .25, .06, .5]], every: [3, 6, chirp] },
+    hill: { n: [["bandpass", 700, .6, .25, .05, .7]], every: [1.5, 3, chirp] },
+    stars: { n: [["lowpass", 300, .5, .12]], every: [2.5, 4, function (t) { osc("sine", hz(84 + [0, 4, 7, 12][Math.random() * 4 | 0]), t, .8, .03, AU.fx); }] },
+    tonight: { n: [["bandpass", 600, .5, .3, .1, .5]], every: [2.5, 5, function (t) { var f = 2600 + Math.random() * 1200; osc("sine", f, t, .5, .03, AU.fx); osc("sine", f * 1.5, t, .3, .015, AU.fx); }] },
+    table: { n: [["lowpass", 180, .5, .2]], every: [1, 1, function (t) { noise(t, .015, .03, "highpass", 3500, 1); }] }
+  };
+  function chirp(t) { var f = 2600 + Math.random() * 1600, n = 2 + (Math.random() * 3 | 0); for (var i = 0; i < n; i++) osc("sine", f, t + i * .11, .07, .035, AU.fx, { to: f * (1.15 + Math.random() * .2), glide: .06 }); }
+  function setAir(k) {
+    if (!AU || AU.amb === k) return; AU.amb = k; var A = AU.A, old = AU.ambStop; AU.air.gain.setTargetAtTime(0, A.currentTime, .3);
+    setTimeout(function () { if (old) old(); if (!AU || AU.amb !== k) return; var a = AIRS[k]; if (!a) return;
+      var nodes = []; a.n.forEach(function (q) { nodes = nodes.concat(loopN(q[0], q[1], q[2], q[3], q[4], q[5])); });
+      var tm = null; if (a.every) (function go() { tm = setTimeout(function () { if (AU && AU.A.state === "running") a.every[2](AU.A.currentTime + .02); go(); }, (a.every[0] + Math.random() * (a.every[1] - a.every[0])) * 1000); })();
+      AU.ambStop = function () { clearTimeout(tm); nodes.forEach(function (n) { try { n.stop(); } catch (e) {} }); };
+      AU.air.gain.setTargetAtTime(.32, AU.A.currentTime, .6); }, 900);
+  }
+  /* things you hear */
+  var FX = {
+    horn: function (t) { osc("sawtooth", 110, t, 1.8, .09, AU.fx, { a: .15, lp: 500 }); osc("sawtooth", 138, t, 1.8, .07, AU.fx, { a: .15, lp: 500 }); },
+    whistle: function (t) { osc("sine", 1180, t, 1.2, .07, AU.fx, { a: .05, vib: 7 }); osc("sine", 1480, t, 1.2, .05, AU.fx, { a: .05 }); noise(t, 1.2, .06, "bandpass", 2500, 2, AU.fx, { a: .05 }); },
+    steam: function (t) { noise(t, 1.4, .18, "highpass", 2000, .7, AU.fx, { a: .05, to: 5000 }); },
+    brakes: function (t) { osc("sine", 2300, t, 1.3, .03, AU.fx, { to: 1900, a: .2 }); noise(t, 1.5, .1, "bandpass", 3000, 8, AU.fx, { a: .2 }); },
+    bite: function (t) { noise(t, .06, .2, "bandpass", 1800, 1.5); noise(t + .12, .05, .15, "bandpass", 1500, 1.5); },
+    sparkle: function (t) { [0, 4, 7, 12, 16].forEach(function (d, i) { osc("sine", hz(84 + d), t + i * .07, .6, .035, AU.fx); }); },
+    page: function (t) { noise(t, .25, .1, "bandpass", 2500, .8, AU.fx, { a: .05, to: 1200 }); },
+    pencil: function (t) { for (var i = 0; i < 6; i++) noise(t + i * .07, .05, .05, "bandpass", 4000 + Math.random() * 1500, 4); },
+    crash: function (t) { noise(t, .5, .4, "highpass", 2500, .7); for (var i = 0; i < 7; i++) osc("sine", 2400 + Math.random() * 3000, t + i * .03 + Math.random() * .05, .25, .05, AU.fx); noise(t + .25, .3, .15, "bandpass", 3500, 2); },
+    rattle: function (t) { for (var i = 0; i < 8; i++) noise(t + i * .06 + Math.random() * .02, .03, .1, "bandpass", 3000 + Math.random() * 2000, 3); },
+    knock: function (t) { noise(t, .06, .25, "lowpass", 600, 1); noise(t + .18, .06, .22, "lowpass", 600, 1); },
+    paper: function (t) { noise(t, .15, .12, "bandpass", 3000, .7, AU.fx, { a: .03 }); },
+    scratch: function (t) { noise(t, .3, .1, "bandpass", 2500, 2, AU.fx, { a: .02, to: 1500 }); },
+    clink: function (t) { osc("sine", 3200, t, .5, .05, AU.fx); osc("sine", 4600, t, .3, .03, AU.fx); },
+    pour: function (t) { noise(t, 1.6, .12, "bandpass", 900, 3, AU.fx, { a: .1, to: 1500 }); },
+    thump: function (t) { osc("sine", 90, t, .15, .25, AU.fx, { to: 60 }); },
+    woof: function (t) { osc("sawtooth", 260, t, .16, .12, AU.fx, { to: 160, lp: 900 }); noise(t, .12, .1, "bandpass", 500, 1); },
+    meow: function (t, hi) { var b = hi ? 900 : 700; osc("sawtooth", b, t, .45, .05, AU.fx, { to: b * 1.3, glide: .2, lp: 1800, a: .05 }); osc("sine", b * 1.3, t + .2, .3, .03, AU.fx, { to: b * .8 }); },
+    purr: function (t) { for (var i = 0; i < 10; i++) noise(t + i * .045, .03, .06, "lowpass", 180, 1); },
+    creak: function (t) { osc("sawtooth", 140, t, .6, .03, AU.fx, { to: 220, lp: 700, a: .1 }); },
+    shutter: function (t) { noise(t, .03, .3, "highpass", 2000, 1); noise(t + .09, .03, .2, "highpass", 2500, 1); osc("sine", 3000, t + .12, .15, .02, AU.fx); },
+    clap: function (t) { noise(t, .04, .3, "bandpass", 1500, 1); noise(t + .22, .04, .3, "bandpass", 1600, 1); },
+    lid: function (t) { osc("sine", 520, t, .4, .05, AU.fx, { to: 480 }); noise(t, .2, .08, "bandpass", 2000, 3); },
+    steps: function (t) { for (var i = 0; i < 4; i++) noise(t + i * .4, .06, .14, "bandpass", 480, 2.4); },
+    chime: function (t) { [0, 7, 12].forEach(function (d, i) { osc("sine", hz(72 + d), t + i * .3, 2, .05, AU.fx); }); },
+    trainby: function (t) { noise(t, 3, .25, "lowpass", 400, .7, AU.fx, { a: .8 }); for (var i = 0; i < 6; i++) noise(t + .4 + i * .35, .04, .15, "bandpass", 900, 2); }
+  };
+  /* for each scene: which air and score where, and what you hear when (p = how far through the scene) */
+  var PLAN = [
+    { air: function (p) { return p < .3 ? "sea" : p < .62 ? "train" : "hall"; }, cue: function (p) { return p < .3 ? "sea" : p < .62 ? "train" : "hall"; }, ev: [[.02, "horn"], [.31, "whistle"], [.5, "bite"], [.63, "brakes"], [.65, "steam"]] },
+    { air: function (p) { return p < .42 ? "hall" : p < .72 ? "night" : "clocks"; }, cue: function (p) { return p < .72 ? "josep" : "clocks"; }, ev: [[.44, "steps"], [.56, "steps"], [.64, "knock"], [.74, "chime"]] },
+    { air: function (p) { return p < .5 ? "market" : "tin"; }, cue: function (p) { return p < .5 ? "rose" : "book"; }, ev: [[.2, "sparkle"], [.36, "page"], [.52, "page"], [.6, "pencil"], [.7, "pencil"], [.8, "pencil"], [.88, "sparkle"]] },
+    { air: function () { return "room"; }, cue: function () { return "bolero"; }, ev: [] },
+    { air: function () { return "yard"; }, cue: function () { return "lemon"; }, ev: [[.1, "scratch"], [.2, "scratch"], [.3, "scratch"], [.4, "scratch"], [.5, "scratch"], [.6, "scratch"], [.7, "scratch"], [.8, "scratch"]] },
+    { air: function () { return "house"; }, cue: function (p) { return p < .7 ? "fight" : "gold"; }, ev: [[.3, "crash"], [.47, "rattle"], [.72, "sparkle"], [.9, "sparkle"]] },
+    { air: function () { return "house"; }, cue: function () { return "cards"; }, ev: [[.05, "paper"], [.12, "paper"], [.2, "paper"], [.28, "paper"], [.36, "paper"], [.44, "paper"], [.52, "paper"], [.6, "paper"], [.68, "page"], [.8, "sparkle"]] },
+    { air: function () { return "snow"; }, cue: function () { return "snow"; }, ev: [[.3, "trainby"], [.27, "clink"], [.45, "clink"], [.6, "clink"], [.67, "woof"], [.75, "steps"], [.85, "steps"]] },
+    { air: function () { return "street"; }, cue: function () { return "kittens"; }, ev: [[.1, "meow"], [.13, "meowhi"], [.65, "purr"], [.8, "purr"]] },
+    { air: function (p) { return p < .38 ? "hill" : p < .8 ? "house" : "stars"; }, cue: function (p) { return p < .8 ? "cabin" : "nearby"; }, ev: [[.1, "steps"], [.25, "steps"], [.36, "creak"], [.42, "pencil"], [.5, "pencil"], [.58, "pencil"], [.66, "pencil"], [.74, "pencil"], [.82, "sparkle"], [.9, "chime"]] },
+    { air: function () { return "tonight"; }, cue: function () { return "tonight"; }, ev: [[.15, "clink"], [.4, "woof"], [.55, "clink"], [.9, "shutter"]] }
+  ];
+  var TABLE = [[.3, "pour"], [.3, "clap"], [.2, "rattle"], null, [.4, "creak"], [.3, "clink"], [.3, "clink"], [.2, "thump"], [.2, "meow"], [.3, "clap"]];   /* what each aside sounds like */
+  var fired = {}, lastP = -1;
+  function soundFor(S, p, t) {
+    if (!AU || !S) return;
+    if (S.kind === "scene") { var P1 = PLAN[S.ch]; setAir(P1.air(p)); setCue(P1.cue(p));
+      P1.ev.forEach(function (e, i) { if (p >= e[0] && lastP < e[0] && !fired[i]) { fired[i] = 1; var f = e[1] === "meowhi" ? function (x) { FX.meow(x, 1); } : FX[e[1]]; f(T0() + .02); } }); }
+    else if (S.kind === "aside") { setAir("table"); setCue(S.k === 3 ? "bolero" : "table"); var a = TABLE[S.k]; if (a && t >= a[0] && !fired.a) { fired.a = 1; FX[a[1]](T0() + .02); if (S.k === 7) { FX.thump(T0() + .35); FX.thump(T0() + .7); } } }
+    else if (S.kind === "open") { setAir("table"); setCue("open"); if (t >= 1.2 && !fired.o) { fired.o = 1; FX.lid(T0() + .02); FX.sparkle(T0() + .5); } }
+    else if (S.kind === "photo") { setAir("tonight"); setCue("photo"); }
+    lastP = p;
+  }
+  function soundReset() { fired = {}; lastP = -1; }
+  function soundOn(on) {
+    SND = on; try { localStorage.setItem("fb_popo_snd", on ? "1" : "0"); } catch (e) {}
+    if (on) { au(); if (AU) { AU.A.resume(); AU.m.gain.setTargetAtTime(1, AU.A.currentTime, .4); hush(true); } }
+    else if (AU) { AU.m.gain.setTargetAtTime(0, AU.A.currentTime, .2); hush(false); }
+  }
+  function soundRun(run) { if (!AU) return; if (run && SND) { AU.A.resume(); hush(true); } else { AU.A.suspend(); hush(false); } }
+  setInterval(seqTick, 120);
+  addEventListener("pagehide", function () { hush(false); });
+  ["pointerdown", "keydown"].forEach(function (ev) { addEventListener(ev, function () { if (SND && !AU) { au(); soundReset(); } else if (AU && SND && AU.A.state !== "running" && !document.documentElement.classList.contains("read")) AU.A.resume(); }, true); });
 
   /* ---------- the words: a sentence at a time ---------- */
   var LANG, CJK;
@@ -456,7 +720,7 @@
     if (S.kind === "scene") { capW.textContent = S.head[0]; capT.textContent = S.head[1]; void cap.offsetWidth; cap.classList.add("on"); }
     [].forEach.call(dots.children, function (d, j) { d.setAttribute("aria-current", String(j === S.ch + 1)); });
   }
-  function go(i, keepLine) { cur = Math.max(0, Math.min(SHOTS.length - 1, i)); li = keepLine ? Math.min(li, SHOTS[cur].lines.length - 1) : 0; lt = 0; st = 0; done = false; fin.hidden = true; headShow(); showLine(); }
+  function go(i, keepLine) { soundReset(); cur = Math.max(0, Math.min(SHOTS.length - 1, i)); li = keepLine ? Math.min(li, SHOTS[cur].lines.length - 1) : 0; lt = 0; st = 0; done = false; fin.hidden = true; headShow(); showLine(); }
   function elapsed() { var S = SHOTS[cur], e = 0; for (var j = 0; j < li; j++) e += S.d[j]; return e + Math.min(lt, S.d[li] || 0); }
   function next() {
     var S = SHOTS[cur];
@@ -464,9 +728,9 @@
     if (cur < SHOTS.length - 1) return go(cur + 1);
     end();
   }
-  function end() { done = true; playing = false; paintPP(); fin.hidden = false; try { fin.querySelector("button,a").focus({ preventScroll: true }); } catch (e) {} }
+  function end() { done = true; playing = false; paintPP(); setTimeout(function () { if (done && AU) { AU.m.gain.setTargetAtTime(0, AU.A.currentTime, 1.5); setTimeout(function () { if (done) { soundRun(false); if (AU && SND) AU.m.gain.value = 1; } }, 5000); } }, 6000); fin.hidden = false; try { fin.querySelector("button,a").focus({ preventScroll: true }); } catch (e) {} }
   function chapter(d) { var S = SHOTS[cur], ch = S.ch + d; for (var j = 0; j < SHOTS.length; j++) if (SHOTS[j].ch === ch && SHOTS[j].kind !== "aside") return go(j); if (d < 0) go(0); }
-  function paintPP() { pp.textContent = playing ? "❚❚" : "▶"; pp.setAttribute("aria-label", P.T(playing ? "pause" : "play")); }
+  function paintPP() { soundRun(playing || done); pp.textContent = playing ? "❚❚" : "▶"; pp.setAttribute("aria-label", P.T(playing ? "pause" : "play")); }
   function frame(now) {
     raf = requestAnimationFrame(frame);
     var dt = Math.min(.1, (now - (last || now)) / 1000); last = now;
@@ -481,7 +745,7 @@
     else if (S.kind === "aside") r = sTable(t, p, S.k);
     else if (S.kind === "photo") { r = sTonight(9, 1); }
     else r = SCENES[S.ch](t, p);
-    r = r || {};
+    r = r || {}; if (playing && !done) soundFor(S, p, st);
     tone(r.tone || 0); if (r.tone) grain(t, 160); if (late) late(); if (r.cut) dip(r.cut);
     if (S.kind === "photo") { tone(.25); g.strokeStyle = "#fbf6ea"; g.lineWidth = 8; g.strokeRect(4, 4, W - 8, H - 8); }
     var since = st; if (since < .5) dip(1 - since / .5);
@@ -493,8 +757,11 @@
   function words() {
     document.getElementById("prev").setAttribute("aria-label", P.T("prev")); document.getElementById("nextc").setAttribute("aria-label", P.T("next"));
     document.getElementById("rd").textContent = P.T("read"); document.getElementById("again").textContent = "↺ " + P.T("again");
-    document.getElementById("hint").textContent = P.T("hint"); paintPP(); paintDots();
+    document.getElementById("hint").textContent = P.T("hint"); paintPP(); paintDots(); paintSnd();
   }
+  function paintSnd() { var b = document.getElementById("snd"); if (!b) return; b.setAttribute("aria-pressed", String(SND)); b.setAttribute("aria-label", P.T("sound")); b.classList.toggle("off", !SND); }
+  document.getElementById("snd").onclick = function () { soundOn(!SND); paintSnd(); };
+  document.addEventListener("visibilitychange", function () { soundRun(!document.hidden && (playing || done)); });
   document.getElementById("pp").onclick = function () { if (done) { go(0); playing = true; } else playing = !playing; paintPP(); };
   document.getElementById("prev").onclick = function () { playing = true; paintPP(); chapter(-1); };
   document.getElementById("nextc").onclick = function () { playing = true; paintPP(); chapter(1); };
@@ -506,9 +773,9 @@
     else if (e.key === "ArrowRight") { e.preventDefault(); if (!done) next(); }
     else if (e.key === "ArrowLeft") { e.preventDefault(); if (li > 0) { li--; lt = 0; showLine(); } else chapter(-1); }
   });
-  document.getElementById("rd").onclick = function () { playing = false; paintPP(); P.read(true); };
+  document.getElementById("rd").onclick = function () { playing = false; paintPP(); soundRun(false); P.read(true); };
   window.addEventListener("popolang", function () { var ch = SHOTS[cur] ? SHOTS[cur].ch : -1, kind = SHOTS[cur] ? SHOTS[cur].kind : "open"; build(); words(); var j = 0; for (var k = 0; k < SHOTS.length; k++) if (SHOTS[k].ch === ch && SHOTS[k].kind === kind) { j = k; break; } go(j); });
   window.addEventListener("popowatch", function () { if (done) go(0); playing = true; paintPP(); });
   build(); words(); go(0); raf = requestAnimationFrame(frame);
-  window.POPOFILM = { go: go, shots: function () { return SHOTS; }, at: function () { return { shot: cur, line: li, kind: SHOTS[cur].kind, ch: SHOTS[cur].ch }; }, next: next, end: end, draw: draw, seek: function (i, l, tt) { go(i); li = l || 0; lt = tt || 0; st = 5; showLine(); draw(); }, pause: function () { playing = false; paintPP(); } };
+  window.POPOFILM = { _au: function () { return AU && { st: AU.A.state, amb: AU.amb, cue: Object.keys(CUES).filter(function (k) { return CUES[k] === AU.cue; })[0] }; }, _fx: function () { Object.keys(FX).forEach(function (k) { FX[k](T0() + .1); }); Object.keys(AIRS).forEach(function (k, i) { setTimeout(function () { setAir(k); }, i * 50); }); return 1; }, _cue: function (k) { setCue(k); }, go: go, shots: function () { return SHOTS; }, at: function () { return { shot: cur, line: li, kind: SHOTS[cur].kind, ch: SHOTS[cur].ch }; }, next: next, end: end, draw: draw, seek: function (i, l, tt) { go(i); li = l || 0; lt = tt || 0; st = 5; showLine(); draw(); }, pause: function () { playing = false; paintPP(); } };
 })();
