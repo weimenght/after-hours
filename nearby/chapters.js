@@ -60,7 +60,8 @@
   var W = {
     says: ["Popo, beside you", "婆婆，在你身边", "婆婆，喺你身邊", "Popo, a tu lado", "La Popo, al teu costat"],
     note: ["Popo's note (she's asleep)", "婆婆留的纸条（她睡了）", "婆婆留低嘅紙仔（佢瞓咗）", "Nota de Popo (duerme)", "Nota de la Popo (dorm)"],
-    go: ["Tap to go on", "点一下继续", "點一下繼續", "Toca para seguir", "Toca per seguir"]
+    go: ["Tap to go on", "点一下继续", "點一下繼續", "Toca para seguir", "Toca per seguir"],
+    ks: ["One of the family's things: ask Popo", "家里的一样东西：问问婆婆", "屋企嘅一樣嘢：問吓婆婆", "Una cosa de la familia: pregunta a Popo", "Una cosa de la família: pregunta-ho a la Popo"]
   };
   var LI = { en: 0, zh: 1, "zh-Hant": 2, es: 3, ca: 4 };
   function li() { return LI[(window.FBL && FBL.get && FBL.get()) || "en"] || 0; }
@@ -100,13 +101,60 @@
   }
   function hide() { clearTimeout(timer); if (!card) return; var c = card; card = null; c.classList.add("out"); setTimeout(function () { c.remove(); }, 700); }
   function start(k) {
+    try { keepsakes(k); } catch (e) {}
     if (!C[k] || document.querySelector(".fbch")) return;
     key = k; lines = C[k]; var s = get(k);
     if (s.done) { once = true; at = (Math.random() * lines.length) | 0; end = at; }
     else { once = false; at = Math.min(s.at || 0, lines.length - 1); end = lines.length - 1; }
     show();
   }
+
+  /* Keepsakes in the room (Nov 14, the owner: the places' interaction tells the story too): a few of the family's things drawn into
+     the place's own scene; a tap and Popo tells you what it is, in the same card. Placed in fractions of the scene (THINGS[key].at). */
+  var PX = function (w, h, rects) { return '<svg viewBox="0 0 ' + w + ' ' + h + '" shape-rendering="crispEdges" aria-hidden="true">' + rects.map(function (r) { return '<rect x="' + r[0] + '" y="' + r[1] + '" width="' + r[2] + '" height="' + r[3] + '" fill="' + r[4] + '"/>'; }).join("") + '</svg>'; };
+  var K = "#1a1410";
+  var ART = {
+    lead: PX(12, 16, [[4, 0, 4, 1, K], [5, 1, 2, 2, "#8a8276"], [3, 3, 6, 1, K], [2, 4, 1, 7, K], [9, 4, 1, 7, K], [3, 4, 6, 1, "#b3261e"], [3, 5, 1, 6, "#b3261e"], [8, 5, 1, 6, "#b3261e"], [3, 11, 6, 1, K], [4, 10, 4, 1, "#b3261e"], [5, 12, 2, 2, "#c9a24a"], [5, 14, 2, 1, K]]),
+    bowl: PX(14, 8, [[0, 2, 14, 1, K], [1, 3, 12, 3, "#c8ccd4"], [1, 3, 12, 1, "#eef0f4"], [0, 3, 1, 3, K], [13, 3, 1, 3, K], [1, 6, 12, 1, K], [3, 1, 8, 1, "#f4f1e8"], [4, 0, 6, 1, "#e8d8a8"]]),
+    box: PX(16, 12, [[0, 1, 16, 1, K], [0, 2, 1, 10, K], [15, 2, 1, 10, K], [0, 11, 16, 1, K], [1, 2, 14, 9, "#b8864a"], [1, 2, 14, 2, "#a0703a"], [3, 5, 10, 4, "#f4ead2"], [4, 6, 3, 1, "#1a1410"], [9, 6, 3, 1, "#d9822b"], [4, 8, 8, 1, "#8a8276"], [0, 0, 5, 1, "#a0703a"]]),
+    wool: PX(10, 10, [[3, 0, 4, 1, K], [1, 1, 8, 1, K], [0, 2, 1, 6, K], [9, 2, 1, 6, K], [1, 8, 8, 1, K], [3, 9, 4, 1, K], [1, 2, 8, 6, "#c8303a"], [3, 1, 4, 1, "#c8303a"], [3, 8, 4, 1, "#c8303a"], [2, 3, 5, 1, "#e85a5a"], [3, 5, 5, 1, "#e85a5a"], [8, 8, 2, 1, "#c8303a"]]),
+    dict: PX(12, 14, [[0, 0, 12, 1, K], [0, 1, 1, 13, K], [11, 1, 1, 13, K], [0, 13, 12, 1, K], [1, 1, 10, 12, "#a8282e"], [1, 1, 2, 12, "#7a1a1e"], [4, 3, 6, 2, "#e8d8a8"], [4, 6, 5, 1, "#c9a24a"], [3, 9, 8, 2, "#d8d0b8"], [3, 9, 8, 1, "#f0ead8"]]),
+    rose: PX(10, 16, [[3, 0, 4, 1, K], [2, 1, 6, 1, K], [1, 2, 1, 3, K], [8, 2, 1, 3, K], [2, 2, 6, 3, "#7a1e2a"], [3, 3, 3, 1, "#a8323e"], [2, 5, 6, 1, K], [4, 6, 1, 9, "#4a6a3a"], [5, 8, 3, 2, "#5a7a42"], [2, 11, 2, 2, "#5a7a42"]])
+  };
+  var THINGS = {
+    sanctuary: { at: "#yard", items: [
+      { a: "lead", x: .66, y: .38, w: 22, s: ["That one, Josep's lead. Mantou only let him hold it. When I take it down, Mantou sit very straight, like Josep coming back through the door.", "那条是 Josep 的狗绳。馒头只肯让他牵。我一拿下来，馒头就坐得笔直，好像 Josep 要从门口回来了。", "嗰條係 Josep 嘅狗帶。饅頭淨係肯俾佢拖。我一攞落嚟，饅頭就坐到好直，好似 Josep 就快由門口返嚟咁。", "Esa, la correa de Josep. Mantou sólo deja él cogerla. Cuando la bajo, Mantou se sienta muy derecho, como si Josep vuelve por la puerta.", "Aquesta és la corretja d'en Josep. En Mantou només deixava que la portés ell. Quan la despenjo, en Mantou s'asseu ben dret, com si en Josep hagués de tornar per la porta."] },
+      { a: "bowl", x: .43, y: .86, w: 30, s: ["Every morning, platform two, I bring this bowl. Rice, little bit chicken. He eat, then look at the clock again.", "每天早上，二号站台，我就端这只碗去。一点饭，一点鸡肉。他吃完，又抬头看钟。", "朝朝，二號月台，我就捧住呢隻碗去。少少飯，少少雞。佢食完，又擰頭睇個鐘。", "Cada mañana, andén dos, llevo este bol. Arroz, un poco pollo. Él come, y otra vez mira el reloj.", "Cada matí, a l'andana dos, li portava aquest bol. Una mica d'arròs, una mica de pollastre. Menjava, i tornava a mirar el rellotge."] }] },
+    nest: { at: "#room", items: [
+      { a: "box", x: .1, y: .8, w: 40, s: ["Preserving jars, fragile. Twelve years they sleep in it. Every winter I tape the corners, otherwise fall apart already.", "腌菜罐，易碎。她们在里面睡了十二年。每年冬天我都给角贴胶布，不然早就散了。", "醃菜樽，小心輕放。佢哋喺入面瞓咗十二年。年年冬天我都同啲角貼膠紙，唔係早就散咗。", "Tarros, frágil. Doce años duermen dentro. Cada invierno pongo cinta en las esquinas, si no, ya se rompe.", "Pots de conserva, fràgil. Fa dotze anys que hi dormen. Cada hivern li poso cinta a les cantonades, si no ja s'hauria desfet."] },
+      { a: "wool", x: .82, y: .84, w: 22, s: ["My red cardigan. Yuzu steal the wool, one string at a time. One day I got no cardigan, only one happy cat.", "我的红毛衣。柚子一根一根把毛线偷走。总有一天我毛衣没了，只剩一只开心的猫。", "我件紅冷衫。柚子一條一條偷啲冷。總有一日我冇晒件冷衫，淨係得返隻開心貓。", "Mi chaqueta roja. Yuzu roba la lana, un hilo cada vez. Un día no tengo chaqueta, sólo una gata feliz.", "La meva jaqueta vermella. La Yuzu me'n roba la llana, fil a fil. Un dia no tindré jaqueta, només una gata feliç."] }] },
+    books: { at: "#parlor", items: [
+      { a: "dict", x: .62, y: .285, w: 22, s: ["My pocket dictionary. Look inside: English, my Cantonese, and Josep's pencil beside every word. Back page, I write the day I arrive.", "我的袖珍字典。你看里面：英文，我的广东话，每个字旁边都有 Josep 的铅笔字。最后一页，我写了我到的那天。", "我本袖珍字典。你睇入面：英文，我嘅廣東話，每個字隔籬都有 Josep 嘅鉛筆字。最尾嗰頁，我寫低我到嗰日。", "Mi diccionario de bolsillo. Mira dentro: inglés, mi cantonés, y el lápiz de Josep al lado de cada palabra. Última página, escribo el día que llego.", "El meu diccionari de butxaca. Mira-hi: l'anglès, el meu cantonès, i el llapis d'en Josep al costat de cada paraula. A l'última pàgina hi vaig escriure el dia que vaig arribar."] },
+      { a: "rose", x: .69, y: .29, w: 18, s: ["The rose from the first Sant Jordi. Dry now, very thin. I press it in the dictionary, at the word love. Don't laugh ah.", "第一个圣乔治节的那枝玫瑰。现在干了，好薄。我把它夹在字典里，就夹在 love 那个字。不许笑喔。", "第一個聖佐治節嗰枝玫瑰。而家乾晒，好薄。我夾咗喺本字典入面，就喺 love 嗰個字。唔准笑呀。", "La rosa del primer Sant Jordi. Ahora seca, muy fina. La pongo dentro del diccionario, en la palabra love. No te ríes, ¿eh?", "La rosa del primer Sant Jordi. Ara seca, primíssima. La vaig premsar al diccionari, a la paraula love. No riguis, eh."] }] }
+  };
+  var KCSS = ".fbks{position:absolute;inset:0;pointer-events:none;z-index:6}" +
+    ".fbks button{position:absolute;padding:0;border:0;background:none;cursor:pointer;pointer-events:auto;transform:translate(-50%,-50%);filter:drop-shadow(1px 1px 0 rgba(0,0,0,.6));-webkit-tap-highlight-color:transparent;animation:fbksHop 9s steps(2) infinite}" +
+    ".fbks button svg{display:block;width:100%;height:auto;image-rendering:pixelated}" +
+    ".fbks button:hover,.fbks button:focus-visible{filter:drop-shadow(1px 1px 0 rgba(0,0,0,.6)) drop-shadow(0 0 6px rgba(255,214,120,.8))}" +
+    ".fbks button:focus-visible{outline:2px solid #f6b73c;outline-offset:2px}" +
+    "@keyframes fbksHop{0%,96%,100%{margin-top:0}97%,99%{margin-top:-3px}}@media (prefers-reduced-motion:reduce){.fbks button{animation:none}}";
+  function keepsakes(k) {
+    var T = THINGS[k]; if (!T) return;
+    var host = document.querySelector(T.at); if (!host || host.querySelector(".fbks")) return;
+    if (!document.getElementById("fbks-css")) { var st = document.createElement("style"); st.id = "fbks-css"; st.textContent = KCSS; document.head.appendChild(st); }
+    if (getComputedStyle(host).position === "static") host.style.position = "relative";
+    var lay = document.createElement("div"); lay.className = "fbks"; lay.setAttribute("data-fbt-skip", ""); lay.setAttribute("data-fb-emoji", "");
+    T.items.forEach(function (it, i) {
+      var b = document.createElement("button"); b.type = "button"; b.innerHTML = ART[it.a];
+      b.style.left = it.x * 100 + "%"; b.style.top = it.y * 100 + "%"; b.style.width = it.w + "px"; b.style.animationDelay = (i * 2.7) + "s";
+      b.setAttribute("aria-label", tx(W.ks));
+      b.addEventListener("click", function (e) { e.stopPropagation(); e.preventDefault(); say(k, it.s); });
+      lay.appendChild(b);
+    });
+    host.appendChild(lay);
+  }
+  function say(k, line) { clearTimeout(timer); key = k; lines = [line]; at = 0; end = 0; once = true; show(); }
   addEventListener("keydown", function (e) { if (card && e.key === "Escape") hide(); });
   addEventListener("fbl:lang", function () { if (card) show(); });
-  window.FBChapter = { start: start, hide: hide, has: function (k) { return !!C[k]; }, keys: Object.keys(TITLE) };
+  window.FBChapter = { keepsakes: keepsakes, start: start, hide: hide, has: function (k) { return !!C[k]; }, keys: Object.keys(TITLE) };
 })();
