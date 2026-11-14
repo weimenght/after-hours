@@ -459,8 +459,25 @@
 
     /* responsive show/hide that wins over .hidden */
 
-    /* back wall: lattice window + little sign, desktop only */
-    .stage-window, .stage-sign { display: none; }
+    /* back wall: lattice window on every screen (Nov 14, the owner: phones get it too, the room taller to hold it); the little sign, wide screens only */
+    .stage-sign { display: none; }
+    .stage-window {
+        display: block; position: absolute; left: 50%; transform: translateX(-50%);
+        top: 92px; width: 44%; height: calc(100% - 220px); min-height: 70px;
+        border: 5px solid #4a2d19; border-radius: 4px;
+        box-shadow: inset 0 0 0 2px #000, 0 0 0 2px #000, inset 0 0 30px rgba(0,0,0,.6);
+        background:
+          linear-gradient(90deg, transparent 32%, #4a2d19 32% 34%, transparent 34% 66%, #4a2d19 66% 68%, transparent 68%),
+          linear-gradient(0deg, transparent 48%, #4a2d19 48% 52%, transparent 52%),
+          linear-gradient(180deg, #151026, #2c1f3a 70%, #3a2433);
+        overflow: hidden;
+    }
+    .stage.cafe-mode .stage-window { background:
+        linear-gradient(90deg, transparent 32%, #4a2d19 32% 34%, transparent 34% 66%, #4a2d19 66% 68%, transparent 68%),
+        linear-gradient(0deg, transparent 48%, #4a2d19 48% 52%, transparent 52%),
+        linear-gradient(180deg, #9cc6dc, #f1d8a8 75%, #e9b98a); }
+    .stage-window .moon { position: absolute; right: 14%; top: 14%; width: 16px; height: 16px; border-radius: 50%; background: #fff3dc; box-shadow: 0 0 12px rgba(255,243,220,.6); }
+    @media (max-width: 1023px) { .stage { height: clamp(300px, calc(100dvh - 330px), 560px); } }
     @media (min-width: 1024px) {
       .stage-window {
         display: block; position: absolute; left: 50%; transform: translateX(-50%);
@@ -926,7 +943,7 @@ html.fbsh-in #view-sanctuary { grid-template-rows: 0 1fr; }
 </style>
 
 <script src="./js/mei.js?v=00de4d295a"></script>
-<script src="./js/popo.js?v=9a8aa9a6c9"></script>
+<script src="./js/popo.js?v=8ad5f799b8"></script>
 <script src="./js/small-talk.js?v=da9f616b00"></script>
 
 <script src="./js/panel.js?v=9c03eb7285"></script>

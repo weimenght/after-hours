@@ -68,17 +68,23 @@
   var dcv = document.createElement("div"); dcv.id = "dog-avatar"; dcv.setAttribute("role", "img"); dcv.setAttribute("aria-label", "Mantou");
   var STOOL = '<path fill="#1a1410" d="M3 16h20v3H3zM6 19h2v5H6zM18 19h2v5h-2z"/><path fill="#8a5a2e" d="M4 16h18v1H4z"/><path fill="#5a3519" d="M4 17h18v1H4zM7 19h1v5H7zM19 19h1v5h-1z"/><path fill="#3a2210" d="M8 22h10v1H8z"/>';
   var dogPainted = null;
+  /* Nov 14, the owner: a pet keeping the counter is in a person's seat, so it wears its dressed-up bust (FBWorld.drawPetBust);
+     on another host's shift Mantou and the cats stay four-legged (the guest below, the cats on the counter) */
   function paintDog(asleep) { asleep = !!asleep; if (dogPainted === asleep) return; dogPainted = asleep; dcv.classList.toggle("asleep", asleep);
-    dcv.innerHTML = window.NDPetPic ? NDPetPic("dog", { asleep: asleep, vw: 26, vh: 24, dx: 2, under: STOOL }) : ""; }
+    if (W.drawPetBust) { dcv.innerHTML = '<canvas width="32" height="36"></canvas>'; var g = dcv.firstChild.getContext("2d"); W.drawPetBust(g, "mantou", 0, 3, 1, { asleep: asleep }); }
+    else dcv.innerHTML = window.NDPetPic ? NDPetPic("dog", { asleep: asleep, vw: 26, vh: 24, dx: 2, under: STOOL }) : ""; }
+  var ccv = document.createElement("canvas"); ccv.id = "cats-avatar"; ccv.width = 32; ccv.height = 36; ccv.setAttribute("role", "img"); ccv.setAttribute("aria-label", "Miso & Yuzu");
+  var catsPainted = null;
+  function paintCats(asleep) { asleep = !!asleep; if (catsPainted === asleep || !W.drawPetBust) return; catsPainted = asleep; var g = ccv.getContext("2d"); g.clearRect(0, 0, 32, 36); W.drawPetBust(g, "cats", 0, 3, 1, { asleep: asleep }); }
   var css0 = document.createElement("style");
-  css0.textContent = "#dog-avatar{display:none;width:78px;height:72px;image-rendering:pixelated}#dog-avatar svg{display:block;width:100%;height:100%;overflow:visible}@media (min-width:1024px){#dog-avatar{width:109px;height:101px}}body.dog-on #dog-avatar{display:block}body.dog-on #svg-wei-avatar,body.dog-on #mei-avatar,body.dog-on #popo-avatar,body.dog-on #wei-zzz-particles{display:none!important}" +
+  css0.textContent = "#dog-avatar,#cats-avatar{display:none;width:66px;height:74px;image-rendering:pixelated}#dog-avatar canvas,#dog-avatar svg{display:block;width:100%;height:100%;overflow:visible;image-rendering:pixelated}@media (min-width:768px){#dog-avatar,#cats-avatar{width:92px;height:104px}}body.cats-on #cats-avatar{display:block}body.cats-on #cat-miso,body.cats-on #cat-yuzu{display:none!important}body.dog-on #dog-avatar{display:block}body.dog-on #svg-wei-avatar,body.dog-on #mei-avatar,body.dog-on #popo-avatar,body.dog-on #wei-zzz-particles{display:none!important}" +
     "#dog-guest{position:absolute;bottom:0;left:30%;z-index:4;width:78px;height:72px;image-rendering:pixelated;cursor:pointer;transform:translateX(-50%)}#dog-guest svg{display:block;width:100%;height:100%;overflow:visible}@media (min-width:1024px){#dog-guest{width:109px;height:101px}}";
   document.head.appendChild(css0);
   var css = document.createElement("style");
-  css.textContent = "#popo-avatar{display:none;width:66px;height:74px;image-rendering:pixelated}body.popo-on #popo-avatar{display:block}body.popo-on #svg-wei-avatar,body.popo-on #mei-avatar,body.popo-on:not(.popo-nap) #wei-zzz-particles,body.cats-on #svg-wei-avatar,body.cats-on #mei-avatar,body.cats-on #wei-zzz-particles{display:none!important}body.popo-on:not(.wei-away) #wei-anchor{visibility:visible!important}body.cats-on #wei-anchor{visibility:hidden!important}@media (min-width:768px){#popo-avatar{width:92px;height:104px}}";
+  css.textContent = "#popo-avatar{display:none;width:66px;height:74px;image-rendering:pixelated}body.popo-on #popo-avatar{display:block}body.popo-on #svg-wei-avatar,body.popo-on #mei-avatar,body.popo-on:not(.popo-nap) #wei-zzz-particles,body.cats-on #svg-wei-avatar,body.cats-on #mei-avatar,body.cats-on #wei-zzz-particles{display:none!important}body.popo-on:not(.wei-away) #wei-anchor{visibility:visible!important}body.cats-on:not(.wei-away) #wei-anchor{visibility:visible!important}@media (min-width:768px){#popo-avatar{width:92px;height:104px}}";
   document.head.appendChild(css);
   var cv = document.createElement("canvas"); cv.id = "popo-avatar"; cv.width = 32; cv.height = 36; cv.setAttribute("role", "img"); cv.setAttribute("aria-label", "Popo");
-  var holder = document.getElementById("sprite-wei-container"); if (holder) { holder.appendChild(cv); holder.appendChild(dcv); }
+  var holder = document.getElementById("sprite-wei-container"); if (holder) { holder.appendChild(cv); holder.appendChild(dcv); holder.appendChild(ccv); }
   function paint(asleep) { var g = cv.getContext("2d"); g.clearRect(0, 0, 32, 36); W.drawPopo(g, 0, 3, 1, { asleep: asleep }); }
   function say(t) { try { if (!(window.NDSay && NDSay(t))) setText("sleep-story-text", t); } catch (e) {} }
   function pick(a) { return a[(Math.random() * a.length) | 0]; }
@@ -111,6 +117,7 @@
       var key = h.asleep ? "nap" : "hi"; if (said !== "popo-" + key) { said = "popo-" + key; say(L(pick(P[key]))); }
       btn(L(h.asleep ? CATS_SERVE : P.ask));
     } else {
+      paintCats(h.asleep); if (hn) hn.textContent = L(M("Miso & Yuzu", "味噌和柚子", "味噌和柚子", "Miso y Yuzu", "Miso i Yuzu"));
       try { setText("sleep-header-title", L(h.asleep ? C.napHead : C.head)); } catch (e) {}
       var k2 = h.asleep ? "nap" : "hi"; if (said !== "cats-" + k2) { said = "cats-" + k2; say(L(pick(C[k2]))); }
       btn(L(C.ask));
