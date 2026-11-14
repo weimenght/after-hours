@@ -206,6 +206,7 @@ function street(c, W0, H0, h, ground) {
   return night;
 }
 function lamp(c, x, ground, night) { R(c, x, ground - 44, 2, 44, "#2f2a26"); R(c, x - 4, ground - 50, 10, 6, "#2f2a26"); R(c, x - 3, ground - 45, 8, 2, night ? "#ffd58a" : "#e7b54a"); if (night) { c.globalAlpha = .18; R(c, x - 10, ground - 44, 22, 44, "#ffd58a"); c.globalAlpha = 1; } }
+function cityToday() { var d = new Date(); return Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5)) % 4; }   /* 0 Hong Kong, 1 Barcelona, 2 New York, 3 Beijing */
 function paintScenes() {
   cancelAnimationFrame(SCN.raf);
   var cs = document.querySelectorAll("canvas[data-scene]"); if (!cs.length || !window.FBWorld) return;
@@ -217,7 +218,9 @@ function paintScenes() {
         var g = 96, night = street(c, W0, H0, h, g), popoUp = !asleepAt("popo", h), dogUp = !asleepAt("dog", h);
         lamp(c, 22, g, night);
         /* the street sign on the corner */
-        R(c, 140, g - 40, 2, 40, "#2f2a26"); R(c, 128, g - 46, 28, 9, "#9bb08a"); R(c, 131, g - 42, 22, 1, "#f3ead8");
+        /* the street sign on the corner, in today's city: Hong Kong's black-on-white, Barcelona's marble plaque, New York's green, Beijing's blue */
+        var SG = [["#f6f3ea", "#1a1a1a", "#1a1a1a"], ["#e8e2d6", "#3a3a3a", "#8a7a64"], ["#2f6b3a", "#f3ead8", "#f3ead8"], ["#2a4a8a", "#f3ead8", "#f3ead8"]][cityToday()];
+        R(c, 140, g - 40, 2, 40, "#2f2a26"); R(c, 128, g - 46, 28, 9, SG[2]); R(c, 129, g - 45, 26, 7, SG[0]); R(c, 131, g - 42, 22, 1, SG[1]);
         /* Popo behind the low garden wall, a pot of geraniums beside her */
         if (popoUp) FBWorld.drawPopo(c, 48, g - 40, 1, {});
         R(c, 36, g - 14, 58, 14, "#c8a27e"); R(c, 36, g - 14, 58, 2, "#e0bf98"); for (var bx = 36; bx < 94; bx += 8) R(c, bx, g - 8, 1, 8, "#a8825e");
@@ -247,7 +250,7 @@ home: function () { return '<section class="screen">' + CORNER() +
   '<div><h1>' + esc(T(W.app)) + '</h1><p class="lede">' + esc(T(W.lede)) + '</p>' + popo("pCorner") + '</div>' +
   '<div><label id="dayL">' + esc(T(W.pickDay)) + '</label><div class="days" role="group" aria-labelledby="dayL">' + [0, 1, 2, 3, 4, 5, 6].map(function (o) { return '<button type="button" class="chip day" aria-pressed="false" data-d="' + o + '">' + esc(dayName(o)) + '</button>'; }).join("") + '</div></div>' +
   '<div><label id="whenL">' + esc(T(W.pickTime)) + '</label><div class="times" role="group" aria-labelledby="whenL">' + TIMES.map(function (x) { return '<button type="button" class="chip tm" aria-pressed="false" data-t="' + x + '">' + x + '</button>'; }).join("") + '<button type="button" class="chip other" id="otherBtn" aria-pressed="false">' + esc(T(W.otherTime)) + '</button><div class="pickt" id="tmIn" hidden><select id="tmH" aria-label="' + esc(T(W.pickTime)) + '"></select><span aria-hidden="true">:</span><select id="tmM" aria-label="' + esc(T(W.pickTime)) + '"></select></div></div></div>' +
-  '<div><label for="corner">' + esc(T(W.whereLabel)) + '</label><input id="corner" maxlength="60" autocomplete="off" placeholder="' + esc(T(W.wherePh)) + '"></div>' +
+  '<div><label for="corner">' + esc(T(W.whereLabel)) + '</label><input id="corner" maxlength="60" autocomplete="off" placeholder="' + esc(T(W.wherePhC ? W.wherePhC[cityToday()] : W.wherePh)) + '"></div>' +
   '<div><label for="name">' + esc(T(W.nameLabel)) + '</label><input id="name" maxlength="30" autocomplete="given-name" placeholder="' + esc(T(W.namePh)) + '" value="' + esc(get(NAMEKEY) || "") + '"></div>' +
   '<p class="note err" id="err" aria-live="polite"></p>' +
   '<button type="button" class="btn" id="make">' + esc(T(W.make)) + '</button></section>'; },

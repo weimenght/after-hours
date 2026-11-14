@@ -41,6 +41,13 @@ window.WW_W = {
   againLine: ["Same time next week? {t}, at {c}.", "下周同一时间？{t}，{c}。", "下週同一時間？{t}，{c}。", "¿Misma hora la semana que viene? El {t}, en {c}.", "Mateixa hora la setmana que ve? El {t}, a {c}."],
   whereLabel: ["Which corner?", "在哪个街角？", "在哪個街角？", "¿Qué esquina?", "Quina cantonada?"],
   wherePh: ["the bakery on Elm Street", "路口的面包店", "路口的麵包店", "la panadería de la esquina", "el forn de la cantonada"],
+  /* the family's cities' corners, one a day, matching the street sign in the picture (Nov 14) */
+  wherePhC: [
+    ["the egg tart bakery on Nathan Road", "弥敦道的蛋挞店", "彌敦道的蛋撻店", "la pastelería de tartas de huevo en Nathan Road", "la pastisseria de tartaletes d'ou de Nathan Road"],
+    ["the forn on Carrer de Blai", "布莱街的面包房", "布萊街的麵包房", "el forn del Carrer de Blai", "el forn del carrer de Blai"],
+    ["the bagel shop on 30th Avenue", "30 大道的贝果店", "30 大道的貝果店", "la tienda de bagels de la 30th Avenue", "la botiga de bagels de la 30th Avenue"],
+    ["the tanghulu stall by the Drum Tower", "鼓楼旁边的糖葫芦摊", "鼓樓旁邊的糖葫蘆攤", "el puesto de tanghulu junto a la Torre del Tambor", "la parada de tanghulu al costat de la Torre del Tambor"]
+  ],
   nameLabel: ["Your name", "你的名字", "你的名字", "Tu nombre", "El teu nom"],
   namePh: ["so they know it's you", "让对方知道是你", "讓對方知道是你", "para que sepan que eres tú", "perquè sàpiguen que ets tu"],
   make: ["Make the code", "生成邀请码", "產生邀請碼", "Crear el código", "Crear el codi"],
