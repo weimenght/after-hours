@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-town" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=e4f29fa2e8"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Put It Back</title>
 <meta name="description" content="Everyone's things wandered off today. Help Popo, Wei, Mei and the animals put them back, then tidy one real spot for one song, with someone if you can, and keep what you found.">
@@ -921,6 +921,7 @@ function openMore() {
     b.onclick = function () { if (window.FBL) FBL.set(l); else document.documentElement.lang = l; closeMore(); render(); }; L.appendChild(b); });
   m.appendChild(L);
   var pv = item(t("privacy"), "", null, "a"); pv.href = "/privacy/";
+  if (window.FBC && FBC.head && FBC.head.more) { var ah = item(FBC.t(FBC.head.more) + " \u203a", "", null, "a"); ah.href = "/app/"; }   /* the way to the rest, as in every app's \u22ef */
   m.hidden = false; $("moreBtn").setAttribute("aria-expanded", "true"); m.firstChild.focus();
 }
 function foot() {
