@@ -868,5 +868,69 @@ window.CF_HOUSE = [
 ],
 "who": "popo",
 "tag": "late"
+},
+{
+"dish": [
+"Jiaozi for the friends who helped you move",
+"给帮你搬家的朋友包的饺子",
+"給幫你搬家的朋友包的餃子",
+"Jiaozi para los amigos que te ayudaron a mudarte",
+"Jiaozi per als amics que t'han ajudat a fer la mudança"
+],
+"whose": [
+"Wei's, from the old woman next door in a Beijing hutong, the winter he lived there",
+"Wei 的，那年冬天他住在北京胡同里，隔壁老太太教的",
+"Wei 的，那年冬天他住在北京胡同裡，隔壁老太太教的",
+"De Wei, de la vecina mayor de un hutong de Pekín, el invierno que vivió allí",
+"D'en Wei, de la veïna gran d'un hutong de Pequín, l'hivern que hi va viure"
+],
+"forwho": [
+"friends who carried boxes up four floors",
+"帮你扛箱子爬了四层楼的朋友",
+"幫你扛箱子爬了四層樓的朋友",
+"los amigos que subieron cajas cuatro pisos",
+"els amics que van pujar caixes quatre pisos"
+],
+"body": [
+"Flour and cold water into a soft dough; rest it under a bowl for half an hour. Pork mince, Chinese cabbage chopped and squeezed dry, ginger, spring onion, soy, sesame oil and a splash of water, stirred one way until sticky. Roll small rounds, thinner at the edge. A spoon of filling, fold, pinch shut. Boil; when they float, add a cup of cold water, and do that three times. Black vinegar and garlic to dip. Everyone folds. The ugly ones are the cook's.",
+"面粉加冷水和成软面团，扣个碗醒半小时。猪肉末、白菜剁碎挤干水，加姜、葱、酱油、香油和一点水，朝一个方向搅到上劲。擀小圆皮，边薄中间厚。放一勺馅，对折，捏紧。水开下锅，浮起来就点一碗冷水，点三次。蘸醋和蒜。大家一起包，包丑的归做饭的人吃。",
+"麵粉加冷水和成軟麵團，扣個碗醒半小時。豬肉末、白菜剁碎擠乾水，加薑、蔥、醬油、香油和一點水，朝一個方向攪到上勁。擀小圓皮，邊薄中間厚。放一勺餡，對折，捏緊。水開下鍋，浮起來就點一碗冷水，點三次。蘸醋和蒜。大家一起包，包醜的歸做飯的人吃。",
+"Harina y agua fría hasta una masa blanda; que repose media hora bajo un cuenco. Carne de cerdo picada, col china picada y escurrida, jengibre, cebolleta, soja, aceite de sésamo y un chorrito de agua, removido en un solo sentido hasta que ligue. Estira discos pequeños, más finos en el borde. Una cucharada de relleno, dobla, pellizca. A hervir; cuando floten, un vaso de agua fría, tres veces. Vinagre negro y ajo para mojar. Todos doblan. Los feos son del cocinero.",
+"Farina i aigua freda fins a una massa tova; que reposi mitja hora sota un bol. Carn de porc picada, col xinesa picada i escorreguda, gingebre, ceba tendra, soja, oli de sèsam i un raig d'aigua, remenat en un sol sentit fins que lligui. Estira discos petits, més fins a la vora. Una cullerada de farcit, doblega, pessiga. A bullir; quan surin, un got d'aigua freda, tres vegades. Vinagre negre i all per sucar. Tothom en plega. Els lletjos són del cuiner."
+],
+"who": "wei",
+"tag": "friend"
+},
+{
+"dish": [
+"Diner pancakes for a slow Sunday",
+"慢悠悠星期天的美式松饼",
+"慢悠悠星期天的美式鬆餅",
+"Tortitas de diner para un domingo lento",
+"Creps de diner per a un diumenge lent"
+],
+"whose": [
+"Mei's, from her mum's Sunday stack in Queens",
+"Mei 的，她妈妈在皇后区每个星期天做的那一摞",
+"Mei 的，她媽媽在皇后區每個星期天做的那一疊",
+"De Mei, de la pila de los domingos de su madre en Queens",
+"De la Mei, de la pila dels diumenges de la seva mare a Queens"
+],
+"forwho": [
+"whoever's too tired to get dressed",
+"累得不想换衣服的人",
+"累得不想換衣服的人",
+"quien esté demasiado cansado para vestirse",
+"qui estigui massa cansat per vestir-se"
+],
+"body": [
+"One and a half cups of flour, a spoon of sugar, two of baking powder, a pinch of salt. One egg, a cup and a bit of milk, three spoons of melted butter. Stir just till it's lumpy; lumpy is right. Hot pan, a little butter, one ladle each. Flip when the bubbles pop and stay open. Butter on top, maple syrup, a stack of three. My mom's rule: the cook eats the first one standing at the stove.",
+"一杯半面粉、一勺糖、两勺泡打粉、一小撮盐。一个蛋、一杯多一点的牛奶、三勺融化的黄油。搅到还有疙瘩就停，有疙瘩才对。锅烧热，抹一点黄油，一勺面糊一个。气泡破了不再合上就翻面。上面放黄油、淋枫糖浆，叠三张。我妈的规矩：做饭的人站在灶边吃第一张。",
+"一杯半麵粉、一勺糖、兩勺泡打粉、一小撮鹽。一個蛋、一杯多一點的牛奶、三勺融化的奶油。攪到還有疙瘩就停，有疙瘩才對。鍋燒熱，抹一點奶油，一勺麵糊一個。氣泡破了不再合上就翻面。上面放奶油、淋楓糖漿，疊三張。我媽的規矩：做飯的人站在爐邊吃第一張。",
+"Taza y media de harina, una cucharada de azúcar, dos de levadura, una pizca de sal. Un huevo, una taza y un poco de leche, tres cucharadas de mantequilla derretida. Remueve solo hasta que queden grumos; con grumos está bien. Sartén caliente, un poco de mantequilla, un cucharón cada una. Dales la vuelta cuando las burbujas revienten y se queden abiertas. Mantequilla encima, sirope de arce, una pila de tres. La regla de mi madre: quien cocina se come la primera de pie junto al fuego.",
+"Una tassa i mitja de farina, una cullerada de sucre, dues de llevat, un pessic de sal. Un ou, una tassa i una mica de llet, tres cullerades de mantega fosa. Remena només fins que hi hagi grumolls; amb grumolls està bé. Paella calenta, una mica de mantega, un cullerot cada una. Gira-les quan les bombolles rebentin i quedin obertes. Mantega a sobre, xarop d'auró, una pila de tres. La regla de la meva mare: qui cuina es menja la primera dret al costat del foc."
+],
+"who": "mei",
+"tag": "tired"
 }
 ];
