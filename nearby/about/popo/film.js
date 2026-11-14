@@ -717,6 +717,7 @@
 
   /* ---------- the player ---------- */
   var cur = 0, li = 0, lt = 0, st = 0, playing = true, last = 0, raf = 0, frameT = 0, done = false;
+  var capTO = 0;   /* the chapter's date and title: up for about two and a half seconds, then gone */
   var sub = document.getElementById("line"), cap = document.getElementById("cap"), capW = document.getElementById("capw"), capT = document.getElementById("capt"), fin = document.getElementById("fin"), pp = document.getElementById("pp"), dots = document.getElementById("dots"), face = document.getElementById("face");
   function esc(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
   function showLine() {
@@ -726,8 +727,8 @@
     sub.classList.remove("in"); void sub.offsetWidth; sub.classList.add("in");
   }
   function headShow() {
-    var S = SHOTS[cur]; cap.classList.remove("on");
-    if (S.kind === "scene") { capW.textContent = S.head[0]; capT.textContent = S.head[1]; void cap.offsetWidth; cap.classList.add("on"); }
+    var S = SHOTS[cur]; clearTimeout(capTO); cap.classList.remove("on");
+    if (S.kind === "scene") { capW.textContent = S.head[0]; capT.textContent = S.head[1]; void cap.offsetWidth; cap.classList.add("on"); clearTimeout(capTO); capTO = setTimeout(function () { cap.classList.remove("on"); }, 2600); }
     [].forEach.call(dots.children, function (d, j) { d.setAttribute("aria-current", String(j === S.ch + 1)); });
   }
   function go(i, keepLine) { soundReset(); cur = Math.max(0, Math.min(SHOTS.length - 1, i)); li = keepLine ? Math.min(li, SHOTS[cur].lines.length - 1) : 0; lt = 0; st = 0; done = false; fin.hidden = true; headShow(); showLine(); }
