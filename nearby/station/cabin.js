@@ -184,7 +184,7 @@
     for (k in c) { r -= c[k]; if (r <= 0) return k; } return "clear";
   }
   function townTakesCity(st) {
-    if (!st) return; var key = st.name + "|" + Math.floor(Date.now() / 600e3); if (key === lastCity) return; lastCity = key;
+    if (!st || st.__popo) return;   /* Popo's line, 1968 (popo-line.js) keeps its own hours and never moves the town's clock */ var key = st.name + "|" + Math.floor(Date.now() / 600e3); if (key === lastCity) return; lastCity = key;
     var held = skyHeld(), w = held ? state.weather : climate(st);
     if (w !== state.weather) { try { setWeather(w); } catch (e) {} }
     var tz = tzOf(st), W = window.FBWorld; if (!tz) return;
