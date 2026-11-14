@@ -756,56 +756,21 @@ function drink(c,t,night){
 }
 /* a tail: path() traces it from a root tucked well inside the body (drawn before the body, so the body covers the join); outline, then fur */
 function tailDraw(path,col,w){g.beginPath();path();g.strokeStyle=INK;g.lineWidth=w+2;g.lineCap='round';g.lineJoin='round';g.stroke();g.beginPath();path();g.strokeStyle=col;g.lineWidth=w;g.stroke()}
-/* Miso, Yuzu or Mantou (the town's own colours): up and looking out of the window by day, curled up asleep from the evening */
+/* Miso, Yuzu or Mantou on the desk: the town's own sprites (FBWorld.drawPet, never a new drawing; Nov 14, the owner: "should
+   be the town's characters"), up and watching the window by day, curled up asleep from the evening and in storms */
 function pet(c,t,night,w){
-  const P=(window.FBWorld&&FBWorld.PETS&&FBWorld.PETS[c.pet])||{miso:{b:'#231b17',d:'#3a2f29',belly:'#3a2f29'},yuzu:{b:'#e8913a',d:'#b5611d',belly:'#f8dcae',stripe:'#b5611d'},dog:{b:'#e8c48a',w:'#fbf3e2',d:'#b88a4a',collar:'#c8402a'}}[c.pet];
-  const asleep=['evening','night','late'].includes(c.tb)||w==='storm',dog=c.pet==='dog',br=1+.05*Math.sin(t*1.6);
+  const asleep=['evening','night','late'].includes(c.tb)||w==='storm',dog=c.pet==='dog';
   const party=c.fid==='nye'||c.fid==='newyear',cosy=(c.season==='winter'||w==='snow')&&asleep;
-  if(asleep){
-    if(dog){   // Mantou, curled on his cushion, chin on his paws
-      poly(ellPts(272,238,48,7,16));ink('#c8473a',2);
-      tailDraw(()=>{g.moveTo(294,222);g.bezierCurveTo(318,210,312,198,300,206)},P.b,2.6);   // the curly tail, rooted inside his back
-      poly(ellPts(278,226,34,13*br,18));ink(P.b,2);poly(ellPts(270,233,20,4,12));ink(P.w,0);
-      poly(ellPts(244,228,14,11,14));ink(P.b,2);poly(ellPts(234,233,7,5,10));ink(P.w,1.4);g.fillStyle=INK;g.beginPath();g.arc(229,231,1.8,0,7);g.fill();
-      poly([[248,219],[258,222],[254,236]]);ink(P.d,1.6);g.beginPath();g.moveTo(252,228);g.lineTo(262,232);g.strokeStyle=P.collar;g.lineWidth=3;g.stroke();
-      g.beginPath();g.arc(240,226,2.4,.2,Math.PI-.2);ink(null,1.3);
-      poly(ellPts(232,240,8,3,8));ink(P.w,1.4);
-    }else{
-      const sw=Math.sin(t*.9)*3;tailDraw(()=>{g.moveTo(292,233);g.quadraticCurveTo(320,232,316,218+sw);g.quadraticCurveTo(313,208+sw,302,212)},P.b,2.4);   // wrapped round her, rooted inside
-      poly(ellPts(270,229,36,12*br,18));ink(P.b,2);
-      poly(ellPts(262,236,20,4*br,12));ink(P.belly,0);
-      if(P.stripe){g.beginPath();[[256,219],[268,218],[280,218],[292,221]].forEach(([x,y])=>{g.moveTo(x,y+1);g.lineTo(x+2,y+8)});g.strokeStyle=P.stripe;g.lineWidth=2;g.stroke()}
-      poly([[226,220],[229,207],[236,216]]);ink(P.b,1.8);poly([[240,215],[247,206],[249,219]]);ink(P.b,1.8);
-      poly(ellPts(238,227,13,11,14));ink(P.b,2);
-      g.beginPath();g.arc(233,227,2.6,.2,Math.PI-.2);g.moveTo(245,227);g.arc(242,227,2.6,.2,Math.PI-.2);g.strokeStyle=c.pet==='miso'?'#b9a48a':INK;g.lineWidth=1.3;g.stroke();
-      g.fillStyle='#f29a8a';g.fillRect(237,231,2,1.6);
-    }
-    if(cosy){const x0=dog?280:274;poly([[x0,222],[x0+14,216],[x0+30,217],[x0+40,224],[x0+42,240],[x0-2,240]]);ink('#d8724a',1.8);g.strokeStyle='#f3d6a8';g.lineWidth=1.6;g.beginPath();for(let k=0;k<3;k++){g.moveTo(x0+8+k*12,219);g.lineTo(x0+6+k*12,240)}g.stroke()}   // a knitted blanket over the back half
-    if(Math.sin(t*.5)>.6){g.font='700 12px Caveat, cursive';g.fillStyle=night?'#ffe3a6':INK;g.fillText('z',252,206-((t*8)%8));g.font='700 9px Caveat, cursive';g.fillText('z',258,198-((t*6)%6))}
-    if(party){poly([[238,216],[248,214],[241,198]]);ink('#f6c046',1.4)}
-    return;
-  }
-  // awake: sitting up on the desk, back to us, watching the window
-  const look=Math.sin(t*.4)*3,x=268;
-  if(dog){
-    const wag=Math.sin(t*(S.playing?10:4))*6;
-    tailDraw(()=>{g.moveTo(x+8,228);g.bezierCurveTo(x+30+wag,224,x+22+wag,210,x+16+wag*.6,218)},P.b,2.6);
-    poly(ellPts(x,226,24,15,16));ink(P.b,2);poly([[x-14,222],[x+14,222],[x+10,196],[x-10,196]]);ink(P.b,2);
-    g.beginPath();g.moveTo(x-11,198);g.lineTo(x+11,198);g.strokeStyle=P.collar;g.lineWidth=3.4;g.stroke();
-    poly(ellPts(x+look,184,13,12,14));ink(P.b,2);poly(ellPts(x-12+look,186,5,10,10));ink(P.d,1.6);poly(ellPts(x+12+look,186,5,10,10));ink(P.d,1.6);
-    poly(ellPts(x-12,240,7,3,8));ink(P.w,1.4);poly(ellPts(x+12,240,7,3,8));ink(P.w,1.4);
-  }else{
-    const tw=Math.sin(t*1.3)*4;
-    tailDraw(()=>{g.moveTo(x+6,234);g.bezierCurveTo(x+40,242,x+44,226+tw,x+36,218+tw)},P.b,2.6);
-    if(P.stripe){g.strokeStyle=P.stripe;g.lineWidth=1.6;g.beginPath();g.moveTo(x+38,232);g.lineTo(x+41,229);g.moveTo(x+40,224+tw);g.lineTo(x+43,223+tw);g.stroke()}   // Yuzu's tail rings
-    poly(ellPts(x,226,22,15,16));ink(P.b,2);poly([[x-13,222],[x+13,222],[x+9,194],[x-9,194]]);ink(P.b,2);
-    if(P.stripe){g.strokeStyle=P.stripe;g.lineWidth=2;g.beginPath();[[214],[222],[230]].forEach(([y])=>{g.moveTo(x-12,y);g.quadraticCurveTo(x,y-4,x+12,y)});g.stroke()}
-    poly(ellPts(x+look,184,12,11,14));ink(P.b,2);
-    poly([[x-10+look,180],[x-8+look,166],[x-1+look,175]]);ink(P.b,1.8);poly([[x+10+look,180],[x+8+look,166],[x+1+look,175]]);ink(P.b,1.8);
-    if(P.stripe){g.strokeStyle=P.stripe;g.lineWidth=1.6;g.beginPath();g.moveTo(x-4+look,175);g.lineTo(x-3+look,182);g.moveTo(x+4+look,175);g.lineTo(x+3+look,182);g.stroke()}
-  }
-  if(party){poly([[x-7+look,174],[x+7+look,174],[x+look,156]]);ink('#f6c046',1.4);g.fillStyle='#e8543c';g.fillRect(x-1+look,154,3,3)}
-  if(c.season==='winter'&&!dog){g.beginPath();g.moveTo(x-11,196);g.lineTo(x+11,196);g.strokeStyle='#c8473a';g.lineWidth=4;g.stroke()}   // a little scarf in winter
+  const k=dog?'dog':c.pet,px=4,x=268,y=241,sw=dog?22:18,sh=dog?16:14,x0=Math.round(x-sw*px/2),y0=Math.round(y-sh*px+(asleep?3*px:0));
+  if(asleep&&dog){poly(ellPts(x,y+1,52,6,16));ink('#c8473a',2)}   // his red cushion
+  if(!(window.FBWorld&&FBWorld.drawPet))return;
+  const st=!asleep&&S.playing?Math.floor(t*(dog?4:2))%2:0;
+  g.save();g.imageSmoothingEnabled=false;FBWorld.drawPet(g,k,x,y,px,{asleep:asleep,step:st});g.restore();
+  const hx=x0+(dog?18:15.5)*px,hy=y0;   // the top of the head (the sprites face right)
+  if(cosy){g.fillStyle='#d8724a';g.fillRect(x0+3*px,y0+5*px,8*px,sh*px-8*px);g.fillStyle='#f3d6a8';for(let i=0;i<3;i++)g.fillRect(x0+(4+i*2.5)*px,y0+5*px,px*.6,sh*px-8*px)}   // a knitted blanket over the back half
+  if(asleep&&Math.sin(t*.5)>.6){g.font='700 12px Caveat, cursive';g.fillStyle=night?'#ffe3a6':INK;g.fillText('z',hx+6,hy-4-((t*8)%8));g.font='700 9px Caveat, cursive';g.fillText('z',hx+12,hy-12-((t*6)%6))}
+  if(party){g.fillStyle='#f6c046';g.beginPath();g.moveTo(hx-8,hy+2);g.lineTo(hx+8,hy+2);g.lineTo(hx,hy-16);g.fill();g.fillStyle='#e8543c';g.fillRect(hx-2,hy-19,4,4)}
+  if(c.season==='winter'&&!dog&&!asleep){g.fillStyle='#c8473a';g.fillRect(x0+12*px,y0+6*px,3*px,2*px)}   // a little scarf in winter
 }
 function draw(now){
   requestAnimationFrame(draw);
