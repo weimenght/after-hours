@@ -756,13 +756,32 @@ window.PCScenes = (function () {
       '<g transform="translate(12 14) scale(1.5)">' + GLYPH[k].replace(/"C"/g, '"' + c + '"') + '</g>' +
       '<text x="49" y="62" text-anchor="end" font-family="Figtree,sans-serif" font-weight="700" font-size="9" fill="#fcf3e2">' + STAMP_V[k.length % 5] + '</text></svg>';
   }
-  function pmSvg(date, place) {
-    var id = "pm" + (++uid), top = String(place || "SAY HELLO").toUpperCase().slice(0, 18);
+  /* the postmark follows the stamp: a stamp from one of the family's cities gets that city's cancel (Nov 14) */
+  var PM_CITY = { junk: "hk", dimsum: "hk", santjordi: "bcn", drac: "bcn", taxi: "ny", bridge: "ny", tower: "bj", kite: "bj" };
+  function pmSvg(d, place, stamp) {
+    var id = "pm" + (++uid), city = PM_CITY[stamp] || "", date = city === "bj" ? d.getFullYear() + "." + (d.getMonth() + 1) + "." + d.getDate() : city === "ny" ? pmDate(d).replace(/^(\d+) (\w+) (\d+)$/, "$2 $1 $3") : pmDate(d);
+    var top = String(place || { hk: "HONG KONG", bcn: "BARCELONA", ny: "NEW YORK NY", bj: "北京 BEIJING" }[city] || "SAY HELLO").toUpperCase().slice(0, 18);
+    var ink = { bcn: "#4e3a6a", ny: "#26262a" }[city] || "#3a3f55", F = "font-family=\"'Special Elite',monospace\" fill=\"" + ink + "\"";
+    var arc = '<defs><path id="' + id + '" d="M22 40a28 28 0 0 1 56 0"/><path id="' + id + 'b" d="M24 42a26 26 0 0 0 52 0"/></defs>';
+    var topT = '<text ' + F + ' font-size="8.4" letter-spacing="1.2"><textPath href="#' + id + '" startOffset="50%" text-anchor="middle">' + esc(top) + '</textPath></text>';
+    var waves = '<path d="M86 22c8-4 16 4 24 0M86 34c8-4 16 4 24 0M86 46c8-4 16 4 24 0M86 58c8-4 16 4 24 0"/>';
+    function bot(txt, sz) { return '<text ' + F + ' font-size="' + (sz || 7) + '" letter-spacing="1.4"><textPath href="#' + id + 'b" startOffset="50%" text-anchor="middle" dominant-baseline="hanging">' + txt + '</textPath></text>'; }
+    if (city === "hk")   /* two rings, the name in both scripts, waves */
+      return '<svg viewBox="0 0 120 80" aria-hidden="true">' + arc + '<g fill="none" stroke="' + ink + '" stroke-width="1.6"><circle cx="50" cy="40" r="34"/><circle cx="50" cy="40" r="25"/>' + waves + '</g>' + topT +
+        '<text x="50" y="44" text-anchor="middle" ' + F + ' font-size="9">' + esc(date) + '</text>' + bot('香 港', 8.5) + '</svg>';
+    if (city === "bcn")   /* the old violet Correos cancel: a ring, CORREOS underneath, a little box of bars */
+      return '<svg viewBox="0 0 120 80" aria-hidden="true">' + arc + '<g fill="none" stroke="' + ink + '" stroke-width="1.6"><circle cx="50" cy="40" r="37"/><path d="M28 34h44M28 48h44"/><rect x="91" y="22" width="26" height="36"/><path d="M95 30h18M95 37h18M95 44h18M95 51h18"/></g>' + topT +
+        '<text x="50" y="44.5" text-anchor="middle" ' + F + ' font-size="8.6">' + esc(date) + '</text>' + bot('CORREOS') + '</svg>';
+    if (city === "ny")   /* a round dater and straight killer bars */
+      return '<svg viewBox="0 0 120 80" aria-hidden="true">' + arc + '<g fill="none" stroke="' + ink + '" stroke-width="1.6"><circle cx="50" cy="40" r="37"/><path d="M90 20h28M90 28h28M90 36h28M90 44h28M90 52h28M90 60h28" stroke-width="2.4"/></g>' + topT +
+        '<text x="50" y="44" text-anchor="middle" ' + F + ' font-size="9">' + esc(date) + '</text>' + bot('USA') + '</svg>';
+    if (city === "bj")   /* one ring, the date in a band across the middle, the district underneath */
+      return '<svg viewBox="0 0 120 80" aria-hidden="true">' + arc + '<g fill="none" stroke="' + ink + '" stroke-width="1.6"><circle cx="50" cy="40" r="37"/><path d="M22 33h56M22 48h56"/>' + waves + '</g>' + topT +
+        '<text x="50" y="44" text-anchor="middle" ' + F + ' font-size="9">' + esc(date) + '</text>' + bot('西 城', 8.5) + '</svg>';
     return '<svg viewBox="0 0 120 80" aria-hidden="true"><defs><path id="' + id + '" d="M22 40a28 28 0 0 1 56 0"/></defs><g fill="none" stroke="#3a3f55" stroke-width="1.6">' +
-      '<circle cx="50" cy="40" r="34"/><circle cx="50" cy="40" r="25"/><path d="M86 22c8-4 16 4 24 0M86 34c8-4 16 4 24 0M86 46c8-4 16 4 24 0M86 58c8-4 16 4 24 0"/></g>' +
-      '<text font-family="\'Special Elite\',monospace" font-size="8.4" fill="#3a3f55" letter-spacing="1.2"><textPath href="#' + id + '" startOffset="50%" text-anchor="middle">' + esc(top) + '</textPath></text>' +
-      '<text x="50" y="44" text-anchor="middle" font-family="\'Special Elite\',monospace" font-size="9" fill="#3a3f55">' + esc(date) + '</text>' +
-      '<text x="50" y="62" text-anchor="middle" font-family="\'Special Elite\',monospace" font-size="6" fill="#3a3f55" letter-spacing="1">SAY HELLO</text></svg>';
+      '<circle cx="50" cy="40" r="34"/><circle cx="50" cy="40" r="25"/>' + waves + '</g>' + topT +
+      '<text x="50" y="44" text-anchor="middle" ' + F + ' font-size="9">' + esc(date) + '</text>' +
+      '<text x="50" y="62" text-anchor="middle" ' + F + ' font-size="6" letter-spacing="1">SAY HELLO</text></svg>';
   }
   var SEAL = '<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M30 3c4 0 5 3 9 3.6s7-1.2 9.6 1.8 1 6.4 3 9.8 5.4 4.6 5.4 8.8-3.4 5.6-4.2 9.4 1.4 7.2-1.4 10-6.6 1-10 3S34 57 30 57s-6.2-4-10-5.6-7.6.6-10-2.6-.4-6.8-1.8-10.4S3 33.4 3 29.6s3.4-5.2 4.6-8.8-.6-7.4 2.2-10.2 6.6-.8 10-2.4S26 3 30 3z" fill="#a8261a"/><circle cx="30" cy="30" r="17" fill="#8e1d12"/><circle cx="30" cy="30" r="17" fill="none" stroke="#c9483a" stroke-width="1.2" opacity=".7"/><path d="M30 39.5s-9.5-5.6-9.5-11.6a5 5 0 0 1 9.5-2.4 5 5 0 0 1 9.5 2.4c0 6-9.5 11.6-9.5 11.6z" fill="#c9483a"/><path d="M14 16c3-4 8-6 12-6" stroke="#e07a6a" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/></svg>';
 
@@ -783,7 +802,7 @@ window.PCScenes = (function () {
     var root = $(pre ? "#rcard" : "#card"); root.style.setProperty("--pen", P.INK[c.ink] || P.INK.blue);
     var m = $(pre ? "#rMsg" : "#bMsg"); m.textContent = c.msg || (pre ? "" : t("msgPh")); m.className = "msg" + (c.msg ? "" : " ph");
     $(pre ? "#rStamp" : "#bStamp").innerHTML = stampSvg(c.stamp);
-    $(pre ? "#rPm" : "#bPm").innerHTML = pmSvg(pmDate(c.sent ? new Date(c.sent) : new Date()), c.place);
+    $(pre ? "#rPm" : "#bPm").innerHTML = pmSvg(c.sent ? new Date(c.sent) : new Date(), c.place, c.stamp);
     var to = $(pre ? "#rTo" : "#bTo"), fr = $(pre ? "#rFrom" : "#bFrom");
     to.textContent = c.wall ? t("wallW") : (c.to || (pre ? "" : t("toPh"))); to.className = c.to || c.wall ? "" : "ph";
     fr.textContent = c.from || (pre ? "" : t("fromPh")); fr.className = c.from ? "" : "ph";
@@ -963,7 +982,7 @@ window.PCScenes = (function () {
     var front = '<div class="pp"><img class="img" alt="" src="' + img + '"><div class="greet"><small>' + esc(t("greet")) + "</small><b>" + esc(c.place || "") + "</b></div></div>";
     var left = words && c.msg ? '<div class="bmsg" style="color:' + (P.INK[c.ink] || P.INK.blue) + '">' + esc(c.msg) + "</div>"
       : '<div class="bseal">' + esc(t("pOpenOn", { d: fmt(new Date(c.open_at), true) })) + "<small>" + esc(t("fromW", { n: c.from || "" })) + "</small></div>";
-    var back = '<div class="pp bk">' + left + '<div class="bdiv"></div><div class="bstp">' + stampSvg(c.stamp) + '</div><div class="bpm">' + pmSvg(pmDate(c.sent ? new Date(c.sent) : new Date()), c.place) + "</div>" +
+    var back = '<div class="pp bk">' + left + '<div class="bdiv"></div><div class="bstp">' + stampSvg(c.stamp) + '</div><div class="bpm">' + pmSvg(c.sent ? new Date(c.sent) : new Date(), c.place, c.stamp) + "</div>" +
       '<div class="baddr"><small>' + esc(t("pAddr")) + "</small><i>" + esc(c.wall ? "" : c.to || "") + "</i><i></i><i></i><i></i></div>" +
       (qrSvg ? '<div class="bqr">' + qrSvg + "<span>" + esc(sealed && !words ? t("pScanSealed") : t("pScan")) + "<br>after-hours.work/say-hello</span></div>" : "") +
       (words && c.msg ? '<div class="bfrom">' + esc(t("fromW", { n: c.from || "" })) + "</div>" : "") + "</div>";
@@ -1016,7 +1035,7 @@ window.PCScenes = (function () {
     if (!c.sealed && (inBox || mineSent(c.id))) $("#rcard").dataset.opened = "1";   /* opened before on this device, or your own: no seal to break again */
     if (c.sealed || !$("#rcard").dataset.opened) {
       if (!env) { env = document.createElement("div"); env.className = "env"; $("#rcard").appendChild(env); env.addEventListener("click", function (e) { e.stopPropagation(); }); }
-      env.innerHTML = '<div class="stp">' + stampSvg(c.stamp) + '</div><div class="pm">' + pmSvg(pmDate(new Date(c.sent)), c.place) + "</div>" +
+      env.innerHTML = '<div class="stp">' + stampSvg(c.stamp) + '</div><div class="pm">' + pmSvg(new Date(c.sent), c.place, c.stamp) + "</div>" +
         '<div class="addr">' + (c.wall ? esc(t("wallW")) : c.to ? esc(t("forYou", { n: c.to })) : "") + "<small>" + esc(t("fromW", { n: c.from })) + "</small></div>" +
         '<div class="when">' + esc(t("opensOn", { d: fmt(o, true) })) + '</div><button class="seal" type="button">' + SEAL + "</button>";
       var seal = $(".seal", env);
