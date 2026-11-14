@@ -107,7 +107,7 @@ html.film main{display:none}html.film footer{display:none}html.film .wrap{displa
 .scr{position:relative;width:100%;aspect-ratio:16/9;background:#0a0608;border:4px solid #000;box-shadow:6px 6px 0 #000,inset 0 0 0 2px #3a2414;cursor:pointer;overflow:hidden;flex:none}
 .scr canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
 .cap{position:absolute;left:12px;top:12px;max-width:70%;padding:7px 11px 8px;background:var(--paper);color:var(--ink);border:3px solid #000;box-shadow:3px 3px 0 #000;opacity:0;transform:translateY(-6px) rotate(-1.5deg);transition:opacity .6s,transform .6s;pointer-events:none}
-.cap.on{opacity:1;transform:rotate(-1.5deg);animation:capOut 1s 6s forwards}@keyframes capOut{to{opacity:0}}
+.cap.on{opacity:1;transform:rotate(-1.5deg)}
 .cap b{display:block;font:400 9px/1.5 var(--px);color:var(--red);letter-spacing:.06em}.cap span{display:block;font:400 22px/1.05 var(--vt)}
 html:lang(zh-Hans) .cap b,html:lang(zh-Hant) .cap b{font:600 12px/1.4 var(--cjk);letter-spacing:.15em}html:lang(zh-Hans) .cap span,html:lang(zh-Hant) .cap span{font:700 17px/1.35 var(--cjk)}
 .hint{position:absolute;right:10px;bottom:8px;font:400 15px/1 var(--vt);color:rgba(251,238,221,.55);pointer-events:none;transition:opacity .6s}.hint.gone{opacity:0}
@@ -127,6 +127,7 @@ html.read #film{display:none}html.read main{display:block}html.read body{overflo
 .watch{display:none;position:sticky;top:8px;z-index:20;margin:10px auto 0;width:max-content}
 html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
 @media (max-height:520px) and (min-aspect-ratio:4/3){html.film #film{flex-direction:row;align-items:center;padding:8px 12px}html.film .side{flex:1;min-width:220px;align-self:stretch;justify-content:center}html.film .side .sub,html.film .side .bar{width:100%!important}.sub{min-height:0}#line{font-size:19px}.dots{order:-1;flex-basis:100%}}
+@media (max-width:560px){.cap{left:8px;top:8px;padding:4px 8px 5px;max-width:60%}.cap b{font-size:7px}.cap span{font-size:17px}html:lang(zh-Hans) .cap span,html:lang(zh-Hant) .cap span{font-size:14px}}
 @media (max-width:560px){.dots{order:-1;flex-basis:100%;min-width:0}.bar{justify-content:center}}
 @media (prefers-reduced-motion:reduce){#line.in{animation:none}.cap{transition:none}}
 </style>
@@ -280,6 +281,6 @@ html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
   } else document.querySelectorAll(".rv").forEach(function (e) { e.classList.add("in"); });
 })();
 </script>
-<script src="./film.js?v=d2f9259fb0"></script>
+<script src="./film.js?v=0dcf10c8f0"></script>
 </body>
 </html>
