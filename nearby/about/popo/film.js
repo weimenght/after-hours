@@ -388,9 +388,9 @@
       var bk = ((t * 18) % 320) - 40; disc(bk, 124, 5, "#2a2a2a"); disc(bk, 124, 3, "#a8a090"); disc(bk + 20, 124, 5, "#2a2a2a"); disc(bk + 20, 124, 3, "#a8a090"); line(bk, 124, bk + 9, 114, "#a8302a"); line(bk + 9, 114, bk + 20, 124, "#a8302a"); line(bk + 9, 114, bk + 17, 113, "#a8302a"); folk(VS + 70, bk + 10, 118, { sit: 1, f: 1, sz: .9 });
       folk(VS + 71, 16 + Math.sin(t * .3) * 4, 128, { f: 1, bag: "#c8a870" });
       var pop = seg(p, .08, .2), kh = ease(pop) * 8;
-      pet("miso", 172, 112 - kh, { px: 1 }); pet("yuzu", 190, 112 - kh, { px: 1, flip: true });
+      pet("miso", 173, 119 - kh, { px: 1 }); pet("yuzu", 191, 119 - kh, { px: 1, flip: true });   /* inside the box: only their heads and backs show over its rim */
       R(162, 106, 40, 18, "#c8a070"); R(162, 106, 40, 2, "#a88050"); R(162 + Math.sin(t * 8) * (pop < 1 ? 1 : 0), 102, 14, 4, "#b8905e"); R(188, 102, 14, 4, "#b8905e");
-      R(168, 112, 28, 7, "#f4ecd6"); txt("MISO/YUZU", 169, 113, "#3a2a1a");
+      R(163, 111, 38, 9, "#f4ecd6"); txt("MISO/YUZU", 165, 113, "#3a2a1a");
       who(150, 128, mix(WEI, { sz: .55, vest: null, top: "#3a6aa0", gl: null, f: 1, armR: p > .25 ? "out" : "down", smile: 1 }));
       who(96, 128, mix(OPOPO, { f: 1, arm: "fold", card: "#8a2a3a" }));
       if (p > .3 && p < .58) { g.fillStyle = "rgba(255,255,255,.9)"; g.fillRect(70, 70, 34, 12); txt("NO CATS", 72, 73, "#a8322a"); }
@@ -479,7 +479,7 @@
     if (k === 3) for (var i = 0; i < 3; i++) { var z = (t * .4 + i / 3) % 1; note(150 + i * 10 + Math.sin(t + i) * 4, 50 - z * 30, "rgba(255,226,160," + (1 - z) + ")"); }
     if (k === 5) { R(100, 84, 32, 12, "#f2f2f6"); R(104, 96, 24, 3, "#e4e4ec"); R(102, 86, 28, 1, "#3a5aa8"); line(110, 84, 114, 96, "#f2c44a"); line(122, 84, 120, 96, "#f2c44a"); }
     if (k === 6) { R(96, 100, 28, 10, "#f2f2f6"); R(98, 98, 24, 3, "#e8d8a8"); steam(110, 94, t, 3); }
-    if (k === 7) { var th = Math.round(Math.sin(t * 9) * 3); pet("dog", 150, 134, { asleep: true }); R(134 + th, 126 - Math.abs(th), 5, 2, "#e8c48a"); }
+    if (k === 7) { var th = Math.round(Math.sin(t * 9) * 3); pet("dog", 150, 134, { asleep: true }); var up = Math.abs(th) > 1 ? 2 : 0; R(137, 125, 4, 2, "#e8c48a"); R(135 - (up ? 0 : 1), 125 - up, 4, 2, "#e8c48a"); R(133 - (up ? 0 : 2), 125 - up * 2, 4, 2, "#e8c48a"); R(133 - (up ? 0 : 2), 125 - up * 2, 2, 1, "#fbf3e2"); }   /* the tail in three joined pieces from his back, thumping */
     if (k === 8) { var jk = seg(t, .4, 1.6), cx = 194, cy = 92 - Math.sin(jk * Math.PI) * 22 - jk * 22; if (t > 2.4) { cx = 118; cy = 98; } pet("miso", cx, cy, {}); }
     if (k === 9 && (t * 3 | 0) % 2) { line(100, 70, 96, 64, "#f4e0a0"); line(140, 70, 144, 64, "#f4e0a0"); line(120, 66, 120, 58, "#f4e0a0"); }
     return { tone: 0 };
