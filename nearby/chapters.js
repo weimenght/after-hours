@@ -87,6 +87,8 @@
       card.addEventListener("click", function (e) { e.stopPropagation(); next(); });
       document.body.appendChild(card);
     }
+    var T = THINGS[key], tr = T && T.lift && document.querySelector(T.lift);
+    card.style.bottom = tr && tr.offsetHeight ? (tr.offsetHeight + 12) + "px" : "";
     card.classList.toggle("paper", nap); face(card.querySelector("canvas"), nap);
     var name = window.FBWorld && FBWorld.name ? FBWorld.name(key) : "";
     card.querySelector("b").textContent = tx(nap ? W.note : W.says) + (name ? " · " + name : "");
@@ -119,6 +121,10 @@
     box: PX(16, 12, [[0, 1, 16, 1, K], [0, 2, 1, 10, K], [15, 2, 1, 10, K], [0, 11, 16, 1, K], [1, 2, 14, 9, "#b8864a"], [1, 2, 14, 2, "#a0703a"], [3, 5, 10, 4, "#f4ead2"], [4, 6, 3, 1, "#1a1410"], [9, 6, 3, 1, "#d9822b"], [4, 8, 8, 1, "#8a8276"], [0, 0, 5, 1, "#a0703a"]]),
     wool: PX(10, 10, [[3, 0, 4, 1, K], [1, 1, 8, 1, K], [0, 2, 1, 6, K], [9, 2, 1, 6, K], [1, 8, 8, 1, K], [3, 9, 4, 1, K], [1, 2, 8, 6, "#c8303a"], [3, 1, 4, 1, "#c8303a"], [3, 8, 4, 1, "#c8303a"], [2, 3, 5, 1, "#e85a5a"], [3, 5, 5, 1, "#e85a5a"], [8, 8, 2, 1, "#c8303a"]]),
     dict: PX(12, 14, [[0, 0, 12, 1, K], [0, 1, 1, 13, K], [11, 1, 1, 13, K], [0, 13, 12, 1, K], [1, 1, 10, 12, "#a8282e"], [1, 1, 2, 12, "#7a1a1e"], [4, 3, 6, 2, "#e8d8a8"], [4, 6, 5, 1, "#c9a24a"], [3, 9, 8, 2, "#d8d0b8"], [3, 9, 8, 1, "#f0ead8"]]),
+    jar: PX(10, 12, [[2, 0, 6, 1, K], [2, 1, 6, 2, "#8a8276"], [1, 3, 8, 1, K], [0, 4, 1, 7, K], [9, 4, 1, 7, K], [0, 11, 10, 1, K], [1, 4, 8, 7, "#cfe0c8"], [2, 6, 2, 2, "#e8c832"], [5, 5, 2, 2, "#e8c832"], [4, 8, 3, 2, "#d8b822"], [1, 4, 1, 7, "#eef4ea"]]),
+    seeds: PX(10, 13, [[0, 0, 10, 1, K], [0, 1, 1, 12, K], [9, 1, 1, 12, K], [0, 12, 10, 1, K], [1, 1, 8, 11, "#e8d8b0"], [1, 1, 8, 2, "#c8b48a"], [3, 5, 4, 3, "#a8b8a0"], [2, 9, 6, 1, "#b8a888"], [5, 10, 2, 1, "#b8a888"]]),
+    oilcan: PX(12, 10, [[3, 3, 6, 1, K], [2, 4, 1, 5, K], [9, 4, 1, 5, K], [2, 9, 8, 1, K], [3, 4, 6, 5, "#b0703a"], [3, 4, 6, 1, "#d8984a"], [5, 1, 1, 2, K], [6, 0, 1, 1, K], [9, 5, 1, 1, K], [10, 4, 1, 1, K], [11, 3, 1, 1, K]]),
+    pot: PX(12, 14, [[4, 0, 4, 1, K], [5, 1, 2, 1, "#2a2a2a"], [3, 2, 6, 1, K], [2, 3, 1, 10, K], [9, 3, 1, 10, K], [2, 13, 8, 1, K], [3, 3, 6, 10, "#2f5aa8"], [3, 3, 6, 1, "#4a78c8"], [4, 6, 2, 2, "#f4f1e8"], [10, 5, 1, 1, K], [11, 6, 1, 4, K], [10, 10, 1, 1, K], [0, 4, 2, 1, K], [1, 5, 1, 1, K]]),
     rose: PX(10, 16, [[3, 0, 4, 1, K], [2, 1, 6, 1, K], [1, 2, 1, 3, K], [8, 2, 1, 3, K], [2, 2, 6, 3, "#7a1e2a"], [3, 3, 3, 1, "#a8323e"], [2, 5, 6, 1, K], [4, 6, 1, 9, "#4a6a3a"], [5, 8, 3, 2, "#5a7a42"], [2, 11, 2, 2, "#5a7a42"]])
   };
   var THINGS = {
@@ -128,6 +134,13 @@
     nest: { at: "#room", items: [
       { a: "box", x: .1, y: .8, w: 40, s: ["Preserving jars, fragile. Twelve years they sleep in it. Every winter I tape the corners, otherwise fall apart already.", "腌菜罐，易碎。她们在里面睡了十二年。每年冬天我都给角贴胶布，不然早就散了。", "醃菜樽，小心輕放。佢哋喺入面瞓咗十二年。年年冬天我都同啲角貼膠紙，唔係早就散咗。", "Tarros, frágil. Doce años duermen dentro. Cada invierno pongo cinta en las esquinas, si no, ya se rompe.", "Pots de conserva, fràgil. Fa dotze anys que hi dormen. Cada hivern li poso cinta a les cantonades, si no ja s'hauria desfet."] },
       { a: "wool", x: .82, y: .84, w: 22, s: ["My red cardigan. Yuzu steal the wool, one string at a time. One day I got no cardigan, only one happy cat.", "我的红毛衣。柚子一根一根把毛线偷走。总有一天我毛衣没了，只剩一只开心的猫。", "我件紅冷衫。柚子一條一條偷啲冷。總有一日我冇晒件冷衫，淨係得返隻開心貓。", "Mi chaqueta roja. Yuzu roba la lana, un hilo cada vez. Un día no tengo chaqueta, sólo una gata feliz.", "La meva jaqueta vermella. La Yuzu me'n roba la llana, fil a fil. Un dia no tindré jaqueta, només una gata feliç."] }] },
+    garden: { at: "#field", lift: "#tray", items: [
+      { a: "jar", x: .08, y: .08, w: 22, s: ["My jar of salt lemons, from the boat. The tree come from one seed inside. The jar still here, I still make salt lemon every summer.", "我那罐咸柠檬，坐船带来的。树就是里面一颗籽长出来的。罐子还在，我每年夏天还是腌咸柠檬。", "我嗰樽鹹檸檬，坐船帶嚟嘅。棵樹就係入面一粒核生出嚟。個樽仲喺度，我年年夏天都仲醃鹹檸檬。", "Mi tarro de limones con sal, del barco. El árbol sale de una semilla de dentro. El tarro todavía aquí, cada verano hago limón con sal.", "El meu pot de llimones salades, del vaixell. L'arbre va néixer d'una llavor de dins. El pot encara hi és; cada estiu encara en faig."] },
+      { a: "seeds", x: .18, y: .08, w: 20, s: ["Josep's seed packets. The rain wash the names off, so nobody knows what is inside. Plant one with somebody, then you find out together.", "Josep 的种子包。雨把名字冲掉了，谁也不知道里面是什么。跟人一起种一包，一起看看是什么。", "Josep 啲種子包。啲雨沖甩晒個名，冇人知入面係乜。同人一齊種一包，一齊睇吓係乜。", "Los sobres de semillas de Josep. La lluvia borra los nombres, nadie sabe qué hay dentro. Planta uno con alguien, y lo descubrís juntos.", "Els sobres de llavors d'en Josep. La pluja n'ha esborrat els noms i ningú no sap què hi ha a dins. Planta'n un amb algú i ho descobrireu junts."] }] },
+    tower: { at: "#tower", items: [
+      { a: "oilcan", x: .06, y: .46, yw: .265, w: 24, s: ["Josep's oil can. Every Sunday three drops in the clock, no more. He say a clock is like a person: too much oil, it get lazy.", "Josep 的油壶。每个礼拜天给钟滴三滴，不多不少。他说钟跟人一样：油太多，就会变懒。", "Josep 個油壺。個個禮拜日同個鐘滴三滴，唔多唔少。佢話鐘同人一樣：油太多，就會懶。", "La aceitera de Josep. Cada domingo tres gotas al reloj, no más. Dice que un reloj es como una persona: mucho aceite, se vuelve vago.", "L'oliera d'en Josep. Cada diumenge tres gotes al rellotge, ni una més. Deia que un rellotge és com una persona: massa oli, i es torna gandul."] }] },
+    cabin: { at: "body", items: [
+      { a: "pot", x: .43, y: .735, xw: .19, yw: .39, w: 22, s: ["Josep's coffee pot. He boil the coffee, grounds and all, very bad one. I never tell him. Now Wei make good coffee, but I miss the bad one.", "Josep 的咖啡壶。他连渣一起煮，难喝死了。我从来没告诉他。现在阿Wei煮得好，可我想念那个难喝的。", "Josep 個咖啡壺。佢連渣一齊煲，難飲到死。我從來冇話過佢知。而家阿Wei煲得好，但我掛住嗰個難飲嘅。", "La cafetera de Josep. Él hierve el café con todo el poso, muy malo. Nunca le digo. Ahora Wei hace café bueno, pero echo de menos el malo.", "La cafetera d'en Josep. Bullia el cafè amb tot el pòsit, dolentíssim. Mai no l'hi vaig dir. Ara en Wei en fa de bo, però enyoro el dolent."] }] },
     books: { at: "#parlor", items: [
       { a: "dict", x: .62, y: .285, w: 22, s: ["My pocket dictionary. Look inside: English, my Cantonese, and Josep's pencil beside every word. Back page, I write the day I arrive.", "我的袖珍字典。你看里面：英文，我的广东话，每个字旁边都有 Josep 的铅笔字。最后一页，我写了我到的那天。", "我本袖珍字典。你睇入面：英文，我嘅廣東話，每個字隔籬都有 Josep 嘅鉛筆字。最尾嗰頁，我寫低我到嗰日。", "Mi diccionario de bolsillo. Mira dentro: inglés, mi cantonés, y el lápiz de Josep al lado de cada palabra. Última página, escribo el día que llego.", "El meu diccionari de butxaca. Mira-hi: l'anglès, el meu cantonès, i el llapis d'en Josep al costat de cada paraula. A l'última pàgina hi vaig escriure el dia que vaig arribar."] },
       { a: "rose", x: .69, y: .29, w: 18, s: ["The rose from the first Sant Jordi. Dry now, very thin. I press it in the dictionary, at the word love. Don't laugh ah.", "第一个圣乔治节的那枝玫瑰。现在干了，好薄。我把它夹在字典里，就夹在 love 那个字。不许笑喔。", "第一個聖佐治節嗰枝玫瑰。而家乾晒，好薄。我夾咗喺本字典入面，就喺 love 嗰個字。唔准笑呀。", "La rosa del primer Sant Jordi. Ahora seca, muy fina. La pongo dentro del diccionario, en la palabra love. No te ríes, ¿eh?", "La rosa del primer Sant Jordi. Ara seca, primíssima. La vaig premsar al diccionari, a la paraula love. No riguis, eh."] }] }
@@ -142,11 +155,14 @@
     var T = THINGS[k]; if (!T) return;
     var host = document.querySelector(T.at); if (!host || host.querySelector(".fbks")) return;
     if (!document.getElementById("fbks-css")) { var st = document.createElement("style"); st.id = "fbks-css"; st.textContent = KCSS; document.head.appendChild(st); }
-    if (getComputedStyle(host).position === "static") host.style.position = "relative";
-    var lay = document.createElement("div"); lay.className = "fbks"; lay.setAttribute("data-fbt-skip", ""); lay.setAttribute("data-fb-emoji", "");
+    var body = host === document.body;
+    if (!body && getComputedStyle(host).position === "static") host.style.position = "relative";
+    var lay = document.createElement("div"); lay.className = "fbks"; if (body) lay.style.position = "fixed"; lay.setAttribute("data-fbt-skip", ""); lay.setAttribute("data-fb-emoji", "");
     T.items.forEach(function (it, i) {
       var b = document.createElement("button"); b.type = "button"; b.innerHTML = ART[it.a];
-      b.style.left = it.x * 100 + "%"; b.style.top = it.y * 100 + "%"; b.style.width = it.w + "px"; b.style.animationDelay = (i * 2.7) + "s";
+      var place = function () { var wide = innerWidth > innerHeight && innerWidth >= 640;
+        b.style.left = ((wide && it.xw != null) ? it.xw : it.x) * 100 + "%"; b.style.top = ((wide && it.yw != null) ? it.yw : it.y) * 100 + "%"; };
+      place(); addEventListener("resize", place); b.style.width = it.w + "px"; b.style.animationDelay = (i * 2.7) + "s";
       b.setAttribute("aria-label", tx(W.ks));
       b.addEventListener("click", function (e) { e.stopPropagation(); e.preventDefault(); say(k, it.s); });
       lay.appendChild(b);
