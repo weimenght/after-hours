@@ -193,7 +193,8 @@
       var o3 = a.createOscillator(), g3 = a.createGain(); o3.type = "triangle"; o3.frequency.setValueAtTime(140, td2); o3.frequency.exponentialRampToValueAtTime(60, td2 + 0.2); o3.connect(g3); g3.connect(a.destination); env(a, g3, td2, 0.004, 0.02, 0.2, 0.08); o3.start(td2); o3.stop(td2 + 0.3); }
   }
   var iv = 0;
-  function end(done) { on = false; clearInterval(iv); portClose(); old(false); hush(); if (card) { var c = card; setTimeout(function () { c.remove(); }, done ? 12000 : 0); card = null; } try { window.FBCabin && FBCabin.director && FBCabin.director.start(); } catch (e) {} }
+  function end(done) { on = false; clearInterval(iv); portClose(); old(false); hush(); if (card) { var c = card; setTimeout(function () { c.remove(); }, done ? 12000 : 0); card = null; } if (done) { setTimeout(function () { try { if (window.parent !== window && parent.FBShell && parent.FBShell.close) { parent.FBShell.close(); return; } } catch (e) {} location.href = "/nearby/"; }, 12500); return; }   /* her story told: back to the town (Nov 14, the owner) */
+    try { window.FBCabin && FBCabin.director && FBCabin.director.start(); } catch (e) {} }
   function start() {
     if (on || typeof state === "undefined" || typeof triggerStationStopOrDepart !== "function") return;
     on = true; beat = -1; phase = "";
