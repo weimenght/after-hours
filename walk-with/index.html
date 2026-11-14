@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-pg ahp-ink" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Walk With</title>
 <meta name="description" content="Two people, one corner, twenty minutes, same clock time. Pick a time, name a corner, send one link. Then put the phone away.">
@@ -188,14 +188,19 @@ function skyFor(h) { return h < 6 || h >= 21 ? ["#1d2240", "#2b3058", true] : h 
 function R(c, x, y, w, h, col) { c.fillStyle = col; c.fillRect(x, y, w, h); }
 function street(c, W0, H0, h, ground) {
   var sk = skyFor(h), night = sk[2];
+  var FV = window.FBWorld && FBWorld.view;
+  if (FV) FBWorld.view(c, 0, 0, W0, ground, { h: h, roofs: false, branch: false, fx: false });   /* the visitor's own sky (the kit); the weather after the houses */
+  else {
   R(c, 0, 0, W0, ground, sk[0]); R(c, 0, Math.round(ground * .55), W0, ground - Math.round(ground * .55), sk[1]);
   if (night) [[12, 8], [40, 14], [70, 6], [118, 10], [146, 18], [96, 20]].forEach(function (s) { R(c, s[0], s[1], 1, 1, "#f3ead8"); });
+  }
   /* the houses across the road: low Eixample fronts with shutters, lit at night */
   var hx = [[0, 30, "#e8d2b0"], [30, 34, "#d9b48e"], [64, 28, "#efdcc0"], [92, 36, "#d8bfa0"], [128, 32, "#e6c9a4"]];
   hx.forEach(function (b, i) {
     var top = ground - 26 - (i % 2) * 6; R(c, b[0], top, b[1], ground - top, night ? "#4a4258" : b[2]); R(c, b[0], top, b[1], 2, night ? "#3a3448" : "#b98a62");
     for (var wx = b[0] + 4; wx < b[0] + b[1] - 5; wx += 9) for (var wy = top + 5; wy < ground - 6; wy += 10) { R(c, wx, wy, 5, 6, night ? ((wx + wy + i) % 3 ? "#f2a33a" : "#2a2438") : "#7d9cb4"); R(c, wx - 1, wy, 1, 6, night ? "#3a3448" : "#5e8a5a"); R(c, wx + 5, wy, 1, 6, night ? "#3a3448" : "#5e8a5a"); }
   });
+  if (FV) FBWorld.view(c, 0, 0, W0, ground, { h: h, sky: false, roofs: false, branch: false });
   R(c, 0, ground, W0, H0 - ground, night ? "#3a3530" : "#cfc3b0"); R(c, 0, ground, W0, 2, night ? "#2a2622" : "#a89a86");
   for (var x = 0; x < W0; x += 12) R(c, x, ground + 6, 1, H0 - ground - 6, night ? "#332e2a" : "#c0b39e");
   return night;

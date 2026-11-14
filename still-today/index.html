@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-town" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Still Today</title>
 <meta name="description" content="Pretend for one minute that today was your last day. Popo, Wei, Mei, Miso, Yuzu or Mantou asks one question. Then the good news: it isn't, Josep's clock is running slow. Go and do the thing today.">
@@ -133,6 +133,7 @@ function draw() {
   if (dk) { g.fillStyle = "rgba(246,183,60,.18)"; g.fillRect(84, 104, 24, 4); }
   if (se === "autumn") { g.fillStyle = "#c8702a"; [[12, 112], [40, 116], [118, 110], [176, 115], [150, 118]].forEach(function (p) { g.fillRect(p[0], p[1], 2, 1); }); }
   g.fillStyle = "#1a1410"; g.fillRect(128, 80, 2, 24); g.fillRect(125, 78, 8, 3); g.fillStyle = dk ? "#ffd27a" : "#e8dcc0"; g.fillRect(126, 81, 6, 4);
+  if (FW().view) FW().view(g, 0, 0, Wd, 104, { h: h, sky: false, roofs: false, branch: false });   /* the visit's weather over the square: rain, snow, fog (the visitor's own when they told Window Radio) */
   /* the animals, as animals, asleep at their own hours (or once the phone goes down) */
   if (FW().drawPet) {
     var zz = function (w) { return SC.down || asleep(w); };

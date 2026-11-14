@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-town" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Common Hand</title>
 <meta name="description" content="A ten-minute warm-up for a mahjong table of four: draw a tile, read it out, and find something in common for every pair at the table. One phone in the middle, then phones down and deal.">
@@ -295,7 +295,7 @@ var WEI = [[9,3,14,4,"#1c1917"],[7,5,4,5,"#1c1917"],[21,5,4,5,"#1c1917"],[11,2,1
   [18,10,4,4,"rgba(125,178,168,.3)"],[18,9,4,1,"#e0a043"],[18,14,4,1,"#e0a043"],[17,10,1,4,"#e0a043"],[22,10,1,4,"#e0a043"],[19,10,1,1,"rgba(255,255,255,.8)"],[20,12,1,2,"#1b0f07"],
   [7,10,2,1,"#b9772c"],[23,10,2,1,"#b9772c"],[14,16,4,1,"#a0521d"],[13,19,6,2,"#f5d49a"],
   [11,21,10,2,"#f3ead8"],[15,22,2,2,"#6b3a1b"],[8,23,16,11,"#1c1410"],[12,23,8,10,"#4a2410"],[14,24,4,7,"#f3ead8"],[15,27,2,1,"#e0a043"],[15,30,2,1,"#e0a043"]];
-function drawWei(ctx, x, y, px) { WEI.forEach(R(ctx, x, y, px)); }
+function drawWei(ctx, x, y, px) { if (window.FBWorld && FBWorld.drawWei) { FBWorld.drawWei(ctx, x, y, px, {}); return; }   /* the day's clothes (the wardrobe in the kit, Nov 14) */ WEI.forEach(R(ctx, x, y, px)); }
 function dayHash(salt) { var d = new Date(), s = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + ":" + salt, h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967295; }
 function meiLook() { var r = dayHash("mei-hair"); return { hair: r < .34 ? 0 : r < .67 ? 1 : 2, mascara: dayHash("mei-lash") < .55 }; }
 var MEI_BASE = [[7,6,3,11,"#f48fb8"],[22,6,3,11,"#f48fb8"],[8,3,16,5,"#f48fb8"],[11,4,4,1,"#ffc4dc"],[9,8,14,12,"#f6d6b8"],[9,8,1,4,"#eab896"],[22,8,1,4,"#eab896"],
@@ -309,7 +309,7 @@ var MEI_STYLE = [
     body: [[7,22,18,10,"#c8303a"],[14,22,4,10,"#1a1a20"],[7,28,3,4,"#f3ead8"],[22,28,3,4,"#f3ead8"],[10,25,3,2,"#f3ead8"]] },
   { hair: [[3,8,4,6,"#f48fb8"],[2,13,4,5,"#d9679a"],[25,8,4,6,"#f48fb8"],[26,13,4,5,"#d9679a"],[6,8,2,2,"#f6e05a"],[24,8,2,2,"#f6e05a"]], lip: "#ec8aa8",
     body: [[7,22,18,10,"#4a6aa0"],[10,22,3,3,"#3a5888"],[19,22,3,3,"#3a5888"],[13,21,6,1,"#1a1a20"],[16,22,1,1,"#f6e05a"],[15,26,2,1,"#c8d8f0"]] }];
-function drawMei(ctx, x, y, px) {
+function drawMei(ctx, x, y, px) { if (window.FBWorld && FBWorld.drawMei) { FBWorld.drawMei(ctx, x, y, px, {}); return; }   /* the day's clothes (the wardrobe in the kit, Nov 14) */
   var Lk = meiLook(), st = MEI_STYLE[Lk.hair], f = R(ctx, x, y, px);
   st.body.forEach(f); st.hair.forEach(f); MEI_BASE.forEach(f); MEI_EYES.forEach(f);
   if (Lk.mascara) { [[10,12,4,1],[18,12,4,1],[9,12,1,1],[22,12,1,1]].forEach(function (r) { f(r.concat("#1a1018")); }); } else { f([11,12,2,1,"#7a4a5a"]); f([19,12,2,1,"#7a4a5a"]); }
@@ -322,7 +322,7 @@ var POPO = [[7,22,18,10,"#8a2a3a"],[6,25,2,7,"#7a2232"],[24,25,2,7,"#7a2232"],[1
   [17,12,5,1,"#5a8a70"],[17,16,5,1,"#5a8a70"],[17,12,1,5,"#5a8a70"],[21,12,1,5,"#5a8a70"],[18,13,3,3,"#fbf3e6"],[15,13,2,1,"#5a8a70"],
   [10,17,2,1,"#f0a8a0"],[20,17,2,1,"#f0a8a0"],[16,15,1,2,"#e2b08a"],[8,15,1,2,"#4aa07a"],[23,15,1,2,"#4aa07a"],
   [14,18,4,1,"#c07068"],[13,17,1,1,"#c07068"],[18,17,1,1,"#c07068"]];
-function drawPopo(ctx, x, y, px) { var f = R(ctx, x, y, px); POPO.forEach(f); f([12,14,1,1,"#3a2418"]); f([19,14,1,1,"#3a2418"]); f([11,13,1,1,"#e2b890"]); f([20,13,1,1,"#e2b890"]); }
+function drawPopo(ctx, x, y, px) { if (window.FBWorld && FBWorld.drawPopo) { FBWorld.drawPopo(ctx, x, y, px, {}); return; }   /* the day's clothes (the wardrobe in the kit, Nov 14) */ var f = R(ctx, x, y, px); POPO.forEach(f); f([12,14,1,1,"#3a2418"]); f([19,14,1,1,"#3a2418"]); f([11,13,1,1,"#e2b890"]); f([20,13,1,1,"#e2b890"]); }
 function drawDogFace(ctx, x, y, px) {
   if (window.FBWorld && FBWorld.dogBust) return FBWorld.dogBust(ctx, x, y, px, {});   // a speaker dresses up (the rule of Nov 13)
   var P = PETS.dog, f = function (c, r) { ctx.fillStyle = c; ctx.fillRect(x + r[0] * px, y + r[1] * px, r[2] * px, r[3] * px); };
@@ -335,8 +335,11 @@ function dogAsleep() { var h = new Date().getHours(); return h >= 22 || h < 6; }
 function counter(ctx, y, top, front) { ctx.fillStyle = top; ctx.fillRect(0, y, 160, 4); ctx.fillStyle = front; ctx.fillRect(0, y + 4, 160, 96 - y - 4); ctx.fillStyle = "#000"; ctx.fillRect(0, y + 4, 160, 1); ctx.fillStyle = "rgba(0,0,0,.18)"; for (var x = 8; x < 160; x += 22) ctx.fillRect(x, y + 8, 1, 96 - y); }
 function room(ctx, wallc, trim) { ctx.fillStyle = wallc; ctx.fillRect(0, 0, 160, 96); ctx.fillStyle = trim; ctx.fillRect(0, 0, 160, 3); }
 function windowBox(ctx, x, y, w, h) { var s = { night: false }; var hh = new Date().getHours(), night = hh < 6 || hh >= 20, dusk = hh >= 17 && hh < 20;
+  if (window.FBWorld && FBWorld.view) FBWorld.view(ctx, x, y, w, h, { h: hh });   /* the visitor's own sky, season and weather (the kit) */
+  else {
   ctx.fillStyle = night ? "#1c1630" : dusk ? "#c8704a" : "#8cc4ea"; ctx.fillRect(x, y, w, h);
   if (night) { ctx.fillStyle = "#fff6d0"; ctx.fillRect(x + 4, y + 4, 1, 1); ctx.fillRect(x + w - 7, y + 7, 1, 1); }
+  }
   ctx.fillStyle = "#3a2214"; ctx.fillRect(x - 2, y - 2, w + 4, 2); ctx.fillRect(x - 2, y + h, w + 4, 2); ctx.fillRect(x - 2, y, 2, h); ctx.fillRect(x + w, y, 2, h); ctx.fillRect(x + (w >> 1) - 1, y, 2, h); ctx.fillRect(x, y + (h >> 1) - 1, w, 2); return s; }
 
 /* ---------- scenes (160×96): Popo's back room, the mahjong table ---------- */
@@ -345,6 +348,7 @@ function backRoom(ctx) {
   ctx.fillStyle = "#3a221e"; for (var x = 0; x < 160; x += 8) ctx.fillRect(x, 3, 1, 50);
   windowBox(ctx, 118, 6, 26, 16);
   ctx.fillStyle = "#c8303a"; ctx.fillRect(20, 10, 14, 18); ctx.fillStyle = "#e8b84a"; ctx.fillRect(23, 14, 8, 8); ctx.fillStyle = "#c8303a"; ctx.fillRect(26, 15, 2, 6); ctx.fillRect(24, 17, 6, 2);   /* 福 paper on the wall */
+  ctx.fillStyle = "#2e1a16"; ctx.fillRect(40, 24, 30, 2); if (window.FBWorld && FBWorld.decor) FBWorld.decor(ctx, [[47, 24], [62, 24]], 1, { salt: "hand" });   /* the day's things: one of the family's keepsakes, then Hong Kong and Catalan things (the kit) */
   ctx.fillStyle = "#1a100c"; ctx.fillRect(80, 0, 1, 6); ctx.fillStyle = "#f6c060"; ctx.fillRect(76, 6, 9, 3); ctx.fillStyle = "rgba(246,192,96,.10)"; ctx.fillRect(48, 9, 64, 50);   /* the lamp over the table */
   ctx.fillStyle = "#2e1a16"; ctx.fillRect(0, 58, 160, 38); ctx.fillStyle = "#3a221e"; for (var y = 62; y < 96; y += 6) ctx.fillRect(0, y, 160, 1);
 }
@@ -377,7 +381,7 @@ function face(who) { var c = document.createElement("canvas"); c.width = 32; c.h
 function say(el, who, line) {
   el.textContent = ""; el.appendChild(face(who));
   var d = document.createElement("div"), n = document.createElement("div"), p = document.createElement("p");
-  n.className = "who"; n.textContent = T(W.names[who]); p.textContent = line; d.appendChild(n); d.appendChild(p); el.appendChild(d);
+  n.className = "who"; n.textContent = T(W.names[who]); p.textContent = line; d.appendChild(n); d.appendChild(p); var q = !false && window.FBWorld && FBWorld.quipEl && FBWorld.quipEl(who, "common-hand"); if (q) d.appendChild(q);   /* now and then: Mei wants a compliment, someone teases Wei Meng (Nov 14) */ el.appendChild(d);
 }
 
 /* ---------- tiles: pixel art on a 32×44 grid, like the town's sprites (ivory face, jade back, black outline) ---------- */

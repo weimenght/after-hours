@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-town" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Put It Back</title>
 <meta name="description" content="Everyone's things wandered off today. Help Popo, Wei, Mei and the animals put them back, then tidy one real spot for one song, with someone if you can, and keep what you found.">
@@ -414,6 +414,7 @@ var WEI = [[9,3,14,4,"#1c1917"],[7,5,4,5,"#1c1917"],[21,5,4,5,"#1c1917"],[11,2,1
   [11,21,10,2,"#f3ead8"],[15,22,2,2,"#6b3a1b"],[8,23,16,11,"#1c1410"],[12,23,8,10,"#4a2410"],[14,24,4,7,"#f3ead8"],[15,27,2,1,"#e0a043"],[15,30,2,1,"#e0a043"]];
 function R(ctx, x, y, px) { return function (r) { ctx.fillStyle = r[4]; ctx.fillRect(x + r[0] * px, y + r[1] * px, r[2] * px, r[3] * px); }; }
 function drawWei(ctx, x, y, px, o) {
+  if (FW().drawWei) return FW().drawWei(ctx, x, y, px, o);   /* the day's clothes */
   var f = R(ctx, x, y, px); WEI.forEach(f);
   if (o && o.asleep) { f([12,12,1,2,"#f5d49a"]); f([20,12,1,2,"#f5d49a"]); f([11,13,3,1,"#1b0f07"]); f([19,13,3,1,"#1b0f07"]); }
 }
@@ -436,7 +437,7 @@ function say(who, line) {
   box.hidden = false; box.textContent = ""; box.classList.toggle("bare", who === "room");
   if (who !== "room") box.appendChild(face(who === "miso" || who === "yuzu" ? "cats" : who));
   var d = document.createElement("div"), nm = W.names[who] ? T(W.names[who]) : "";
-  d.innerHTML = '<div class="who">' + esc(nm) + "</div><p>" + acts(line) + "</p>";
+  d.innerHTML = '<div class="who">' + esc(nm) + "</div><p>" + acts(line) + "</p>"; var q = !(who === "room") && window.FBWorld && FBWorld.quipEl && FBWorld.quipEl(who, "put-it-back"); if (q) d.appendChild(q);   /* now and then: Mei wants a compliment, someone teases Wei Meng (Nov 14) */
   box.appendChild(d);
 }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-town" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Twelve Grapes</title>
 <meta name="description" content="New Year's Eve at Popo's table: twelve grapes for twelve months, a chair for everyone you care about, three small red papers on the door. Kept on your own device.">
@@ -135,7 +135,7 @@ var WEI = [[9,3,14,4,"#1c1917"],[7,5,4,5,"#1c1917"],[21,5,4,5,"#1c1917"],[11,2,1
   [18,10,4,4,"rgba(125,178,168,.3)"],[18,9,4,1,"#e0a043"],[18,14,4,1,"#e0a043"],[17,10,1,4,"#e0a043"],[22,10,1,4,"#e0a043"],[19,10,1,1,"rgba(255,255,255,.8)"],[20,12,1,2,"#1b0f07"],
   [7,10,2,1,"#b9772c"],[23,10,2,1,"#b9772c"],[14,16,4,1,"#a0521d"],[13,19,6,2,"#f5d49a"],
   [11,21,10,2,"#f3ead8"],[15,22,2,2,"#6b3a1b"],[8,23,16,11,"#1c1410"],[12,23,8,10,"#4a2410"],[14,24,4,7,"#f3ead8"],[15,27,2,1,"#e0a043"],[15,30,2,1,"#e0a043"]];
-function drawWei(g, x, y, px) { WEI.forEach(function (r) { g.fillStyle = r[4]; g.fillRect(x + r[0] * px, y + (r[1] - 1) * px, r[2] * px, r[3] * px); }); }
+function drawWei(g, x, y, px) { if (FW.drawWei) return FW.drawWei(g, x, y - px, px, {}); WEI.forEach(function (r) { g.fillStyle = r[4]; g.fillRect(x + r[0] * px, y + (r[1] - 1) * px, r[2] * px, r[3] * px); }); }
 function meiLook() { return FW.meiLook ? FW.meiLook() : { hair: 0, mascara: true }; }
 
 /* ---------- what's kept on the device ---------- */
@@ -267,7 +267,7 @@ function face(who) { faceC.clearRect(0, 0, 32, 32); faceC.fillStyle = "#3a2414";
   else if (who === "cats" && FW.drawCatsFace) (FW.catsBust || FW.drawCatsFace)(faceC, 0, 0, 1, {}); else if (who === "mantou" && FW.drawDogFace) (FW.dogBust || FW.drawDogFace)(faceC, 0, 0, 1, {});
   else drawWei(faceC, 0, 0, 1); }
 function say(who, text, aside) {
-  face(who); $("name").textContent = T(W.names[who]); $("line").innerHTML = rich(T(text));
+  face(who); $("name").textContent = T(W.names[who]); $("line").innerHTML = rich(T(text)); var q = !false && window.FBWorld && FBWorld.quipEl && FBWorld.quipEl(who, "twelve-grapes"); if (q) $("line").appendChild(q);   /* now and then: Mei wants a compliment, someone teases Wei Meng (Nov 14) */
   var A = $("aside"); if (aside) { A.hidden = false; A.innerHTML = '<span class="tag">' + esc(T(W.names[aside[0]] || aside[0])) + "</span>" + rich(T(aside[1])); } else A.hidden = true;
   $("ctl").innerHTML = ""; curRow = null;
 }

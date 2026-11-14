@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-town" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Little Things</title>
 <meta name="description" content="Popo's jar of little offline things: one at a time, in her kitchen, for a fuller life away from the screen. Kept on your own device.">
@@ -361,6 +361,7 @@ var SCARF = [["#c8303a", "#9a2028"], ["#e8d070", "#c0a040"], ["#4a7ec0", "#2e5a9
 var SHOES = { slippers: ["slippers", "拖鞋", "拖鞋", "zapatillas", "sabatilles"], shoes: ["house shoes", "布鞋", "布鞋", "zapatos de casa", "sabates de casa"] };
 function season() { if (DAYKEY) { var m = +DAYKEY.split("-")[1] - 1; return m === 11 || m < 2 ? "winter" : m < 5 ? "spring" : m < 8 ? "summer" : "autumn"; } try { if (FW.season) return FW.season(); } catch (e) {} return realSeason(); }
 function popoLook() {
+  if (FW.popoLook && !DAYKEY) return FW.popoLook();   /* the kit's wardrobe: the same Popo as in every app today */
   var sn = season(), cold = sn === "winter" ? .75 : sn === "autumn" ? .4 : 0;
   var cardi = dpick(Object.keys(CARDI), "popo-cardi");
   return { cardi: cardi, apron: dpick(["plain", "gingham", "flowers"], "popo-apron"),
@@ -368,6 +369,7 @@ function popoLook() {
 }
 /* the town's Popo (FBWorld.drawPopo), dressed for the day: her clothes redrawn over the town's, her face untouched */
 function popoDraw(g, x, y, o) {
+  o = o || {}; if (FW.popoLook && FW.drawPopo && !DAYKEY) return FW.drawPopo(g, x, y, 1, { asleep: !!o.asleep, look: o.look });
   o = o || {}; if (FW.drawPopo) FW.drawPopo(g, x, y, 1, { asleep: !!o.asleep }); else return rect(g, x + 4, y + 4, 24, 28, "#8a2a3a");
   var L = o.look || popoLook(), C = CARDI[L.cardi] || CARDI.red, R = function (a, b, w, h, c) { rect(g, x + a, y + b, w, h, c); };
   var AP = L.apron === "gingham" ? "#f6f2ea" : L.apron === "flowers" ? "#f4ead4" : "#efe4c8";
@@ -379,7 +381,7 @@ function popoDraw(g, x, y, o) {
   if (L.scarf) { R(9, 20, 14, 3, L.scarf[0]); R(9, 22, 14, 1, L.scarf[1]); R(17, 22, 3, 3, L.scarf[0]); R(18, 25, 2, 4, L.scarf[1]); R(18, 29, 1, 1, L.scarf[0]); R(19, 29, 1, 1, L.scarf[1]); }
 }
 /* Wei, the drawing of Next Door's svg-wei-avatar (round amber glasses, black hair, waistcoat) */
-function weiDraw(g, x, y) { WEI.forEach(function (r) { rect(g, x + r[0], y + r[1] - 1, r[2], r[3], r[4]); }); }
+function weiDraw(g, x, y) { if (FW.drawWei) return FW.drawWei(g, x, y - 1, 1, {}); WEI.forEach(function (r) { rect(g, x + r[0], y + r[1] - 1, r[2], r[3], r[4]); }); }
 
 /* what's cooking: v is the vessel, fire whether the ring is lit; p is Popo's line (en Hong Kong English, zh broken, zh-Hant Cantonese, es broken, ca fluent) */
 var DISH = {
@@ -642,7 +644,8 @@ var SUNT = { winter: [8.25, 17.75], spring: [6.75, 20.25], summer: [6.25, 21.5],
 var WXS = { winter: ["clear", "clear", "cloudy", "snow", "snow", "fog", "rain"], spring: ["clear", "clear", "clear", "cloudy", "rain", "rain", "fog"],
   summer: ["clear", "clear", "clear", "clear", "cloudy", "rain", "fog"], autumn: ["clear", "clear", "cloudy", "cloudy", "rain", "rain", "fog"] };
 var WX = (function () {
-  var w = null; try { w = sessionStorage.getItem("lt_wx"); } catch (e) {}
+  var w = null; try { if (FW.weather && !DAYKEY) { w = FW.weather(); return w === "storm" ? "rain" : w; } } catch (e) {}   /* the visit's sky, the same as every window in the apps and the town (the visitor's own when they told Window Radio) */
+  try { w = sessionStorage.getItem("lt_wx"); } catch (e) {}
   if (["clear", "cloudy", "rain", "snow", "fog"].indexOf(w) < 0) { w = pick(WXS[SEASON] || WXS.spring); try { sessionStorage.setItem("lt_wx", w); } catch (e) {} }
   return w === "snow" && SEASON !== "winter" ? "rain" : w;   /* snow only in winter */
 })();
@@ -816,7 +819,8 @@ function scene(t) {
   rect(g, 88, 29, 6, 5, "#c0603a"); rect(g, 88, 29, 6, 1, "#000"); rect(g, 89, 24, 1, 5, "#5aa04a"); rect(g, 91, 22, 1, 7, "#5aa04a"); rect(g, 93, 25, 1, 4, "#2e6b34");
   /* a shelf with jars and a red tin */
   rect(g, 104, 14, 50, 2, "#8a5a34"); rect(g, 104, 16, 50, 1, "#000");
-  rect(g, 108, 8, 6, 6, "#e8d070"); rect(g, 108, 7, 6, 1, "#000"); rect(g, 117, 9, 5, 5, "#d6d2ca"); rect(g, 125, 6, 8, 8, "#4a7ec0"); rect(g, 126, 7, 6, 1, "#7cc8d8"); rect(g, 137, 9, 10, 5, "#f3ead8"); rect(g, 138, 10, 8, 1, "#c8303a");
+  if (FW.decor && !DAYKEY) FW.decor(g, [[112, 14], [129, 14], [146, 14]], 1, { salt: "lt" });   /* the day's things: one of the family's keepsakes, then Hong Kong and Catalan things (the kit) */
+  else {  rect(g, 108, 8, 6, 6, "#e8d070"); rect(g, 108, 7, 6, 1, "#000"); rect(g, 117, 9, 5, 5, "#d6d2ca"); rect(g, 125, 6, 8, 8, "#4a7ec0"); rect(g, 126, 7, 6, 1, "#7cc8d8"); rect(g, 137, 9, 10, 5, "#f3ead8"); rect(g, 138, 10, 8, 1, "#c8303a"); }
   /* a calendar on the wall: paper, no numbers that count anything */
   rect(g, 10, 6, 18, 20, "#000"); rect(g, 11, 7, 16, 18, "#fffdf6"); rect(g, 11, 7, 16, 4, "#c8303a"); for (i = 0; i < 4; i++) rect(g, 13, 13 + i * 3, 12, 1, "#d6d2ca");
   /* the lamp over the table */
@@ -870,7 +874,7 @@ var talk = $("talk"), card = $("card"), acts = $("acts");
 function say(who, line, o) {
   o = o || {}; var d = document.createElement("div"); d.className = "say" + (o.small ? " small" : "");
   var c = document.createElement("canvas"); face(c, who, o); c.setAttribute("aria-hidden", "true");
-  var b = document.createElement("div"); b.className = "b"; b.innerHTML = '<span class="who">' + esc(T(WHO[who])) + "</span>" + fmt(typeof line === "string" ? line : T(line));
+  var b = document.createElement("div"); b.className = "b"; b.innerHTML = '<span class="who">' + esc(T(WHO[who])) + "</span>" + fmt(typeof line === "string" ? line : T(line)); var q = !o.asleep && window.FBWorld && FBWorld.quipEl && FBWorld.quipEl(who, "little-things"); if (q) b.appendChild(q);   /* now and then: Mei wants a compliment, someone teases Wei Meng (Nov 14) */
   d.appendChild(c); d.appendChild(b); talk.appendChild(d); return d;
 }
 function clear() { talk.innerHTML = ""; card.innerHTML = ""; acts.innerHTML = ""; }

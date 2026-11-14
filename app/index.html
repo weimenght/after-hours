@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>after-hours</title>
 <meta name="description" content="Everything Wei makes after hours, in one place on your phone. Small, free things that end off the screen, next to someone.">
@@ -1021,7 +1021,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     [7,10,2,1,"#b9772c"],[23,10,2,1,"#b9772c"],[14,16,4,1,"#a0521d"],[13,19,6,2,"#f5d49a"],
     [11,21,10,2,"#f3ead8"],[15,22,2,2,"#6b3a1b"],[8,23,16,11,"#1c1410"],[12,23,8,10,"#4a2410"],[14,24,4,7,"#f3ead8"],[15,27,2,1,"#e0a043"],[15,30,2,1,"#e0a043"]];
   var FW = function () { return window.FBWorld || null; };
-  function drawWei(g, x, y, px, o) { WEI.forEach(function (r) { if (o && o.asleep && r[2] === 1 && r[3] === 2 && r[4] === "#1b0f07") return; g.fillStyle = r[4]; g.fillRect(x + r[0] * px, y + (r[1] - 1) * px, r[2] * px, r[3] * px); }); }
+  function drawWei(g, x, y, px, o) { var F0 = FW(); if (F0 && F0.drawWei) return F0.drawWei(g, x, y - px, px, o || {}); WEI.forEach(function (r) { if (o && o.asleep && r[2] === 1 && r[3] === 2 && r[4] === "#1b0f07") return; g.fillStyle = r[4]; g.fillRect(x + r[0] * px, y + (r[1] - 1) * px, r[2] * px, r[3] * px); }); }
   function bust(g, who, x, y, px, o) {   // a 32×32 person or face at (x, y)
     var F = FW(); o = o || {};
     try {

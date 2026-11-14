@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-pg ahp-ink" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Counting Sleeps</title>
 <meta name="description" content="Pick the day you'll see them and count the sleeps on a paper chain on the fridge. Save little things to tell them; swap them at the table. Then put the phone down.">
@@ -261,8 +261,8 @@ function paintScenes() {
       PX(c, 0, G, 160, 16, night ? "#6b4f36" : "#b98c5e"); PX(c, 0, G, 160, 1, night ? "#4a3626" : "#8a6440");
       for (var fx = 6; fx < 160; fx += 18) PX(c, fx, G + 4, 1, 12, night ? "#5c432e" : "#a77b52");
       /* the window: the hour's sky, Miso on the sill */
-      PX(c, 8, 12, 40, 34, "#3b2a20"); PX(c, 10, 14, 36, 30, sky[0]); PX(c, 10, 30, 36, 14, sky[1]); PX(c, 27, 14, 2, 30, "#3b2a20"); PX(c, 10, 28, 36, 2, "#3b2a20");
-      if (night) { PX(c, 38, 18, 4, 4, "#f3e6c0"); PX(c, 14, 20, 1, 1, "#f3ead8"); PX(c, 20, 17, 1, 1, "#f3ead8"); } else PX(c, 15, 18, 5, 5, "#f6d77a");
+      PX(c, 8, 12, 40, 34, "#3b2a20"); if (Wd && Wd.view) Wd.view(c, 10, 14, 36, 30, { h: h }); else { PX(c, 10, 14, 36, 30, sky[0]); PX(c, 10, 30, 36, 14, sky[1]); } PX(c, 27, 14, 2, 30, "#3b2a20"); PX(c, 10, 28, 36, 2, "#3b2a20");
+      if (!(Wd && Wd.view)) { if (night) { PX(c, 38, 18, 4, 4, "#f3e6c0"); PX(c, 14, 20, 1, 1, "#f3ead8"); PX(c, 20, 17, 1, 1, "#f3ead8"); } else PX(c, 15, 18, 5, 5, "#f6d77a"); }
       PX(c, 6, 46, 44, 3, "#8a6440");
       if (Wd) Wd.drawPet(c, "miso", 20, 46, 1, { asleep: catZ });
       /* the door and the calendar over it (today's date, big enough to read in pixels) */

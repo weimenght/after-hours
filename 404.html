@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="referrer" content="same-origin"><title>Page not found</title><link rel="stylesheet" href="/fonts/g/fonts.css"><script src="/fbkit/fb.js?v=b8b3973642"></script><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="referrer" content="same-origin"><title>Page not found</title><link rel="stylesheet" href="/fonts/g/fonts.css"><script src="/fbkit/fb.js?v=a7b353ae02"></script><style>
 :root{--ink:#120F18;--card:#1B1826;--cream:#F4ECDD;--mut:rgba(244,236,221,.72);--line:rgba(244,236,221,.12);--lamp:#F6B65B}
 *{box-sizing:border-box}html{background:var(--ink);color-scheme:dark}
 body{margin:0;min-height:100vh;display:grid;place-items:center;color:var(--cream);font:400 16px/1.55 "Plus Jakarta Sans",system-ui,"PingFang SC",sans-serif;padding:32px max(18px,env(safe-area-inset-left));
@@ -35,7 +35,7 @@ function zz(w){try{return !!(W.sleeps&&W.sleeps(w,h))}catch(e){return false}}
 function cv(draw){var c=document.createElement("canvas");c.width=32;c.height=32;c.style.width=c.style.height="64px";try{draw(c.getContext("2d"))}catch(e){}return c}
 function pet(k,a){var s=document.createElement("span");try{s.innerHTML=W.petSvg(k,{asleep:a})}catch(e){}var v=s.querySelector("svg");if(v){v.style.width="30px";v.style.height="auto"}return s}
 function line(s){var o=document.createElement("span");s.split(/(\*[^*]+\*)/).forEach(function(p){if(!p)return;if(p.charAt(0)==="*"){var i=document.createElement("i");i.textContent=p.slice(1,-1);o.appendChild(i)}else o.appendChild(document.createTextNode(p))});return o}
-var WHO=[["wei","Wei",function(a){return [cv(function(g){WEI.forEach(function(r){g.fillStyle=r[4];g.fillRect(r[0],r[1],r[2],r[3])});if(a){g.fillStyle="#f5d49a";g.fillRect(10,10,4,4);g.fillRect(18,10,4,4);g.fillStyle="#1b0f07";g.fillRect(10,12,4,1);g.fillRect(18,12,4,1)}})]}],
+var WHO=[["wei","Wei",function(a){return [cv(function(g){if(window.FBWorld&&FBWorld.drawWei){FBWorld.drawWei(g,0,0,1,{asleep:a});return}WEI.forEach(function(r){g.fillStyle=r[4];g.fillRect(r[0],r[1],r[2],r[3])});if(a){g.fillStyle="#f5d49a";g.fillRect(10,10,4,4);g.fillRect(18,10,4,4);g.fillStyle="#1b0f07";g.fillRect(10,12,4,1);g.fillRect(18,12,4,1)}})]}],
  ["mei","Mei",function(a){return [cv(function(g){W.drawMei(g,0,0,1,{asleep:a})})]}],
  ["popo","Popo",function(a){return [cv(function(g){W.drawPopo(g,0,0,1,{asleep:a})})]}],
  ["cats","Miso & Yuzu",function(a){return [pet("miso",a),pet("yuzu",a)]}],

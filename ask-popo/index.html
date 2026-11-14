@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="skin-ah ahp-town" lang="en">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ask Popo</title>
 <meta name="description" content="One question a week to ask an older relative in person, and two lines to keep the answer. A small book you can print. Kept on your own device.">
@@ -211,15 +211,20 @@ function draw(t) {
   R(0, 100, 320, 46, "#3c2632"); for (x = 4; x < 320; x += 12) R(x, 100, 1, 46, "#2e1c26"); R(0, 99, 320, 2, "#4c3040");
   R(0, 146, 320, 54, "#4a3020"); for (y = 152; y < 200; y += 8) R(0, y, 320, 1, "#3c2618");
   /* the window: Barcelona's roofs at the real hour */
-  R(6, 14, 56, 60, "#1a1410"); R(9, 17, 50, 54, sk === "night" ? "#10142a" : sk === "dusk" ? "#d8805a" : "#8ec5e8");
+  R(6, 14, 56, 60, "#1a1410");
+  if (window.FBWorld && FBWorld.view) FBWorld.view(C, 9, 17, 50, 54, { h: h });   /* the visitor's own sky, season and weather (the kit) */
+  else {
+  R(9, 17, 50, 54, sk === "night" ? "#10142a" : sk === "dusk" ? "#d8805a" : "#8ec5e8");
   if (sk === "dusk") { R(9, 17, 50, 14, "#7a5a8a"); R(9, 31, 50, 10, "#c0707a"); }
   if (sk === "night") STARS.forEach(function (st) { if (RM || Math.sin(s * 2 + st[2]) > -.3) R(st[0] | 0, st[1] | 0, 1, 1, "#f3ead8"); });
   if (sk === "day") { R(14, 24, 10, 3, "#f3f8fc"); R(16, 22, 6, 2, "#f3f8fc"); R(40, 30, 12, 3, "#f3f8fc"); }
   ROOFS.forEach(function (b) { R(b[0], b[1], b[2], 74 - b[1], sk === "day" ? "#a85a3a" : "#1c1624"); R(b[0] + 1, b[1] - 2, b[2] - 2, 2, sk === "day" ? "#c06a44" : "#241c2e"); });
   if (sk !== "day") LIT.forEach(function (w) { R(w[0], w[1], 2, 2, "#f4c060"); });
+  }
   R(33, 17, 2, 54, "#1a1410"); R(9, 43, 50, 2, "#1a1410"); R(4, 74, 60, 3, "#5a3a22");
   /* Miso on the sill; in the quiet, Yuzu has your chair */
   pet("miso", 42, 74, { asleep: !catsUp });
+  R(196, 50, 66, 3, "#5a3a22"); R(196, 53, 66, 1, "#1a1410"); if (window.FBWorld && FBWorld.decor) FBWorld.decor(C, [[212, 50], [244, 50]], 2, { salt: "ask" });   /* the day's things on a shelf: one of the family's keepsakes, then Hong Kong and Catalan things (the kit) */
   /* Josep's clock, keeping the real time */
   R(272, 8, 34, 52, "#1a1410"); R(273, 9, 32, 50, "#7a4a28"); disc(289, 24, 12, "#1a1410"); disc(289, 24, 11, "#f3ead8");
   for (k = 0; k < 12; k++) { var an = k / 12 * Math.PI * 2; R(Math.round(289 + Math.sin(an) * 9), Math.round(24 - Math.cos(an) * 9), 1, 1, "#5a4030"); }

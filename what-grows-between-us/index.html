@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="skin-ah ahp-town fbt">
 <head>
-<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=b8b3973642"></script>
+<meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=a7b353ae02"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>What Grows Between Us</title>
 <meta name="description" content="Popo found a seed packet with no label. Grow it with your friends: it grows only from real things you do together, off the screen. Pass it hand to hand, guess what it is, and when it blooms, grow a real one.">
@@ -184,9 +184,13 @@ function draw() {
   for (var y = 0; y < 86; y += 6) px(g, dk ? "#2a2030" : "#cfbb94", 0, y, 192, 1);
   px(g, "#5a3820", 34, 6, 124, 70);
   var sky = dk ? ["#100c1c", "#1a1630"] : h < 9 ? ["#8a9ac8", "#e8b890"] : h > 17 ? ["#5a3a6a", "#e88a56"] : ["#6e9ed8", "#a6c8ec"];
+  var FV = window.FBWorld && FBWorld.view;
+  if (FV) FBWorld.view(g, 38, 10, 116, 62, { h: h, roofs: false, branch: false, fx: false });   /* the visitor's own sky (the kit); the weather goes on after the roofs */
+  else {
   px(g, sky[0], 38, 10, 116, 32); px(g, sky[1], 38, 42, 116, 30);
   if (dk) { [[50, 18], [80, 14], [120, 22], [140, 15], [100, 30], [64, 26]].forEach(function (s) { px(g, "#f3ead8", s[0], s[1]); }); px(g, "#f4e8cf", 132, 16, 6, 6); px(g, sky[0], 135, 15, 4, 5); }
   else px(g, "#fff2c0", Math.max(40, Math.min(146, 40 + ((h - 7) / 11) * 106)), 18, 7, 7);
+  }
   [[38, 56, 30], [70, 50, 34], [106, 58, 26], [134, 52, 20]].forEach(function (b) {
     px(g, dk ? "#3a2c34" : "#c8b090", b[0], b[1], b[2], 72 - b[1]); px(g, dk ? "#4a2018" : "#a0442a", b[0], b[1] - 2, b[2], 3);
     if (se === "winter") px(g, "#eef2f8", b[0], b[1] - 3, b[2], 1);
@@ -194,8 +198,9 @@ function draw() {
   });
   if (se === "autumn") [[46, 30], [118, 36], [88, 44]].forEach(function (p) { px(g, "#c8702a", p[0], p[1], 2, 1); });
   if (se === "spring") [[52, 26], [124, 32], [92, 40]].forEach(function (p) { px(g, "#f2b8c8", p[0], p[1], 2, 1); });
+  if (FV) FBWorld.view(g, 38, 10, 116, 62, { h: h, sky: false, roofs: false, branch: false });
   px(g, "#5a3820", 94, 6, 4, 70); px(g, "#5a3820", 34, 40, 124, 3);
-  px(g, "#7a5030", 20, 76, 152, 6); px(g, "#5a3820", 20, 82, 152, 3); px(g, dk ? "#1e1820" : "#b8a080", 0, 85, 192, 35);
+  px(g, "#7a5030", 20, 76, 152, 6); px(g, "#5a3820", 20, 82, 152, 3); if (window.FBWorld && FBWorld.decor) FBWorld.decor(g, [[42, 76], [152, 76]], 1, { salt: "grow" });   /* the day's things on the sill: one of the family's keepsakes, then Hong Kong and Catalan things (the kit) */ px(g, dk ? "#1e1820" : "#b8a080", 0, 85, 192, 35);
   var notes = (S && S.notes) || [];
   notes.slice(-6).forEach(function (n, i) { var cs = ["#fff1a8", "#ffd6e0", "#cdeffd"]; var x = i < 3 ? 22 : 162, y = 12 + (i % 3) * 18; px(g, cs[i % 3], x, y, 9, 9); px(g, "#a08a60", x + 2, y + 3, 5, 1); px(g, "#a08a60", x + 2, y + 5, 4, 1); });
   var cx = 96, base = 76;
