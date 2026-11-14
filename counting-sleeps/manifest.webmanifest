@@ -1,0 +1,15 @@
+{
+  "name": "Counting Sleeps",
+  "short_name": "Counting Sleeps",
+  "description": "Pick the day you'll see them. Count the sleeps on a paper chain, not on your phone. Lives in your link and on this device.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7efe2",
+  "theme_color": "#f7efe2",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
