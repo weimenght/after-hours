@@ -359,6 +359,18 @@
             :focus-visible { outline-color: #b45309; }
             ::selection { background: #fcd34d; color: #000; }
         }
+        /* the trunk call's coins: one a minute, no numbers */
+        .tk-phone { display:flex; align-items:center; justify-content:center; gap:18px; color:#f2c46b; }
+        .tk-set { width:96px; height:52px; }
+        .tk-coins { display:flex; gap:7px; }
+        .tk-coins i { width:18px; height:18px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #ffe7a6, #d9a03a 60%, #9c6a1c); box-shadow:0 1px 0 rgba(0,0,0,.35), inset 0 0 0 1.5px rgba(120,80,20,.6); transition:opacity .6s, transform .6s; }
+        .tk-coins i.spent { opacity:.14; transform:translateY(8px) scale(.85); }
+        .tk-coins i.now { animation:tkGlow 1.6s ease-in-out infinite; }
+        @keyframes tkGlow { 50% { filter:brightness(1.25); transform:translateY(-1px); } }
+        .tk-btn { width:100%; padding:.7rem 1rem; border-radius:999px; font-size:.9rem; font-weight:600; }
+        .tk-main { background:#f2c46b; color:#1a1408; }
+        #trunk-btn.tk-live { opacity:1; color:#fde7a8; box-shadow:0 0 0 1px rgba(242,196,107,.55); }
+        @media (prefers-reduced-motion: reduce) { .tk-coins i.now { animation:none; } }
     </style>
 <style id="skin-ah">html.skin-ah {--ahp-bg: #F5EEE3; --ahp-bg2: #ECE2D2; --ahp-card: #FFFBF4; --ahp-field: #FFFDF8;--ahp-ink: #2B231C; --ahp-ink2: #6E6156; --ahp-line: #DDD0BC; --ahp-line2: #C9B89E;--ahp-lamp: #F2A33A; --ahp-lamp-ink: #2A1A08;--ahp-acc: #B5562F; --ahp-acc-ink: #FFFFFF;--ahp-accd: color-mix(in oklab, var(--ahp-acc) 82%, #000);--ahp-soft: color-mix(in oklab, var(--ahp-acc) 12%, var(--ahp-card));--ahp-shadow: 0 1px 2px rgba(70,45,20,.06), 0 6px 20px rgba(70,45,20,.08);--ahp-say: "Fraunces", "Songti SC", "Noto Serif SC", "Noto Serif CJK SC", Georgia, serif;--ahp-ui: "Figtree", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;--ahp-hand: "Caveat", "Figtree", cursive;color-scheme: light;}html.skin-ah:lang(zh-Hant) { --ahp-say: "Fraunces", "Songti TC", "Noto Serif TC", "Noto Serif CJK TC", Georgia, serif; --ahp-ui: "Figtree", "PingFang HK", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif; }@media (prefers-color-scheme: dark) {html.skin-ah:not([data-theme="light"]) {--ahp-bg: #17130F; --ahp-bg2: #211B16; --ahp-card: #251E18; --ahp-field: #1C1612;--ahp-ink: #F3EADB; --ahp-ink2: #B8A992; --ahp-line: #3B3128; --ahp-line2: #54463A;--ahp-accd: color-mix(in oklab, var(--ahp-acc) 70%, #fff);--ahp-soft: color-mix(in oklab, var(--ahp-acc) 18%, var(--ahp-card));--ahp-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);color-scheme: dark;}}html.skin-ah[data-theme="dark"] {--ahp-bg: #17130F; --ahp-bg2: #211B16; --ahp-card: #251E18; --ahp-field: #1C1612;--ahp-ink: #F3EADB; --ahp-ink2: #B8A992; --ahp-line: #3B3128; --ahp-line2: #54463A;--ahp-accd: color-mix(in oklab, var(--ahp-acc) 70%, #fff);--ahp-soft: color-mix(in oklab, var(--ahp-acc) 18%, var(--ahp-card));--ahp-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);color-scheme: dark;}html.skin-ah, html.skin-ah body { background: var(--ahp-bg) !important; }html.skin-ah body { -webkit-font-smoothing: antialiased; }html.skin-ah ::selection { background: color-mix(in oklab, var(--ahp-lamp) 45%, transparent); }@font-face { font-family: "VT323"; font-style: normal; font-weight: 400; font-display: swap; size-adjust: 77%; src: url(/fonts/g/figtree-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }@font-face { font-family: "Press Start 2P"; font-style: normal; font-weight: 400; font-display: swap; size-adjust: 128%; src: url(/fonts/g/figtree-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }@font-face { font-family: "AHP Head"; font-weight: 100 900; font-display: swap; size-adjust: 132%; src: url(/fonts/g/fraunces-latin-600-normal.woff2) format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }html.ahp-town:root:root {--page: var(--ahp-bg); --check: transparent;--wood: var(--ahp-card); --wood-hi: var(--ahp-bg2); --ink-on-wood: var(--ahp-ink); --card-ink: var(--ahp-ink); --card-dim: var(--ahp-ink2);--paper: var(--ahp-card); --paper-2: var(--ahp-bg2); --ink: var(--ahp-ink); --ink-soft: var(--ahp-ink2);--amber: var(--ahp-acc); --amber-ink: var(--ahp-acc-ink); --line: var(--ahp-line); --muted: var(--ahp-ink2); --head: var(--ahp-ink);--bevel: 0 0 0 transparent; --bevel-pri: 0 0 0 transparent; --drop: var(--ahp-shadow);--bg: var(--ahp-bg); --bg2: var(--ahp-bg2); --panel: var(--ahp-card); --field: var(--ahp-field); --mut: var(--ahp-ink2);--shadow: transparent; --woodD: var(--ahp-bg2); --wood2: var(--ahp-bg2); --amber2: var(--ahp-accd); --link: var(--ahp-accd);color-scheme: light;}@media (prefers-color-scheme: dark) { html.ahp-town:not([data-theme="light"]) { color-scheme: dark; } }html.ahp-town[data-theme="dark"] { color-scheme: dark; }html.ahp-town body { color: var(--ahp-ink) !important; font-family: var(--ahp-ui); line-height: 1.4; }html.ahp-town :is(#app, .wrap, main, .main, .sheet, #toast, .toast, #seeds, #go, #helpSheet),html.ahp-town :is(#app, .wrap, main, .main, .sheet, #toast, .toast, #seeds, #go, #helpSheet) :not(canvas, svg, svg *, img) {border-width: 1px; border-color: var(--ahp-line); box-shadow: none; text-shadow: none;}html.ahp-town :is(#app, .wrap, main, .main, .sheet) :not(canvas, svg, svg *, img, i, span, b, small, em) { border-radius: 14px; }html.ahp-town :is(#app, .wrap, main, .main, .sheet) :is(p, li, small, label, .hint, .sub, .note, .say p, .ln p, .body) { line-height: 1.42; }html.ahp-town :is(.card, .panel, .entry, .item, .form, .paper, .reveal, .q, .confirm, .slip, .stick, .note, .pocket, .in, .bubble) {background-color: var(--ahp-card); color: var(--ahp-ink); border: 1px solid var(--ahp-line); box-shadow: var(--ahp-shadow); border-radius: 18px;}html.ahp-town :is(.note, .slip, .stick) { box-shadow: 0 1px 2px rgba(70,45,20,.08); }html.ahp-town .paper::before, html.ahp-town .q::before { border: 0; border-radius: 2px; opacity: .55; }html.ahp-town .say:not(p) { background: var(--ahp-card); border: 1px solid var(--ahp-line); box-shadow: var(--ahp-shadow); border-radius: 18px; color: var(--ahp-ink); }html.ahp-town .say p, html.ahp-town p.say, html.ahp-town .say .b, html.ahp-town .bubble { font-family: var(--ahp-say); font-size: 17px; line-height: 1.45; font-weight: 500; color: var(--ahp-ink); background: none; border: 0; box-shadow: none; }html.ahp-town .say .b { padding: 0; }html.ahp-town .say .who, html.ahp-town .who b { color: var(--ahp-accd); font-family: var(--ahp-ui); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }html.ahp-town :is(.say canvas, .who canvas) { border: 0; border-radius: 50%; background: var(--ahp-bg2); }html.ahp-town .sl-say { background: var(--ahp-card) !important; color: var(--ahp-ink) !important; border: 1px solid var(--ahp-line) !important; box-shadow: var(--ahp-shadow) !important; border-radius: 18px; }html.ahp-town .sl-who { color: var(--ahp-accd) !important; font-family: var(--ahp-ui) !important; font-weight: 700; font-size: 11px !important; letter-spacing: .12em !important; }html.ahp-town :is(.sl-p, .sl-card) { color: var(--ahp-ink) !important; font-family: var(--ahp-say); font-size: 17px; line-height: 1.45; border-color: var(--ahp-line) !important; }html.ahp-town .sl-bigt { color: var(--ahp-ink) !important; font-family: "AHP Head", var(--ahp-say) !important; }html.ahp-town .sl-b { border-radius: 999px !important; border: 1px solid var(--ahp-line2) !important; background: var(--ahp-card) !important; color: var(--ahp-ink) !important; box-shadow: 0 1px 2px rgba(70,45,20,.08) !important; font-family: var(--ahp-ui) !important; font-weight: 600; }html.ahp-town .sl-b.sl-pri { background: var(--ahp-acc) !important; color: var(--ahp-acc-ink) !important; border-color: var(--ahp-acc) !important; }html.ahp-town .sl-q { color: var(--ahp-accd) !important; font-family: var(--ahp-ui) !important; }html.ahp-town .sl-in { background: var(--ahp-field) !important; color: var(--ahp-ink) !important; border: 1px solid var(--ahp-line2) !important; border-radius: 12px !important; box-shadow: none !important; }html.ahp-town :is(.sl-paper, .sl-pg) { border: 1px solid var(--ahp-line) !important; border-radius: 6px; box-shadow: 0 1px 3px rgba(70,45,20,.12) !important; }html.ahp-town .sl-log { border: 1px solid var(--ahp-line) !important; border-radius: 18px; box-shadow: var(--ahp-shadow) !important; }html.ahp-town :is(.scene, .stage, .mapbox, canvas.scene) { border: 1px solid var(--ahp-line) !important; border-radius: 18px; box-shadow: var(--ahp-shadow); overflow: hidden; }html.ahp-town canvas { image-rendering: pixelated; }html.ahp-town :is(#app, .wrap, main, .main, .sheet) :is(h1, h2) { font-family: "AHP Head", var(--ahp-say); font-weight: 600; letter-spacing: -.005em; text-transform: none; color: var(--ahp-ink); line-height: 1.15; }html.ahp-town :is(#app, .wrap, main, .main, .sheet) :is(h3) { font-family: var(--ahp-say); font-weight: 600; text-transform: none; letter-spacing: 0; }html.ahp-town :is(.lbl, .sect, .brand, .k, .dn, .tag-l, .eyebrow) { color: var(--ahp-ink2); letter-spacing: .1em; }html.ahp-town :is(.hint, .sub, .note, .count, small) { color: var(--ahp-ink2); }html.ahp-town a { color: var(--ahp-accd); }html.ahp-town :is(#app, .wrap, main, .main, .sheet) :is(input[type=text], input[type=time], input[type=date], input:not([type]), input.in, textarea, select) {background: var(--ahp-field) !important; color: var(--ahp-ink) !important; border: 1px solid var(--ahp-line2) !important; border-radius: 12px !important; box-shadow: none !important;}html.ahp-town :is(input, textarea, select):focus { outline: 2px solid color-mix(in oklab, var(--ahp-acc) 60%, transparent) !important; outline-offset: 1px; }html.ahp-town ::placeholder { color: color-mix(in oklab, var(--ahp-ink2) 70%, transparent); }html.ahp-town :is(.btn, .fbb, .chip, .go, .pill) {border-radius: 999px !important; border: 1px solid var(--ahp-line2) !important; background: var(--ahp-card); color: var(--ahp-ink) !important;box-shadow: 0 1px 2px rgba(70,45,20,.08) !important; font-family: var(--ahp-ui); font-weight: 600; text-shadow: none; transform: none;transition: background .15s, border-color .15s, transform .1s;}html.ahp-town :is(.btn, .fbb, .chip, .go, .pill):hover { background: var(--ahp-bg2); }html.ahp-town :is(.btn, .fbb, .chip, .go, .pill):active { transform: translateY(1px); }html.ahp-town :is(.btn, .fbb, .chip, .go, .pill):focus-visible { outline: 2px solid var(--ahp-acc) !important; outline-offset: 2px; }html.ahp-town :is(.btn.pri, .fbb.pri, .fbb-pri, .btn.go-pri, .btn.primary, .chip.on, .fbb.on, .go:hover) {background: var(--ahp-acc) !important; color: var(--ahp-acc-ink) !important; border-color: var(--ahp-acc) !important;}html.ahp-town :is(.btn.pri, .fbb.pri, .fbb-pri):hover { background: var(--ahp-accd) !important; }html.ahp-town :is(.mood, .tags .chip, .chip, .fbb, button)[aria-pressed="true"],html.ahp-town :is(.mood, .chip, button)[aria-checked="true"] {background: var(--ahp-soft) !important; border-color: var(--ahp-acc) !important; color: var(--ahp-ink) !important; box-shadow: inset 0 0 0 1px var(--ahp-acc) !important;}html.ahp-town :is(#app, .wrap, main, .main, .sheet) button:not(.btn, .fbb, .chip, .go, .pill, .lk, .quiet) { border-radius: 14px; }html.ahp-town .tags .chip.any { background: var(--ahp-bg2) !important; }html.ahp-town :is(.btn, .fbb)[disabled] { opacity: .45; }html.ahp-town :is(.lk, .quiet) { color: var(--ahp-accd) !important; font-family: var(--ahp-ui); }html.ahp-town :is(.say, .sl-say, .who, .card, .panel, .entry) i:not(:empty) { color: var(--ahp-ink2) !important; background: none !important; font-style: italic; border: 0; }html.ahp-town .hd { background: color-mix(in oklab, var(--ahp-bg) 92%, transparent) !important; border-bottom: 1px solid var(--ahp-line) !important; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }html.ahp-town .hd .brand span { font-family: var(--ahp-say) !important; font-size: 20px !important; font-weight: 600; letter-spacing: 0 !important; text-transform: none !important; color: var(--ahp-ink) !important; }html.ahp-town .hd .rb { border-radius: 999px !important; border: 1px solid var(--ahp-line2) !important; background: var(--ahp-card) !important; color: var(--ahp-ink) !important; box-shadow: none !important; font-family: var(--ahp-ui) !important; font-size: 17px !important; }html.ahp-town .hd .menu { background: var(--ahp-card) !important; color: var(--ahp-ink) !important; border: 1px solid var(--ahp-line) !important; border-radius: 14px; box-shadow: var(--ahp-shadow) !important; }html.ahp-town :is(.steps i, .lbl i, .who i:empty) { border-radius: 50%; border-width: 0; background: var(--ahp-line2); }html.ahp-town .steps i.on { background: var(--ahp-acc); }html.ahp-town .recipe .pin { border: 0; box-shadow: 0 1px 3px rgba(0,0,0,.25); }html.ahp-town .langm .menu, html.ahp-town .toast, html.ahp-town #toast { background: var(--ahp-card) !important; color: var(--ahp-ink) !important; border: 1px solid var(--ahp-line) !important; border-radius: 14px; box-shadow: var(--ahp-shadow) !important; }html.ahp-town .langm .menu button { color: var(--ahp-ink); }html.ahp-town .langm .menu button[aria-checked="true"] { color: var(--ahp-accd); }html.ahp-town .sheet > :is(.in, .card, div:first-child) { border-radius: 22px 22px 0 0; }@media (min-width: 720px) { html.ahp-town .sheet > :is(.in, .card, div:first-child) { border-radius: 22px; } }html.ahp-town #dark, html.ahp-town #dark * { border-radius: 0; }html.ahp-town #dark { background: #0d0a08 !important; color: #efe5d4; }html.ahp-paper:root:root {--bg: var(--ahp-bg); --bg2: var(--ahp-bg2); --card: var(--ahp-card); --panel: var(--ahp-card); --line: var(--ahp-line);}html.ahp-ink:root:root { --ink: var(--ahp-ink); --ink2: var(--ahp-ink2); --soft: var(--ahp-ink2); }html.ahp-pg:root:root { --paper: var(--ahp-bg); --paper2: var(--ahp-bg2); --field: var(--ahp-field); --dot: transparent; }html.ahp-pc:root:root { --paper: var(--ahp-card); --paper2: var(--ahp-bg2); }html.skin-ah .ahh { --ahh-bg: var(--ahp-card); --ahh-ink: var(--ahp-ink); --ahh-line: var(--ahp-line); --ahh-name: var(--ahp-say); }html.skin-ah .ahh .ahh-nm { font-family: var(--ahp-say) !important; font-size: 20px !important; font-weight: 600 !important; text-transform: none !important; letter-spacing: 0 !important; line-height: 1.2 !important; }html.skin-ah .ahh .ahh-b { border-radius: 999px !important; border: 1px solid var(--ahp-line2) !important; background: var(--ahp-card) !important; color: var(--ahp-ink) !important; box-shadow: none !important; font-family: var(--ahp-ui) !important; font-size: 17px !important; width: 44px; height: 44px; padding: 0; }html.skin-ah .ahh .ahh-b:hover { background: var(--ahp-bg2) !important; }html.skin-ah .ahh .ahh-ic img { image-rendering: auto; }html.ahp-town :is(.top, header.top) { background: transparent !important; border: 0 !important; box-shadow: none !important; }html.skin-ah{--ahp-acc:#2F4A86}</style></head>
 <body id="app-body" class="bg-[#090d16] text-white antialiased selection:bg-amber-300 selection:text-black">
@@ -471,6 +483,7 @@
                 <div class="flex items-center justify-between text-[11px] gap-2 min-w-0">
                     <span class="opacity-55 shrink-0 hide-narrow" data-i18n="overlapTitle">Together window</span>
                     <span id="overlap-text" class="font-medium text-amber-200 truncate text-right flex-1 min-w-0">--</span>
+                    <button id="trunk-btn" type="button" onclick="openTrunk()" class="shrink-0 px-2.5 py-1 -my-1 rounded-full glass-subtle text-[11px] opacity-75 hover:opacity-100 active:scale-95 transition whitespace-nowrap"><span aria-hidden="true">📞 </span><span id="trunk-lbl">Trunk call</span></button>
                 </div>
                 <p id="sis-first" class="hidden text-[10px] opacity-60" data-i18n="sisFirst">The sisters' one is at six.</p>
                 <div class="relative">
@@ -702,6 +715,26 @@
                 </button>
             </div>
             <div id="timeline-list" class="space-y-2.5"></div>
+        </div>
+    </div>
+
+    <!-- TRUNK CALL (Nov 14, the owner): three minutes a day, like an expensive international call; the operator keeps the time of a call you make yourselves -->
+    <div id="trunk-modal" class="sheet-backdrop hidden" onclick="if(event.target===this) closeTrunk()">
+        <div class="sheet glass rounded-[28px] p-5 flex flex-col gap-3 no-scrollbar" role="dialog" aria-modal="true" aria-labelledby="trunk-title">
+            <div class="flex justify-between items-center shrink-0">
+                <h3 id="trunk-title" class="text-xs font-semibold uppercase tracking-wider opacity-80">--</h3>
+                <button onclick="closeTrunk()" class="icon-btn -mr-2 opacity-60 hover:opacity-100" data-i18n-aria="close" aria-label="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                </button>
+            </div>
+            <div class="tk-phone" aria-hidden="true">
+                <svg viewBox="0 0 120 64" class="tk-set"><path d="M14 22c0-8 20-14 46-14s46 6 46 14v4c0 3-3 5-6 5H86c-3 0-5-2-5-5v-3c-6-2-14-3-21-3s-15 1-21 3v3c0 3-2 5-5 5H20c-3 0-6-2-6-5z" fill="currentColor" opacity=".85"/><path d="M30 36h60l8 22H22z" fill="currentColor" opacity=".55"/><circle cx="60" cy="47" r="8" fill="none" stroke="currentColor" stroke-width="2.5" opacity=".9"/></svg>
+                <div id="trunk-coins" class="tk-coins"><i></i><i></i><i></i></div>
+            </div>
+            <p id="trunk-say" class="text-sm leading-snug" aria-live="polite">--</p>
+            <p id="trunk-how" class="text-[12px] opacity-65 leading-snug">--</p>
+            <p class="text-[12px] opacity-75 leading-snug border-l-2 border-amber-300/60 pl-2.5"><span id="trunk-popo" class="italic">--</span><br><span id="trunk-popo-by" class="text-[10px] opacity-70">--</span></p>
+            <div id="trunk-acts" class="flex flex-col gap-2"></div>
         </div>
     </div>
 
@@ -2138,6 +2171,135 @@
             });
         }
 
+        // ============================================================================
+        // TRUNK CALL (Nov 14, the owner): "like an expensive international call in the last
+        // century, a few minutes a day". Handoff is the operator: the line opens only in the
+        // handoff hour, you call on whatever you use, it keeps three minutes a day as three coins
+        // (no numbers), the pips, then the click. Honour-based, kept on this device (ho_trunk),
+        // nothing sent. Popo's rule from her calls to Hong Kong.
+        // ============================================================================
+        const TK_ALLOW = 180;
+        const TK = {
+            'en': { tkBtn: "Trunk call", tkBtnOpen: "The line's open", tkTitle: "The line to {name}", tkOpen: "Operator: the line to {name} is open. You have three minutes today.", tkOpenLeft: "Operator: the line to {name} is open. The coins left are today's.", tkHow: "Call on whatever you use: phone, FaceTime, WhatsApp. I'll keep the time.", tkTell: "Tell {name} to pick up", tkTellT: "Tell {name} the line's open", tkStart: "We're on the line", tkOn: "You're through to {name}.", tkPips: "The pips. Say the important thing.", tkHang: "Hang up", tkUp: "Your three minutes are up.", tkLeftSome: "Line closed. The coins left are yours until midnight.", tkUsed: "That's today's three minutes. The line opens again tomorrow.", tkLater: "The line to {name} opens at {time}.", tkTomorrow: "The line to {name} opens tomorrow at {time}.", tkNone: "Your days don't meet today, so there's no line. Leave a capsule instead.", tkCapsule: "Leave a capsule for the rest", tk1l: "Call you now?", tk1: "The line's open. Three minutes. Call you now?", tk2l: "Call me", tk2: "I saved my three minutes for you. Call me when you can.", tk3l: "Tomorrow?", tk3: "Can't talk now. Same time tomorrow?", tkPopo: "“Three minutes only. Say the important thing first lah.”", tkPopoBy: "Popo, on her calls to Hong Kong" },
+            'zh-CN': { tkBtn: "长途电话", tkBtnOpen: "线路通了", tkTitle: "打给{name}的线路", tkOpen: "接线员：打给{name}的线路通了。你今天有三分钟。", tkOpenLeft: "接线员：打给{name}的线路通了。剩下的硬币是今天的。", tkHow: "用你们平常用的打：电话、FaceTime 或 WhatsApp。时间我来看。", tkTell: "叫{name}接电话", tkTellT: "告诉{name}线路通了", tkStart: "我们接通了", tkOn: "已接通{name}。", tkPips: "嘀嘀嘀。把要紧的话说了。", tkHang: "挂断", tkUp: "你的三分钟到了。", tkLeftSome: "线路挂断。剩下的硬币留到今晚十二点。", tkUsed: "今天的三分钟用完了。明天线路再开。", tkLater: "打给{name}的线路{time}开。", tkTomorrow: "打给{name}的线路明天{time}开。", tkNone: "今天你们醒着的时间碰不上，没有线路。留个胶囊吧。", tkCapsule: "剩下的话留个胶囊", tk1l: "现在打给你？", tk1: "线路通了，三分钟。现在打给你？", tk2l: "打给我", tk2: "我的三分钟留给你了，方便就打给我。", tk3l: "明天？", tk3: "现在不方便。明天同一时间？", tkPopo: "“只有三分钟啊。要紧的话先讲啦。”", tkPopoBy: "婆婆说起她打回香港的长途电话" },
+            'zh-TW': { tkBtn: "長途電話", tkBtnOpen: "線路通了", tkTitle: "打給{name}的線路", tkOpen: "接線員：打給{name}的線路通了。你今天有三分鐘。", tkOpenLeft: "接線員：打給{name}的線路通了。剩下的硬幣是今天的。", tkHow: "用你們平常用的打：電話、FaceTime 或 WhatsApp。時間我來看。", tkTell: "叫{name}接電話", tkTellT: "告訴{name}線路通了", tkStart: "我們接通了", tkOn: "已接通{name}。", tkPips: "嘀嘀嘀。把要緊的話說了。", tkHang: "掛斷", tkUp: "你的三分鐘到了。", tkLeftSome: "線路掛斷。剩下的硬幣留到今晚十二點。", tkUsed: "今天的三分鐘用完了。明天線路再開。", tkLater: "打給{name}的線路{time}開。", tkTomorrow: "打給{name}的線路明天{time}開。", tkNone: "今天你們醒著的時間碰不上，沒有線路。留個膠囊吧。", tkCapsule: "剩下的話留個膠囊", tk1l: "現在打給你？", tk1: "線路通了，三分鐘。現在打給你？", tk2l: "打給我", tk2: "我的三分鐘留給你了，方便就打給我。", tk3l: "明天？", tk3: "現在不方便。明天同一時間？", tkPopo: "「得三分鐘㗎。要緊嘢講先啦。」", tkPopoBy: "婆婆說起她打回香港的長途電話" },
+            'es': { tkBtn: "Conferencia", tkBtnOpen: "Hay línea", tkTitle: "La línea con {name}", tkOpen: "Operadora: la línea con {name} está abierta. Hoy tienes tres minutos.", tkOpenLeft: "Operadora: la línea con {name} está abierta. Las monedas que quedan son de hoy.", tkHow: "Llamad por lo de siempre: teléfono, FaceTime o WhatsApp. Yo llevo el tiempo.", tkTell: "Avisa a {name}", tkTellT: "Dile a {name} que hay línea", tkStart: "Ya estamos hablando", tkOn: "Estás hablando con {name}.", tkPips: "Los pitidos. Di lo importante.", tkHang: "Colgar", tkUp: "Se acabaron tus tres minutos.", tkLeftSome: "Línea cerrada. Las monedas que quedan son tuyas hasta medianoche.", tkUsed: "Ya están los tres minutos de hoy. Mañana se vuelve a abrir la línea.", tkLater: "La línea con {name} se abre a las {time}.", tkTomorrow: "La línea con {name} se abre mañana a las {time}.", tkNone: "Hoy vuestros días no coinciden: no hay línea. Deja una cápsula.", tkCapsule: "Deja una cápsula con el resto", tk1l: "¿Te llamo ahora?", tk1: "Hay línea. Tres minutos. ¿Te llamo ahora?", tk2l: "Llámame", tk2: "Te he guardado mis tres minutos. Llámame cuando puedas.", tk3l: "¿Mañana?", tk3: "Ahora no puedo. ¿Mañana a la misma hora?", tkPopo: "«Tres minutos solo. Lo importante primero, ¿eh?»", tkPopoBy: "Popo, de sus llamadas a Hong Kong" },
+            'ca': { tkBtn: "Conferència", tkBtnOpen: "Hi ha línia", tkTitle: "La línia amb {name}", tkOpen: "Operadora: la línia amb {name} és oberta. Avui tens tres minuts.", tkOpenLeft: "Operadora: la línia amb {name} és oberta. Les monedes que queden són d'avui.", tkHow: "Truqueu pel de sempre: telèfon, FaceTime o WhatsApp. Jo porto el temps.", tkTell: "Avisa {name}", tkTellT: "Digues a {name} que hi ha línia", tkStart: "Ja parlem", tkOn: "Ja parles amb {name}.", tkPips: "Els pips. Digues el que importa.", tkHang: "Penjar", tkUp: "S'han acabat els teus tres minuts.", tkLeftSome: "Línia tancada. Les monedes que queden són teves fins a mitjanit.", tkUsed: "Ja hi ha els tres minuts d'avui. Demà es torna a obrir la línia.", tkLater: "La línia amb {name} s'obre a les {time}.", tkTomorrow: "La línia amb {name} s'obre demà a les {time}.", tkNone: "Avui els vostres dies no coincideixen: no hi ha línia. Deixa una càpsula.", tkCapsule: "Deixa una càpsula amb la resta", tk1l: "Et truco ara?", tk1: "Hi ha línia. Tres minuts. Et truco ara?", tk2l: "Truca'm", tk2: "T'he guardat els meus tres minuts. Truca'm quan puguis.", tk3l: "Demà?", tk3: "Ara no puc. Demà a la mateixa hora?", tkPopo: "«Tres minuts. Primer, el que importa.»", tkPopoBy: "La Popo, de les seves trucades a Hong Kong" }
+        };
+        Object.keys(TK).forEach(l => { if (I18N[l]) Object.assign(I18N[l], TK[l]); });
+
+        let tkTimer = null, tkAudio = null, tkLock = null, tkPipped = false;
+        function tkDay() { try { return new Intl.DateTimeFormat('en-CA', { timeZone: tzOf(currentUser) }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } }
+        function tkGet() {
+            let o = null; try { o = JSON.parse(lsGet('ho_trunk') || 'null'); } catch (e) {}
+            if (!o || o.d !== tkDay()) o = { d: tkDay(), u: 0, s: 0 };
+            return o;
+        }
+        function tkPut(o) { lsSet('ho_trunk', JSON.stringify(o)); }
+        function tkUsed(o) { return Math.min(TK_ALLOW, o.u + (o.s ? (Date.now() - o.s) / 1000 : 0)); }
+        function tkLine() {
+            if (!currentUser || !partnerUser) return { open: false, none: true };
+            const ov = computeOverlap(currentUser, partnerUser);
+            if (ov.segs.find(s => ov.nowIdx >= s.from && ov.nowIdx <= s.to)) return { open: true };
+            const next = ov.segs.find(s => s.from > ov.nowIdx);
+            if (next) return { open: false, at: ov.slotLabel(next.from) };
+            if (ov.segs.length) return { open: false, at: ov.slotLabel(ov.segs[0].from), tomorrow: true };
+            return { open: false, none: true };
+        }
+        function trunkChip() {
+            const b = $('trunk-btn'); if (!b) return;
+            show(b, !!partnerUser);
+            if (!partnerUser) return;
+            const o = tkGet(), L = tkLine(), live = L.open && tkUsed(o) < TK_ALLOW;
+            setText('trunk-lbl', live ? t('tkBtnOpen') : t('tkBtn'));
+            b.classList.toggle('tk-live', live);
+        }
+        function tkCoins(o) {
+            const used = tkUsed(o), cs = $('trunk-coins').children;
+            for (let i = 0; i < 3; i++) {
+                cs[i].classList.toggle('spent', used >= (i + 1) * 60 - 0.5);
+                cs[i].classList.toggle('now', !!o.s && used < (i + 1) * 60 && used >= i * 60);
+            }
+        }
+        function tkBtn(label, cls, fn) { const b = document.createElement('button'); b.type = 'button'; b.className = 'tk-btn ' + cls; b.textContent = label; b.addEventListener('click', fn); return b; }
+        function tkActs(list) { $('trunk-acts').replaceChildren(...list); }
+        function tkSound(kind) {
+            try {
+                tkAudio = tkAudio || new (window.AudioContext || window.webkitAudioContext)();
+                const a = tkAudio, n = a.currentTime;
+                if (kind === 'pips') {
+                    for (let i = 0; i < 3; i++) { const o = a.createOscillator(), g = a.createGain(); o.frequency.value = 1000; g.gain.setValueAtTime(0.0001, n + i * 0.45); g.gain.exponentialRampToValueAtTime(0.18, n + i * 0.45 + 0.01); g.gain.setValueAtTime(0.18, n + i * 0.45 + 0.16); g.gain.exponentialRampToValueAtTime(0.0001, n + i * 0.45 + 0.2); o.connect(g).connect(a.destination); o.start(n + i * 0.45); o.stop(n + i * 0.45 + 0.22); }
+                } else {
+                    const len = Math.floor(a.sampleRate * 0.06), buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
+                    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+                    const s = a.createBufferSource(), g = a.createGain(); g.gain.value = 0.5; s.buffer = buf; s.connect(g).connect(a.destination); s.start(n);
+                }
+            } catch (e) {}
+            try { navigator.vibrate && navigator.vibrate(kind === 'pips' ? [80, 120, 80, 120, 80] : [160]); } catch (e) {}
+        }
+        async function tkWake(on) {
+            try {
+                if (on && !tkLock && navigator.wakeLock) tkLock = await navigator.wakeLock.request('screen');
+                if (!on && tkLock) { tkLock.release(); tkLock = null; }
+            } catch (e) {}
+        }
+        function tkStop(o) {
+            if (o.s) { o.u = tkUsed(o); o.s = 0; tkPut(o); }
+            clearInterval(tkTimer); tkTimer = null; tkWake(false);
+        }
+        function tkCapsule() { closeTrunk(); setTimeout(() => { try { $('composer-input').focus(); } catch (e) {} }, 150); }
+        function renderTrunk() {
+            if (!partnerUser) return closeTrunk();
+            const name = partnerUser.name || '';
+            const o = tkGet(), L = tkLine(), used = tkUsed(o);
+            setText('trunk-title', t('tkTitle', { name }));
+            setText('trunk-popo', t('tkPopo')); setText('trunk-popo-by', t('tkPopoBy'));
+            tkCoins(o);
+            const how = $('trunk-how');
+            if (o.s) {   // on the line
+                if (used >= TK_ALLOW) {
+                    tkStop(o); tkSound('click');
+                    setText('trunk-say', t('tkUp')); show(how, false);
+                    tkActs([tkBtn(t('tkCapsule'), 'tk-main', tkCapsule), tkBtn(t('close'), 'glass-subtle', closeTrunk)]);
+                    tkCoins(o); trunkChip(); return;
+                }
+                const pips = TK_ALLOW - used <= 15;
+                if (pips && !tkPipped) { tkPipped = true; tkSound('pips'); }
+                setText('trunk-say', pips ? t('tkPips') : t('tkOn', { name })); show(how, false);
+                if (!$('trunk-acts').dataset.on) { tkActs([tkBtn(t('tkHang'), 'tk-main', () => { tkStop(o); tkSound('click'); $('trunk-acts').dataset.on = ''; renderTrunk(); setText('trunk-say', tkUsed(tkGet()) < TK_ALLOW ? t('tkLeftSome') : t('tkUsed')); })]); $('trunk-acts').dataset.on = '1'; }
+                return;
+            }
+            $('trunk-acts').dataset.on = '';
+            if (used >= TK_ALLOW) {
+                setText('trunk-say', t('tkUsed')); show(how, false);
+                tkActs([tkBtn(t('tkCapsule'), 'tk-main', tkCapsule), tkBtn(t('close'), 'glass-subtle', closeTrunk)]);
+            } else if (!L.open) {
+                setText('trunk-say', L.none ? t('tkNone') : t(L.tomorrow ? 'tkTomorrow' : 'tkLater', { name, time: L.at })); show(how, false);
+                tkActs([tkBtn(t('tkCapsule'), 'tk-main', tkCapsule), tkBtn(t('close'), 'glass-subtle', closeTrunk)]);
+            } else {
+                setText('trunk-say', used > 0 ? t('tkOpenLeft', { name }) : t('tkOpen', { name }));
+                setText('trunk-how', t('tkHow')); show(how, true);
+                const acts = [tkBtn(t('tkStart'), 'tk-main', () => {
+                    const n = tkGet(); n.s = Date.now(); tkPut(n); tkPipped = TK_ALLOW - n.u <= 15; tkSound('click'); tkWake(true);
+                    clearInterval(tkTimer); tkTimer = setInterval(renderTrunk, 250); renderTrunk(); trunkChip();
+                })];
+                if (window.FBC && FBC.tell) acts.push(tkBtn(t('tkTell', { name }), 'glass-subtle', () => FBC.tell({ title: t('tkTellT', { name }), choices: [
+                    { label: t('tk1l'), text: t('tk1') }, { label: t('tk2l'), text: t('tk2') }, { label: t('tk3l'), text: t('tk3') }] })));
+                tkActs(acts);
+            }
+        }
+        function openTrunk() {
+            if (!partnerUser) return;
+            lastFocused = document.activeElement;
+            const o = tkGet();
+            if (o.s && !tkTimer) { tkPipped = TK_ALLOW - tkUsed(o) <= 15; tkTimer = setInterval(renderTrunk, 250); tkWake(true); }
+            $('trunk-acts').dataset.on = '';
+            renderTrunk(); show('trunk-modal', true);
+        }
+        function closeTrunk() { show('trunk-modal', false); if (lastFocused) try { lastFocused.focus(); } catch (e) {} }
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && tkTimer) renderTrunk(); });
+        window.HOT = { open: openTrunk, get: tkGet, put: tkPut, render: renderTrunk };   // test hook
+
         function renderOverlap() {
             if (!currentUser || !partnerUser) return;
             const ov = computeOverlap(currentUser, partnerUser);
@@ -2158,6 +2320,7 @@
             else if (ov.segs.length) text = t('overlapRange', { range: ov.segs.map(s => `${ov.slotLabel(s.from)}–${ov.slotLabel(s.to + 1)}`).join(', ') });
             else text = t('overlapNone');
             setText('overlap-text', text);
+            trunkChip();
         }
 
         async function setMyMood(moodKey) {
@@ -2662,6 +2825,7 @@
             if ($('lang-menu') && !$('lang-menu').classList.contains('hidden')) closeLangMenu();
             else if (!$('edit-modal').classList.contains('hidden')) closeEditModal();
             else if (!$('timeline-modal').classList.contains('hidden')) closeTimeline();
+            else if (!$('trunk-modal').classList.contains('hidden')) closeTrunk();
         });
 
         // ============================================================================
