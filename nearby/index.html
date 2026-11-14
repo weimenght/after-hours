@@ -683,6 +683,67 @@ body{overflow:hidden}
     for (var x2 = -24; x2 < 0; x2++) { var k2 = x2 + EX; if (k2 < 0) continue; var m = (((x2 + 14) % 46) + 46) % 46, o = 8 + Math.abs(m - 23) * 1.6 + (hash("pk" + x2) - .5) * 3, a = (x2 + 24) / 24; PKT[k2] = o * a + Math.min(PKT[k2] == null ? 70 : PKT[k2], 70) * (1 - a); }   /* meets the map's own peaks at the seam */
     for (var x3 = 0; x3 < EX; x3++) if (PKT[x3] == null || PKT[x3] > 66) PKT[x3] = 66;
   }
+  /* the new country is laid out in patches of their own width, each its own kind (by hash, so it holds still and never repeats):
+     west: pine clumps, fields (crops and furrows each their own way), a vineyard, a pond with reeds, a farm, a meadow, an orchard;
+     east above the sea: dunes, beach huts, a fishing village, a meadow; below the rails: woods, a chapel, allotments, a lane of houses */
+  var PK_KIND = { w: ["pines", "fields", "vines", "pond", "farm", "meadow", "orchard", "pasture", "fields"], e: ["dunes", "huts", "village", "meadow", "dunes"], ws: ["woods", "chapel", "allot", "lane", "meadow", "woods"], es: ["woods", "lane", "allot", "meadow", "chapel"] };
+  function patches(side, a, b, y0, y1, fr, night, lit, wx, se, G, D) {
+    var list = PK_KIND[side], bag = [], bi = 0, x = a, n = 0, prevCol = [];
+    function draw1(avoid) {   /* a seeded shuffle of the kinds, refilled as it runs out; skips whatever touches this cell */
+      for (var t = 0; t < 12; t++) { if (bi >= bag.length) { bag = list.slice(); for (var q = bag.length - 1; q > 0; q--) { var r = (hash(side + "sh" + n + q + t) * (q + 1)) | 0, tmp = bag[q]; bag[q] = bag[r]; bag[r] = tmp; } bi = 0; }
+        var k = bag[bi++]; if (avoid.indexOf(k) < 0) return k; }
+      return list[0];
+    }
+    while (x < b - 6) {
+      var w = Math.min(b - x, 30 + (hash(side + "pw" + n) * 60 | 0)), H = y1 - y0, rows = H > 80 ? 1 + (hash(side + "pr" + n) * 3 | 0) : 1, yy = y0, col = [];
+      for (var r2 = 0; r2 < rows; r2++) {
+        var rh = r2 === rows - 1 ? y1 - yy : Math.round(H / rows * (.7 + hash(side + "rh" + n + r2) * .6));
+        var k = draw1([col[r2 - 1], prevCol[r2], prevCol[r2 - 1], prevCol[r2 + 1]]);
+        patch(k, x, x + w, yy, yy + rh, side + n + "_" + r2, fr, night, lit, wx, se, G, D); col.push(k); yy += rh;
+      }
+      prevCol = col; x += w; n++;
+    }
+  }
+  function patch(k, a, b, y0, y1, id, fr, night, lit, wx, se, G, D) {
+    var w = b - a, h = y1 - y0, H1 = function (s) { return hash(id + s); }, nt = night;
+    var CROPS = { spring: ["#7ab84a", "#9ad06a", "#b8d86a"], summer: ["#c8b040", "#d8c458", "#8ab040"], autumn: ["#a8743a", "#8a5a2a", "#c8904a"], winter: ["#8a7a6a", "#c8c4bc", "#7a6a5a"] }[se] || ["#7ab84a", "#9ad06a", "#b8d86a"];
+    function tree(tx, ty, s) { R(tx + s / 2 - 1, ty + s, 2, s / 2 + 1, "#4a2e1a"); P0(tx + s / 4, ty, s / 2, s / 3, D); P0(tx, ty + s / 3, s, s / 3, D); P0(tx - 1, ty + s * 2 / 3, s + 2, s / 3, nt ? "#163020" : "#346a32"); if (se === "winter" || wx === "snow") P0(tx + s / 4, ty, s / 2, 1, "#f4f6fa"); }
+    if (k === "pines" || k === "woods") { var cnt = Math.round(w * h / (k === "woods" ? 70 : 55)); for (var i = 0; i < cnt; i++) { var s = 6 + (H1("s" + i) * 6 | 0); tree(a + H1("x" + i) * (w - s), y0 + H1("y" + i) * (h - s * 1.6), s); } return; }
+    if (k === "fields") { var vert = H1("v") < .4, gap = 4 + (H1("g") * 4 | 0), c1 = CROPS[(H1("c") * 3) | 0], c2 = CROPS[(H1("d") * 3) | 0], top = y0 + 2 + (H1("t") * Math.min(10, h / 5) | 0), bot = y1 - 2 - (H1("b") * Math.min(10, h / 5) | 0);
+      R(a, top, w, bot - top, nt ? "#2a2a1c" : c1);
+      if (vert) for (var fx = a + 1; fx < b; fx += gap) R(fx, top, 1, bot - top, nt ? "#1a2416" : c2); else for (var fy = top + 1; fy < bot; fy += gap) R(a, fy, w, 1, nt ? "#1a2416" : c2);
+      R(a, top - 1, w, 1, nt ? "#14281a" : "#4a7a3a"); R(a, bot, w, 1, nt ? "#14281a" : "#4a7a3a"); R(b - 1, top, 1, bot - top, nt ? "#14281a" : "#4a7a3a");
+      if (H1("hay") < .5 && se !== "spring") for (var hy = 0; hy < 3; hy++) { var hx = a + 6 + H1("hx" + hy) * (w - 14); R(hx, top + 8 + hy * 14, 6, 4, nt ? "#6a5a3a" : "#e8c860"); R(hx + 1, top + 7 + hy * 14, 4, 1, nt ? "#6a5a3a" : "#f0d878"); }
+      return; }
+    if (k === "pasture") { for (var sw = a; sw < b; sw += 3) R(sw, y0 + 2, 1, h - 4, "rgba(0,0,0,.04)"); for (var st = a + 2; st < b - 2; st += 4) R(st, y1 - 4, 2, 3, "#9a9a92"); R(a + 2, y1 - 5, w - 4, 1, "#8a8a82");   /* a stone wall, and sheep */
+      for (var sh = 0; sh < Math.max(1, w * h / 500); sh++) { var sx = a + 4 + H1("sx" + sh) * (w - 10), sy = y0 + 4 + H1("sy" + sh) * (h - 12); R(sx, sy, 5, 3, "#fbfbf6"); R(sx + 5, sy - 1, 2, 2, nt ? "#fbfbf6" : "#3a3a3a"); R(sx + 1, sy + 3, 1, 1, "#2a2a2a"); R(sx + 3, sy + 3, 1, 1, "#2a2a2a"); }
+      return; }
+    if (k === "vines") { for (var vx = a + 3; vx < b - 2; vx += 5) for (var vy = y0 + 4; vy < y1 - 4; vy += 3) { R(vx, vy, 1, 2, "#6a4a2a"); if ((vx + vy) % 2) R(vx - 1, vy, 3, 2, se === "autumn" ? "#c8602a" : se === "winter" ? "#6a5a4a" : nt ? "#1e3a24" : "#4a8a3a"); if (se === "autumn" && H1("gr" + vx + vy) < .2) R(vx, vy + 1, 1, 1, "#5a2a6a"); } return; }
+    if (k === "pond") { var cx = (a + b) / 2, cy = y0 + h * (.35 + H1("py") * .35), rx = w * .38, ry = Math.min(8 + H1("pr") * 10, rx * .6, h * .4);
+      for (var yy = -ry; yy < ry; yy++) { var hw = Math.sqrt(1 - (yy * yy) / (ry * ry)) * rx; R(cx - hw, cy + yy, hw * 2, 1, wx === "snow" ? "#d4e6f0" : nt ? "#16305a" : "#4a8ac8"); }
+      for (var rd = 0; rd < 8; rd++) { var rx2 = cx - rx + H1("rd" + rd) * rx * 2; R(rx2, cy + ry - 3 - (rd % 3), 1, 5, "#4a7a3a"); R(rx2, cy + ry - 4 - (rd % 3), 1, 1, "#8a5a33"); }
+      if (!nt && wx !== "snow") { R(cx - 3 + Math.sin(fr / 30) * 4, cy - 1, 3, 2, "#fbfbf6"); R(cx - 1 + Math.sin(fr / 30) * 4, cy - 2, 1, 1, "#f6b73c"); }
+      return; }
+    if (k === "farm") { var fx0 = a + 4 + H1("fx") * Math.max(1, w - 34), fy0 = y0 + 8 + H1("fy") * Math.max(0, h - 30), roof = ["#9c3a2a", "#5a3a2a", "#3a4a6a"][(H1("r") * 3) | 0];
+      R(fx0, fy0, 18, 12, nt ? "#5a4434" : "#e8dcc4"); for (var rf = 0; rf < 6; rf++) R(fx0 - 2 + rf, fy0 - 6 + rf, 22 - rf * 2, 1, roof); R(fx0 + 7, fy0 + 5, 4, 7, "#3a2414"); R(fx0 + 2, fy0 + 3, 3, 3, lit ? "#f6c84a" : "#9ac0d8"); R(fx0 + 13, fy0 + 3, 3, 3, lit ? "#f6c84a" : "#9ac0d8");
+      if (w > 40) { R(fx0 + 22, fy0 + 2, 12, 10, "#9c2418"); R(fx0 + 21, fy0 - 1, 14, 3, "#5a2a1e"); R(fx0 + 26, fy0 + 6, 4, 6, "#3a1a10"); }
+      for (var fz = a + 2; fz < b - 2; fz += 3) R(fz, fy0 + 18, 1, 3, "#c8a878"); R(a + 2, fy0 + 19, w - 4, 1, "#c8a878");
+      if (!nt) for (var ch = 0; ch < 3; ch++) R(fx0 + 4 + ch * 5 + Math.sin((fr + ch * 9) / 12) * 2, fy0 + 15, 2, 2, "#fbfbf6");
+      return; }
+    if (k === "orchard") { for (var oy = y0 + 6; oy < y1 - 12; oy += 16 + (H1("og" + oy) * 6 | 0)) for (var ox = a + 3 + (H1("oo" + oy) * 6 | 0); ox < b - 8; ox += 11 + (H1("ox" + ox + oy) * 6 | 0)) { R(ox + 3, oy + 6, 2, 5, "#6a4a2a"); crown(ox, oy - 2, 7, 8, nt ? "#1e3a24" : "#4a8a44", nt, (ox + oy) % 7, wx); if (se === "autumn" || se === "summer") R(ox + 2, oy + 1, 1, 1, se === "autumn" ? "#e0402a" : "#f6c84a"); } return; }
+    if (k === "meadow") { for (var mf = 0; mf < w * h / 40; mf++) { var mx = a + H1("mx" + mf) * w, my = y0 + H1("my" + mf) * h; if (se !== "winter") R(mx, my, 1, 1, ["#ffffff", "#f6d84a", "#f4a0b8", "#c9a6ff", "#ff7a5a"][mf % 5]); else R(mx, my, 1, 1, "#e8ecf4"); }
+      if (H1("lone") < .7) { var lx = a + w * .3 + H1("lx") * w * .4, ly = y0 + h * .4; R(lx + 3, ly + 8, 2, 8, "#4a2e1a"); crown(lx - 2, ly - 4, 12, 13, nt ? "#1e3a24" : "#4a8a44", nt, 3, wx); }
+      return; }
+    if (k === "dunes") { for (var dx = a; dx < b; dx++) { var dh = 8 + Math.sin((dx - a) / (6 + H1("dw") * 8)) * 5 + Math.sin(dx / 3.7) * 1.5; R(dx, y1 - dh, 1, dh, nt ? "#8a7a5a" : "#e8d29a"); if (H1("tf" + dx) < .18) R(dx, y1 - dh - 2, 1, 2, "#6a9a4a"); } return; }
+    if (k === "huts") { for (var hx = a + 3; hx < b - 8; hx += 9) { var col = ["#c8302a", "#2a6aa8", "#f6c84a", "#3a9a6a", "#e8a0b0"][(H1("hc" + hx) * 5) | 0]; R(hx, y1 - 14, 7, 12, col); R(hx, y1 - 14, 7, 1, "#fbfbf6"); R(hx + 1, y1 - 16, 5, 2, "#fbfbf6"); R(hx + 2, y1 - 8, 3, 6, "#3a2a1c"); } R(a, y1 - 2, w, 2, nt ? "#8a7a5a" : "#e8d29a"); return; }
+    if (k === "village") { for (var vh = 0; vh < w / 9; vh++) { var hx3 = a + 2 + vh * 9, hh = 8 + (H1("vh" + vh) * 8 | 0), hy3 = y1 - hh - 2 - (H1("vy" + vh) * 6 | 0); R(hx3, hy3, 8, hh, nt ? "#5a4c44" : ["#f4ece0", "#e8d4b8", "#d8e4ea"][vh % 3]); R(hx3 - 1, hy3 - 2, 10, 2, ["#9c3a2a", "#2a4a7a", "#5a3a2a"][(H1("vr" + vh) * 3) | 0]); R(hx3 + 2, hy3 + 3, 2, 2, lit ? "#f6c84a" : "#5a7a9a"); }
+      R(a, y1 - 2, w, 2, nt ? "#3a3a40" : "#8a8a84"); for (var bt = a + 4; bt < b - 6; bt += 17) { R(bt, y1, 8, 2, "#8a5a33"); R(bt + 3, y1 - 6, 1, 6, "#3a2a1c"); } return; }
+    if (k === "chapel") { var cx2 = a + w / 2 - 6, cy2 = y0 + 14; R(cx2, cy2, 12, 14, nt ? "#5a5048" : "#e8e0d0"); R(cx2 + 4, cy2 - 10, 4, 10, nt ? "#5a5048" : "#e8e0d0"); R(cx2 + 5, cy2 - 13, 2, 3, "#5a4a3a"); R(cx2 - 1, cy2 - 2, 14, 2, "#7a3a2a"); R(cx2 + 5, cy2 + 7, 3, 7, "#3a2414"); R(cx2 + 5, cy2 - 6, 2, 2, lit ? "#f6c84a" : "#3a2a1c");
+      for (var gs = 0; gs < 4; gs++) R(a + 3 + gs * (w - 6) / 4, cy2 + 18 + (gs % 2) * 4, 2, 3, "#9a9a92"); return; }
+    if (k === "allot") { for (var ay = y0 + 6; ay < y1 - 6; ay += 8) for (var ax = a + 2; ax < b - 8; ax += 12) { R(ax, ay, 10, 5, nt ? "#3a2a1c" : "#7a5a3a"); for (var ap = 0; ap < 4; ap++) R(ax + 1 + ap * 2.4, ay + 1 + (ap % 2), 1, 2, nt ? "#2a4a2a" : CROPS[(H1("al" + ax + ay) * 3) | 0]); } if (H1("shed") < .6) { R(b - 12, y0 + 2, 8, 6, "#6a4a2a"); R(b - 13, y0, 10, 2, "#3a3a40"); } return; }
+    if (k === "lane") { for (var lh = 0; lh < w / 12; lh++) { var lx2 = a + 2 + lh * 12, lw = 9 + (H1("lw" + lh) * 2 | 0), lht = 9 + (H1("lht" + lh) * 5 | 0); R(lx2, y0 + 14 - lht + 9, lw, lht, nt ? "#5a4c44" : ["#e8dcc4", "#d8c8b0", "#f0e4d4", "#c8b8a0"][lh % 4]); R(lx2 - 1, y0 + 12 - lht + 9, lw + 2, 2, ["#9c3a2a", "#7a3a2a", "#5a4a4a"][lh % 3]); R(lx2 + 3, y0 + 18, 3, 5, "#3a2414"); R(lx2 + 1, y0 + 14, 2, 2, lit ? "#f6c84a" : "#7a9aba"); }
+      for (var lp = a + 6; lp < b; lp += 24) { R(lp, y0 + 26, 1, 8, "#2a2a30"); R(lp - 1, y0 + 25, 3, 2, lit ? "#ffd68a" : "#5a5a4a"); } return; }
+  }
   function drawLand(fr) {
     if (!EX) return; peaks();
     var g0 = g; g = lg; g.setTransform(1, 0, 0, 1, EX, 0);
@@ -711,14 +772,16 @@ body{overflow:hidden}
         R(a, 108, wd, 4, night ? "#2a2a30" : "#8a8a84");
         R(a, 112, wd, 172, G);
         if (west) {
-          for (var tr = 0; tr < wd / 3; tr++) { var tx = a + 2 + (tr * 13) % Math.max(8, wd - 10), ty = 118 + (tr % 4) * 11 + hash("lt" + tr) * 4; R(tx + 3, ty + 8, 2, 3, "#4a2e1a"); P0(tx + 2, ty, 4, 3, D); P0(tx + 1, ty + 3, 6, 3, D); P0(tx, ty + 6, 8, 3, night ? "#163020" : "#346a32"); if (se === "winter" || wx === "snow") { P0(tx + 2, ty, 4, 1, "#f4f6fa"); P0(tx + 5, ty + 6, 2, 1, "#e8ecf4"); } }
-          var crop = { spring: ["#7ab84a", "#9ad06a"], summer: ["#c8b040", "#d8c458"], autumn: ["#a8743a", "#8a5a2a"], winter: ["#8a7a6a", "#c8c4bc"] }[se] || ["#7ab84a", "#9ad06a"];
-          for (var fy = 172; fy < 246; fy += 6) { var fx0 = a + (((fy / 6) | 0) % 3) * 4; R(fx0, fy, wd, 4, night ? "#2a2a1c" : crop[((fy / 6) | 0) % 2]); R(a, fy + 4, wd, 2, night ? "#1a2416" : "#5a7a3a"); }   /* terraced fields */
-          for (var ot = 0; ot < wd / 14; ot++) { var ox = a + 4 + ot * 14; R(ox + 2, 270, 2, 6, "#6a4a2a"); crown(ox, 260, 6, 9, night ? "#1e3a24" : "#4a8a44", night, ot + 7, wx); }   /* an orchard by the rails */
+          patches("w", a, b, 114, 282, fr, night, lit, wx, se, G, D);   /* the country in patches of its own: never the same row twice */
+
+
+
           if (wd > 150) { var vx = a + 26, vy = 62 + Math.sin((vx) / 23) * 6 - 4; for (var vh = 0; vh < 5; vh++) { var hx2 = vx + vh * 7, hy2 = vy - 6 - (vh === 2 ? 6 : 0); R(hx2, hy2, 6, 66 - hy2 > 0 ? 8 + (vh === 2 ? 6 : 0) : 8, night ? "#4a4038" : "#e8dcc4"); R(hx2 - 1, hy2 - 2, 8, 2, "#9c3a2a"); R(hx2 + 2, hy2 + 3, 2, 2, lit ? "#f6c84a" : "#5a6a7a"); } R(vx + 15, vy - 20, 2, 4, night ? "#4a4038" : "#e8dcc4"); }   /* a hilltop village with its church tower */
-          var hx = a + Math.min(30, wd - 30); if (wd > 50) { R(hx, 196, 18, 12, night ? "#5a4434" : "#e8dcc4"); for (var rf = 0; rf < 6; rf++) R(hx - 2 + rf, 190 + rf, 22 - rf * 2, 1, "#9c3a2a"); R(hx + 7, 201, 4, 7, "#3a2414"); R(hx + 2, 199, 3, 3, lit ? "#f6c84a" : "#9ac0d8"); R(hx + 13, 199, 3, 3, lit ? "#f6c84a" : "#9ac0d8"); }   /* a farmhouse */
+
         } else {
-          R(a, 150, wd, 16, night ? "#2e2c30" : "#c8b088"); for (var bw = a; bw < b; bw += 6) R(bw, 150, 1, 16, night ? "#3a383c" : "#a89068");   /* the boardwalk goes on */
+          var bwEnd = a + Math.min(wd, 40 + (hash("bwe" + EX) * 50 | 0));   /* the boardwalk runs on a little, then ends in steps down to the dunes */
+          R(a, 150, bwEnd - a, 16, night ? "#2e2c30" : "#c8b088"); for (var bw = a; bw < bwEnd; bw += 6) R(bw, 150, 1, 16, night ? "#3a383c" : "#a89068"); R(bwEnd, 156, 3, 10, night ? "#3a383c" : "#a89068");
+          patches("e", bwEnd + 4, b, 114, 202, fr, night, lit, wx, se, G, D);
           for (var y = 204; y < 284; y++) R(a, y, wd, 1, SEAC);   /* open sea */
           for (var wv = 0; wv < wd / 9; wv++) { var wvx = a + hash("lw" + wv) * wd, wvy = 208 + ((hash("lwy" + wv) * 72 + fr * .2) % 72); R(wvx, wvy, 6, 1, "rgba(255,255,255,.55)"); }
           if (wd > 60) { var lx = a + wd - 34; R(lx - 6, 248, 22, 6, night ? "#3a3a40" : "#8a8a84"); R(lx, 222, 8, 26, "#f4f2ea"); R(lx, 228, 8, 4, "#c8302a"); R(lx, 238, 8, 4, "#c8302a"); R(lx - 1, 218, 10, 4, "#2a2a30"); R(lx + 2, 214, 4, 4, "#2a2a30");   /* a lighthouse on its rock */
@@ -728,7 +791,7 @@ body{overflow:hidden}
         R(a, 284, wd, 8, "#8a8a84"); R(a, 292, wd, 2, "#5a5a54");
         R(a, 298, wd, 10, "#5a4a3a"); for (var sl = a; sl < b; sl += 5) R(sl, 298, 2, 10, "#3a2a1e"); R(a, 300, wd, 1, "#c8c8c8"); R(a, 305, wd, 1, "#c8c8c8");
         R(a, 308, wd, 60, G); R(a, 314, wd, 4, night ? "#2a2a30" : "#8a8a84");
-        for (var bt = 0; bt < wd / 22; bt++) { var bx = a + 6 + bt * 22 + (hash("lb" + sd[2] + bt) * 6 | 0), by = 334 + (hash("lby" + sd[2] + bt) * 18 | 0); R(bx + 2, by + 5, 2, 4, "#4a2e1a"); crown(bx, by - 2, 6, 8, D, night, bt + 3, wx); }
+        patches(sd[2] + "s", a, b, 320, 366, fr, night, lit, wx, se, G, D);
       });
       /* the train: in from the east before it reaches the town, out to the west after it leaves */
       var cyc = fr % 600, c2 = cyc > 600 - (EX / 2.2 + 20) ? cyc - 600 : cyc;
