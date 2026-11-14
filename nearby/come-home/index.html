@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt fbfit">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=9a492bba81"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d9afa8e09e" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=4d47c46991" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Come Home · Nearby</title>
+<title>Mantou's Yard · Nearby</title>
 <meta name="description" content="Mantou the dog's home by the meadow: play fetch with him, follow his story, and help real animals find a home. Post an animal that needs one, or ask to adopt.">
 <meta name="theme-color" content="#24361f">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 16' shape-rendering='crispEdges'%3E%3Crect x='4' y='6' width='13' height='6' fill='%23e8c48a'/%3E%3Crect x='15' y='2' width='6' height='6' fill='%23e8c48a'/%3E%3Crect x='15' y='0' width='2' height='3' fill='%23e8c48a'/%3E%3Crect x='19' y='0' width='2' height='3' fill='%23e8c48a'/%3E%3Crect x='14' y='7' width='2' height='2' fill='%23c8402a'/%3E%3Crect x='1' y='2' width='3' height='4' fill='%23e8c48a'/%3E%3Crect x='5' y='12' width='2' height='4' fill='%23b88a4a'/%3E%3Crect x='14' y='12' width='2' height='4' fill='%23b88a4a'/%3E%3C/svg%3E">
@@ -79,14 +79,14 @@ h2{font:400 12px/1.4 var(--px);color:var(--a);margin:28px 0 12px;letter-spacing:
 <link rel="manifest" href="/nearby/manifest.webmanifest" data-fbapp><meta name="apple-mobile-web-app-capable" content="yes" data-fbapp><meta name="mobile-web-app-capable" content="yes" data-fbapp><meta name="apple-mobile-web-app-title" content="Nearby" data-fbapp></head>
 <body>
 <header class="top">
-  <div class="sign fit-title" data-t="title">COME HOME</div>
+  <div class="sign fit-title" data-t="title">MANTOU'S YARD</div>
   <div class="tools fit-head">
     <button class="pill" type="button" id="mineBtn">🏡<span class="n" id="mineN" hidden></span></button>
     <button class="pill" type="button" data-fbl-btn aria-label="Language"><span aria-hidden="true">🌐</span><span data-fbl-label>EN</span></button>
   </div>
 </header>
 <main class="fit-main">
-  <h1 class="sr" data-t="title">Come Home</h1>
+  <h1 class="sr" data-t="title">Mantou's Yard</h1>
   <div class="yard fit-hero" id="yard" style="--fit-ar:1.78"><canvas id="cv" width="160" height="90"></canvas></div>
   <div class="fit-panel">
   <p class="hint" id="hint"></p>
@@ -116,7 +116,7 @@ h2{font:400 12px/1.4 var(--px);color:var(--a);margin:28px 0 12px;letter-spacing:
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function toast(m) { var e = $("toast"); e.textContent = m; e.classList.add("on"); clearTimeout(e._t); e._t = setTimeout(function () { e.classList.remove("on"); }, 3000); }
   var W = {
-    title: ["COME HOME", "回家吧", "回家吧", "VUELVE A CASA", "TORNA A CASA"],
+    title: ["MANTOU'S YARD", "馒头的院子", "馒头的院子", "VUELVE A CASA", "TORNA A CASA"],
     meet: ["MANTOU", "馒头", "饅頭", "MANTOU", "MANTOU"], mName: ["Mantou · 馒头", "馒头 · Mantou", "饅頭 · Mantou", "Mantou · 馒头", "Mantou · 馒头"],
     mBio: ["Found at the station on a rainy night. Loves tennis balls and trains. Not for adoption: he welcomes everyone else.", "一个雨夜在火车站被人发现。爱网球，爱火车。它不参与领养：它负责迎接大家。", "一個雨夜在火車站被人發現。愛網球，愛火車。牠不參與領養：牠負責迎接大家。", "Lo encontraron en la estación una noche de lluvia. Le encantan las pelotas y los trenes. No está en adopción: él recibe a todos.", "El van trobar a l'estació una nit de pluja. Li encanten les pilotes i els trens. No està en adopció: ell rep tothom."],
     hint: ["Tap the grass to throw the ball. Tap Mantou to say hello.", "点草地扔球，点馒头跟它打招呼。", "點草地丟球，點饅頭跟牠打招呼。", "Toca la hierba para lanzar la pelota. Toca a Mantou para saludarlo.", "Toca l'herba per llançar la pilota. Toca en Mantou per saludar-lo."],

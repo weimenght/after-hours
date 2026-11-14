@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=9a492bba81"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d9afa8e09e" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=4d47c46991" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>No Hurry · Nearby</title>
+<title>Popo's Cabin · Nearby</title>
 <meta name="description" content="A cabin on the high pasture with a big window. Clouds, cows, weather, a candle on the sill.">
 <meta name="theme-color" content="#1d130d">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='2' y='6' width='12' height='9' fill='%23c8a050'/%3E%3Crect x='1' y='4' width='14' height='3' fill='%237c2513'/%3E%3Crect x='4' y='8' width='5' height='4' fill='%23f6c84a'/%3E%3C/svg%3E">
@@ -27,7 +27,7 @@ canvas#cv{touch-action:none}
 </style>
 <link rel="stylesheet" href="/fonts/g/fonts.css"><link rel="manifest" href="/nearby/manifest.webmanifest" data-fbapp><meta name="apple-mobile-web-app-capable" content="yes" data-fbapp><meta name="mobile-web-app-capable" content="yes" data-fbapp><meta name="apple-mobile-web-app-title" content="Nearby" data-fbapp></head>
 <body>
-<h1 class="sr" id="h1">No Hurry</h1>
+<h1 class="sr" id="h1">Popo's Cabin</h1>
 <canvas id="cv" role="img" aria-label="A view from a cabin window over a high pasture"></canvas>
 <div class="alb" id="alb" role="dialog" aria-modal="true" aria-labelledby="albT" hidden>
   <div class="alb-b" tabindex="-1"><h2 id="albT"></h2><canvas id="albC" width="480" height="340" aria-hidden="true"></canvas><small class="alb-ai" id="albAI"></small><p id="albP"></p><div id="albA" hidden></div>
@@ -122,7 +122,7 @@ canvas#cv{touch-action:none}
     if (warm || wx === "snow") { g.fillStyle = "rgba(240,120,40," + (.05 + Math.sin(f / 6) * .015) + ")"; g.fillRect(0, 0, PW, PH); }
   }
   /* the window opens for a breath of air: then you see who is out there. Birds by day, a hare now and then,
-     and any neighbour's animal whose walk passes the cabin this half hour (Come Home → bring your animal to town). */
+     and any neighbour's animal whose walk passes the cabin this half hour (Mantou's Yard → bring your animal to town). */
   var open = false, openT = 0, birds = [], hare = null, pets = [];
   try { open = sessionStorage.getItem("fb_cabin_open") === "1"; openT = open ? 1 : 0; } catch (e) {}
   function loadPets() { try { if (window.FBG && FBG.pets && W.petAt) FBG.pets().then(function (l) { pets = (l || []).filter(function (p) { return W.petAt(p.id) === "cabin"; }).slice(0, 3).map(function (p, i) { return { p: p, x: .2 + i * .25 + Math.random() * .1, d: Math.random() < .5 ? 1 : -1, y: .82 + Math.random() * .1, step: 0, rest: 0 }; }); }); } catch (e) {} }
@@ -359,7 +359,7 @@ canvas#cv{touch-action:none}
   addEventListener("pagehide", function () { window.FB_HUSH = false; });
   function words() {
     var i = L(); document.documentElement.lang = ["en", "zh-Hans", "zh-Hant", "es", "ca"][i];
-    var nm = window.FBWorld && FBWorld.name ? FBWorld.name("cabin") : "No Hurry"; document.title = nm + " · " + (window.FBWorld && FBWorld.name ? FBWorld.name("map") : "Nearby");
+    var nm = window.FBWorld && FBWorld.name ? FBWorld.name("cabin") : "Popo's Cabin"; document.title = nm + " · " + (window.FBWorld && FBWorld.name ? FBWorld.name("map") : "Nearby");
     document.getElementById("h1").textContent = nm; if (!AL.hidden) showPage(); snd.setAttribute("aria-label", T.snd[i]); snd.title = T.snd[i];
   }
   window.FBL_GET = function () { return (window.FBL && FBL.get()) || "en"; };

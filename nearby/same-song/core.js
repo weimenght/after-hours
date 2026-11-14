@@ -1,5 +1,5 @@
 /* FREE//BUILDER Jukebox · core
-   One shared turntable for the studio (/nearby/same-song/), Next Door and Borrowed Pages.
+   One shared turntable for the studio (/nearby/same-song/), Next Door and Josep's Books.
    - a song is a short code: 1.<bpm>.<mood>.<instrument>.<melody 8x16 as 32 hex>.<drums 3x16 as 12 hex>
    - the synth turns that code into a ~30 s arrangement (intro, bass, drums, full, lift, outro)
    - the clock asks the database what is playing for everyone, and plays it from the right second
@@ -209,11 +209,11 @@
     {"id": "h2", "title": "Last Train to Gulou", "name": "Wei", "house": true, "song": "1.104.0.0.00000000000008002200812200840008.80800808ffff"},
     {"id": "h3", "title": "Yuzu on the Piano", "name": "Yuzu", "house": true, "song": "1.96.0.1.00800020800812000801000000000000.82800808aaaa"},
     {"id": "h4", "title": "Miso's Midnight Snack", "name": "Miso", "house": true, "song": "1.112.3.2.00000000008004200800101020088002.90900808aaaa"},
-    {"id": "h5", "title": "Borrowed Pages Waltz", "name": "Wei", "house": true, "song": "1.88.2.3.00000000108022008080002000080002.800002088888"},
+    {"id": "h5", "title": "Josep's Books Waltz", "name": "Wei", "house": true, "song": "1.88.2.3.00000000108022008080002000080002.800002088888"},
     {"id": "h6", "title": "Neon over Barcelona", "name": "Wei", "house": true, "song": "1.120.1.2.00800240882040082002000000000000.82900808ffff"},
     {"id": "h7", "title": "Lanterns at Nine", "name": "Wei", "house": true, "song": "1.120.2.0.00000000000000000000008080404808.808000002222"},
     {"id": "h8", "title": "Smoke Rings", "name": "Miso", "house": true, "song": "1.120.3.2.000000000000000100040142a4880a00.80200808aaaa"},
-    {"id": "h9", "title": "Slow Clock, Fast Heart", "name": "Wei", "house": true, "song": "1.96.3.3.000000000000000000018000080223a8.808000002222"},
+    {"id": "h9", "title": "Josep's Clock, Fast Heart", "name": "Wei", "house": true, "song": "1.96.3.3.000000000000000000018000080223a8.808000002222"},
     {"id": "h10", "title": "Sunday Dumplings", "name": "Mantou", "house": true, "song": "1.88.0.3.00000000000060029010002c08c00600.80200808aaaa"},
     {"id": "h11", "title": "Umbrellas on Gulou", "name": "Wei", "house": true, "song": "1.96.1.2.00000000000008001400019880010004.88880808ffff"},
     {"id": "h12", "title": "Mantou's Morning Run", "name": "Mantou", "house": true, "song": "1.120.0.2.0000000000000000840008002281012e.88880808ffff"},
@@ -298,7 +298,7 @@
     spunAt0: ["played in {v}", "在{v}点播", "在{v}點播", "puesta en {v}", "posada a {v}"],
     studio: ["the studio", "录音室", "錄音室", "el estudio", "l'estudi"],
     bar: ["Next Door", "“隔壁”", "“隔壁”", "Al Lado", "Al Costat"],
-    books: ["Borrowed Pages", "借来的书", "借來的書", "Páginas Prestadas", "Pàgines Manllevades"],
+    books: ["Josep's Books", "外公书房", "外公書房", "Libros de Josep", "Llibres d'en Josep"],
     house: ["house record", "店里的唱片", "店裡的唱片", "disco de la casa", "disc de la casa"],
     by: ["by {n}", "{n} 作", "{n} 作", "de {n}", "de {n}"],
     next: ["next", "下一首", "下一首", "después", "després"],

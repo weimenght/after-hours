@@ -188,9 +188,9 @@
         id: "book_corner_next_door",
         mood: "poetic",
         text: {
-          en: "\"Have you been next door yet? Borrowed Pages, the second-hand book place. Four little rooms from the attic down to the basement, and every book has a note tucked inside. Yuzu hops the garden wall most afternoons and naps on the poetry.\"",
-          zh: "\"去过隔壁了吗？借来的书，卖旧书的。从阁楼到地下室一共四个小房间，每本书里都夹着一张字条。柚子几乎每天下午都翻过花园墙溜过去，睡在诗集上。\"",
-          es: "\"¿Ya has ido a la casa de al lado? Páginas Prestadas, los libros de segunda mano. Cuatro cuartitos del desván al sótano, y cada libro lleva una nota dentro. Yuzu salta la tapia del jardín casi cada tarde y se duerme sobre la poesía.\""
+          en: "\"Have you been next door yet? Josep's Books, the second-hand book place. Four little rooms from the attic down to the basement, and every book has a note tucked inside. Yuzu hops the garden wall most afternoons and naps on the poetry.\"",
+          zh: "\"去过隔壁了吗？外公书房，卖旧书的。从阁楼到地下室一共四个小房间，每本书里都夹着一张字条。柚子几乎每天下午都翻过花园墙溜过去，睡在诗集上。\"",
+          es: "\"¿Ya has ido a la casa de al lado? Libros de Josep, los libros de segunda mano. Cuatro cuartitos del desván al sótano, y cada libro lleva una nota dentro. Yuzu salta la tapia del jardín casi cada tarde y se duerme sobre la poesía.\""
         },
         options: [
           {

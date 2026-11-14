@@ -16,7 +16,7 @@
     { p: "#f6d640", c: "#d89a20", n: 5 },   /* buttercup */
     { p: "#e88ab0", c: "#b8507a", n: 9 }    /* clover */
   ];
-  /* the meadow keeps the town's season (Slow Clock can turn it): full in spring and summer, a few asters in autumn, snowdrops in winter */
+  /* the meadow keeps the town's season (Josep's Clock can turn it): full in spring and summer, a few asters in autumn, snowdrops in winter */
   var ASTER = { p: "#9a6ad0", c: "#f2c230", n: 9 }, SNOWDROP = { p: "#f4f4ee", c: "#8ab868", n: 3 };
   function season() { try { return FBWorld.season(); } catch (e) { return "summer"; } }
   var fl = [], puffs = [], bee = null, SE = season();
@@ -41,7 +41,7 @@
     order.forEach(function (fi, r) { fl[fi].note = 440 * Math.pow(2, (TUNE.root + sc[r % sc.length] + 12 * Math.floor(r / sc.length) - 69) / 12); });
   }
   retune(); size(); addEventListener("resize", size);
-  addEventListener("fbback", function () { retune(); if (season() !== SE) size(); });   /* back in the meadow: new tones, and the season Slow Clock may have turned */
+  addEventListener("fbback", function () { retune(); if (season() !== SE) size(); });   /* back in the meadow: new tones, and the season Josep's Clock may have turned */
   function wetSky() { try { var w = FBWorld.weather(); return w !== "clear"; } catch (e) { return false; } }   /* bees only come out in the sun */
   function night() { var h = window.FBWorld ? (FBWorld.solar ? FBWorld.solar() : FBWorld.hour()) : new Date().getHours(); h = ((h % 24) + 24) % 24; return h < 5.5 || h >= 20; }
   function R(x, y, w, h, c) { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); }

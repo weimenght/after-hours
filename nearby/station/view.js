@@ -448,7 +448,7 @@
     ctx.fillStyle = css(land("#2f5a3a", 0.1)); ctx.fillRect(kx + w * 0.7, base - h * 0.78, w * 0.22, h * 0.78);
     ctx.fillStyle = "#c8a050"; ctx.beginPath(); ctx.arc(kx + w * 0.74, base - h * 0.4, 2 * S * k, 0, TAU); ctx.fill();
     if (lit > 0.2) glowDot(sx + sw / 2, sy + sh / 2, w * 0.8, [255, 210, 140], 0.2 * lit);
-    ctx.save(); ctx.font = "600 " + Math.round(13 * S * k) + "px Georgia,'Songti SC',serif"; ctx.textAlign = "center"; ctx.fillStyle = "#f3dfb8"; fitText("📖 Borrowed Pages", kx + w / 2, base - h - 30 * S * k, w + gap * 0.8); ctx.restore();
+    ctx.save(); ctx.font = "600 " + Math.round(13 * S * k) + "px Georgia,'Songti SC',serif"; ctx.textAlign = "center"; ctx.fillStyle = "#f3dfb8"; fitText("📖 Josep's Books", kx + w / 2, base - h - 30 * S * k, w + gap * 0.8); ctx.restore();
     HITS.push({ k: "bar", x: bx, y: base - h - 30 * S * k, w: w, h: h + 30 * S * k }, { k: "books", x: kx, y: base - h - 30 * S * k, w: w, h: h + 30 * S * k });
   }
   function hutongHouse(x, base, w, h, i) {

@@ -63,8 +63,8 @@
         yue: ["\"見唔見籬笆嗰邊盞燈仲著住？嗰度係隔籬嘅二手書角。有啲夜晚，啲人啱啱喺嗰邊執到本書，就過嚟坐喺吧枱一路睇到收舖。呢種熟客最正。\"", "噉就俾杯夠我慢慢睇完一章嘅酒。", "我過去揀本書，即刻返嚟。", "味噌同柚子有冇借書證㗎？"]
       },
       book_corner_next_door: {
-        ca: ["\"Ja has anat a la casa del costat? Pàgines Manllevades, els llibres de segona mà. Quatre estancetes de les golfes al soterrani, i cada llibre porta una nota a dins. La Yuzu salta la tanca del jardí gairebé cada tarda i s'adorm sobre la poesia.\"", "Després d'aquest cafè hi passo a canviar un llibre.", "Tornaré la Yuzu, amb un cafè de filtre com a rescat.", "Wei, quin llibre deixaries tu als seus prestatges?"],
-        yue: ["\"去過隔籬未？借來的書，賣二手書嘅。由閣樓到地庫一共四間細房，每本書入面都夾住張字條。柚子差唔多每日下晝都跳過花園牆走過去，瞓喺啲詩集上面。\"", "飲完呢杯就過去換本書。", "我去帶柚子返嚟，順手拎杯手沖做贖金。", "Wei，你會留邊本書喺佢哋個書架？"]
+        ca: ["\"Ja has anat a la casa del costat? Llibres d'en Josep, els llibres de segona mà. Quatre estancetes de les golfes al soterrani, i cada llibre porta una nota a dins. La Yuzu salta la tanca del jardí gairebé cada tarda i s'adorm sobre la poesia.\"", "Després d'aquest cafè hi passo a canviar un llibre.", "Tornaré la Yuzu, amb un cafè de filtre com a rescat.", "Wei, quin llibre deixaries tu als seus prestatges?"],
+        yue: ["\"去過隔籬未？外公書房，賣二手書嘅。由閣樓到地庫一共四間細房，每本書入面都夾住張字條。柚子差唔多每日下晝都跳過花園牆走過去，瞓喺啲詩集上面。\"", "飲完呢杯就過去換本書。", "我去帶柚子返嚟，順手拎杯手沖做贖金。", "Wei，你會留邊本書喺佢哋個書架？"]
       },
       cat_burlap_inspection: {
         ca: ["\"A les set ha arribat un sac de cafè rentat de Huila, Colòmbia. La Miso s'hi ha adormida a sobre i la Yuzu ha olorat cada racó. Control de qualitat felí certificat!\"", "Fes el gra que els gats hagin aprovat.", "Dona un premi a la Miso i la Yuzu per la feina.", "Un Einspänner mentre els gats dormen."],

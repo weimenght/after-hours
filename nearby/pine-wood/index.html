@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=9a492bba81"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d9afa8e09e" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=4d47c46991" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Pine Wood · Nearby</title>
 <meta name="description" content="A slow walk under the pines to the cabin. Stone lanterns, mist, fireflies, and sometimes a cat on the path.">
@@ -395,7 +395,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   }
   /* the walk ends: sat on a log, a card with what you saw and the way home */
   /* the path ends where Popo and Josep's Sunday walk always ended: the cabin's door (the owner, Nov 14) */
-  var RESTW = { t: ["The cabin's door.", "小屋的门口。", "小屋門口。", "La puerta de la cabaña.", "La porta de la cabana."], p: ["The path ends where it always did: No Hurry, the cabin Josep built. Popo still walks up on Sundays. Your legs say sit down.", "小路走到头，还是老地方：“不急”，Josep 亲手盖的小屋。婆婆现在每个礼拜天还走上来。你的腿说，坐下吧。", "小路走到盡頭，還是老地方：「不急」，Josep 親手蓋的小屋。婆婆現在每個禮拜天還走上來。你的腿說，坐下吧。", "El camino acaba donde siempre: Sin Prisa, la cabaña que construyó Josep. Popo aún sube los domingos. Tus piernas dicen que te sientes.", "El camí acaba on sempre: Sense Pressa, la cabana que va fer en Josep. La Popo encara hi puja els diumenges. Les cames et diuen que seguis."], cab: ["Go in", "进去", "入去", "Entra", "Entra"], lie: ["Lie back under the pines", "在松树下躺一会儿", "在松樹下躺一會兒", "Túmbate bajo los pinos", "Estira't sota els pins"], home: ["Back to town ›", "回镇上 ›", "回鎮上 ›", "Volver al pueblo ›", "Tornar al poble ›"] };
+  var RESTW = { t: ["The cabin's door.", "小屋的门口。", "小屋門口。", "La puerta de la cabaña.", "La porta de la cabana."], p: ["The path ends where it always did: Popo's Cabin, which Josep built. Popo still walks up on Sundays. Your legs say sit down.", "小路走到头，还是老地方：“婆婆的小屋”，Josep 亲手盖的小屋。婆婆现在每个礼拜天还走上来。你的腿说，坐下吧。", "小路走到盡頭，還是老地方：「婆婆的小屋」，Josep 親手蓋的小屋。婆婆現在每個禮拜天還走上來。你的腿說，坐下吧。", "El camino acaba donde siempre: Cabaña de Popo, la cabaña que construyó Josep. Popo aún sube los domingos. Tus piernas dicen que te sientes.", "El camí acaba on sempre: Cabana de la Popo, la cabana que va fer en Josep. La Popo encara hi puja els diumenges. Les cames et diuen que seguis."], cab: ["Go in", "进去", "入去", "Entra", "Entra"], lie: ["Lie back under the pines", "在松树下躺一会儿", "在松樹下躺一會兒", "Túmbate bajo los pinos", "Estira't sota els pins"], home: ["Back to town ›", "回镇上 ›", "回鎮上 ›", "Volver al pueblo ›", "Tornar al poble ›"] };
   function rest() {
     var i = li5(), d = document.getElementById("rest"), seen = leg.seen; d.innerHTML = "<b>" + RESTW.t[i] + "</b><p>" + RESTW.p[i] + "</p>" + '<div class="row"><button type="button" class="fbb fbb-pri" id="restCab">' + RESTW.cab[i] + '</button><button type="button" class="fbb" id="restLie">' + RESTW.lie[i] + '</button><button type="button" class="fbb" id="restHome">' + RESTW.home[i] + "</button></div>";
     d.hidden = false;

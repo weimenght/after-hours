@@ -29,9 +29,9 @@
   function byClock() { var h = window.FBWorld ? (FBWorld.solar ? FBWorld.solar() : FBWorld.hour()) : new Date().getHours() + new Date().getMinutes() / 60;   /* Nearby's hour for this visit */ return h >= 5 && h < 10.5 ? "morning" : h >= 10.5 && h < 16.5 ? "noon" : h >= 16.5 && h < 19.5 ? "dusk" : "night"; }
   var sky = byClock(); setSkyPalette(sky);
   function reclock() { var k = byClock(); if (k !== sky) { sky = k; setSkyPalette(k); X.stars = night(); if (night()) X.flies = X.flies || Math.random() < 0.7; } }
-  setInterval(reclock, 60e3); addEventListener("fbback", reclock);   /* Slow Clock may have moved the hour while you were away */
+  setInterval(reclock, 60e3); addEventListener("fbback", reclock);   /* Josep's Clock may have moved the hour while you were away */
   function night() { return sky === "night"; }
-  /* the town's weather and season for this visit (Slow Clock sets them), read fresh every frame */
+  /* the town's weather and season for this visit (Josep's Clock sets them), read fresh every frame */
   function wx() { try { return (window.FBWorld && FBWorld.weather()) || "clear"; } catch (e) { return "clear"; } }
   function season() { try { return (window.FBWorld && FBWorld.season && FBWorld.season()) || "summer"; } catch (e) { return "summer"; } }
 

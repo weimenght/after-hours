@@ -14,7 +14,7 @@
     board: "Board", quiet: "board quietly", lead: "A sleeper car through cities, mountains and sea. A window seat, a cup of tea, the world going by.",
     saved: "A friend saved you a seat in cabin", tip: "Drag to wipe the glass · hold to write · double-tap to knock",
     share: "With a friend", shareLead: "Friends who open this link sit in your car and see the same window, live. No names, nothing saved: the cabin disappears when everyone leaves.",
-    homeScreen: "Add to Home Screen", getOff: "Get off here", stay: "Stay aboard", bar: "Next Door", books: "Borrowed Pages", copy: "↗ Send the link", copied: "Link copied", joinLbl: "or type their code", join: "Join", badCode: "Four letters, like KTRB", yourCode: "Your cabin", close: "Close", leave: "Go alone", alone: "Just you in this car",
+    homeScreen: "Add to Home Screen", getOff: "Get off here", stay: "Stay aboard", bar: "Next Door", books: "Josep's Books", copy: "↗ Send the link", copied: "Link copied", joinLbl: "or type their code", join: "Join", badCode: "Four letters, like KTRB", yourCode: "Your cabin", close: "Close", leave: "Go alone", alone: "Just you in this car",
     aboard: "{n} aboard", joined: "Your friend is here", left: "Your friend left", knock: "knock knock", write: "Write on the glass…",
     sound: "Sound", controls: "All controls", shuffle: "Somewhere else", connecting: "Joining the cabin…", lost: "Lost the cabin's signal — retrying", host: "You're steering the journey",
     tunnelOut: "Out of the tunnel —", pass: "An express train thunders past", star: "A shooting star — make a wish", rainIn: "Rain on the glass", fogIn: "Fog rolls in", snowIn: "Snow begins to fall", clearIn: "The sky clears"
@@ -152,7 +152,7 @@
 
   function inTown() { try { return document.documentElement.classList.contains("fbsh-in") || (window.parent !== window && !!window.parent.FBShell); } catch (e) { return false; } }
   /* a real city on the line: when you get there, the town keeps that city's own hour (its real local time) and the sky you
-     arrived under. Slow Clock can still change both. Made-up stops keep the town as it was. */
+     arrived under. Josep's Clock can still change both. Made-up stops keep the town as it was. */
   var TZ = { fr: "Europe/Paris", de: "Europe/Berlin", ch: "Europe/Zurich", it: "Europe/Rome", es: "Europe/Madrid", ca: "Europe/Madrid", uk: "Europe/London", cy: "Europe/London", cn: "Asia/Shanghai", hk: "Asia/Hong_Kong", jp: "Asia/Tokyo" };
   var TZ_US = { "Grand Central": "America/New_York", "Flagstaff": "America/Phoenix", "Glacier Park": "America/Denver", "Santa Barbara": "America/Los_Angeles" };
   var lastCity = null;

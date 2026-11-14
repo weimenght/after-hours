@@ -1,4 +1,4 @@
-/* Popo's line, 1968 (Nov 14, the owner: "Nearby Station should tell the story of how Popo took the ship from Hong Kong to Marseille
+/* Popo's line, 1968 (Nov 14, the owner: "Estació de França should tell the story of how Popo took the ship from Hong Kong to Marseille
    then on train to Barcelona"). In town only (never with app=1): every fresh boarding starts on her journey. First the ship, seen
    through a porthole (Hong Kong, Singapore, the Indian Ocean, Cape Town, because the Suez Canal was shut from 1967 to 1975, then
    Marseille), then the train in the station's own window, braking at each real stop: Marseille Saint-Charles, Narbonne, Perpignan,

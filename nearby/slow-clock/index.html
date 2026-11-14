@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=9a492bba81"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d9afa8e09e" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=4d47c46991" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Slow Clock · Nearby</title>
+<title>Josep's Clock · Nearby</title>
 <meta name="description" content="Climb the clock tower and set Nearby's hour and weather: every game you visit next follows it.">
 <meta name="theme-color" content="#14101e">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%2314101e'/%3E%3Crect x='5' y='3' width='6' height='13' fill='%23a8a094'/%3E%3Crect x='7' y='1' width='2' height='2' fill='%235a4a3a'/%3E%3Crect x='6' y='5' width='4' height='4' fill='%23fbeedd'/%3E%3Crect x='8' y='6' width='1' height='2' fill='%23b3261e'/%3E%3C/svg%3E">
@@ -120,11 +120,11 @@ html.fbsh-in .grp{margin-top:8px}
 <link rel="manifest" href="/nearby/manifest.webmanifest" data-fbapp><meta name="apple-mobile-web-app-capable" content="yes" data-fbapp><meta name="mobile-web-app-capable" content="yes" data-fbapp><meta name="apple-mobile-web-app-title" content="Nearby" data-fbapp></head>
 <body>
 <header class="top">
-  <div class="sign" data-t="title">SLOW CLOCK</div>
+  <div class="sign" data-t="title">JOSEP'S CLOCK</div>
   <button class="pill" type="button" data-fbl-btn aria-label="Language"><span aria-hidden="true">🌐</span><span data-fbl-label>EN</span></button>
 </header>
 <main>
-  <h1 class="sr" data-t="title">Slow Clock</h1>
+  <h1 class="sr" data-t="title">Josep's Clock</h1>
   <div class="tower" id="tower">
     <div class="sky"><canvas id="sky" width="160" height="72"></canvas></div><div class="sill"></div>
     <div class="dialrow">
@@ -151,7 +151,7 @@ html.fbsh-in .grp{margin-top:8px}
   var $ = function (id) { return document.getElementById(id); };
   var World = window.FBWorld || { h: 21, w: "clear", hour: function () { return this.h; }, weather: function () { return this.w; }, setHour: function (h) { this.h = h; }, set: function (w) { this.w = w; }, phase: function () { return "night"; } };
   var T = {
-    title: ["SLOW CLOCK", "慢钟", "慢鐘", "RELOJ LENTO", "RELLOTGE LENT"],
+    title: ["JOSEP'S CLOCK", "外公的钟", "外公的鐘", "RELOJ LENTO", "RELLOTGE LENT"],
     sky: ["Sky", "天空", "天空", "Cielo", "Cel"],
     time: ["Time", "时间", "時間", "Hora", "Hora"],
     season: ["Season", "季节", "季節", "Estación", "Estació"],

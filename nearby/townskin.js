@@ -1,5 +1,5 @@
 /* The town's skin for places that were drawn in their own style (the owner, Nov 14: every place in Nearby follows the Nearby
-   design, scenes included). Loaded first in the head of Mended, Borrowed Pages, the station and Lie Back.
+   design, scenes included). Loaded first in the head of Mended, Josep's Books, the station and Lie Back.
    1. Pixel scenes: canvases render at about a third of their size and are scaled up without smoothing (the page reads a low
       devicePixelRatio; townskin.css sets image-rendering: pixelated), so painted scenes come out as pixel art.
    2. Marks <html> with nb-skin so townskin.css can put every control, panel and label in the town's wood, borders and type.

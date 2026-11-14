@@ -54,7 +54,7 @@ URL: lie-back/?place=mountain
 
 CODE: CABIN
 ID: NH-16
-TITLE: No Hurry
+TITLE: Popo's Cabin
 GENRE: A cabin with a view, and nothing to do
 AUTHOR: FREE//BUILDER
 DESC: A small cabin on the high pasture with one big window. Clouds drift, cows wander, the weather does what it does. There is nothing to win and nothing to finish. Stay as long as you like.
@@ -70,7 +70,7 @@ URL: plaza/
 
 CODE: GARDEN
 ID: GD-13
-TITLE: Plant a Friend
+TITLE: the Lemon Tree
 GENRE: One endless garden, planted together
 AUTHOR: FREE//BUILDER
 DESC: Pick a seed and plant it next to someone else's: cherry trees, sunflowers, peonies, ponds and stone lanterns. Everything grows over days, faster when people water it, and the garden keeps spreading.
@@ -86,7 +86,7 @@ URL: miso-and-yuzu/
 
 CODE: SANCTUARY
 ID: AS-12
-TITLE: Come Home
+TITLE: Mantou's Yard
 GENRE: A dog's home, and real adoptions
 AUTHOR: FREE//BUILDER
 DESC: Mantou the dog lives here, by the meadow. Throw his ball, follow his story to the station and back, and help real animals find a home: put up a notice for one you're caring for, or ask to adopt.
@@ -94,7 +94,7 @@ URL: come-home/
 
 CODE: TRAIN
 ID: TW-06
-TITLE: Nearby Station
+TITLE: Estació de França
 GENRE: Sleeper car daydream
 AUTHOR: FREE//BUILDER
 DESC: Board a night sleeper and just look out. Stations from Kyoto to Sitges roll by, each in its own style and announced in its own language. Write on the fogged glass, and share your cabin so friends ride the same window, live.
@@ -118,7 +118,7 @@ URL: next-door/
 
 CODE: BOOKS
 ID: DE-05
-TITLE: Borrowed Pages
+TITLE: Josep's Books
 GENRE: Second-hand book swap
 AUTHOR: FREE//BUILDER
 DESC: A four-room book house next door to the bar. Wander the attic, parlour, garden and basement, read the notes tucked into books, borrow one and pass it on by hand. The cats come over from the bar.

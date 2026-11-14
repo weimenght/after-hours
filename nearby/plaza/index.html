@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="fbt">
 <head>
-<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=9a492bba81"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=d9afa8e09e" defer></script>
+<meta charset="UTF-8" /><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="full" src="/fbkit/fb.js?v=52c6fa5555"></script><link rel="stylesheet" href="/fbkit/fbb.css?v=e10ee1e3d0" data-fbb><script data-fbg src="/fbkit/fbg.js?v=4d47c46991" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>The Plaza · Nearby</title>
 <meta name="description" content="The square in the middle of Nearby: a fountain, benches, pigeons. Toss a coin and make a wish; keep it to yourself or let it float for the town to read.">
@@ -245,7 +245,7 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
     JARR = { x: jx - 4, y: y - 9, w: 12, h: 12 };
   }
   /* two more carts: across the square a seasonal one (chestnuts roasting in autumn and winter, ice lollies in spring and summer),
-     and beside the left lamp a crate of old books that points up the street to Borrowed Pages. Nothing to buy here, nothing kept:
+     and beside the left lamp a crate of old books that points up the street to Josep's Books. Nothing to buy here, nothing kept:
      each says where the real one is. */
   var CARTS = [];
   function carts(night, lit, snow) {
@@ -608,7 +608,7 @@ canvas#cv{display:block;width:100vw;height:100vh;height:100dvh;image-rendering:p
     }
   }
   function cartWords(k, had) {
-    var night = W.phase() === "night", nm = window.FBWorld && FBWorld.name ? FBWorld.name("books") : "Borrowed Pages";
+    var night = W.phase() === "night", nm = window.FBWorld && FBWorld.name ? FBWorld.name("books") : "Josep's Books";
     $("cartH").textContent = t(k + "H"); var b = $("cartB");
     $("cartP").textContent = night ? t("shut") : k === "book" ? t("book").replace("{p}", nm) : had ? t(k + "Y") : t(k);
     b.parentNode.style.display = night || (had && k !== "book") ? "none" : ""; b.innerHTML = "";

@@ -1,4 +1,4 @@
-/* Nearby Station, the app: the platform you step off onto (journey.js asks FBPlat for the scene; in town none of this runs).
+/* Estació de França, the app: the platform you step off onto (journey.js asks FBPlat for the scene; in town none of this runs).
    Every stop is built its own way and looks out at its own view:
      a Japanese platform (yellow tactile strip, the white name board, vending machines), an iron-and-glass shed (Paris, Hamburg,
      Madrid, Firenze, Grand Central…), a British canopy with its wooden valance, a modern Chinese hall, a chalet halt in the
