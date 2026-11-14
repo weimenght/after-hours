@@ -429,7 +429,7 @@ html.fbsh-in.bp-one body > header.sign { position: fixed; }
   function shade(hex, p) { var n = parseInt(hex.slice(1), 16), f = function (v) { return Math.max(0, Math.min(255, Math.round(v * (100 + p) / 100))); }; return "rgb(" + f(n >> 16) + "," + f((n >> 8) & 255) + "," + f(n & 255) + ")"; }
   function spine(b) {
     var sp = shape(b), lie = b.lying || PILES[spotOf(b)], me = isMine(b), asked = myAsk(b);
-    var el = document.createElement("button"); el.type = "button"; el.className = "bk" + (lie ? " lie" : "");
+    var el = document.createElement("button"); el.type = "button"; el.className = "bk" + (lie ? " lie" : "") + (me ? " me" : "");
     el.dataset.id = b.id;
     el.setAttribute("aria-label", b.title + (b.author ? ", " + b.author : "") + (b.house ? " · " + t("readingCopy") : me ? " · " + t("yours") : b.requests ? " · 🎀 " + t("askedN", { n: b.requests }) : ""));
     el.style.background = "linear-gradient(90deg," + sp.color + "," + shade(sp.color, -18) + ")";
@@ -438,7 +438,7 @@ html.fbsh-in.bp-one body > header.sign { position: fixed; }
       el.style.setProperty("--th", th + "px"); el.style.setProperty("--tw", tw + "px"); el.style.setProperty("--r", r.toFixed(1) + "deg"); el.style.transform = "translateX(" + Math.round((hash(b.id + "x") - 0.5) * 18) + "px) rotate(" + r.toFixed(1) + "deg)";
     } else { el.style.setProperty("--h", Math.min(sp.h, 172) + "px"); el.style.setProperty("--w", sp.w + "px"); el.style.transform = "rotate(" + sp.tilt.toFixed(1) + "deg)"; }
     el.innerHTML = '<span class="t">' + esc(b.title) + "</span>" + (b.requests && !b.house ? '<span class="rib" aria-hidden="true"></span>' : "") + (b.house ? '<span class="hc" aria-hidden="true"></span>' : "") +
-      (me ? '<span class="mk" aria-hidden="true">🗝️</span>' : asked ? '<span class="mk" aria-hidden="true">🎀</span>' : "");
+      (me ? '<span class="mk mk-me" aria-hidden="true">🗝️</span>' : asked ? '<span class="mk mk-ask" aria-hidden="true">🎀</span>' : "");
     el.addEventListener("click", function () { openBook(b.id); });
     return el;
   }
@@ -804,7 +804,7 @@ html.fbsh-in.bp-one body > header.sign { position: fixed; }
 </script>
 
 <script>(function () { var p = document.getElementById("parlor"); if (!p || !window.JBW) return; p.style.position = "relative"; JBW.corner({ dock: p, pos: { right: "10px", top: "4px" } }); })();</script>
-<script src="./study.js?v=4d835c8e10"></script>
+<script src="./study.js?v=ee0c9e62a3"></script>
 <style id="bp-one">
 /* in town: one room at a time, the whole screen; the floor dial (or a swipe) goes up and down the house */
 html.bp-one, html.bp-one body { height: 100%; overflow: hidden; }

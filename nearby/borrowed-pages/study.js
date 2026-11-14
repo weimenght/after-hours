@@ -83,6 +83,9 @@
     "#study .sd-sp .tp{position:absolute;left:-2px;right:-2px;height:5px;background:rgba(240,230,190,.75);border:1px solid rgba(0,0,0,.4)}",
     "#study .sd-it svg{display:block;width:100%;height:auto;image-rendering:pixelated;filter:drop-shadow(1px 1px 0 rgba(0,0,0,.6))}",
     "#study .sd-nb .bk{flex:none}",
+    /* yours: a small amber bookplate at the foot of the spine, not a key over it (keys crowded thin spines) */
+    "#study .mk-me{display:none}",
+    "#study .bk.me::after{content:'';position:absolute;left:3px;right:3px;bottom:6px;height:5px;background:#f2a33a;box-shadow:0 0 0 1px #000;pointer-events:none}",
     "#study .sd-nb .slot{display:flex;align-items:flex-end}",
     "#study .sd-ghost{flex:none;align-self:flex-end;margin-bottom:2px;min-width:44px;height:60%;border:2px dashed rgba(243,215,154,.5);background:none;color:#f3d79a;font:400 15px/1.1 VT323,monospace;cursor:pointer;padding:4px}",
     "#study .sd-seat{flex:none;height:92px;display:flex;align-items:flex-end;gap:12px;padding:0 10px;position:relative}",
