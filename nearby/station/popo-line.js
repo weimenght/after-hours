@@ -46,37 +46,37 @@
           "Un mes al mar. I després, Marsella! Una església dalt del turó amb una mare de Déu daurada al capdamunt. Les cames encara es pensaven que eren al vaixell: caminava com un ànec."] }
   ];
   var TRAIN = [
-    { n: "Marseille Saint-Charles", r: "Provence", b: "metropolis", tm: "afternoon", w: ["Marseille Saint-Charles", "马赛圣夏尔站", "馬賽聖查理站", "Marsella Saint-Charles", "Marsella Saint-Charles"],
+    { n: "MARSEILLE-ST-CHARLES", lk: "fr", r: "S.N.C.F.", b: "metropolis", tm: "afternoon", w: ["Marseille Saint-Charles", "马赛圣夏尔站", "馬賽聖查理站", "Marsella Saint-Charles", "Marsella Saint-Charles"],
       t: ["The station got big, big stairs. I carry my suitcase up all by myself. Nobody help. OK, one man help at the top.",
           "火车站有好大好大的楼梯。我自己一个人提着箱子上去，没人帮。好啦，到最上面有个人帮了一下。",
           "車站有條好大好大嘅樓梯。我自己一個挽個喼上去，冇人幫。好啦，去到頂有個男人幫咗下。",
           "La estación tiene escaleras grandes, grandes. Yo subo maleta sola. Nadie ayuda. Bueno, un señor ayuda arriba.",
           "L'estació tenia unes escales enormes. Vaig pujar la maleta tota sola. Ningú no em va ajudar. Bé, un home, ja a dalt de tot."] },
-    { n: "Narbonne", r: "Languedoc", b: "countryside", tm: "sunset", w: ["Narbonne", "纳博讷", "納博訥", "Narbona", "Narbona"],
+    { n: "NARBONNE", lk: "fr", r: "S.N.C.F.", b: "countryside", tm: "sunset", w: ["Narbonne", "纳博讷", "納博訥", "Narbona", "Narbona"],
       t: ["Out the window: vines, vines, vines. When the sun go down, everything purple. I never see so many grapes in my life.",
           "窗外：葡萄藤，葡萄藤，葡萄藤。太阳下山的时候，什么都变成紫色。我这辈子没见过那么多葡萄。",
           "窗外：葡萄藤，葡萄藤，葡萄藤。日落嗰陣，乜都變晒紫色。我一世都未見過咁多提子。",
           "Por la ventana: viñas, viñas, viñas. Cuando el sol baja, todo morado. Yo nunca veo tantas uvas en mi vida.",
           "Per la finestra: vinyes, vinyes i més vinyes. Quan es pon el sol, tot es torna morat. No havia vist mai tant de raïm."] },
-    { n: "Perpignan", r: "Roussillon", b: "countryside", tm: "night", w: ["Perpignan", "佩皮尼昂", "佩皮尼昂", "Perpiñán", "Perpinyà"],
+    { n: "PERPIGNAN", lk: "fr", r: "S.N.C.F.", b: "countryside", tm: "night", w: ["Perpignan", "佩皮尼昂", "佩皮尼昂", "Perpiñán", "Perpinyà"],
       t: ["Night already. The old lady across from me give me bread and sausage. I give her one salt lemon. She make a face like this! Ha.",
           "天已经黑了。对面的老太太给我面包和香肠。我给她一颗咸柠檬。她的脸就皱成这样！哈。",
           "天都黑咗。對面個伯母俾麵包同香腸我食。我俾粒鹹檸檬佢。佢塊面皺到咁樣！哈。",
           "Ya de noche. La señora mayor de enfrente me da pan y salchichón. Yo le doy un limón salado. ¡Ella pone una cara así! Ja.",
           "Ja era de nit. La senyora gran del davant em va donar pa i llonganissa. Jo li vaig donar una llimona en sal. Quina cara que va fer! Ha."] },
-    { n: "Portbou", r: "Frontera · Frontière", b: "coastal", tm: "night", w: ["Portbou · the border", "波尔特沃 · 边境", "波爾特沃 · 邊境", "Portbou · la frontera", "Portbou · la frontera"],
+    { n: "PORT-BOU", lk: "es", r: "RENFE · FRONTERA", b: "coastal", tm: "night", w: ["Portbou · the border", "波尔特沃 · 边境", "波爾特沃 · 邊境", "Portbou · la frontera", "Portbou · la frontera"],
       t: ["At the border, everybody get off with their luggage. The rails in Spain are a different size, so you change train. Middle of the night, cold, police check passports. I hold mine so tight.",
           "到了边境，大家都拿着行李下车。西班牙的铁轨宽度不一样，要换火车。半夜，好冷，警察查护照。我把护照抓得紧紧的。",
           "到咗邊境，個個都挽住行李落車。西班牙啲路軌闊啲，要轉車。半夜，好凍，警察查護照。我揸到本護照實一實。",
           "En la frontera todos bajan con maletas. Las vías en España otro tamaño, entonces cambias de tren. Medianoche, frío, policía mira pasaportes. Yo agarro el mío muy fuerte.",
           "A la frontera tothom baixava amb l'equipatge: les vies d'Espanya són més amples i calia canviar de tren. Mitjanit, fred, la policia mirant els passaports. Jo m'agafava el meu ben fort."] },
-    { n: "Girona", r: "Gironès", b: "countryside", tm: "dawn", w: ["Girona", "赫罗纳", "赫羅納", "Gerona", "Girona"],
+    { n: "GERONA", lk: "es", r: "RENFE", b: "countryside", tm: "dawn", w: ["Girona", "赫罗纳", "赫羅納", "Gerona", "Girona"],
       t: ["From the border I cry, cry, cry. At Girona the sun come up. I eat one salt lemon. Finish crying. Sour, but OK lah.",
           "从边境开始我一直哭，哭，哭。到了赫罗纳，太阳出来了。我食了一颗咸柠檬。不哭咯。酸，但是没事啦。",
           "由邊境開始我喊，喊，喊。到赫羅納，太陽出嚟。我食咗粒鹹檸檬。唔喊喇。酸，不過冇事嘅。",
           "Desde la frontera lloro, lloro, lloro. En Girona sale el sol. Como un limón salado. Ya no lloro. Ácido, pero bien.",
           "Des de la frontera vaig plorar i plorar. A Girona va sortir el sol. Em vaig menjar una llimona en sal i vaig deixar de plorar. Àcid, però bé."] },
-    { n: "Barcelona · Estació de França", r: "Barcelona", b: "metropolis", tm: "afternoon", w: ["Barcelona · Estació de França", "巴塞罗那 · 法国站", "巴塞隆拿 · 法國站", "Barcelona · Estación de Francia", "Barcelona · Estació de França"],
+    { n: "BARCELONA-TÉRMINO", lk: "es", r: "RENFE", b: "metropolis", tm: "afternoon", w: ["Barcelona · Estació de França", "巴塞罗那 · 法国站", "巴塞隆拿 · 法國站", "Barcelona · Estación de Francia", "Barcelona · Estació de França"],
       t: ["Barcelona. The signs, I cannot read one. Then one young man, smell of machine oil, ask me where I go. That one is Josep. The rest you know already lah.",
           "巴塞罗那。站牌，我一个字都看不懂。然后有个年轻人，一身机油味，问我去哪里。那个就是 Josep。后面的你都知道啦。",
           "巴塞隆拿。啲牌，我一個字都睇唔明。跟住有個後生仔，成身機油味，問我去邊。嗰個就係 Josep。之後嘅你都知㗎喇。",
@@ -84,9 +84,9 @@
           "Barcelona. Els rètols, no n'entenia ni un. Llavors un noi jove, que feia olor d'oli de màquina, em va preguntar on anava. Era en Josep. La resta ja la saps."] }
   ];
   var KICK = ["Popo's line · 1968", "婆婆的路 · 1968", "婆婆條路 · 1968", "El camino de Popo · 1968", "El camí de la Popo · 1968"];
-  var ON = ["Tap to go on", "点一下继续", "撳一下繼續", "Toca para seguir", "Toca per seguir"];
+  var ON = ["Tap here to go on", "点这里继续", "撳呢度繼續", "Toca aquí para seguir", "Toca aquí per seguir"];
   var CSS = ".pl-port{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:#2a1d14;transition:opacity 1s}" +
-    ".pl-port.out{opacity:0;pointer-events:none}.pl-port canvas{width:min(78vmin,560px);height:min(78vmin,560px);image-rendering:pixelated;margin-top:-14vmin}" +
+    ".pl-port.out{opacity:0;pointer-events:none}.pl-port canvas{width:min(78vmin,560px);height:min(78vmin,560px);image-rendering:pixelated;margin-top:-14vmin;filter:sepia(.3) saturate(.85)}" +
     ".pl-card{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:61;width:min(560px,calc(100vw - 24px));box-sizing:border-box;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:#2a1d14;color:#fbeedd;border:3px solid #000;box-shadow:5px 5px 0 #000,inset 0 0 0 2px #5a3a22;font:400 20px/1.25 'VT323','PingFang SC','Noto Sans SC',monospace;cursor:pointer;animation:plIn .4s steps(4)}" +
     "@keyframes plIn{from{opacity:0;transform:translate(-50%,10px)}}.pl-card canvas{flex:none;width:48px;height:48px;image-rendering:pixelated;border:2px solid #000;background:#3a2414}" +
     ".pl-card b{display:block;font:400 9px/1.6 'Press Start 2P',monospace;color:#f6b73c;letter-spacing:.04em;margin-bottom:4px}.pl-card small{display:block;margin-top:4px;font-size:15px;opacity:.6}" +
@@ -135,7 +135,8 @@
   function portOpen() { port = document.createElement("div"); port.className = "pl-port"; pc = document.createElement("canvas"); pc.width = pc.height = 96; port.appendChild(pc); document.body.appendChild(port); t0 = performance.now(); raf = requestAnimationFrame(draw); }
   function portClose() { if (!port) return; port.classList.add("out"); var p = port; setTimeout(function () { cancelAnimationFrame(raf); p.remove(); }, 1100); port = null; pc = null; }
   /* ---- the train: each stop of hers, braking in the station's own window ---- */
-  function stopOf(s) { return { name: s.n, region: s.r, biome: s.b, ink: "#b3261e", icon: "fa-train", code: "1968", __popo: 1 }; }
+  /* the signs as they read in 1968: SNCF enamel in France; over the border, under Franco, in Spanish (Port-Bou, Gerona, Barcelona-Término) */
+  function stopOf(s) { return { name: s.n, sub: s.r, region: s.r, look: s.lk, biome: s.b, ink: "#b3261e", icon: "fa-train", code: "1968", __popo: 1 }; }
   function trainTo(s) { try { state.station = stopOf(s); setBiome(s.b, false); setTimeOfDay(s.tm); setWeather("clear"); syncHUDAndButtons(); } catch (e) {} }
   var phase = "";   /* "ship" | "cruise" | "brake" | "stop" */
   function tick(force) {
@@ -145,22 +146,54 @@
     if (!force && now < nextAt) return;
     if (phase === "ship" || beat < 0) {
       beat++;
-      if (beat < SHIP.length) { phase = "ship"; scene = SHIP[beat].s; say(T(SHIP[beat].w), T(SHIP[beat].t)); nextAt = now + 15000; return; }
-      portClose(); phase = "cruise"; trainTo(TRAIN[0]); try { if (state.trainState !== "CRUISING") state.trainState = "CRUISING"; } catch (e) {}
-      if (card) card.remove(); card = null; nextAt = now + 6000; return;
+      if (beat < SHIP.length) { phase = "ship"; scene = SHIP[beat].s; say(T(SHIP[beat].w), T(SHIP[beat].t)); sfx(scene); nextAt = now + 40000; return; }
+      portClose(); phase = "cruise"; old(true); trainTo(TRAIN[0]); try { if (state.trainState !== "CRUISING") state.trainState = "CRUISING"; } catch (e) {}
+      sfx("whistle"); nextAt = now + (force ? 12000 : 30000); return;
     }
     var i = beat - SHIP.length, s = TRAIN[i];
-    if (phase === "cruise") { if (state.trainState === "CRUISING") { triggerStationStopOrDepart(); phase = "brake"; } nextAt = now + 1500; return; }
-    if (phase === "brake") { if (state.trainState === "STOPPED") { phase = "stop"; say(T(s.w), T(s.t)); nextAt = now + 16000; } else nextAt = now + 1000; return; }
+    if (phase === "cruise") { if (state.trainState === "CRUISING") { triggerStationStopOrDepart(); phase = "brake"; sfx("brake"); } nextAt = now + 1500; return; }
+    if (phase === "brake") { if (state.trainState === "STOPPED") { phase = "stop"; sfx("door"); say(T(s.w), T(s.t)); nextAt = now + 30000; } else nextAt = now + 1000; return; }
     if (phase === "stop") {
       if (i >= TRAIN.length - 1) return end(true);
       beat++; var nx = TRAIN[i + 1]; grace = now + 4500; triggerStationStopOrDepart();   /* depart; the station picks a random next stop after 2.8 s, so ours is set after that */
       setTimeout(function () { if (on) trainTo(nx); }, 3200);
-      if (card) { card.remove(); card = null; } phase = "cruise"; nextAt = now + (force ? 7000 : 11000);
+      sfx("whistle"); phase = "cruise"; nextAt = now + (force ? 12000 : 40000);   /* her card stays up while the train rides on; a tap on it goes on sooner */
     }
   }
+  /* 1968 in the window: the city low and without neon, no express (view.js reads __nb1968), and colour faded like her photos */
+  function old(onoff) { window.__nb1968 = !!onoff; var v = document.getElementById("windowViewport"); if (v) { v.style.transition = "filter 2s"; v.style.filter = onoff ? "sepia(.38) saturate(.78) contrast(.94) brightness(.98)" : ""; } }
+  /* sounds that belong to 1968, made here (Web Audio, nothing fetched); the shell's sound switch mutes them like everything else */
+  var AC = null, sea = null;
+  function ac() { try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === "suspended") AC.resume(); } catch (e) {} return AC; }
+  addEventListener("pointerdown", function () { ac(); }, { capture: true, passive: true });
+  function soundOn() { try { return !(window.parent !== window && window.parent.FBSound && !window.parent.FBSound.on()); } catch (e) { return true; } }
+  function noise(a, dur) { var b = a.createBuffer(1, Math.max(1, a.sampleRate * dur | 0), a.sampleRate), d = b.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; var n = a.createBufferSource(); n.buffer = b; return n; }
+  function env(a, g, t, at, hold, rel, v) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + at); g.gain.setValueAtTime(v, t + at + hold); g.gain.exponentialRampToValueAtTime(0.0001, t + at + hold + rel); }
+  function horn(a, t) { [92, 138].forEach(function (f) { var o = a.createOscillator(), lp = a.createBiquadFilter(), g = a.createGain(); o.type = "sawtooth"; o.frequency.value = f; lp.type = "lowpass"; lp.frequency.value = 420; o.connect(lp); lp.connect(g); g.connect(a.destination); env(a, g, t, 0.25, 2.2, 1.2, 0.06); o.start(t); o.stop(t + 4); }); }
+  function gull(a, t) { for (var k = 0; k < 3; k++) { var o = a.createOscillator(), g = a.createGain(), tk = t + k * 0.32; o.type = "triangle"; o.frequency.setValueAtTime(1500, tk); o.frequency.exponentialRampToValueAtTime(2400, tk + 0.08); o.frequency.exponentialRampToValueAtTime(1100, tk + 0.24); o.connect(g); g.connect(a.destination); env(a, g, tk, 0.02, 0.12, 0.12, 0.018); o.start(tk); o.stop(tk + 0.32); } }
+  function waves(a) {   /* the sea against the hull, slow swells while the porthole is up */
+    if (sea) return; var n = noise(a, 4), lp = a.createBiquadFilter(), g = a.createGain(), lfo = a.createOscillator(), lg = a.createGain();
+    n.loop = true; lp.type = "lowpass"; lp.frequency.value = 520; g.gain.value = 0.022; lfo.frequency.value = 0.11; lg.gain.value = 0.018; lfo.connect(lg); lg.connect(g.gain);
+    n.connect(lp); lp.connect(g); g.connect(a.destination); n.start(); lfo.start(); sea = { n: n, lfo: lfo, g: g };
+  }
+  function hush() { if (!sea) return; try { var a = AC, t = a.currentTime; sea.g.gain.cancelScheduledValues(t); sea.g.gain.setTargetAtTime(0.0001, t, 0.8); var s0 = sea; setTimeout(function () { try { s0.n.stop(); s0.lfo.stop(); } catch (e) {} }, 4000); } catch (e) {} sea = null; }
+  function sfx(k) {
+    if (!soundOn()) return; var a = ac(); if (!a || a.state !== "running") return; var t = a.currentTime + 0.05;
+    if (k === "hk") { waves(a); horn(a, t + 0.4); gull(a, t + 4); }
+    else if (k === "sg" || k === "cape") { waves(a); gull(a, t + 0.6); if (k === "cape") gull(a, t + 2.2); }
+    else if (k === "ocean") { waves(a); }
+    else if (k === "mrs") { waves(a); gull(a, t + 0.3); horn(a, t + 1.6); }
+    else if (k === "whistle") { hush();   /* the guard's whistle: a pea whistle, two blasts, then the train pulls out */
+      [0, 0.75].forEach(function (d, i) { var o = a.createOscillator(), lfo = a.createOscillator(), lg = a.createGain(), g = a.createGain(), td = t + d; o.type = "sine"; o.frequency.value = 2650; lfo.frequency.value = 28; lg.gain.value = 140; lfo.connect(lg); lg.connect(o.frequency); o.connect(g); g.connect(a.destination); env(a, g, td, 0.02, i ? 0.55 : 0.25, 0.08, 0.035); o.start(td); lfo.start(td); o.stop(td + 0.8); lfo.stop(td + 0.8); }); }
+    else if (k === "brake") {   /* steel on steel as the train slows */
+      var o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain(); o.type = "sine"; o2.type = "sine"; o.frequency.setValueAtTime(3400, t + 1); o.frequency.linearRampToValueAtTime(2900, t + 5); o2.frequency.value = 4210; o.connect(g); o2.connect(g); g.connect(a.destination); env(a, g, t + 1, 0.6, 2.6, 1.6, 0.012); o.start(t + 1); o2.start(t + 1); o.stop(t + 6); o2.stop(t + 6);
+      var n = noise(a, 5), bp = a.createBiquadFilter(), gn = a.createGain(); bp.type = "bandpass"; bp.frequency.value = 1800; bp.Q.value = 2; n.connect(bp); bp.connect(gn); gn.connect(a.destination); env(a, gn, t + 1, 0.5, 2.5, 1.2, 0.02); n.start(t + 1); }
+    else if (k === "door") {   /* a carriage door swung open and slammed, on a stopped train */
+      var n2 = noise(a, 0.4), lp2 = a.createBiquadFilter(), g2 = a.createGain(), td2 = t + 1.2; lp2.type = "lowpass"; lp2.frequency.value = 380; n2.connect(lp2); lp2.connect(g2); g2.connect(a.destination); env(a, g2, td2, 0.005, 0.03, 0.25, 0.25); n2.start(td2);
+      var o3 = a.createOscillator(), g3 = a.createGain(); o3.type = "triangle"; o3.frequency.setValueAtTime(140, td2); o3.frequency.exponentialRampToValueAtTime(60, td2 + 0.2); o3.connect(g3); g3.connect(a.destination); env(a, g3, td2, 0.004, 0.02, 0.2, 0.08); o3.start(td2); o3.stop(td2 + 0.3); }
+  }
   var iv = 0;
-  function end(done) { on = false; clearInterval(iv); portClose(); if (card) { var c = card; setTimeout(function () { c.remove(); }, done ? 12000 : 0); card = null; } try { window.FBCabin && FBCabin.director && FBCabin.director.start(); } catch (e) {} }
+  function end(done) { on = false; clearInterval(iv); portClose(); old(false); hush(); if (card) { var c = card; setTimeout(function () { c.remove(); }, done ? 12000 : 0); card = null; } try { window.FBCabin && FBCabin.director && FBCabin.director.start(); } catch (e) {} }
   function start() {
     if (on || typeof state === "undefined" || typeof triggerStationStopOrDepart !== "function") return;
     on = true; beat = -1; phase = "";

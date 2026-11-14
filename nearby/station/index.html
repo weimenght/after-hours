@@ -3165,6 +3165,7 @@
     }
 
     function showWindowToast(msg) {
+      if (!/[?&]app=1/.test(location.search) && /^(Approaching|Arrived at)/.test(msg)) return;   /* no announcements in town (the owner, Nov 14) */
       const toast = document.getElementById("windowToast");
       const text = document.getElementById("windowToastText");
       text.textContent = msg;
@@ -3593,7 +3594,7 @@
       requestAnimationFrame(renderScene);
     };
   </script>
-<script src="./view.js?v=4dc721ea3f" defer></script>
-<script src="./cabin.js?v=0c612805e3" defer></script><script src="./popo-line.js?v=4d789d1365" defer></script><script src="./journey.js?v=508dfa706f" defer></script><script src="./platform.js?v=10cbec02ff" defer></script>
+<script src="./view.js?v=b1339c4f92" defer></script>
+<script src="./cabin.js?v=0c612805e3" defer></script><script src="./popo-line.js?v=db84618aec" defer></script><script src="./journey.js?v=508dfa706f" defer></script><script src="./platform.js?v=10cbec02ff" defer></script>
 </body>
 </html>

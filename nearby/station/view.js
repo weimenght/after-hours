@@ -292,14 +292,15 @@
   var BIOMES = {
     metropolis: function (now) {
       var lp = L.lights; if (lp > 0.4) { var g = ctx.createLinearGradient(0, H - 160 * S, 0, H); g.addColorStop(0, "rgba(255,150,90,0)"); g.addColorStop(1, "rgba(255,150,90," + 0.18 * lp + ")"); ctx.fillStyle = g; ctx.fillRect(0, H - 160 * S, cw, 160 * S); }
-      buildings(0.03, H, 50, 150, 26, 64, 11, 0.85, "#7f8bb0", { windows: 1.6 });
-      buildings(0.09, H + 6 * S, 70, 230, 40, 110, 12, 0.5, "#5a6386", { windows: 3.2, neon: true });
+      var old = window.__nb1968;   /* Popo's line, 1968 (popo-line.js): a city of six or seven floors, no towers, no neon */
+      buildings(0.03, H, old ? 30 : 50, old ? 70 : 150, 26, 64, 11, 0.85, old ? "#9a8f80" : "#7f8bb0", { windows: 1.6 });
+      buildings(0.09, H + 6 * S, old ? 40 : 70, old ? 95 : 230, 40, 110, 12, 0.5, old ? "#7a6e60" : "#5a6386", { windows: old ? 2.2 : 3.2, neon: !old });
       fogBands(now, H - 120 * S, H);
       ground(H + 4 * S, land("#2a2d3a", 0.3), land("#16171e", 0));
       /* streetlights and a road below the viaduct */
       slots(0.45, 150, function (x, i) { var y = H + 34 * S; ctx.fillStyle = css(land("#1e2028", 0.15)); ctx.fillRect(x, y - 48 * S, 2 * S, 48 * S); ctx.fillRect(x, y - 48 * S, 14 * S, 2 * S); if (lp > 0.2) glowDot(x + 14 * S, y - 45 * S, 26 * S, [255, 190, 110], 0.6 * lp); });
       slots(0.6, 260, function (x, i) { if (hash(i, 31) < 0.5 || lp < 0.3) return; ctx.fillStyle = "rgba(255,240,220," + 0.9 * lp + ")"; var y = H + 48 * S; ctx.fillRect(x, y, 3 * S, 2 * S); ctx.fillStyle = "rgba(255,60,60," + 0.8 * lp + ")"; ctx.fillRect(x + 60 * S, y + 4 * S, 3 * S, 2 * S); });
-      buildings(0.7, ch * 0.98, 40, 120, 70, 170, 13, 0.08, "#262a36", { windows: 5, neon: true });
+      buildings(0.7, ch * 0.98, 40, window.__nb1968 ? 90 : 120, 70, 170, 13, 0.08, window.__nb1968 ? "#3a3028" : "#262a36", { windows: 5, neon: !window.__nb1968 });
     },
     countryside: function (now) {
       ridge(0.025, H - 6 * S, 46 * S, 0.004, 21, css(land("#8ea886", 0.9)));
@@ -501,6 +502,7 @@
   }
   /* the express that thunders past on the other line */
   function express(dt) {
+    if (window.__nb1968) { state.passingTrainX = -2600; return; }   /* no modern express on the other line in 1968 */
     if (state.passingTrainX <= -2600) { if (state.speed > 0.5 && Math.random() < 0.0003) { try { triggerPassingExpressTrain(); } catch (e) {} } return; }
     state.passingTrainX -= (26 + state.speed * 18) * dt * S;
     var x0 = state.passingTrainX, len = 2400 * S, top = ch * 0.3, bot = ch * 0.94, body = css(mix([18, 22, 34], L.low, 0.12));
@@ -926,7 +928,9 @@
   }
   var NEXT = { jp: "次は、{n}です。", cn: "下一站，{n}。", fr: "Prochain arrêt : {n}.", de: "Nächster Halt: {n}.", ch: "Nächster Halt: {n}.", es: "Próxima parada: {n}.", ca: "Propera parada: {n}.", us: "Next stop, {n}.", uk: "The next station is {n}.", it: "Prossima fermata: {n}.", hk: "下一站：{n}。", cy: "Yr orsaf nesaf yw {n}." };
   /* say it in the station's own language; if this phone has no such voice, say it in English rather than not at all */
+  var QUIET = !/[?&]app=1/.test(location.search);   /* in Nearby the station makes no announcements (the owner, Nov 14) */
   function speak(st, line) {
+    if (QUIET) return;
     if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
     /* the guard only speaks to people on the train: not while you are elsewhere in town, not with the sound off */
     if (window.__fbAsleep || document.hidden) return;
@@ -939,6 +943,7 @@
     try { if (typeof isAudioPlaying !== "undefined" && !isAudioPlaying) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = vo ? vo[0] : "en-GB"; u.rate = lk === "jp" || lk === "cn" ? 0.92 : 0.95; u.pitch = lk === "jp" ? 1.1 : 1; u.volume = 0.9; speechSynthesis.speak(u); } catch (e) {}
   }
   function announce(st) {
+    if (QUIET) return true;   /* nothing at all, not even the chime */
     var lk = lookOf(st), ch = CHIME[lk] || CHIME.uk;
     if (typeof audioCtx === "undefined" || !audioCtx || !isAudioPlaying) return false;
     var t0 = audioCtx.currentTime + 0.05;
@@ -967,6 +972,7 @@
     var d = door; door = null; if (!d) return; d.classList.add("gone"); setTimeout(function () { d.remove(); }, 1700);
   }
   function doorUp() {
+    if (QUIET) return;   /* the town never links out to an app (Vocab) */
     try {
       var st = state.station, lk = st && lookOf(st), L = LEARN[lk];
       if (st !== doorSt) { doorSt = st; doorT = Date.now(); doorAway(); }
