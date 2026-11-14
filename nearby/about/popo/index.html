@@ -111,7 +111,8 @@ html.film main{display:none}html.film footer{display:none}html.film .wrap{displa
 .cap b{display:block;font:400 9px/1.5 var(--px);color:var(--red);letter-spacing:.06em}.cap span{display:block;font:400 22px/1.05 var(--vt)}
 html:lang(zh-Hans) .cap b,html:lang(zh-Hant) .cap b{font:600 12px/1.4 var(--cjk);letter-spacing:.15em}html:lang(zh-Hans) .cap span,html:lang(zh-Hant) .cap span{font:700 17px/1.35 var(--cjk)}
 .hint{position:absolute;right:10px;bottom:8px;font:400 15px/1 var(--vt);color:rgba(251,238,221,.55);pointer-events:none;transition:opacity .6s}.hint.gone{opacity:0}
-.sub{display:flex;gap:12px;align-items:flex-start;width:100%;min-height:5.4em;flex:none}
+.sub{display:flex;gap:12px;align-items:flex-start;width:100%;height:var(--subh,7.2em);overflow-y:auto;overscroll-behavior:contain;flex:none}
+/* the picture, the words and the controls keep their places (Nov 14, the owner): the words' box is a fixed height, set by fit() from the line height */
 .sub img{flex:none;width:44px;height:44px;image-rendering:pixelated;background:var(--wood);border:3px solid #000;box-shadow:3px 3px 0 #000}
 #line{margin:0;flex:1;font-size:22px;line-height:1.3;color:var(--cream);text-wrap:pretty}#line.in{animation:lineIn .45s ease both}@keyframes lineIn{from{opacity:0;transform:translateY(4px)}}
 #line em{font-style:italic;color:var(--amber);opacity:.9}#line.as{color:#fff3d8}
@@ -126,7 +127,7 @@ html:lang(zh-Hans) #line,html:lang(zh-Hant) #line{font-size:18px;line-height:1.7
 html.read #film{display:none}html.read main{display:block}html.read body{overflow:auto}html.read .watch{display:inline-flex}
 .watch{display:none;position:sticky;top:8px;z-index:20;margin:10px auto 0;width:max-content}
 html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
-@media (max-height:520px) and (min-aspect-ratio:4/3){html.film #film{flex-direction:row;align-items:center;padding:8px 12px}html.film .side{flex:1;min-width:220px;align-self:stretch;justify-content:center}html.film .side .sub,html.film .side .bar{width:100%!important}.sub{min-height:0}#line{font-size:19px}.dots{order:-1;flex-basis:100%}}
+@media (max-height:520px) and (min-aspect-ratio:4/3){html.film #film{flex-direction:row;align-items:center;padding:8px 12px}html.film .side{flex:1;min-width:220px;align-self:stretch;justify-content:center}html.film .side .sub,html.film .side .bar{width:100%!important}#line{font-size:19px}.dots{order:-1;flex-basis:100%}}
 @media (max-width:560px){.cap{left:8px;top:8px;padding:4px 8px 5px;max-width:60%}.cap b{font-size:7px}.cap span{font-size:17px}html:lang(zh-Hans) .cap span,html:lang(zh-Hant) .cap span{font-size:14px}}
 @media (max-width:560px){.dots{order:-1;flex-basis:100%;min-width:0}.bar{justify-content:center}}
 @media (prefers-reduced-motion:reduce){#line.in{animation:none}.cap{transition:none}}
@@ -265,15 +266,22 @@ html.film .side{display:flex;flex-direction:column;gap:10px;align-items:center}
   function fwords() { var U = window.POPO.U; document.getElementById("watch").textContent = window.POPO.T("watch"); document.getElementById("fend").textContent = U("end");
     document.getElementById("fgo1").textContent = U("go1") + " →"; document.getElementById("fgo2").textContent = U("go2") || D.ui.town[lang]; }
   document.getElementById("watch").onclick = function () { window.POPO.read(false); };
-  var _paint = paint; paint = function () { _paint(); fwords(); dispatchEvent(new Event("popolang")); };
+  var _paint = paint; paint = function () { _paint(); fwords(); dispatchEvent(new Event("popolang")); try { fit(); } catch (e) {} };
   paint();
   /* the screen as big as the window allows, the line and the controls under it */
   function fit() { var f = document.getElementById("film"); if (!f || !f.offsetParent) return;
+    lay(); var before = document.getElementById("sub").offsetHeight; tall(); if (document.getElementById("sub").offsetHeight !== before) lay(); }
+  /* the words' box is as tall as this language's longest line at this width, measured once per fit, so nothing moves line to line */
+  function tall() { var sub = document.getElementById("sub"), ln = document.getElementById("line"), sh = window.POPOFILM && POPOFILM.shots && POPOFILM.shots(), keep = ln.innerHTML, cls = ln.className, mx = 0;
+    var lh = parseFloat(getComputedStyle(ln).lineHeight) || 30;
+    if (sh && sh.length) { ln.className = ""; sh.forEach(function (S) { (S.lines || []).forEach(function (t) { ln.textContent = t.replace(/\*/g, ""); mx = Math.max(mx, ln.scrollHeight); }); }); ln.innerHTML = keep; ln.className = cls; }
+    sub.style.setProperty("--subh", Math.ceil(Math.max(mx, lh * 3)) + 4 + "px"); }
+  function lay() { var f = document.getElementById("film");
     if (innerHeight <= 520 && innerWidth / innerHeight >= 4 / 3) { var ww = Math.max(220, Math.min(f.clientWidth - 280, (f.clientHeight - 24) * 16 / 9)); document.getElementById("scr").style.width = ww + "px"; return; }
     var sub = document.getElementById("sub"), bar = f.querySelector(".bar"),
       h = f.clientHeight - sub.offsetHeight - bar.offsetHeight - 40, w = Math.min(f.clientWidth - 28, h * 16 / 9, 1100); w = Math.max(220, w);
     document.getElementById("scr").style.width = w + "px"; sub.style.width = bar.style.width = Math.max(w, Math.min(f.clientWidth - 28, 560)) + "px"; }
-  addEventListener("resize", fit); fit(); setTimeout(fit, 300);
+  addEventListener("resize", fit); addEventListener("load", fit); fit(); setTimeout(fit, 300);
   var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if ("IntersectionObserver" in window && !still) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -6% 0px" });
