@@ -114,7 +114,7 @@
 <script>
 /* Paw Reading, the app (after-hours.work/paw-reading/): Miso & Yuzu's stall from Nearby, outside the town.
    One card a day from the Nearby deck (FBPaw in /nearby/paw-reading/paw.js; fb_paw on this device, the same one the town's
-   stall and Your Plot's keepsakes read). The cats paw it over by day (whichever is at the stall, or one trots back from
+   the cards on Next Door's counter read). The cats paw it over by day (whichever is at the stall, or one trots back from
    wherever FBWorld.cats() has her), doze behind the counter at night (FBWorld.sleeps), and you cut the deck quietly.
    The card asks one thing of you, somewhere real, and most carry one way to start it (a line to send, your own maps, a minute
    with the phone face down); then it goes in your pocket and the page gets out of the way. Draw with someone: the same card,
@@ -189,7 +189,7 @@ var W = {
   h1: ["Miso and Yuzu paw you one card a day.", "味噌和柚子每天用爪子推给你一张牌。", "味噌和柚子每天用爪子推給你一張牌。", "Miso y Yuzu te acercan una carta al día con la pata.", "La Miso i la Yuzu t'acosten una carta al dia amb la pota."],
   h2: ["It asks one thing of you, out there: a call, a walk, a meal.", "它请你在屏幕外做一件事：一通电话、一段路、一顿饭。", "它請你在螢幕外做一件事：一通電話、一段路、一頓飯。", "Te pide una cosa, ahí fuera: una llamada, un paseo, una comida.", "Et demana una cosa, allà fora: una trucada, un passeig, un àpat."],
   h3: ["Draw with someone: the same card, the same day.", "和谁一起抽：同一张牌，同一天。", "和誰一起抽：同一張牌，同一天。", "Saca con alguien: la misma carta, el mismo día.", "Treu amb algú: la mateixa carta, el mateix dia."],
-  hTown: ["In Nearby, the stall is by the Plaza", "在近邻里，小摊就在广场边上", "在近鄰裡，小攤就在廣場邊上", "En Cerca, el puesto está junto a la Plaza", "A A Prop, la parada és al costat de la Plaça"],
+  hTown: ["In Nearby, the deck is on Next Door's counter", "在近邻里，这副牌就放在隔壁的吧台上", "在近鄰裡，這副牌就放在隔壁的吧檯上", "En Cerca, la baraja está en la barra de Al Lado", "A A Prop, la baralla és a la barra d'Al Costat"],
   ok: ["OK", "好", "好", "Vale", "D'acord"],
   mBtn: ["A card in the morning", "每天早上一张牌", "每天早上一張牌", "Una carta por la mañana", "Una carta al matí"],
   mHead: ["The cats nudge you once a day, at a time you pick, only on your after-hours phone. Nothing is sent. Off unless you turn it on.", "猫咪每天在你选的时间轻轻提醒你一次，只在你的 after-hours 手机上，不发送任何东西。你不打开就不会有。", "貓咪每天在你選的時間輕輕提醒你一次，只在你的 after-hours 手機上，不傳送任何東西。你不打開就不會有。", "Las gatas te avisan una vez al día, a la hora que elijas, solo en tu teléfono de after-hours. No se envía nada. Apagado si no lo activas.", "Les gates t'avisen un cop al dia, a l'hora que triïs, només al teu telèfon d'after-hours. No s'envia res. Apagat si no ho actives."],
@@ -479,7 +479,7 @@ function morning(parent) {
 function help() {
   var sh = el("div", "sheet", null, document.body), p = el("div", "panel", null, sh); sh.setAttribute("role", "dialog"); sh.setAttribute("aria-modal", "true"); sh.setAttribute("aria-label", T(W.help));
   var ol = el("ol", null, null, p); [W.h1, W.h2, W.h3].forEach(function (x) { el("li", null, esc(T(x)), ol); });
-  el("p", "sub", '<a href="/nearby/?at=' + encodeURIComponent("/nearby/paw-reading/") + '">' + esc(T(W.hTown)) + " ↗</a>", p);
+  el("p", "sub", '<a href="/nearby/?at=' + encodeURIComponent("/nearby/next-door/") + '">' + esc(T(W.hTown)) + " ↗</a>", p);
   var r = el("div", "row", null, p), opened = Date.now();
   function close() { sh.remove(); document.removeEventListener("keydown", key); if (HD && HD.help) HD.help.focus(); }
   function key(e) { if (e.key === "Escape") close(); }

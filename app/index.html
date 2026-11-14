@@ -1945,7 +1945,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
      apps keep (nothing sent) or one of their data files, fetched only while the widget is out, and ends in a way off the
      screen. Today's card (fb_paw), Popo's paper (Little Things' jar), tonight's pot (the hosts' recipes), a walk, a question
      for someone older (Ask Popo), today's tape (Window Radio's key for the weekday), and the week's skies (Along the Way). */
-  var LZV = {"/little-things/things.js": "903de493", "/cook-for-someone/words.js": "97c0611e", "/ask-popo/words.js": "99a5c1a6"}, LZ = {};
+  var LZV = {"/little-things/things.js": "d283db45", "/cook-for-someone/words.js": "97c0611e", "/ask-popo/words.js": "99a5c1a6"}, LZ = {};
   function need(src, ok, cb) {   // a data file from one of the apps, once
     if (ok()) return cb(); if (LZ[src]) { LZ[src].push(cb); return; } LZ[src] = [cb];
     var sc = document.createElement("script"); sc.async = true; sc.src = src + (LZV[src] ? "?v=" + LZV[src] : "");

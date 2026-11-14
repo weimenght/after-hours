@@ -2,7 +2,7 @@
    Popo keeps her voice (Hong Kong English, broken Spanish, a Hong Kong grandmother's Mandarin in zh, her own Cantonese in zh-Hant,
    fluent Catalan). Wei acts in small acts, Mei is nineteen (lowercase in English), Miso, Yuzu and Mantou only act.
    Josep's winding log is in his Catalan, with the visitor's language under it. The interface itself is plain.
-   Shared by the app (/still-today/) and the town (Slow Clock), through still.js. Never reorder LOG: the device keeps its index. */
+   Shared by the app (/still-today/) and the town (Josep's Clock), through still.js. Never reorder LOG: the device keeps its index. */
 window.SL_W = {
   title: ["Still Today", "今天还没完", "今天還沒完", "Aún es Hoy", "Encara és Avui"],
   names: { popo: ["Popo", "婆婆", "婆婆", "Popo", "Popo"], wei: ["Wei", "Wei", "Wei", "Wei", "Wei"], mei: ["Mei", "Mei", "Mei", "Mei", "Mei"],
@@ -59,7 +59,7 @@ window.SL_W = {
   turnRound: ["Turn Josep's clock round", "把 Josep 的钟转过来", "把 Josep 的鐘轉過來", "Dale la vuelta al reloj de Josep", "Gira el rellotge d'en Josep"],
   logA: ["Josep's winding log", "Josep 的上弦本", "Josep 的上鍊簿", "El cuaderno de Josep", "El quadern d'en Josep"],
 
-  /* the town: Slow Clock's two chips */
+  /* the town: Josep's Clock's two chips */
   townK: ["Josep's clock", "Josep 的钟", "Josep 的鐘", "El reloj de Josep", "El rellotge d'en Josep"],
   townPlay: ["Still today?", "今天还没完？", "今天還沒完？", "¿Aún es hoy?", "Encara és avui?"],
   townLog: ["Behind the clock", "钟的背面", "鐘的背面", "Detrás del reloj", "Darrere el rellotge"],
@@ -160,7 +160,7 @@ window.SL_W = {
       dca: "Res, aquella nit. Trenta anys després, en Wei el va adobar amb or.", d: ["Nothing, that night. Thirty years later, Wei mended it with gold.", "那晚什么也没做。三十年后，Wei 用金子把它补好了。", "那晚什麼也沒做。三十年後，Wei 用金子把它補好了。", "Nada, esa noche. Treinta años después, Wei lo arregló con oro."],
       popo: ["He make tea after. Too late, but very good tea.", "后来他泡了茶。晚了点，不过茶很好喝。", "之後佢沖咗壺茶。遲咗啲，不過啲茶好好飲。", "Después él hace té. Tarde, pero té muy bueno.", "Després va fer te. Tard, però un te boníssim."] },
     { ca: "Només ballàvem després de tancar.", t: ["Only danced after closing.", "我们只在打烊后跳舞。", "我們只在打烊後跳舞。", "Solo bailábamos después de cerrar."],
-      dca: "Vaig deixar el disc a la prestatgeria de La Mateixa Cançó.", d: ["Left the record on the shelf at Same Song.", "把唱片留在了同一首歌的架子上。", "把唱片留在了同一首歌的架子上。", "Dejé el disco en la estantería de La Misma Canción."],
+      dca: "Vaig deixar el disc a la seva capsa.", d: ["Left the record in her tin.", "把唱片放进了她的饼干罐。", "把唱片放進了她的餅乾罐。", "Dejé el disco en su lata."],
       popo: ["In the shop he dance very good. Outside, like a chair.", "在店里他跳得很好。到外面，像把椅子。", "喺舖頭入面佢跳得好好。出到街，好似張櫈咁。", "En la tienda él baila muy bien. Fuera, como una silla.", "A la botiga ballava de meravella. A fora, semblava una cadira."] },
     { ca: "Mai vaig acabar la segona finestra de la cabana.", t: ["Never finished the second window at the cabin.", "小屋的第二扇窗一直没做完。", "小屋的第二扇窗一直沒做完。", "Nunca terminé la segunda ventana de la cabaña."],
       dca: "Res.", d: ["Nothing.", "什么也没做。", "什麼也沒做。", "Nada."],

@@ -1,4 +1,4 @@
-/* Still Today's flow (FBStill), shared by the app (/still-today/) and the town (Slow Clock, /nearby/slow-clock/).
+/* Still Today's flow (FBStill), shared by the app (/still-today/) and the town (Josep's Clock, /nearby/slow-clock/).
    Pretend for one minute that today was your last day: one of Nearby's six asks one question (the people in words, the animals
    only in acts), the answer stays on the screen, then "it isn't: Josep's clock is running slow" and one thing to do today.
    Too late, or "not today": one thing on Popo's paper for the morning (the only thing kept, with Josep's log page and the day
