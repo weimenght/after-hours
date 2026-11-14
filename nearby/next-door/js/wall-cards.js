@@ -26,7 +26,7 @@
     function show(c, P) {
       var st = (P && P.STAMPS[c.stamp]) || ["✉️", "#c8402a"], ink = (P && P.INK[c.ink]) || "#2c4a86";
       var m = document.createElement("div"); m.className = "modal-backdrop pc-view";
-      m.innerHTML = '<div class="modal panel" style="max-width:520px"><div class="pcv" style="--pc-ink:' + ink + '"><div class="m"></div><div class="s"><span class="st" style="background:' + st[1] + '">' + st[0] + '</span><span style="margin-top:auto"></span></div></div>'
+      m.innerHTML = '<div class="modal panel" style="max-width:520px"><div class="pcv" style="--pc-ink:' + ink + '"><div class="m"></div><div class="s"><span class="st" style="background:' + st[1] + '">' + (P && P.stamp && P.STAMPS[c.stamp] ? '<i style="display:block;width:30px;height:30px">' + P.stamp(c.stamp) + '</i>' : st[0]) + '</span><span style="margin-top:auto"></span></div></div>'
         + '<div class="flex gap-2 mt-3"><button class="btn flex-1" type="button">✕</button></div></div>';
       m.querySelector(".m").textContent = c.sealed ? "🔒 " + T("wall.opens").replace("{d}", when(c.open_at)) : (c.msg || "");
       var s = m.querySelector(".s span:last-child"); s.innerHTML = ""; s.appendChild(document.createTextNode("— " + c.from + (c.place ? ", " + c.place : "")));
