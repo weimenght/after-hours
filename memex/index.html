@@ -104,7 +104,7 @@ body.paper #dark{background:#2B231C;color:#6E6156}
   function motor(on) { /* a carriage-return thunk */ var a = A; if (!a || !snd || a.state !== "running") return; var t = a.currentTime, o = a.createOscillator(), g = a.createGain(); o.type = "triangle"; o.frequency.setValueAtTime(on ? 90 : 60, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.12); g.gain.setValueAtTime(0.18, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14); o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + 0.15); }
 
   /* ── printing: one line at a time, typed out unless motion is reduced; a tap anywhere finishes it ── */
-  var buf = $("buf"), Q = [], busy = false, fast = false;
+  var buf = $("buf"), Q = [], busy = false, fast = false, CPS = 30, CR = 120, gen = 0;   /* 300 baud: 30 characters a second, and the carriage return */
   function nearBottom() { return buf.scrollHeight - buf.scrollTop - buf.clientHeight < 80; }
   /* a command or a tap on a key takes the paper to its foot and keeps it there while the answer types (the owner, Nov 15);
      scrolling back up yourself lets go until the next command */
@@ -112,24 +112,32 @@ body.paper #dark{background:#2B231C;color:#6E6156}
   function toEnd() { buf.scrollTop = buf.scrollHeight; }
   ["wheel", "touchmove"].forEach(function (ev) { buf.addEventListener(ev, function () { setTimeout(function () { if (!nearBottom()) follow = false; }, 60); }, { passive: true }); });
   buf.addEventListener("keydown", function (e) { if (/^(ArrowUp|PageUp|Home)$/.test(e.key)) follow = false; });
-  function line(html, cls) { Q.push({ html: html, cls: cls || "" }); pump(); }
+  function line(html, cls) { Q.push({ html: html, cls: cls || "", g: gen }); pump(); }
   function text(s, cls) { line(esc(s), cls); }
-  function node(el) { Q.push({ el: el }); pump(); }
+  function node(el) { Q.push({ el: el, g: gen }); pump(); }
   function pump() {
     if (busy) return; var it = Q.shift(); if (!it) return; busy = true;
     var stick = follow || nearBottom();
     var el = it.el || document.createElement("div"); if (!it.el) { el.className = "l " + it.cls; }
     buf.appendChild(el); if (stick) buf.scrollTop = buf.scrollHeight;
-    if (it.el || fast || reduce || !it.html) { if (!it.el) el.innerHTML = it.html || "&nbsp;"; done(); return; }
-    /* type the visible text into a copy, then swap in the real markup (links stay links) */
-    var tmp = document.createElement("div"); tmp.innerHTML = it.html; var plain = tmp.textContent, i = 0, step = Math.max(1, Math.ceil(plain.length / (CJK() ? 8 : 12)));
+    if (!it.el) el.innerHTML = it.html || "&nbsp;";
+    var hurry = function () { return fast || it.g < gen; };
+    if (hurry() || reduce || !it.html && !it.el) { done(); return; }
+    /* the line prints the way a 1968 terminal on a 300-baud line did (the owner, Nov 15: "like a real memex 68"): one character
+       at a time at 30 a second, by the clock (so a busy tab never runs fast or slow), every text node filled in place so codes
+       and highlights stay as they are; then the carriage returns. A tap, Esc or a new command prints the rest at once. */
+    var tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [], full = [], total = 0, n;
+    while ((n = tw.nextNode())) { if (/^\s*$/.test(n.data) && n.parentNode === el && !n.data.length) continue; nodes.push(n); full.push(n.data); total += n.data.length; n.data = ""; }
+    if (!total) { el.innerHTML = it.html || "&nbsp;"; done(); return; }
+    var shown = 0, t0 = performance.now();
+    function fill(k) { var left = k, j; for (j = 0; j < nodes.length; j++) { var L = full[j].length; nodes[j].data = full[j].slice(0, Math.max(0, Math.min(L, left))); left -= L; } }
     (function go() {
-      if (fast) { el.innerHTML = it.html; return done(); }
-      i = Math.min(plain.length, i + step); el.textContent = plain.slice(0, i); tick(false);
-      if (stick) buf.scrollTop = buf.scrollHeight;
-      if (i < plain.length) setTimeout(go, 14); else { el.innerHTML = it.html; done(); }
+      if (hurry()) { fill(total); return done(); }
+      var k = Math.min(total, Math.floor((performance.now() - t0) * CPS / 1000) + 1);
+      if (k > shown) { fill(k); for (var c = shown; c < k && c < shown + 3; c++) tick(false); shown = k; if (stick) buf.scrollTop = buf.scrollHeight; }
+      if (shown < total) setTimeout(go, 1000 / CPS); else done(true);
     })();
-    function done() { if (stick) buf.scrollTop = buf.scrollHeight; busy = false; if (!Q.length) { fast = false; motor(false); } setTimeout(pump, fast || reduce ? 0 : 30); }
+    function done(typed) { if (stick) buf.scrollTop = buf.scrollHeight; busy = false; if (!Q.length) { fast = false; motor(false); } if (typed) motor(true); setTimeout(pump, fast || reduce || (Q[0] && Q[0].g < gen) ? 0 : typed ? CR : 0); }
   }
   function blank() { line(""); }
   /* no buttons anywhere (the owner, Nov 15: "no buttons, only command lines"): a command is shown to be typed, and a tap on the
@@ -228,7 +236,7 @@ body.paper #dark{background:#2B231C;color:#6E6156}
   function run(raw) {
     follow = true; toEnd();
     ac(); var s = String(raw || "").trim(); if (!s) return;
-    if (busy || Q.length) fast = true;
+    gen++;   /* a new command prints what was still coming at once, then types its own answer */
     hist.push(s); hp = hist.length;
     line('<span class="echo">EXEC&gt; <b>' + esc(s.toUpperCase()) + "</b></span>"); motor(true);
     if (matchMedia("(max-width: 700px)").matches) $("ft").classList.add("gone");
