@@ -117,12 +117,18 @@ body.paper #dark{background:#2B231C;color:#6E6156}
   /* ── printing: one line at a time, typed out unless motion is reduced; a tap anywhere finishes it ── */
   var buf = $("buf"), Q = [], busy = false, fast = false;
   function nearBottom() { return buf.scrollHeight - buf.scrollTop - buf.clientHeight < 80; }
+  /* a command or a tap on a key takes the paper to its foot and keeps it there while the answer types (the owner, Nov 15);
+     scrolling back up yourself lets go until the next command */
+  var follow = true;
+  function toEnd() { buf.scrollTop = buf.scrollHeight; }
+  ["wheel", "touchmove"].forEach(function (ev) { buf.addEventListener(ev, function () { setTimeout(function () { if (!nearBottom()) follow = false; }, 60); }, { passive: true }); });
+  buf.addEventListener("keydown", function (e) { if (/^(ArrowUp|PageUp|Home)$/.test(e.key)) follow = false; });
   function line(html, cls) { Q.push({ html: html, cls: cls || "" }); pump(); }
   function text(s, cls) { line(esc(s), cls); }
   function node(el) { Q.push({ el: el }); pump(); }
   function pump() {
     if (busy) return; var it = Q.shift(); if (!it) return; busy = true;
-    var stick = nearBottom();
+    var stick = follow || nearBottom();
     var el = it.el || document.createElement("div"); if (!it.el) { el.className = "l " + it.cls; }
     buf.appendChild(el); if (stick) buf.scrollTop = buf.scrollHeight;
     if (it.el || fast || reduce || !it.html) { if (!it.el) el.innerHTML = it.html || "&nbsp;"; done(); return; }
@@ -252,6 +258,7 @@ body.paper #dark{background:#2B231C;color:#6E6156}
   /* ── the command line ── */
   var hist = [], hp = 0;
   function run(raw) {
+    follow = true; toEnd();
     ac(); var s = String(raw || "").trim(); if (!s) return;
     if (busy || Q.length) fast = true;
     hist.push(s); hp = hist.length;
