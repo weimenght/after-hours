@@ -266,11 +266,11 @@ body.paper #dark{background:#2B231C;color:#6E6156}
   /* ── boot ── */
   function boot() {
     document.documentElement.lang = LANGS[li()]; applyTheme(); tagWho();
-    var q = new URLSearchParams(location.search), skip = sessionStorage && (function () { try { return sessionStorage.getItem("mx68_booted"); } catch (e) { return null; } })();
-    if (!skip) { line(esc(w("init")), "dim up"); line("MEMEX-68 // " + esc(w("sub")), "hi up"); line(esc(w("where")), "dim"); line(esc(onTop()), "dim"); blank(); try { sessionStorage.setItem("mx68_booted", "1"); } catch (e) {} }
-    else { line("MEMEX-68 // " + esc(w("sub")), "hi up"); line(esc(onTop()), "dim"); blank(); }
-    catalog();
-    var last = BY[get("mx68_last") || ""]; if (last) line(esc(w("lastT")).replace("{n}", esc(t5(last.n))).replace("{c}", kw("RUN " + last.c)), "dim");
+    /* the first screen says only how (the owner, Nov 15: "default screen list nothing but help or how"); the shelf waits for LIST */
+    var q = new URLSearchParams(location.search);
+    line("MEMEX-68 // " + esc(w("sub")), "hi up"); blank();
+    help();
+    var last = BY[get("mx68_last") || ""]; if (last) { blank(); line(esc(w("lastT")).replace("{n}", esc(t5(last.n))).replace("{c}", kw("RUN " + last.c)), "dim"); }
     foot();
     var a = q.get("tape"); if (a) run("INFO " + a);
   }
