@@ -621,8 +621,8 @@ html.desk .nbp{left:auto;right:24px;top:56px;width:360px}
 #nbA i{width:26px;height:22px;flex:none;display:inline-flex;align-items:flex-end;justify-content:center}
 #nbA i svg{width:26px;height:auto;image-rendering:pixelated}
 #nbA em{font-style:normal;opacity:.6;font-size:12px}
-#nbN{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font:400 14px/1.4 var(--sans);color:inherit;text-decoration:none;opacity:.86}
-#nbN:hover{text-decoration:underline}
+#nbN,#nbTn{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font:400 14px/1.4 var(--sans);color:inherit;text-decoration:none;opacity:.86}
+#nbN:hover,#nbTn:hover{text-decoration:underline}
 .nbb{display:flex;gap:8px;padding:14px 16px 0}
 .nbb a{flex:1;display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:999px;font:600 14px/1 var(--sans);text-decoration:none;border:1px solid var(--line);color:inherit;text-align:center;padding:0 10px}
 .nbb .nbgo{background:var(--lamp);color:#1B1408;border-color:transparent}
@@ -951,6 +951,8 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
    <div class="nbh"><canvas id="nbFace" width="32" height="32" aria-hidden="true"></canvas><div><small id="nbHk"></small><b id="nbHn"></b><p id="nbHl"></p></div></div>
    <div class="nbs"><small id="nbAk"></small><div id="nbA"></div></div>
    <div class="nbs" id="nbNw"><small id="nbNk"></small><a id="nbN" href="/nearby/" target="_top"></a></div>
+   <div class="nbs" id="nbTw" hidden><small id="nbTk"></small><a id="nbTn" href="/nearby/" target="_top"></a></div>
+   <div class="nbs" id="nbRw" hidden><small id="nbRk"></small><p id="nbR"></p></div>
    <div class="nbs" id="nbDd" hidden><small id="nbDk"></small><p id="nbD"></p></div>
    <div class="nbb"><a class="nbgo" id="nbGo" href="/nearby/" target="_top"></a><a class="nbsit" id="nbSit" href="/nearby/next-door/" target="_top"></a></div>
   </div>
@@ -1404,11 +1406,15 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     pour: { who: "wei", icon: "☕", t: ["*sets two cups on the counter* Heard you poured a V60 for someone. Second cup still warm?", "*在吧台上放了两只杯子* 听说你给谁冲了一杯 V60。第二杯还热吗？", "*在吧台上放了兩隻杯子* 聽說你給誰沖了一杯 V60。第二杯還熱嗎？", "*pone dos tazas en la barra* Me han dicho que preparaste un V60 para alguien. ¿La segunda taza sigue caliente?", "*posa dues tasses a la barra* M'han dit que has preparat un V60 per a algú. La segona tassa encara és calenta?", "*喺吧枱擺咗兩隻杯* 聽講你沖咗杯 V60 畀人。第二杯仲熱唔熱？"] },
     casino: { who: "popo", icon: "🪙", t: ["You win one plan at my casino today? Good. Now go and meet them, ah. No money, I hope.", "今天在我的赌场赢了一个约？好。现在去见人喔。没押钱吧？", "今日喺我間賭場贏咗個約？好。而家去見人喇。冇押錢嘛？", "¿Hoy ganaste un plan en mi casino? Bien. Ahora ve a verlos, ¿eh? Sin dinero, espero.", "Avui has guanyat un pla al meu casino? Molt bé. Ara ves a veure'ls. Sense diners, espero.", "今日喺我間賭場贏咗個約？好。而家去見人喇。冇押錢嘛？", "🎰📅✅ → 👫🚶 · 🌻 ≠ 💰"] },
     sky: { who: "mei", icon: "🌤", t: ["you logged today's sky. the town's wearing it. you're welcome.", "你记了今天的天。小镇替你穿上了。不客气。", "你記了今天的天。小鎮替你穿上了。不客氣。", "anotaste el cielo de hoy. el pueblo lo lleva puesto. de nada.", "has apuntat el cel d'avui. el poble se l'ha posat. de res."] }
-  };
+  }, NBTALE = ["bar", "train", "tower", "books", "bar", "garden", "bar", "postcard", "sanctuary", "nest", "cabin", "bar"];
   var NBW = {
     kHost: ["Behind the counter", "今天在吧台后面", "今天在吧檯後面", "Hoy tras la barra", "Avui darrere la barra"],
     kPets: ["The animals", "小动物们", "小動物們", "Los animales", "Els animals"],
     kNews: ["In town", "镇上", "鎮上", "En el pueblo", "Al poble"],
+    kTin: ["Popo's tin", "婆婆的饼干罐", "婆婆的曲奇罐", "La lata de Popo", "La llauna de la Popo"],
+    tin0: ["Waiting behind the counter at {n}", "在{n}的吧台后面等你", "在{n}的吧檯後面等你", "Te espera en {n}, detrás de la barra", "T'espera a {n}, darrere la barra"],
+    tinN: ["Something from it turned up at {n}", "里面有样东西出现在{n}", "裡面有樣東西出現在{n}", "Algo de dentro ha aparecido en {n}", "Una cosa de dins ha aparegut a {n}"],
+    kTape: ["Playing indoors", "屋里在放", "屋裡在放", "Suena dentro", "Sona a dins"],
     kDid: ["They noticed", "他们注意到了", "他們注意到了", "Se han dado cuenta", "Se n'han adonat"],
     go: ["Go to {n}", "去{n}", "去{n}", "Ir a {n}", "Anar a {n}"],
     sit: ["Sit at the counter", "去吧台坐坐", "去吧檯坐坐", "Siéntate en la barra", "Seu a la barra"],
@@ -1478,6 +1484,13 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var u = NBUPD && NBUPD.length ? NBUPD[Math.floor(Date.now() / 864e5) % Math.min(5, NBUPD.length)] : null;
     $("nbNw").hidden = !u;
     if (u) { $("nbNk").textContent = nbT(NBW.kNews); $("nbN").textContent = String((u.t && (u.t[li()] || u.t[0])) || ""); $("nbN").href = u.k ? nbUrl(u.k) : "/nearby/"; }
+    // where the next thing from Popo's tin waits (the town's own rule: three in the first visit, then one every eight hours)
+    var st = { n: 0, t: 0 }; try { st = JSON.parse(localStorage.getItem("fb_tale") || "null") || st; } catch (e) {}
+    var tk = st.n < NBTALE.length && !(st.n >= 3 && Date.now() - (st.t || 0) < 8 * 36e5) ? NBTALE[st.n] : "";
+    $("nbTw").hidden = !tk;
+    if (tk) { $("nbTk").textContent = nbT(NBW.kTin); $("nbTn").textContent = nbT(st.n ? NBW.tinN : NBW.tin0, nbName(tk)); $("nbTn").href = nbUrl(tk); }
+    // the tape every indoor room in town is playing this quarter hour (the same on every device)
+    nbTape();
     // what the town noticed today (the same lines its hosts say when you walk in)
     var did = {}; try { did = window.FBApps && FBApps.did ? FBApps.did() : {}; } catch (e) {}
     var dk = Object.keys(NBDID).filter(function (k) { return did[k] != null; })[0];
@@ -1486,6 +1499,32 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     var nn = NB ? (NB[2][li()] || NB[2][0]) : "Nearby";
     $("nbGo").textContent = nbT(NBW.go, nn); $("nbSit").textContent = nbT(NBW.sit);
     $("nbp").setAttribute("aria-label", nn);
+  }
+  var nbWR = 0;
+  function nbTapeNow() {   // the town's tapeNow() in fbs.js, kept in step
+    var W = window.WRM, slot = Math.floor(Date.now() / 9e5), d = new Date(), p = {};
+    try { new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(d).forEach(function (x) { p[x.type] = x.value; }); } catch (e) {}
+    var y = +p.year || d.getUTCFullYear(), m = +p.month || d.getUTCMonth() + 1, dd = +p.day || d.getUTCDate(), h = p.hour != null ? +p.hour % 24 : (d.getUTCHours() + 1) % 24;
+    var date = new Date(y, m - 1, dd, 12), tb = W.timeBlock(h), mo = date.getMonth();
+    var skies = mo === 11 || mo < 2 ? ["sun", "cloud", "rain", "sun", "fog", "wind", "cloud", "sun"] : mo < 5 ? ["sun", "sun", "cloud", "rain", "sun", "wind", "cloud", "sun"]
+      : mo < 8 ? ["sun", "sun", "sun", "cloud", "storm", "sun", "sun", "cloud"] : ["sun", "cloud", "rain", "rain", "sun", "storm", "cloud", "fog"];
+    var wx = skies[W.hash("sky|" + slot) % skies.length];
+    var lean = { late: ["tired", "calm", "heavy", "calm"], dawn: ["calm", "okay", "tired", "calm"], morning: ["bright", "okay", "calm", "bright"],
+      afternoon: ["okay", "bright", "restless", "calm"], evening: ["calm", "okay", "heavy", "bright"], night: ["calm", "tired", "okay", "heavy"] }[tb];
+    var md = lean[W.hash(slot + "|" + tb) % lean.length], f = W.festivalFor(date);
+    return W.buildCfg({ d: W.ymd(date), tb: tb, w: wx, m: md, f: f ? f.id : "", e: f && f.eve ? 1 : 0, x: slot });
+  }
+  function nbTape() {
+    var row = $("nbRw");
+    if (!window.WRM) {
+      row.hidden = true; if (nbWR) return; nbWR = 1;
+      var add = function (src, next) { var sc = document.createElement("script"); sc.src = src; sc.async = true; sc.onload = next; sc.onerror = function () { nbWR = 0; }; document.head.appendChild(sc); };
+      var go = function () { add("/window-radio/engine.js", function () { if (window.WRM && !$("nbp").hidden) nbTape(); }); };
+      if (window.WR_W) go(); else add("/window-radio/words.js", go);
+      return;
+    }
+    var t = ""; try { t = window.WRM.title(nbTapeNow()); } catch (e) {}
+    row.hidden = !t; if (t) { $("nbRk").textContent = nbT(NBW.kTape); $("nbR").textContent = "\u266a " + t; }
   }
   function nbOpen(on) {
     var p = $("nbp"), a = $("tNb"); if (!p) return;
