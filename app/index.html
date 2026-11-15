@@ -3073,7 +3073,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     l = el("div", "list");
     var sp = el("button", "row", '<span class="tx"><b class="lnk">' + esc(w("sSendPhone")) + '</b></span><span class="chev">›</span>'); sp.type = "button";   /* the share card: this phone */
     sp.onclick = function () { if (window.FBShare) FBShare.card({ url: location.origin + "/app/", text: w("sSendPhoneL"), app: "after-hours", title: w("sSendPhoneT"), mascots: ["yuzu", "miso", "mantou"] }); }; l.appendChild(sp); 
-    [["wei-meng.org", "https://www.wei-meng.org/"], [w("why"), "/"]].forEach(function (x) { var r = el("a", "row", '<span class="tx"><b class="lnk">' + esc(x[0]) + '</b></span><span class="chev">↗</span>'); r.href = x[1]; l.appendChild(r); }); c.appendChild(l);
+    [["wei-meng.org", "https://www.wei-meng.org/"], [w("why"), "/"], ["MEMEX-68", "/memex/"]].forEach(function (x) { var r = el("a", "row", '<span class="tx"><b class="lnk">' + esc(x[0]) + '</b></span><span class="chev">↗</span>'); r.href = x[1]; l.appendChild(r); }); c.appendChild(l);
     var ft = el("footer", "foot"); c.appendChild(ft); if (window.FBC && FBC.foot) try { FBC.foot(ft, { extra: "<span>" + esc(w(AH() && AHID.user() ? "aCopy" : "none")) + "</span>" }); } catch (e) {}
   };
   /* ── the after-hours account (/fbkit/ahid.js, Nov 7): optional; shown only once the account is switched on in /config.js ── */
