@@ -104,6 +104,10 @@ body.paper #dark{background:#2B231C;color:#6E6156}
   function motor(on) { /* a carriage-return thunk */ var a = A; if (!a || !snd || a.state !== "running") return; var t = a.currentTime, o = a.createOscillator(), g = a.createGain(); o.type = "triangle"; o.frequency.setValueAtTime(on ? 90 : 60, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.12); g.gain.setValueAtTime(0.18, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14); o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + 0.15); }
 
   /* ── printing: one line at a time, typed out unless motion is reduced; a tap anywhere finishes it ── */
+  /* inside the after-hours phone (five taps on its lit window turn the phone into this terminal): RUN and NEARBY leave the
+     whole phone, PHONE turns the phone back */
+  var FRAMED = false, TOP = window; try { FRAMED = window.parent !== window && parent.location.origin === location.origin; if (FRAMED) TOP = window.top; } catch (e) {}
+  if (FRAMED) document.documentElement.classList.add("inphone");
   var buf = $("buf"), Q = [], busy = false, fast = false, CPS = 30, CR = 120, gen = 0;   /* 300 baud: 30 characters a second, and the carriage return */
   function nearBottom() { return buf.scrollHeight - buf.scrollTop - buf.clientHeight < 80; }
   /* a command or a tap on a key takes the paper to its foot and keeps it there while the answer types (the owner, Nov 15);
@@ -183,7 +187,7 @@ body.paper #dark{background:#2B231C;color:#6E6156}
     line(esc(w("mount").replace("{c}", a.c)), "dim up"); line(esc(t5(a.n)), "hi");
     line(esc(w("go")), "dim up");
     put("mx68_last", a.c);
-    var wait = function () { if (busy || Q.length) return setTimeout(wait, 60); bell(); setTimeout(function () { location.href = a.h; }, reduce ? 150 : 650); };
+    var wait = function () { if (busy || Q.length) return setTimeout(wait, 60); bell(); setTimeout(function () { TOP.location.href = a.h; }, reduce ? 150 : 650); };
     wait();
   }
   function tonight() {   /* one tape for this hour, the same for anyone this hour; never a count */
@@ -246,8 +250,8 @@ body.paper #dark{background:#2B231C;color:#6E6156}
       case "INFO": case "I": case "?": arg ? info(arg) : help(); break;
       case "RUN": case "R": case "LOAD": case "OPEN": case "GO": arg ? runTape(arg) : line(esc(w("runWhat")), "warn"); break;
       case "TONIGHT": case "RANDOM": case "PICK": tonight(); break;
-      case "NEARBY": line(esc(w("toTown")), "dim up"); setTimeout(function () { location.href = "/nearby/?from=app"; }, 500); break;
-      case "PHONE": case "APP": line(esc(w("toPhone")), "dim up"); setTimeout(function () { location.href = "/app/"; }, 500); break;
+      case "NEARBY": line(esc(w("toTown")), "dim up"); setTimeout(function () { TOP.location.href = "/nearby/?from=app"; }, 500); break;
+      case "PHONE": case "APP": line(esc(w("toPhone")), "dim up"); setTimeout(function () { if (FRAMED) parent.postMessage({ mx68: "phone" }, location.origin); else location.href = "/app/"; }, 500); break;
       case "HELP": case "H": help(); break;
       case "THEME": cycleTheme(arg); break;
       case "SOUND": case "SND": toggleSnd(arg); break;

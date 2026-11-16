@@ -930,6 +930,15 @@ html.desk .sheet.ntop{left:auto;right:18px;width:400px;top:54px;transform:none}
 .banner .ni{flex:none;width:38px;height:38px;border-radius:10px;overflow:hidden;display:block}
 .banner .ni>*{width:100%;height:100%;display:block}
 html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
+/* MEMEX-68 inside the phone: five taps on the lit window and the screen powers down to a line and comes back up as the terminal */
+.mx68{position:absolute;inset:0;z-index:1000090;background:#060906;animation:mxon .9s cubic-bezier(.2,.8,.2,1) both}
+.mx68 iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#060906;opacity:0;transition:opacity .35s .55s}
+.mx68.ready iframe{opacity:1}
+.mx68.off{animation:mxoff .55s ease-in both}
+@keyframes mxon{0%{clip-path:inset(50% 50% 50% 50%);background:#fff}18%{clip-path:inset(49.6% 0 49.6% 0);background:#dfffe8}45%{clip-path:inset(49.6% 0 49.6% 0);background:#33ff66}100%{clip-path:inset(0 0 0 0);background:#060906}}
+@keyframes mxoff{0%{clip-path:inset(0 0 0 0)}55%{clip-path:inset(49.6% 0 49.6% 0);background:#33ff66}100%{clip-path:inset(50% 50% 50% 50%);background:#fff}}
+.top .mark.knock{animation:knock .18s}
+@keyframes knock{50%{transform:scale(.88)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -1535,6 +1544,28 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     else p.hidden = true;
     if (a) { a.classList.toggle("open", on); a.setAttribute("aria-expanded", on ? "true" : "false"); }
   }
+  /* the lit window, tapped five times quickly, turns the phone into MEMEX-68 (the owner, Nov 16: it isn't in Settings any more);
+     one tap still goes to the front door, a moment later; PHONE in the terminal turns it back */
+  (function mxWire() {
+    var mk = document.querySelector("#screen .top .mark"); if (!mk) return;
+    var n = 0, tm = 0;
+    mk.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault(); n++; clearTimeout(tm); sfx("down");
+      mk.classList.remove("knock"); void mk.offsetWidth; mk.classList.add("knock");
+      if (n >= 5) { n = 0; mxOpen(); return; }
+      tm = setTimeout(function () { var one = n === 1; n = 0; if (one) location.href = mk.href; }, n === 1 ? 420 : 1600);
+    });
+  })();
+  function mxOpen() {
+    if ($("mx68")) return;
+    var o = document.createElement("div"); o.className = "mx68"; o.id = "mx68"; o.setAttribute("role", "dialog"); o.setAttribute("aria-label", "MEMEX-68");
+    var f = document.createElement("iframe"); f.title = "MEMEX-68"; f.src = "/memex/";
+    f.onload = function () { o.classList.add("ready"); try { f.contentWindow.focus(); var c = f.contentDocument.getElementById("cmd"); if (c && matchMedia("(pointer: fine)").matches) c.focus({ preventScroll: true }); } catch (e) {} };
+    o.appendChild(f); $("screen").appendChild(o);
+  }
+  function mxClose() { var o = $("mx68"); if (!o || o.classList.contains("off")) return; o.classList.add("off"); setTimeout(function () { o.remove(); }, matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 560); }
+  window.addEventListener("message", function (e) { if (e.origin === location.origin && e.data && e.data.mx68 === "phone") mxClose(); });
   (function nbWire() {
     var a = $("tNb"); if (!a) return;
     a.addEventListener("click", function (e) { if (e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); nbOpen(); });
@@ -3073,7 +3104,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
     l = el("div", "list");
     var sp = el("button", "row", '<span class="tx"><b class="lnk">' + esc(w("sSendPhone")) + '</b></span><span class="chev">›</span>'); sp.type = "button";   /* the share card: this phone */
     sp.onclick = function () { if (window.FBShare) FBShare.card({ url: location.origin + "/app/", text: w("sSendPhoneL"), app: "after-hours", title: w("sSendPhoneT"), mascots: ["yuzu", "miso", "mantou"] }); }; l.appendChild(sp); 
-    [["wei-meng.org", "https://www.wei-meng.org/"], [w("why"), "/"], ["MEMEX-68", "/memex/"]].forEach(function (x) { var r = el("a", "row", '<span class="tx"><b class="lnk">' + esc(x[0]) + '</b></span><span class="chev">↗</span>'); r.href = x[1]; l.appendChild(r); }); c.appendChild(l);
+    [["wei-meng.org", "https://www.wei-meng.org/"], [w("why"), "/"]].forEach(function (x) { var r = el("a", "row", '<span class="tx"><b class="lnk">' + esc(x[0]) + '</b></span><span class="chev">↗</span>'); r.href = x[1]; l.appendChild(r); }); c.appendChild(l);
     var ft = el("footer", "foot"); c.appendChild(ft); if (window.FBC && FBC.foot) try { FBC.foot(ft, { extra: "<span>" + esc(w(AH() && AHID.user() ? "aCopy" : "none")) + "</span>" }); } catch (e) {}
   };
   /* ── the after-hours account (/fbkit/ahid.js, Nov 7): optional; shown only once the account is switched on in /config.js ── */
