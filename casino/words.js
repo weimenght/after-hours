@@ -209,3 +209,729 @@ window.AC_W = {
     ["the best thing I ever found on the street", "在街上捡到过最好的东西", "喺街度執過最好嘅嘢", "lo mejor que he encontrado en la calle", "el millor que he trobat al carrer"]
   ]
 };
+
+/* Party variety: append only; old saved indices must remain stable. */
+window.AC_W.TALK = [
+  [
+    "What food reminds you of home?",
+    "什么食物让你想起家？",
+    "咩嘢食令你諗起屋企？",
+    "¿Qué comida te recuerda a casa?",
+    "Quin menjar et recorda casa?"
+  ],
+  [
+    "What is a small thing you look forward to?",
+    "你期待哪件小事？",
+    "有咩小事你期待緊？",
+    "¿Qué pequeña cosa esperas con ilusión?",
+    "Quina coseta et fa il·lusió?"
+  ],
+  [
+    "What did you love doing as a child?",
+    "小时候你最喜欢做什么？",
+    "細個最鍾意做咩？",
+    "¿Qué te encantaba hacer de pequeño?",
+    "Què t'encantava fer de petit?"
+  ],
+  [
+    "What song takes you somewhere else?",
+    "哪首歌会把你带到另一个地方？",
+    "邊首歌會帶你去另一個地方？",
+    "¿Qué canción te transporta a otro lugar?",
+    "Quina cançó et transporta a un altre lloc?"
+  ],
+  [
+    "What is an ordinary moment you would happily live again?",
+    "哪个平凡的时刻你愿意再经历一次？",
+    "邊個平凡時刻你想再過一次？",
+    "¿Qué momento corriente vivirías otra vez con gusto?",
+    "Quin moment quotidià tornaries a viure de gust?"
+  ],
+  [
+    "If we had a free afternoon together, what would we do?",
+    "如果我们有一个空闲的下午，一起做什么？",
+    "如果我哋有個得閒嘅下晝，一齊做咩好？",
+    "Si tuviéramos una tarde libre juntos, ¿qué haríamos?",
+    "Si tinguéssim una tarda lliure junts, què faríem?"
+  ],
+  [
+    "What little tradition would you like to start with friends?",
+    "你想和朋友开始什么小传统？",
+    "你想同朋友開始咩小傳統？",
+    "¿Qué pequeña tradición te gustaría empezar con amigos?",
+    "Quina petita tradició t'agradaria començar amb amics?"
+  ],
+  [
+    "What has made you laugh lately?",
+    "最近什么事让你笑了？",
+    "最近有咩令你笑？",
+    "¿Qué te ha hecho reír últimamente?",
+    "Què t'ha fet riure últimament?"
+  ],
+  [
+    "If your week were a weather forecast, what would it be?",
+    "如果这周是天气预报，会是什么天气？",
+    "如果呢個禮拜係天氣報告，會係咩天氣？",
+    "Si tu semana fuera una previsión meteorológica, ¿cuál sería?",
+    "Si la teva setmana fos una previsió del temps, quina seria?"
+  ],
+  [
+    "Which fictional home would you visit for dinner?",
+    "你想去哪座虚构的家吃晚饭？",
+    "你想去邊間虛構嘅屋企食飯？",
+    "¿En qué casa de ficción cenarías?",
+    "A quina casa de ficció aniries a sopar?"
+  ],
+  [
+    "What useless talent are you proud of?",
+    "你有什么引以为傲的无用技能？",
+    "你有咩冇用但自豪嘅技能？",
+    "¿De qué talento inútil te sientes orgulloso?",
+    "De quin talent inútil et sents orgullós?"
+  ],
+  [
+    "What snack deserves its own fan club?",
+    "哪种零食值得拥有粉丝俱乐部？",
+    "邊款小食值得有粉絲會？",
+    "¿Qué aperitivo merece su propio club de fans?",
+    "Quin aperitiu mereix el seu propi club de fans?"
+  ],
+  [
+    "What would you name a cafe if you opened one?",
+    "如果开咖啡馆，你会取什么名字？",
+    "如果開咖啡店，你會改咩名？",
+    "¿Cómo llamarías a tu cafetería si abrieras una?",
+    "Com anomenaries la teva cafeteria si n'obrissis una?"
+  ],
+  [
+    "What small luxury costs almost nothing?",
+    "什么小享受几乎不花钱？",
+    "有咩小享受幾乎唔使錢？",
+    "¿Qué pequeño lujo cuesta casi nada?",
+    "Quin petit luxe no costa gairebé res?"
+  ],
+  [
+    "What did you think adulthood would be like?",
+    "你小时候以为成年是什么样的？",
+    "你細個以為大個係點㗎？",
+    "¿Cómo imaginabas la vida adulta?",
+    "Com t'imaginaves la vida adulta?"
+  ],
+  [
+    "What is your ideal rainy afternoon?",
+    "你理想的雨天下午是什么样？",
+    "你理想嘅落雨下晝係點？",
+    "¿Cómo sería tu tarde lluviosa ideal?",
+    "Com seria la teva tarda plujosa ideal?"
+  ],
+  [
+    "Which smell takes you straight back to childhood?",
+    "什么气味让你立刻回到童年？",
+    "咩氣味令你即刻返到細個？",
+    "¿Qué olor te devuelve a la infancia?",
+    "Quina olor et torna a la infància?"
+  ],
+  [
+    "What would you put in a museum of ordinary life?",
+    "如果办一座日常生活博物馆，你会放什么？",
+    "如果搞個日常生活博物館，你會擺咩？",
+    "¿Qué pondrías en un museo de la vida cotidiana?",
+    "Què posaries en un museu de la vida quotidiana?"
+  ],
+  [
+    "What is a harmless hill you will die on?",
+    "有什么无伤大雅的观点你绝不让步？",
+    "有咩無傷大雅嘅觀點你堅持到底？",
+    "¿Qué opinión inofensiva defenderías hasta el final?",
+    "Quina opinió inofensiva defensaries fins al final?"
+  ],
+  [
+    "What would be your signature dish?",
+    "你的招牌菜会是什么？",
+    "你嘅招牌菜會係咩？",
+    "¿Cuál sería tu plato estrella?",
+    "Quin seria el teu plat estrella?"
+  ],
+  [
+    "What was your favourite thing to do after school?",
+    "放学后你最喜欢做什么？",
+    "放學後你最鍾意做咩？",
+    "¿Qué te gustaba hacer al salir de clase?",
+    "Què t'agradava fer en sortir de classe?"
+  ],
+  [
+    "Which everyday sound do you love?",
+    "你喜欢哪种日常声音？",
+    "你鍾意邊種日常聲音？",
+    "¿Qué sonido cotidiano te encanta?",
+    "Quin so quotidià t'encanta?"
+  ],
+  [
+    "What is a good piece of advice you ignored at first?",
+    "有什么好建议你一开始没听进去？",
+    "有咩好建議你一開始冇聽入耳？",
+    "¿Qué buen consejo ignoraste al principio?",
+    "Quin bon consell vas ignorar al principi?"
+  ],
+  [
+    "What would make an ordinary Tuesday feel special?",
+    "什么会让普通的星期二变得特别？",
+    "咩會令普通嘅禮拜二變特別？",
+    "¿Qué haría especial un martes cualquiera?",
+    "Què faria especial un dimarts qualsevol?"
+  ],
+  [
+    "If we formed a band, what would we call it?",
+    "如果我们组乐队，会叫什么名字？",
+    "如果我哋組樂隊，會叫咩名？",
+    "Si formáramos un grupo de música, ¿cómo se llamaría?",
+    "Si féssim un grup de música, com es diria?"
+  ],
+  [
+    "What is something you enjoy doing slowly?",
+    "你喜欢慢慢做什么？",
+    "你鍾意慢慢做咩？",
+    "¿Qué disfrutas haciendo despacio?",
+    "Què gaudeixes fent a poc a poc?"
+  ],
+  [
+    "What silly invention would improve this room?",
+    "什么搞笑发明能让这个房间更好？",
+    "咩搞笑發明會令呢間房更好？",
+    "¿Qué invento absurdo mejoraría esta sala?",
+    "Quin invent absurd milloraria aquesta sala?"
+  ],
+  [
+    "What tiny act of kindness sticks in your memory?",
+    "哪件小小的善意让你记忆犹新？",
+    "邊件小小嘅好意你仲記得？",
+    "¿Qué pequeño gesto amable recuerdas?",
+    "Quin petit gest amable recordes?"
+  ],
+  [
+    "What would you bring to a picnic on the moon?",
+    "去月球野餐你会带什么？",
+    "去月球野餐你會帶咩？",
+    "¿Qué llevarías a un pícnic en la Luna?",
+    "Què portaries a un pícnic a la Lluna?"
+  ],
+  [
+    "Which tradition from somewhere else would you like to try?",
+    "你想尝试哪里的传统？",
+    "你想試吓邊度嘅傳統？",
+    "¿Qué tradición de otro lugar te gustaría probar?",
+    "Quina tradició d'un altre lloc t'agradaria provar?"
+  ],
+  [
+    "What is a very specific thing that makes you happy?",
+    "有什么很具体的小事让你开心？",
+    "有咩好具體嘅小事令你開心？",
+    "¿Qué cosa muy concreta te hace feliz?",
+    "Quina cosa molt concreta et fa feliç?"
+  ],
+  [
+    "What would you teach an alien about human parties?",
+    "你会怎么教外星人了解人类聚会？",
+    "你會點教外星人識人類聚會？",
+    "¿Qué enseñarías a un extraterrestre sobre las fiestas humanas?",
+    "Què ensenyaries a un extraterrestre sobre les festes humanes?"
+  ]
+];
+window.AC_W.WHAT = window.AC_W.WHAT.concat([
+  [
+    "a picnic with homemade snacks",
+    "带自制点心去野餐",
+    "帶自家製小食去野餐",
+    "un pícnic con comida casera",
+    "un pícnic amb menjar casolà"
+  ],
+  [
+    "a blind snack tasting",
+    "来一场零食盲品",
+    "嚟場零食盲試",
+    "una cata de aperitivos a ciegas",
+    "un tast de snacks a cegues"
+  ],
+  [
+    "a board game evening",
+    "一起玩桌游",
+    "一齊玩桌遊",
+    "una tarde de juegos de mesa",
+    "una tarda de jocs de taula"
+  ],
+  [
+    "explore a new street",
+    "探索一条没走过的街",
+    "行一條未行過嘅街",
+    "explorar una calle nueva",
+    "explorar un carrer nou"
+  ],
+  [
+    "a homemade pizza night",
+    "在家做披萨",
+    "喺屋企整薄餅",
+    "una noche de pizza casera",
+    "una nit de pizza casolana"
+  ],
+  [
+    "a second-hand bookshop visit",
+    "逛二手书店",
+    "行二手書店",
+    "visitar una librería de segunda mano",
+    "visitar una llibreria de segona mà"
+  ],
+  [
+    "make a shared playlist",
+    "一起做歌单",
+    "一齊整歌單",
+    "hacer una lista de música juntos",
+    "fer una llista de música junts"
+  ],
+  [
+    "watch the sunset together",
+    "一起看日落",
+    "一齊睇日落",
+    "ver juntos la puesta de sol",
+    "veure junts la posta de sol"
+  ],
+  [
+    "a dessert swap",
+    "交换甜点",
+    "交換甜品",
+    "intercambiar postres",
+    "intercanviar postres"
+  ],
+  [
+    "a museum wander",
+    "慢慢逛博物馆",
+    "慢慢行博物館",
+    "pasear por un museo",
+    "voltar per un museu"
+  ],
+  [
+    "a childhood film night",
+    "重温童年电影",
+    "重睇細個嘅戲",
+    "una noche de pelis de infancia",
+    "una nit de pel·lis de la infància"
+  ],
+  [
+    "teach each other a small skill",
+    "互相教一个小技能",
+    "互相教一樣小技能",
+    "enseñarnos una pequeña habilidad",
+    "ensenyar-nos una petita habilitat"
+  ],
+  [
+    "a silly drawing night",
+    "一起画搞笑的画",
+    "一齊畫搞笑畫",
+    "una noche de dibujos absurdos",
+    "una nit de dibuixos absurds"
+  ],
+  [
+    "a breakfast potluck",
+    "每人带一样早餐",
+    "每人帶一樣早餐",
+    "un desayuno compartido",
+    "un esmorzar compartit"
+  ],
+  [
+    "a park bench catch-up",
+    "在公园长椅上聊天",
+    "喺公園長櫈傾偈",
+    "charlar en un banco del parque",
+    "xerrar en un banc del parc"
+  ],
+  [
+    "a neighbourhood bakery hunt",
+    "一起寻找附近的面包店",
+    "一齊搵附近嘅麵包舖",
+    "buscar panaderías del barrio",
+    "buscar forns del barri"
+  ]
+]);
+window.AC_W.WHEN = window.AC_W.WHEN.concat([
+  [
+    "one evening next week",
+    "下周某个晚上",
+    "下個禮拜一晚",
+    "una noche de la semana que viene",
+    "un vespre de la setmana que ve"
+  ],
+  [
+    "the next free weekend",
+    "下一个有空的周末",
+    "下一個得閒嘅週末",
+    "el próximo fin de semana libre",
+    "el proper cap de setmana lliure"
+  ],
+  [
+    "on a sunny afternoon",
+    "某个晴朗的下午",
+    "一個好天嘅下晝",
+    "una tarde soleada",
+    "una tarda assolellada"
+  ],
+  [
+    "before the next home party",
+    "下次聚会之前",
+    "下次屋企聚會之前",
+    "antes de la próxima reunión en casa",
+    "abans de la propera trobada a casa"
+  ],
+  [
+    "a day everyone agrees on",
+    "大家都方便的一天",
+    "大家都得閒嗰日",
+    "un día que nos vaya bien a todos",
+    "un dia que ens vagi bé a tots"
+  ],
+  [
+    "next Friday evening",
+    "下周五晚上",
+    "下個禮拜五夜晚",
+    "el viernes que viene por la noche",
+    "divendres que ve al vespre"
+  ],
+  [
+    "within ten days",
+    "接下来十天内",
+    "嚟緊十日之內",
+    "en los próximos diez días",
+    "durant els propers deu dies"
+  ],
+  [
+    "over a long lunch",
+    "找个悠闲的午餐时间",
+    "搵日慢慢食晏",
+    "durante una comida sin prisas",
+    "durant un dinar sense presses"
+  ]
+]);
+window.AC_W.ACTS = window.AC_W.ACTS.concat([
+  [
+    "invent a ridiculous name for tonight's party",
+    "给今晚聚会起个荒唐的名字",
+    "幫今晚聚會改個騎呢名",
+    "inventa un nombre ridículo para la fiesta de hoy",
+    "inventa un nom ridícul per a la festa d'avui"
+  ],
+  [
+    "describe a film badly and let everyone guess",
+    "故意把电影讲得很糟，让大家猜",
+    "亂咁講套戲嘅劇情，等大家估",
+    "describe fatal una película para que la adivinen",
+    "descriu fatal una pel·lícula perquè l'endevinin"
+  ],
+  [
+    "make a three-second sound effect for the room",
+    "给房间配个三秒音效",
+    "幫間房配個三秒音效",
+    "haz un efecto sonoro de tres segundos para la sala",
+    "fes un efecte sonor de tres segons per a la sala"
+  ],
+  [
+    "invent a slogan for an ordinary object",
+    "给一件普通物品想句广告词",
+    "幫一件普通嘢諗句廣告詞",
+    "inventa un eslogan para un objeto corriente",
+    "inventa un eslògan per a un objecte corrent"
+  ],
+  [
+    "start a story with five words; invite someone to continue",
+    "用五个词开头讲故事，邀请别人接着讲",
+    "用五個詞開個故仔頭，請人接住講",
+    "empieza una historia con cinco palabras e invita a alguien a seguir",
+    "comença una història amb cinc paraules i convida algú a seguir"
+  ],
+  [
+    "greet the table like a sleepy cat",
+    "模仿困猫跟大家打招呼",
+    "扮隻眼瞓貓同大家打招呼",
+    "saluda como un gato somnoliento",
+    "saluda com un gat endormiscat"
+  ],
+  [
+    "recommend a song in three words",
+    "用三个词推荐一首歌",
+    "用三個詞推薦一首歌",
+    "recomienda una canción en tres palabras",
+    "recomana una cançó en tres paraules"
+  ],
+  [
+    "invent an ice cream flavour",
+    "发明一种冰淇淋口味",
+    "發明一款雪糕味",
+    "inventa un sabor de helado",
+    "inventa un gust de gelat"
+  ],
+  [
+    "give a dramatic weather report about the kitchen",
+    "给厨房来段夸张的天气预报",
+    "幫廚房報段誇張天氣",
+    "da una previsión del tiempo dramática sobre la cocina",
+    "fes una previsió del temps dramàtica sobre la cuina"
+  ],
+  [
+    "offer two silly superpowers for someone to choose",
+    "让愿意玩的人选一种搞笑超能力",
+    "俾肯玩嘅人揀兩種搞笑超能力之一",
+    "ofrece dos superpoderes absurdos para elegir",
+    "ofereix dos superpoders absurds per triar"
+  ],
+  [
+    "name three things for the perfect breakfast",
+    "说出完美早餐的三样东西",
+    "講三樣完美早餐嘅嘢",
+    "di tres cosas del desayuno perfecto",
+    "digues tres coses de l'esmorzar perfecte"
+  ],
+  [
+    "give an imaginary award to a household object",
+    "给家居用品颁个虚构奖项",
+    "頒個虛構獎俾一件屋企嘢",
+    "da un premio imaginario a un objeto de casa",
+    "dona un premi imaginari a un objecte de casa"
+  ],
+  [
+    "teach everyone a tiny trick",
+    "教大家一个小窍门",
+    "教大家一個小貼士",
+    "enseña un truco sencillo",
+    "ensenya un truc senzill"
+  ],
+  [
+    "mime an animal and let the table guess",
+    "用动作模仿动物，让大家猜",
+    "扮一種動物，等大家估",
+    "imita un animal con gestos para que lo adivinen",
+    "imita un animal amb gestos perquè l'endevinin"
+  ],
+  [
+    "invent a dish for tonight's imaginary menu",
+    "给今晚的虚构菜单加道菜",
+    "幫今晚嘅虛構餐牌加道菜",
+    "inventa un plato para el menú imaginario de hoy",
+    "inventa un plat per al menú imaginari d'avui"
+  ],
+  [
+    "say something nice about the room or host",
+    "说一句喜欢房间或感谢主人的话",
+    "講句讚間房或者多謝主人家嘅說話",
+    "di algo bonito de la sala o quien nos recibe",
+    "digues alguna cosa bonica de la sala o de qui ens acull"
+  ],
+  [
+    "describe your day as a film title",
+    "用电影片名形容你的一天",
+    "用戲名形容你今日",
+    "describe tu día como título de película",
+    "descriu el teu dia com a títol de pel·lícula"
+  ],
+  [
+    "make up two lines of poetry about the snacks",
+    "为零食编两句诗",
+    "為小食作兩句詩",
+    "inventa dos versos sobre los aperitivos",
+    "inventa dos versos sobre els aperitius"
+  ],
+  [
+    "name a surprisingly good food combination",
+    "说一种出奇好吃的食物搭配",
+    "講一款出奇好食嘅配搭",
+    "di una combinación de comida sorprendentemente buena",
+    "digues una combinació de menjar sorprenentment bona"
+  ],
+  [
+    "pitch an ordinary object as a luxury product",
+    "把普通物品当奢侈品推销",
+    "將普通嘢當奢侈品推銷",
+    "vende un objeto corriente como si fuera de lujo",
+    "ven un objecte corrent com si fos de luxe"
+  ],
+  [
+    "invent a completely fake fun fact",
+    "编一条完全虚构的冷知识",
+    "作一條完全虛構嘅冷知識",
+    "inventa un dato curioso totalmente falso",
+    "inventa una curiositat completament falsa"
+  ],
+  [
+    "ask the table to invent a rhyme for a word",
+    "选个词请大家押韵",
+    "揀個詞請大家押韻",
+    "pide a la mesa que invente una rima para una palabra",
+    "demana a la taula que inventi una rima per a una paraula"
+  ],
+  [
+    "invent a tiny dance using only your hands",
+    "只用双手发明一段小舞蹈",
+    "淨係用雙手發明一段小舞",
+    "inventa un baile usando solo las manos",
+    "inventa un ball fent servir només les mans"
+  ],
+  [
+    "choose the theme tune for Popo's casino",
+    "为婆婆的赌场选一首主题曲",
+    "幫婆婆間賭場揀首主題曲",
+    "elige la sintonía del casino de Popo",
+    "tria la sintonia del casino de la Popo"
+  ]
+]);
+window.AC_W.THEMES = window.AC_W.THEMES.concat([
+  [
+    "a misunderstanding that became funny",
+    "后来变得好笑的一次误会",
+    "後來變得好笑嘅一次誤會",
+    "un malentendido que acabó siendo divertido",
+    "un malentès que va acabar fent gràcia"
+  ],
+  [
+    "a strange thing I believed as a teenager",
+    "少年时相信的一件怪事",
+    "後生嗰陣信過嘅一件怪事",
+    "algo raro que creía de adolescente",
+    "una cosa estranya que creia d'adolescent"
+  ],
+  [
+    "an unexpected act of kindness",
+    "一次意外的善意",
+    "一次意外嘅好意",
+    "un gesto inesperado de amabilidad",
+    "un gest inesperat d'amabilitat"
+  ],
+  [
+    "a recipe that went completely wrong",
+    "一次彻底失败的下厨经历",
+    "一次完全失敗嘅煮嘢食經歷",
+    "una receta que salió fatal",
+    "una recepta que va sortir fatal"
+  ],
+  [
+    "a surprisingly good day trip",
+    "一次意外精彩的短途旅行",
+    "一次出奇好玩嘅短途旅行",
+    "una excursión sorprendentemente buena",
+    "una excursió sorprenentment bona"
+  ],
+  [
+    "a funny encounter with an animal",
+    "一次和动物的有趣相遇",
+    "一次同動物嘅搞笑相遇",
+    "un encuentro divertido con un animal",
+    "una trobada divertida amb un animal"
+  ],
+  [
+    "a hobby I tried and abandoned",
+    "尝试过又放弃的爱好",
+    "試過又放棄嘅興趣",
+    "una afición que probé y dejé",
+    "una afició que vaig provar i deixar"
+  ],
+  [
+    "a small victory nobody noticed",
+    "没人注意到的小胜利",
+    "冇人留意到嘅小勝利",
+    "una pequeña victoria que nadie notó",
+    "una petita victòria que ningú va notar"
+  ],
+  [
+    "a bizarre thing on public transport",
+    "公交或地铁上的一件怪事",
+    "搭車嗰陣遇到嘅一件怪事",
+    "algo raro en el transporte público",
+    "una cosa estranya al transport públic"
+  ],
+  [
+    "a party that went off script",
+    "一次不按计划发展的聚会",
+    "一次唔跟計劃嘅聚會",
+    "una fiesta que se salió del guion",
+    "una festa que es va sortir del guió"
+  ],
+  [
+    "a time I laughed at the wrong moment",
+    "一次在不合适的时候笑了",
+    "一次喺唔啱嘅時候笑咗",
+    "una vez que me reí en el momento equivocado",
+    "una vegada que vaig riure en el moment equivocat"
+  ],
+  [
+    "an unusual family tradition",
+    "一个不寻常的家庭传统",
+    "一個唔尋常嘅家庭傳統",
+    "una tradición familiar poco habitual",
+    "una tradició familiar poc habitual"
+  ],
+  [
+    "a memorable first impression",
+    "一次难忘的第一印象",
+    "一次難忘嘅第一印象",
+    "una primera impresión memorable",
+    "una primera impressió memorable"
+  ],
+  [
+    "a mysterious noise at home",
+    "家里一次神秘的响声",
+    "屋企一次神秘嘅聲",
+    "un ruido misterioso en casa",
+    "un soroll misteriós a casa"
+  ],
+  [
+    "the oddest thing I packed for a trip",
+    "旅行时带过最奇怪的东西",
+    "去旅行帶過最古怪嘅嘢",
+    "lo más raro que metí en una maleta",
+    "la cosa més estranya que vaig posar a la maleta"
+  ],
+  [
+    "a time a stranger made me smile",
+    "一次陌生人让我笑了",
+    "一次陌生人令我笑咗",
+    "una vez que un desconocido me hizo sonreír",
+    "una vegada que un desconegut em va fer somriure"
+  ],
+  [
+    "a childhood invention",
+    "小时候的一项发明",
+    "細個嘅一樣發明",
+    "un invento de mi infancia",
+    "un invent de la meva infància"
+  ],
+  [
+    "a very ordinary day that became memorable",
+    "平凡却难忘的一天",
+    "平凡但難忘嘅一日",
+    "un día corriente que se volvió memorable",
+    "un dia corrent que es va fer memorable"
+  ],
+  [
+    "a song that arrived at exactly the right time",
+    "在恰好的时刻听到的一首歌",
+    "啱啱好嗰刻聽到嘅一首歌",
+    "una canción que llegó en el momento justo",
+    "una cançó que va arribar en el moment just"
+  ],
+  [
+    "a time I changed my mind about a food",
+    "一次改变对某种食物的看法",
+    "一次改變對某款食物嘅睇法",
+    "una vez que cambié de opinión sobre una comida",
+    "una vegada que vaig canviar d'opinió sobre un menjar"
+  ],
+  [
+    "an object I nearly threw away",
+    "一件差点扔掉的物品",
+    "一樣差啲掉咗嘅嘢",
+    "un objeto que casi tiré",
+    "un objecte que gairebé vaig llençar"
+  ],
+  [
+    "a place that looked nothing like I imagined",
+    "一个和想象完全不同的地方",
+    "一個同想像完全唔同嘅地方",
+    "un lugar que no se parecía nada a lo que imaginaba",
+    "un lloc que no s'assemblava gens al que imaginava"
+  ]
+]);
