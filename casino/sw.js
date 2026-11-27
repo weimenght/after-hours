@@ -1,10 +1,10 @@
 /* After Hours Casino: works offline once opened. Keeps only what this app needs to draw itself (its own folder, the kit, the fonts),
    always asks the network first and falls back to the copy it kept. Never touches anything off the site; sends nothing. */
-var V = "ac-2";
+var V = "ac-3";
 var OWN = /^\/(casino|fbkit|fonts)\//;
 self.addEventListener("install", function (e) {
   self.skipWaiting();
-  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"].map(function (u) { return new Request(u, { cache: "reload" }); })); }).catch(function () {}));
+  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js?v=2", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"].map(function (u) { return new Request(u, { cache: "reload" }); })); }).catch(function () {}));
 });
 self.addEventListener("activate", function (e) {
   e.waitUntil(caches.keys().then(function (ks) {
