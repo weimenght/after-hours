@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=81e07c19cd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>After Hours Casino</title>
-<meta name="description" content="A tiny casino for one table and one night, played with sunflower seeds, never money: a slot machine that deals real plans, a little wheel of small dares, and true stories or tall tales. One phone in the middle; Popo runs it, and her staff cheat in your favour.">
+<meta name="description" content="A tiny casino for one table and one night, played with sunflower seeds, never money: a slot machine that deals real plans, a little wheel of small dares, true stories or tall tales, and questions to share around the table. One phone in the middle; Popo runs it, and her staff cheat in your favour.">
 <meta name="theme-color" content="#e9dcc0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14101e" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="./manifest.webmanifest">
@@ -239,7 +239,7 @@ input::placeholder { color: #a08a70; }
       <form class="addrow" id="addForm"><input type="text" id="nameIn" maxlength="14" autocomplete="off"><button class="btn small" type="submit" data-t="add"></button></form>
       <p class="hint" id="need" data-t="needMore"></p>
     </div>
-    <button class="btn pri lg wide" id="toFloor" type="button" data-t="onFloor"></button>
+    <button class="btn pri lg wide" id="toFloor" type="button" data-t="onFloor"></button><button class="btn quiet" id="doorNew" type="button" data-t="newNight"></button>
   </section>
 
   <!-- the floor -->
@@ -250,12 +250,13 @@ input::placeholder { color: #a08a70; }
       <button class="tbl" type="button" data-table="slot"><canvas width="56" height="32" data-mini="slot"></canvas><span><span class="num">#1</span><span class="nm" style="display:block" data-t="slotName"></span><span class="ds" style="display:block" data-t="slotSub"></span></span></button>
       <button class="tbl" type="button" data-table="wheel"><canvas width="56" height="32" data-mini="wheel"></canvas><span><span class="num">#2</span><span class="nm" style="display:block" data-t="wheelName"></span><span class="ds" style="display:block" data-t="wheelSub"></span></span></button>
       <button class="tbl" type="button" data-table="truth"><canvas width="56" height="32" data-mini="truth"></canvas><span><span class="num">#3</span><span class="nm" style="display:block" data-t="truthName"></span><span class="ds" style="display:block" data-t="truthSub"></span></span></button>
-    </div>
-    <div class="say" id="sayFloor"></div>
+      <button class="tbl" id="talkTable" type="button"><canvas width="56" height="32" data-mini="talk" aria-hidden="true"></canvas><span><span class="num">#4</span><span class="nm" style="display:block" data-t="talkName"></span><span class="ds" style="display:block" data-t="talkSub"></span></span></button>
+    </div><div class="say" id="sayFloor"></div><div class="row"><button class="btn small" id="editGuests" type="button" data-t="editGuests"></button><button class="btn small" id="partyBreak" type="button" data-t="partyBreak"></button></div>
     <button class="btn wide" id="lastCall" type="button" data-t="lastCall"></button>
   </section>
 
-  <!-- #1 slot of plans -->
+  <section class="screen" data-s="talk" hidden><button class="btn quiet" type="button" data-floor data-t="toFloor"></button><h2 data-t="talkName"></h2><div class="card"><p class="act" id="talkPrompt"></p><p class="hint" data-t="talkHint"></p></div><button class="btn pri lg wide" id="nextTalk" type="button" data-t="nextTalk"></button><button class="btn wide" id="talkBreak" type="button" data-t="partyBreak"></button></section>
+<!-- #1 slot of plans -->
   <section class="screen" data-s="slot" hidden>
     <button class="btn quiet back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="saySlot"></div>
@@ -280,7 +281,7 @@ input::placeholder { color: #a08a70; }
       <div class="k" data-t="lWhen"></div><div class="v" id="jWhen"></div>
       <div class="k" data-t="lWhere"></div><input type="text" id="jWhere" maxlength="40">
     </div>
-    <button class="btn pri lg wide" id="seal" type="button" data-t="seal"></button>
+    <button class="btn pri lg wide" id="seal" type="button" data-t="seal"></button><p class="sub" data-t="agreePlan"></p>
     <button class="btn quiet" id="notThis" type="button" data-t="notThis"></button>
   </section>
 
@@ -288,7 +289,7 @@ input::placeholder { color: #a08a70; }
     <div class="say" id="saySealed"></div>
     <h1 data-t="dealt"></h1>
     <div class="card"><h2 data-t="tonightPlans"></h2><ul class="plans" id="plansA"></ul></div>
-    <button class="btn pri lg wide" id="sealedNext" type="button"></button>
+    <button class="btn pri lg wide" id="sealedNext" type="button"></button><button class="btn quiet" type="button" data-floor data-t="toFloor"></button>
   </section>
 
   <!-- #2 little wheel -->
@@ -305,7 +306,7 @@ input::placeholder { color: #a08a70; }
     <p class="kick" data-t="ballLands"></p>
     <div class="big" id="wWho"></div>
     <div class="card"><div class="hint" data-t="yourMove"></div><p class="act" id="wAct"></p></div>
-    <button class="btn pri lg wide" id="didIt" type="button" data-t="didIt"></button>
+    <button class="btn pri lg wide" id="didIt" type="button" data-t="didIt"></button><button class="btn wide" id="passWheel" type="button" data-t="passTurn"></button><button class="btn quiet" type="button" data-floor data-t="toFloor"></button>
   </section>
 
   <!-- #3 say it true -->
@@ -314,7 +315,7 @@ input::placeholder { color: #a08a70; }
     <div class="say" id="sayPass"></div>
     <p class="kick center" data-t="passTo"></p>
     <div class="big center" id="tTeller"></div>
-    <button class="btn pri lg wide" id="imTeller" type="button"></button>
+    <button class="btn pri lg wide" id="imTeller" type="button"></button><button class="btn wide" id="passTeller" type="button" data-t="passTurn"></button>
     <div class="dots" id="truthDots"></div>
   </section>
 
@@ -322,7 +323,7 @@ input::placeholder { color: #a08a70; }
     <div class="theme"><div class="k" data-t="themeK"></div><div class="v" id="tTheme"></div></div>
     <div class="peek" id="peek" role="button" tabindex="0"><div class="f bk"><span data-t="holdPeek"></span></div><div class="f fr" id="tSecret"></div></div>
     <div class="say" id="sayPeek"></div>
-    <button class="btn pri lg wide" id="told" type="button" data-t="told"></button>
+    <button class="btn pri lg wide" id="told" type="button" data-t="told"></button><button class="btn wide" id="newTheme" type="button" data-t="anotherTheme"></button><button class="btn quiet" id="passPeek" type="button" data-t="passTurn"></button>
   </section>
 
   <section class="screen" data-s="tcall" hidden>
@@ -336,7 +337,7 @@ input::placeholder { color: #a08a70; }
     <p class="kick center" id="tWas"></p>
     <div class="verdict" id="tVerdict"></div>
     <div class="say" id="sayReveal"></div>
-    <button class="btn pri lg wide" id="nextTeller" type="button"></button>
+    <button class="btn pri lg wide" id="nextTeller" type="button"></button><button class="btn quiet" id="finishStory" type="button" data-t="toFloor"></button>
   </section>
 
   <!-- last call -->
@@ -371,6 +372,8 @@ input::placeholder { color: #a08a70; }
 "use strict";
 /* ---------- words (words.js, five languages) ---------- */
 var W = window.AC_W;
+Object.assign(W, {"talkName":["Around the table","围桌聊聊","圍枱傾偈","Alrededor de la mesa","Al voltant de la taula"],"talkSub":["No guessing. A question for whoever wants to answer.","不用猜。想答就答。","唔使估。想答就答。","Sin adivinar. Una pregunta para quien quiera responder.","Sense endevinar. Una pregunta per a qui vulgui respondre."],"talkHint":["Read it aloud, then put the phone down. Anyone may answer or pass.","读出来，然后放下手机。想答就答，不答也行。","讀出嚟，然後放低電話。想答就答，唔答都得。","Leedla en voz alta y dejad el móvil. Cualquiera puede responder o pasar.","Llegiu-la en veu alta i deixeu el mòbil. Tothom pot respondre o passar."],"nextTalk":["Another question","换个问题","換條問題","Otra pregunta","Una altra pregunta"],"editGuests":["Who's here?","谁在这里？","邊個喺度？","¿Quién está aquí?","Qui hi ha?"],"partyBreak":["Put the phone down","放下手机","放低電話","Dejad el móvil","Deixeu el mòbil"],"breakLine":["Take your time. The table will be here.","慢慢来。桌子还在。","慢慢嚟。張枱仲喺度。","Sin prisa. La mesa seguirá aquí.","Sense pressa. La taula serà aquí."],"passTurn":["Pass, no explanation","跳过，不用解释","跳過，唔使解釋","Paso, sin explicaciones","Passo, sense explicacions"],"anotherTheme":["Another subject","换个话题","換個話題","Otro tema","Un altre tema"],"agreePlan":["Only seal this if everyone named wants to go.","只有计划里的人都愿意，才成交。","計劃入面嘅人個個都想去先成交。","Cerrad el trato solo si todos los nombrados quieren ir.","Tanqueu el tracte només si tots els esmentats hi volen anar."],"resetAsk":["Start a new night? This clears the guests and plans on this phone.","开新的一晚？这会清除手机上的名单和计划。","開新一晚？會清除電話入面嘅名單同計劃。","¿Empezar otra noche? Se borrarán los nombres y planes de este móvil.","Començar una altra nit? S'esborraran els noms i plans d'aquest mòbil."],"needMore":["Two to twelve people. Nicknames are fine.","两到十二人。昵称也可以。","兩至十二人。花名都得。","De dos a doce personas. Valen los apodos.","De dues a dotze persones. Els sobrenoms van bé."],"sayFloor":["Four tables, any order. Clever people play the slot last.","四张桌子，随便玩。聪明人最后才玩老虎机。","四張枱，隨便玩。醒目仔最後先玩老虎機。","Cuatro mesas, como quieras. Gente lista juega la tragaplanes al final.","Quatre taules, en l'ordre que vulgueu. La gent llesta juga la màquina al final."],"TALK":[["What food reminds you of home?","什么食物让你想起家？","咩嘢食令你諗起屋企？","¿Qué comida te recuerda a casa?","Quin menjar et recorda casa?"],["What is a small thing you look forward to?","你期待哪件小事？","有咩小事你期待緊？","¿Qué pequeña cosa esperas con ilusión?","Quina coseta et fa il·lusió?"],["What did you love doing as a child?","小时候你最喜欢做什么？","細個最鍾意做咩？","¿Qué te encantaba hacer de pequeño?","Què t'encantava fer de petit?"],["What song takes you somewhere else?","哪首歌会把你带到另一个地方？","邊首歌會帶你去另一個地方？","¿Qué canción te transporta a otro lugar?","Quina cançó et transporta a un altre lloc?"],["What is an ordinary moment you would happily live again?","哪个平凡的时刻你愿意再经历一次？","邊個平凡時刻你想再過一次？","¿Qué momento corriente vivirías otra vez con gusto?","Quin moment quotidià tornaries a viure de gust?"],["If we had a free afternoon together, what would we do?","如果我们有一个空闲的下午，一起做什么？","如果我哋有個得閒嘅下晝，一齊做咩好？","Si tuviéramos una tarde libre juntos, ¿qué haríamos?","Si tinguéssim una tarda lliure junts, què faríem?"],["What little tradition would you like to start with friends?","你想和朋友开始什么小传统？","你想同朋友開始咩小傳統？","¿Qué pequeña tradición te gustaría empezar con amigos?","Quina petita tradició t'agradaria començar amb amics?"],["What has made you laugh lately?","最近什么事让你笑了？","最近有咩令你笑？","¿Qué te ha hecho reír últimamente?","Què t'ha fet riure últimament?"]]});
+W.steps[1] = ["Four tables: make a plan, try a small dare, tell a story or just talk.","四张桌子：约一件事、试个小挑战、讲故事或者聊聊。","四張枱：約一件事、試個小挑戰、講故或者傾偈。","Cuatro mesas: un plan, un reto, una historia o simplemente hablar.","Quatre taules: un pla, un repte, una història o simplement parlar."]; W.rules.push(["Any turn is optional. A story may stay at this table.","任何一轮都可以跳过。故事可以只留在这里。","任何一輪都可以跳過。故事可以淨係留喺呢張枱。","Cualquier turno es opcional. Una historia puede quedarse en esta mesa.","Qualsevol torn és opcional. Una història es pot quedar en aquesta taula."]);
 var LANGS = ["en", "zh", "zh-Hant", "es", "ca"];
 function li() { var l = window.FBL ? FBL.get() : (document.documentElement.lang || "en"); var i = LANGS.indexOf(l); return i < 0 ? 0 : i; }
 function T(a) { return a == null ? "" : typeof a === "string" ? a : (a[li()] || a[0]); }
@@ -383,10 +386,19 @@ function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&
 function rich(s) { return esc(s).replace(/\*([^*]+)\*/g, "<i>$1</i>"); }
 
 /* ---------- storage (this device only) ---------- */
-var KEY = "ac_v1", SLOT_MAX = 3, WHEEL_MAX = 8;
-function fresh(names) { return { names: names || [], plans: [], spins: 0, told: 0, visits: 0, screen: "home" }; }
+var KEY = "ac_v1", SLOT_MAX = 3, WHEEL_MAX = 8, GUEST_MAX = 12;
+function fresh(names) { return { names: names || [], plans: [], spins: 0, told: 0, toldNames: [], wheelNames: [], talkSeen: [], visits: 0, screen: "home" }; }
 var S = fresh();
 try { var raw = JSON.parse(localStorage.getItem(KEY) || "null"); if (raw && Array.isArray(raw.names) && Array.isArray(raw.plans)) S = raw; } catch (e) {}
+/* Migrate old positional plans before editing the guest list. */
+function pairs(names) { var out = []; for(var i=0;i<names.length;i++) for(var j=i+1;j<names.length;j++) out.push([names[i],names[j]]); return out; }
+S.plans.forEach(function(p){if(!Array.isArray(p.people)) p.people = (p.whoAll ? S.names : (pairs(S.names)[p.who] || [])).slice();});
+if(!Array.isArray(S.toldNames)) S.toldNames = S.names.slice(0,S.told || 0);
+if(!Array.isArray(S.wheelNames)) S.wheelNames = [];
+if(!Array.isArray(S.talkSeen)) S.talkSeen = [];
+function remainingTellers(){return S.names.filter(function(n){return S.toldNames.indexOf(n)<0;});}
+function wheelMax(){var unseen=S.names.filter(function(n){return S.wheelNames.indexOf(n)<0;}).length;return Math.max(WHEEL_MAX,S.names.length,S.spins+unseen);}
+function wheelGuest(){var min=Infinity, choices=[]; S.names.forEach(function(n,i){var count=S.wheelNames.filter(function(w){return w===n;}).length; if(count<min){min=count; choices=[i];}else if(count===min)choices.push(i);});return pick(choices);}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 function home() { return /(^|\.)after-hours\.work$/.test(location.hostname) ? "https://www.after-hours.work/casino/" : location.href.split("#")[0]; }
 
@@ -542,6 +554,7 @@ function mini(c, kind) {
   ctx.fillStyle = "#2e6a4a"; ctx.fillRect(0, 0, 56, 32); ctx.fillStyle = "#3a7d58"; for (var y = 0; y < 32; y += 4) for (var x = (y / 4) % 2 * 2; x < 56; x += 4) ctx.fillRect(x, y, 1, 1);
   if (kind === "slot") { FACE.wei(ctx, -2, 0, 1); slotMachine(ctx, 30, 4, true); drawPet(ctx, "dog", 44, 32, 1, { asleep: dogAsleep(), flip: true }); }
   if (kind === "wheel") { FACE.popo(ctx, -2, 0, 1); wallWheel(ctx, 40, 13, 10); drawPet(ctx, "miso", 44, 32, 1, { asleep: catsAsleep(), flip: true }); }
+  if (kind === "talk") { var f = R(ctx,0,0,1); [[8,19,40,9,"#000"],[9,18,38,8,"#8a5a32"],[10,19,36,2,"#bd884e"],[12,25,3,6,"#422618"],[41,25,3,6,"#422618"],[17,11,9,8,"#000"],[18,12,7,6,"#f3ead8"],[25,13,3,4,"#f3ead8"],[32,11,9,8,"#000"],[33,12,7,6,"#f3ead8"],[30,13,3,4,"#f3ead8"],[19,12,5,2,"#a4693b"],[34,12,5,2,"#a4693b"],[22,5,1,4,"#d8c6a0"],[36,4,1,5,"#d8c6a0"]].forEach(f); }
   if (kind === "truth") { FACE.mei(ctx, -2, 0, 1); ctx.fillStyle = "#000"; ctx.fillRect(31, 6, 11, 15); ctx.fillRect(38, 4, 11, 15); ctx.fillStyle = "#c8303a"; ctx.fillRect(32, 7, 9, 13); ctx.fillStyle = "#fbf6e9"; ctx.fillRect(39, 5, 9, 13); ctx.fillStyle = "#c8303a"; ctx.fillRect(42, 9, 3, 1); ctx.fillRect(44, 10, 1, 2); ctx.fillRect(43, 12, 1, 1); ctx.fillRect(43, 14, 1, 1); drawPet(ctx, "yuzu", 44, 32, 1, { asleep: catsAsleep(), flip: true }); }
 }
 
@@ -579,8 +592,9 @@ var HD = window.FBC && FBC.head ? FBC.head($("head"), { px: 1, btn: "btn small",
   sound: { get: function () { return SND; }, set: function (v) { SND = v; try { localStorage.setItem("ac_snd", SND ? "1" : "0"); } catch (e) {} if (SND) sfx("tap"); } } }) : null;
 var cur = "home", homeLine = null;
 var KEEP = { home: 1, door: 1, floor: 1, closing: 1 };   /* where a reload comes back to */
-var TABLE = { slot: 1, jackpot: 1, sealed: 1, wheel: 1, wheelres: 1, tpass: 1, tpeek: 1, tcall: 1, treveal: 1 };
+var TABLE = { slot: 1, jackpot: 1, sealed: 1, wheel: 1, wheelres: 1, tpass: 1, tpeek: 1, tcall: 1, treveal: 1, talk: 1 };
 function show(s) {
+  if ((slot && slot.spinning) || wheelSpinning) return;
   var from = cur; cur = s; if (KEEP[s]) { S.screen = s; save(); }
   document.querySelectorAll("[data-s]").forEach(function (el) { el.hidden = el.getAttribute("data-s") !== s; });
   window.scrollTo(0, 0); render(TABLE[from] && s === "floor");
@@ -590,9 +604,9 @@ function render(back) {
   document.title = t("title");
   document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
   $("nameIn").placeholder = t("ph"); $("jWhere").placeholder = t("wherePh"); $("lever").setAttribute("aria-label", t("pull"));
-  if (HD) HD.paint();
+  if (HD) HD.paint(); $("doorNew").hidden = !S.names.length && !S.plans.length;
   $("foot").hidden = !!TABLE[cur]; foot();
-  ({ home: rHome, door: rDoor, floor: function () { rFloor(back); }, slot: rSlot, jackpot: rJack, sealed: rSealed, wheel: rWheel, wheelres: rWres, tpass: rPass, tpeek: rPeek, tcall: rCall, treveal: rReveal, closing: rClose })[cur]();
+  ({ home: rHome, door: rDoor, floor: function () { rFloor(back); }, slot: rSlot, jackpot: rJack, sealed: rSealed, wheel: rWheel, wheelres: rWres, tpass: rPass, tpeek: rPeek, tcall: rCall, treveal: rReveal, talk: rTalk, closing: rClose })[cur]();
 }
 
 /* front door */
@@ -609,24 +623,25 @@ function rDoor() {
   var box = $("names"); box.textContent = "";
   S.names.forEach(function (n, i) {
     var c = document.createElement("span"), b = document.createElement("button"); c.className = "chip"; c.textContent = n;
-    b.type = "button"; b.textContent = "×"; b.setAttribute("aria-label", t("remove", { n: n })); b.onclick = function () { S.names.splice(i, 1); S.told = 0; save(); rDoor(); };
+    b.type = "button"; b.textContent = "×"; b.setAttribute("aria-label", t("remove", { n: n })); b.onclick = function () { S.names.splice(i, 1); save(); rDoor(); };
     c.appendChild(b); box.appendChild(c);
   });
-  $("addForm").hidden = S.names.length >= 6; $("toFloor").disabled = S.names.length < 2;
+  $("doorNew").hidden = !S.names.length && !S.plans.length;
+  $("addForm").hidden = S.names.length >= GUEST_MAX; $("toFloor").disabled = S.names.length < 2;
 }
 $("addForm").onsubmit = function (e) {
   e.preventDefault(); var v = $("nameIn").value.trim().slice(0, 14);
-  if (v && S.names.length < 6 && S.names.indexOf(v) < 0) { S.names.push(v); save(); sfx("tap"); }
-  $("nameIn").value = ""; rDoor(); if (S.names.length < 6) $("nameIn").focus();
+  if (v && S.names.length < GUEST_MAX && S.names.indexOf(v) < 0) { S.names.push(v); save(); sfx("tap"); }
+  $("nameIn").value = ""; rDoor(); if (S.names.length < GUEST_MAX) $("nameIn").focus();
 };
-$("toFloor").onclick = function () { if (S.names.length >= 2) { S.told = Math.min(S.told, S.names.length); save(); show("floor"); } };
+$("toFloor").onclick = function () { if (S.names.length >= 2) { save(); show("floor"); } };
 
 /* the floor */
 function rFloor(back) {
   scene($("scFloor")); tapScene($("scFloor"), "", $("sayFloor"));
   $("tonight").textContent = t("tonight", { n: S.names.join(li() === 0 || li() > 2 ? ", " : "、") });
-  var off = { slot: S.plans.length >= SLOT_MAX, wheel: S.spins >= WHEEL_MAX, truth: S.told >= S.names.length };
-  document.querySelectorAll("[data-table]").forEach(function (b) { var k = b.getAttribute("data-table"); b.classList.toggle("off", off[k]); b.querySelector(".num").setAttribute("data-off", t("closed")); });
+  var off = { slot: S.plans.length >= SLOT_MAX, wheel: S.spins >= wheelMax(), truth: remainingTellers().length === 0 };
+  document.querySelectorAll("[data-table]").forEach(function (b) { var k = b.getAttribute("data-table"); b.classList.toggle("off", off[k]); b.disabled = !!off[k]; b.querySelector(".num").setAttribute("data-off", t("closed")); });
   document.querySelectorAll("[data-mini]").forEach(function (c) { mini(c, c.getAttribute("data-mini")); });
   if (back) { S.visits = (S.visits || 0) + 1; save(); }
   if (back && S.visits % 3 === 0) { say($("sayFloor"), "popo", t("houseCut"), true); sfx("mis"); }
@@ -634,10 +649,18 @@ function rFloor(back) {
 }
 document.querySelectorAll("[data-table]").forEach(function (b) { b.onclick = function () {
   sfx("tap"); var k = b.getAttribute("data-table");
-  if (k === "slot") { resetSlot(); show("slot"); } else if (k === "wheel") show("wheel"); else if (S.told < S.names.length) show("tpass");
+  if (k === "slot") { resetSlot(); show("slot"); } else if (k === "wheel") show("wheel"); else if (remainingTellers().length) show("tpass");
 }; });
 document.querySelectorAll("[data-floor]").forEach(function (b) { b.onclick = function () { if (!slot.spinning && !wheelSpinning) show("floor"); }; });
 $("lastCall").onclick = function () { sfx("tap"); show("closing"); };
+$("editGuests").onclick = function(){show("door");};
+function pauseParty(){sceneDark($("scDark")); $("darkLine").textContent=t("breakLine"); $("dark").hidden=false; $("dark").focus();}
+$("partyBreak").onclick = $("talkBreak").onclick = pauseParty;
+var talkIndex=null;
+function nextTalk(){var a=W.TALK.map(function(_,i){return i;}).filter(function(i){return S.talkSeen.indexOf(i)<0;});if(!a.length){S.talkSeen=[];a=W.TALK.map(function(_,i){return i;}).filter(function(i){return i!==talkIndex;});}talkIndex=pick(a);S.talkSeen.push(talkIndex);save();}
+function rTalk(){if(talkIndex===null)nextTalk();$("talkPrompt").textContent=T(W.TALK[talkIndex]);}
+$("talkTable").onclick=function(){nextTalk();show("talk");};
+$("nextTalk").onclick=function(){nextTalk();rTalk();};
 
 /* ---------- #1 slot of plans ---------- */
 var slot = { cur: [null, null, null], held: [false, false, false], spun: false, spinning: false, lever: false, msg: null };
@@ -688,8 +711,8 @@ document.querySelectorAll(".reel").forEach(function (el) { el.onclick = function
 $("deal").onclick = function () { if (!slot.spun) return; $("jWhere").value = ""; sfx("jackpot"); seedfall(30); show("jackpot"); };
 function rJack() { say($("sayJack"), "wei", t("sayJackpot")); $("jWho").textContent = label(0, slot.cur[0]); $("jWhat").textContent = label(1, slot.cur[1]); $("jWhen").textContent = label(2, slot.cur[2]); }
 $("notThis").onclick = function () { show("slot"); };
-$("seal").onclick = function () { S.plans.push({ at: Date.now(), who: slot.cur[0], whoAll: slot.cur[0] === whoList().length - 1, what: slot.cur[1], when: slot.cur[2], where: $("jWhere").value.trim().slice(0, 40) }); save(); sfx("tap"); show("sealed"); };
-function planWho(p) { return p.whoAll ? t("all") : label(0, p.who); }
+$("seal").onclick = function () { S.plans.push({ at: Date.now(), who: slot.cur[0], whoAll: slot.cur[0] === whoList().length - 1, people: (slot.cur[0] === whoList().length - 1 ? S.names : pairs(S.names)[slot.cur[0]]).slice(), what: slot.cur[1], when: slot.cur[2], where: $("jWhere").value.trim().slice(0, 40) }); save(); sfx("tap"); show("sealed"); };
+function planWho(p) { return (p.people || []).join(t("and")); }
 function planLine(p) { return planWho(p) + " · " + T(W.WHAT[p.what]) + " · " + T(W.WHEN[p.when]) + (p.where ? " · " + p.where : ""); }
 function plansHTML() { return S.plans.map(function (p) { return "<li><b>" + esc(planWho(p)) + "</b> · " + esc(T(W.WHAT[p.what])) + " · " + esc(T(W.WHEN[p.when])) + (p.where ? " · " + esc(p.where) : "") + "</li>"; }).join(""); }
 function rSealed() { say($("saySealed"), "wei", t("sayDealt")); $("plansA").innerHTML = plansHTML(); $("sealedNext").textContent = S.plans.length >= SLOT_MAX ? t("backFloor") : t("morePlan"); }
@@ -715,17 +738,17 @@ function drawWheel() {
 var wheelRot = 0, wheelSpinning = false, wRes = { who: 0, act: 0, swat: false };
 function rWheel() {
   drawWheel(); $("wheel").style.transition = "none"; $("wheel").style.transform = "rotate(" + wheelRot + "deg)";
-  dots($("wheelDots"), WHEEL_MAX, S.spins);
-  var done = S.spins >= WHEEL_MAX; $("spin").textContent = done ? t("wheelRest") : t("spin"); $("spin").disabled = done;
+  dots($("wheelDots"), wheelMax(), S.spins);
+  var done = S.spins >= wheelMax(); $("spin").textContent = done ? t("wheelRest") : t("spin"); $("spin").disabled = done;
   say($("sayWheel"), "popo", t("sayWheel"));
 }
 $("spin").onclick = function () {
-  if (wheelSpinning || S.spins >= WHEEL_MAX) return;
+  if (wheelSpinning || S.spins >= wheelMax()) return;
   wheelSpinning = true; $("spin").disabled = true; sfx("spin");
   var w = $("wheel"); w.classList.remove("nudge"); w.style.transition = "";
   var k = rnd(8), target = (360 - (k * 45 + 22.5)) % 360, now = ((wheelRot % 360) + 360) % 360;
   wheelRot += 360 * 5 + ((target - now + 360) % 360); w.style.transform = "rotate(" + wheelRot + "deg)";
-  wRes = { act: k, who: rnd(S.names.length), swat: petAwake("miso") && Math.random() < .3 };
+  wRes = { act: k, who: wheelGuest(), swat: petAwake("miso") && Math.random() < .3 };
   setTimeout(function () {
     if (wRes.swat) {   /* Miso bats it one pocket over */
       say($("sayWheel"), "miso", t("mSwat"), true); sfx("mis");
@@ -739,12 +762,13 @@ function rWres() {
   $("wWho").textContent = S.names[wRes.who] || ""; $("wAct").textContent = T(W.ACTS[wRes.act]);
   if (wRes.swat) say($("sayWres"), "miso", t("mSwat"), true); else say($("sayWres"), "popo", t("sayPay"));
 }
-$("didIt").onclick = function () { S.spins++; save(); sfx("tap"); show(S.spins >= WHEEL_MAX ? "floor" : "wheel"); };
+function finishWheel(){S.wheelNames.push(S.names[wRes.who]); S.spins++; save(); sfx("tap"); show(S.spins >= wheelMax() ? "floor" : "wheel");}
+$("didIt").onclick = $("passWheel").onclick = finishWheel;
 
 /* ---------- #3 say it true ---------- */
 var truth = { theme: 0, real: true, hint: null };
-function teller() { return S.names[S.told] || ""; }
-function rPass() { say($("sayPass"), "mei", t("sayPass")); $("tTeller").textContent = teller(); $("imTeller").textContent = t("imTeller", { n: teller() }); dots($("truthDots"), S.names.length, S.told); }
+function teller() { return remainingTellers()[0] || ""; }
+function rPass() { say($("sayPass"), "mei", t("sayPass")); $("tTeller").textContent = teller(); $("imTeller").textContent = t("imTeller", { n: teller() }); dots($("truthDots"), S.names.length, S.names.length - remainingTellers().length); }
 $("imTeller").onclick = function () {
   truth.theme = rnd(W.THEMES.length); truth.real = Math.random() < .5;
   truth.hint = petAwake("yuzu") && Math.random() < .5 ? ((Math.random() < .5) === truth.real ? "left" : "right") : null;   /* Yuzu sits on a side; honest half the time */
@@ -761,15 +785,18 @@ function rPeek() {
   p.addEventListener("contextmenu", function (e) { e.preventDefault(); });
   p.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") on(e); }); p.addEventListener("keyup", off); p.addEventListener("blur", off);
 })();
+$("newTheme").onclick = function(){truth.theme=(truth.theme+1+rnd(W.THEMES.length-1))%W.THEMES.length;rPeek();};
+$("passTeller").onclick = $("passPeek").onclick = function(){finishTeller(false);};
 $("told").onclick = function () { sfx("tap"); show("tcall"); };
 function rCall() { if (truth.hint) say($("sayCall"), "yuzu", t("mYuzu", { s: t(truth.hint) }), true); else say($("sayCall"), "mei", t("sayCall")); }
 $("flip").onclick = function () { sfx("flip"); seedfall(14); show("treveal"); };
 function rReveal() {
   $("tWas").textContent = t("was", { n: teller() }); var v = $("tVerdict"); v.textContent = truth.real ? t("vTrue") : t("vMade"); v.style.color = truth.real ? "#5cb36c" : "#e04a52";
   say($("sayReveal"), "mei", truth.real ? t("payTrue") : t("payMade"));
-  $("nextTeller").textContent = S.told + 1 >= S.names.length ? t("truthDone") : t("nextT");
+  $("nextTeller").textContent = remainingTellers().length <= 1 ? t("truthDone") : t("nextT");
 }
-$("nextTeller").onclick = function () { S.told++; save(); sfx("tap"); show(S.told >= S.names.length ? "floor" : "tpass"); };
+function finishTeller(toFloor){var n=teller();if(n)S.toldNames.push(n);S.told=S.toldNames.length;save();sfx("tap");show(toFloor||!remainingTellers().length?"floor":"tpass");}
+$("nextTeller").onclick=function(){finishTeller(false);};$("finishStory").onclick=function(){finishTeller(true);};
 
 /* ---------- last call ---------- */
 function rClose() {
@@ -797,7 +824,7 @@ $("send").onclick = function () {
 $("putDown").onclick = function () { sceneDark($("scDark")); $("darkLine").textContent = t("lights"); $("dark").hidden = false; };
 function wakeUp() { $("dark").hidden = true; }
 $("dark").onclick = wakeUp; $("dark").onkeydown = function (e) { if (e.key === "Enter" || e.key === " " || e.key === "Escape") wakeUp(); };
-$("newNight").onclick = function () { S = fresh(S.names); save(); resetSlot(); $("sendNote").textContent = ""; homeLine = null; show("door"); };
+$("doorNew").onclick = $("newNight").onclick = function () { if(!window.confirm(t("resetAsk")))return; S = fresh(); talkIndex=null; save(); resetSlot(); $("sendNote").textContent = ""; homeLine = null; show("door"); };
 
 /* seeds rain on a win */
 function seedfall(n) {
