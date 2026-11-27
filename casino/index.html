@@ -117,7 +117,7 @@ input::placeholder { color: #a08a70; }
 :lang(zh) .tbl .nm, :lang(zh-Hant) .tbl .nm { font-family: var(--vt); font-size: 24px; line-height: 1.1; }
 
 /* #1 the machine */
-.machine { position: relative; background: var(--red); border: 3px solid #000; box-shadow: inset -4px -4px 0 rgba(0,0,0,.3), inset 4px 4px 0 rgba(255,180,170,.3), var(--drop); padding: 10px 58px 12px 12px; }
+.machine { position: relative; background: var(--red); border: 3px solid #000; box-shadow: inset -4px -4px 0 rgba(0,0,0,.3), inset 4px 4px 0 rgba(255,180,170,.3), var(--drop); padding: 10px 68px 12px 12px; }
 .bulbs { display: flex; justify-content: space-between; margin: 0 0 8px; }
 .bulbs i { width: 8px; height: 8px; background: var(--amber); border: 2px solid #000; animation: bulb 1.6s steps(1) infinite; }
 .bulbs i:nth-child(even) { animation-delay: .8s; }
@@ -134,12 +134,52 @@ input::placeholder { color: #a08a70; }
 .strip { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
 .cell { height: 66px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px 8px 0; box-sizing: border-box; font-size: clamp(17px, 4.5vw, 21px); line-height: 1.1; overflow-wrap:anywhere; color: var(--ink); }
 .cell.q { font-family: var(--px); font-size: 18px; color: #c9b89a; }
-.lever { all: unset; position: absolute; right: 8px; top: 34px; width: 38px; height: 190px; cursor: pointer; }
-.lever .rod { position: absolute; left: 15px; width: 8px; top: 18px; height: 110px; background: #cfc8bc; border: 3px solid #000; transform-origin: 50% 100%; transition: transform .15s steps(3); }
-.lever .knob { position: absolute; left: 3px; top: -8px; width: 26px; height: 26px; background: var(--amber); border: 3px solid #000; box-shadow: inset -3px -3px 0 rgba(0,0,0,.25); }
-.lever .base { position: absolute; left: 6px; top: 126px; width: 20px; height: 34px; background: #8a8478; border: 3px solid #000; }
-.lever.down .rod { transform: scaleY(-.6); }
-.lever:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+/* Mechanical pull handle: a fixed brass mount and a moving, rigid steel arm. */
+html.ahp-town #app .machine .lever {
+  all:unset; position:absolute; right:8px; top:44px; bottom:12px; width:52px;
+  box-sizing:border-box; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+  border:0; border-radius:12px; background:transparent; isolation:isolate;
+}
+html.ahp-town #app .lever .track {
+  position:absolute; left:8px; right:8px; top:18px; bottom:21px; border:2px solid #531b20;
+  border-radius:16px; background:linear-gradient(90deg,#70232a,#98262f 50%,#642026);
+  box-shadow:inset 2px 2px 0 #501b21,inset -2px -2px 0 #db5558;
+}
+html.ahp-town #app .lever .base {
+  position:absolute; left:7px; right:7px; bottom:11px; height:40px; border:2px solid #3e271c;
+  border-radius:10px; background:linear-gradient(135deg,#f1d8a3 0 18%,#c6a16b 18% 65%,#9a7449 65%);
+  box-shadow:0 3px 0 #68242a,inset 0 2px 0 #ffe8ba; z-index:2;
+}
+html.ahp-town #app .lever .base::before,html.ahp-town #app .lever .base::after {
+  content:""; position:absolute; top:5px; width:5px; height:5px; border-radius:50%; background:#644831; box-shadow:inset 0 1px 0 #e5c58a;
+}
+html.ahp-town #app .lever .base::before {left:4px;} html.ahp-town #app .lever .base::after {right:4px;}
+html.ahp-town #app .lever .rod {
+  position:absolute; left:50%; bottom:36px; height:calc(100% - 64px); width:12px;
+  box-sizing:border-box; border:2px solid #40382f; border-radius:5px;
+  background:linear-gradient(90deg,#82786b 0 23%,#fff1d6 23% 55%,#c2b6a4 55% 78%,#766c61 78%);
+  box-shadow:2px 1px 0 #70232a; transform:translateX(-50%); transform-origin:50% 100%;
+  transition:transform .16s cubic-bezier(.2,.75,.3,1.25); z-index:3;
+}
+html.ahp-town #app .lever .knob {
+  position:absolute; left:50%; top:-13px; width:34px; height:34px; box-sizing:border-box;
+  transform:translateX(-50%); border:2px solid #491b1d; border-radius:50%;
+  background:radial-gradient(circle at 32% 25%,#ffdfb4 0 8%,#ef8b65 9% 20%,#c84036 21% 53%,#98272a 54% 76%,#6e2225 77%);
+  box-shadow:0 3px 0 #6c2225,inset 0 -3px 0 #8c262b;
+}
+html.ahp-town #app .lever .pivot {
+  position:absolute; left:50%; bottom:25px; width:17px; height:17px; box-sizing:border-box;
+  transform:translateX(-50%); border:2px solid #443026; border-radius:50%;
+  background:linear-gradient(135deg,#f7e5bd 0 35%,#a98857 36% 70%,#765b3e 71%); z-index:4;
+}
+html.ahp-town #app .lever.down .rod { transform:translateX(-50%) scaleY(.58); transition-timing-function:cubic-bezier(.3,.1,.65,1); }
+html.ahp-town #app .lever .knob { transition:transform .16s cubic-bezier(.2,.75,.3,1.25); }
+html.ahp-town #app .lever.down .knob { transform:translateX(-50%) scaleY(1.72414); box-shadow:0 1px 0 #6c2225,inset 0 -3px 0 #8c262b; }
+html.ahp-town #app .lever:not(:disabled):hover .knob { filter:brightness(1.12); }
+html.ahp-town #app .lever:focus-visible { outline:3px solid #fff4d7; outline-offset:1px; }
+html.ahp-town #app .lever:disabled { cursor:default; }
+@media (max-width:360px) { html.ahp-town #app .machine {padding-right:60px;} html.ahp-town #app .machine .lever {right:5px;width:48px;} }
+@media (prefers-reduced-motion:reduce) {html.ahp-town #app .lever .rod,html.ahp-town #app .lever .knob {transition:none;} }
 .stamp { position: absolute; right: 10px; top: -14px; transform: rotate(8deg); background: var(--amber); border: 3px solid #000; padding: 8px 8px 6px; font-family: var(--px); font-size: 11px; box-shadow: 2px 2px 0 #000; }
 :lang(zh) .stamp, :lang(zh-Hant) .stamp { font-family: var(--vt); font-size: 22px; }
 .plan .k { font-family: var(--px); font-size: 8px; color: var(--ink-soft); text-transform: uppercase; }
@@ -299,7 +339,7 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
       <div class="reel" data-r="0"><span class="lab" data-t="lWho"></span><span class="hold" data-t="held"></span><div class="strip"></div></div>
       <div class="reel" data-r="1"><span class="lab" data-t="lWhat"></span><span class="hold" data-t="held"></span><div class="strip"></div></div>
       <div class="reel" data-r="2"><span class="lab" data-t="lWhen"></span><span class="hold" data-t="held"></span><div class="strip"></div></div>
-      <button class="lever" id="lever" type="button" aria-label="Pull"><span class="base"></span><span class="rod"><span class="knob"></span></span></button>
+      <button class="lever" id="lever" type="button" aria-label="Pull"><span class="track" aria-hidden="true"></span><span class="base" aria-hidden="true"></span><span class="rod" aria-hidden="true"><span class="knob"></span></span><span class="pivot" aria-hidden="true"></span></button>
     </div>
     <div class="row"><button class="btn lg" id="pull" type="button" data-t="pull"></button><button class="btn pri lg" id="deal" type="button" data-t="deal"></button></div>
     <div class="dots" id="slotDots"></div>
@@ -540,7 +580,7 @@ function slotMachine(ctx, x, y, lit) {
   ctx.fillStyle = lit ? "#f6b73c" : "#7a5418"; ctx.fillRect(x + 3, y + 3, 16, 3);
   for (var i = 0; i < 3; i++) { ctx.fillStyle = "#000"; ctx.fillRect(x + 2 + i * 6, y + 9, 6, 9); ctx.fillStyle = "#fbf6e9"; ctx.fillRect(x + 3 + i * 6, y + 10, 4, 7); ctx.fillStyle = ["#c8303a", "#2a7a3a", "#2a5aa8"][i]; ctx.fillRect(x + 4 + i * 6, y + 12, 2, 3); }
   ctx.fillStyle = "#000"; ctx.fillRect(x + 4, y + 22, 14, 6); ctx.fillStyle = "#3a2214"; ctx.fillRect(x + 5, y + 23, 12, 4);
-  ctx.fillStyle = "#000"; ctx.fillRect(x + 23, y + 8, 3, 18); ctx.fillStyle = "#cfc8bc"; ctx.fillRect(x + 24, y + 9, 1, 16); ctx.fillStyle = "#000"; ctx.fillRect(x + 22, y + 3, 5, 5); ctx.fillStyle = "#f6b73c"; ctx.fillRect(x + 23, y + 4, 3, 3);
+  ctx.fillStyle = "#531b20"; ctx.fillRect(x + 22, y + 8, 5, 19); ctx.fillStyle = "#c6a16b"; ctx.fillRect(x + 22, y + 22, 5, 5); ctx.fillStyle = "#40382f"; ctx.fillRect(x + 23, y + 8, 3, 16); ctx.fillStyle = "#fff1d6"; ctx.fillRect(x + 24, y + 9, 1, 14); ctx.fillStyle = "#491b1d"; ctx.fillRect(x + 23, y + 3, 3, 5); ctx.fillRect(x + 22, y + 4, 5, 3); ctx.fillStyle = "#c84036"; ctx.fillRect(x + 23, y + 4, 3, 3); ctx.fillStyle = "#ffdfb4"; ctx.fillRect(x + 23, y + 4, 1, 1);
 }
 function wallWheel(ctx, cx, cy, r) {
   for (var y = -r - 1; y <= r + 1; y++) for (var x = -r - 1; x <= r + 1; x++) {
@@ -716,14 +756,14 @@ function rSlot() {
   if (full) say($("saySlot"), "wei", t("sFull"));
   else if (slot.msg) say($("saySlot"), slot.msg[0], slot.msg[1], true);
   else say($("saySlot"), "wei", slot.spun ? t("s1") : t("s0"));
-  $("deal").disabled = !slot.spun || slot.spinning || full; $("pull").disabled = full || slot.spinning;
+  $("deal").disabled = !slot.spun || slot.spinning || full; $("pull").disabled = full || slot.spinning; $("lever").disabled = full || slot.spinning;
   dots($("slotDots"), SLOT_MAX, S.plans.length);
 }
 function pull() {
   if (slot.spinning || S.plans.length >= SLOT_MAX || (slot.held[0] && slot.held[1] && slot.held[2])) return;
   if (!slot.lever && slot.spun && petAwake("mantou") && Math.random() < .12) { slot.lever = true; slot.msg = ["mantou", t("mLever")]; sfx("mis"); rSlot(); return; }   /* Mantou lies on the lever */
-  slot.lever = false; slot.msg = null; slot.spinning = true; $("deal").disabled = true; $("pull").disabled = true; sfx("pull");
-  $("lever").classList.add("down"); setTimeout(function () { $("lever").classList.remove("down"); }, 300);
+  slot.lever = false; slot.msg = null; slot.spinning = true; $("deal").disabled = true; $("pull").disabled = true; $("lever").disabled = true; sfx("pull");
+  $("lever").classList.add("down"); setTimeout(function () { $("lever").classList.remove("down"); }, 360);
   var pending = 0, spun = [];
   document.querySelectorAll(".reel").forEach(function (el) {
     var r = +el.dataset.r; if (slot.held[r]) return; pending++; spun.push(r);
