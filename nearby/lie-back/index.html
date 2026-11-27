@@ -390,23 +390,32 @@
 
     function createCloudEntity(layer, startX) {
       // Layer 0: Distant small horizon clouds, Layer 1: Mid-sky cumulus, Layer 2: Foreground billowy clouds
-      const layerScale = layer === 0 ? 0.55 : layer === 1 ? 0.88 : 1.25;
+      const viewportScale = Math.max(0.62, Math.min(1, cw / 850));
+      const layerScale = (layer === 0 ? 0.55 : layer === 1 ? 0.88 : 1.25) * viewportScale;
       const yMin = layer === 0 ? ch * 0.42 : layer === 1 ? ch * 0.22 : ch * 0.10;
       const yMax = layer === 0 ? ch * 0.68 : layer === 1 ? ch * 0.56 : ch * 0.46;
 
       const cx = startX !== undefined ? startX : Math.random() * (cw + 500) - 250;
       const cy = yMin + Math.random() * (yMax - yMin);
-      const puffCount = layer === 0 ? 8 : layer === 1 ? 12 : 15;
+      const puffCount = layer === 0 ? 6 : layer === 1 ? 9 : 11;
       const puffs = [];
 
-      // Build an organic, flat-bottomed, billowy-topped cumulus cluster
-      const widthSpan = (110 + Math.random() * 90) * layerScale;
+      // Uneven cumulus banks: overlapping horizontal bases and off-centre towers.
+      const widthSpan = (150 + Math.random() * 155) * layerScale;
+      const height = (30 + Math.random() * 40) * layerScale;
+      const peak = (Math.random() - 0.5) * 0.85;
+      const baseCount = Math.ceil(puffCount * 0.55);
       for (let i = 0; i < puffCount; i++) {
-        const t = (i / (puffCount - 1)) * 2 - 1; // -1 to 1 across cloud width
-        const archY = -(1 - t * t) * (38 + Math.random() * 28) * layerScale;
-        const ox = t * (widthSpan * 0.5) + (Math.random() - 0.5) * 26 * layerScale;
-        const oy = (i % 3 === 0 ? 6 : archY) + (Math.random() - 0.5) * 14 * layerScale;
-        const r = (28 + (1 - Math.abs(t) * 0.45) * 34 + Math.random() * 14) * layerScale;
+        const base = i < baseCount;
+        const n = base ? baseCount : puffCount - baseCount;
+        const j = base ? i : i - baseCount;
+        const t = (j / Math.max(1, n - 1)) * 2 - 1;
+        const mound = Math.exp(-Math.pow((t - peak) * 1.45, 2));
+        const ox = t * widthSpan * (base ? 0.50 : 0.40) + (Math.random() - 0.5) * 24 * layerScale;
+        const r = (base ? 35 + Math.random() * 15 : 23 + mound * 28 + Math.random() * 12) * layerScale;
+        const oy = base ? -r * 0.36 + (Math.random() - 0.5) * 7 * layerScale :
+          -height * (0.40 + mound * 0.75) + (Math.random() - 0.5) * 15 * layerScale;
+        const stretch = base ? 1.55 + Math.random() * 0.45 : 1.08 + Math.random() * 0.30;
 
         puffs.push({
           homeOx: ox,
@@ -416,8 +425,9 @@
           vx: 0,
           vy: 0,
           r,
+          stretch,
           phase: Math.random() * Math.PI * 2,
-          breatheSpeed: 0.008 + Math.random() * 0.012
+          breatheSpeed: 0.005 + Math.random() * 0.008
         });
       }
 
@@ -519,10 +529,10 @@
 
       // 3. Volumetric Cumulus Clouds across 3 Parallax Depth Layers
       state.clouds = [];
-      const counts = [6, 6, 4];
+      const counts = cw < 600 ? [3, 3, 2] : [5, 4, 3];
       counts.forEach((cnt, layer) => {
         for (let i = 0; i < cnt; i++) {
-          const sx = (i / cnt) * (cw + 480) - 240 + (Math.random() - 0.5) * 90;
+          const sx = ((i + 0.5) / cnt) * (cw + 180) - 90 + (Math.random() - 0.5) * Math.min(100, cw * 0.15);
           state.clouds.push(createCloudEntity(layer, sx));
         }
       });
@@ -636,6 +646,31 @@
       ctx.fill();
     }
 
+    // Paint the whole bank's shadow, then its body, then its light.
+    // This avoids a dark ring from each puff being painted over its neighbour.
+    function drawAmbientCloudPuff(puff, sunVecX, sunVecY, alpha, pass) {
+      const { x, y, r, stretch } = puff;
+      if (x + r * stretch * 1.5 < -10 || x - r * stretch * 1.5 > cw + 10 ||
+          y + r * 1.5 < -10 || y - r * 1.5 > ch + 10) return;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(stretch, 1);
+      const shadow = pass === 0, light = pass === 2;
+      const gx = shadow ? -sunVecX * r * 0.14 : light ? sunVecX * r * 0.16 : 0;
+      const gy = shadow ? r * 0.23 : light ? Math.min(-0.10, sunVecY * 0.22) * r : 0;
+      const radius = r * (shadow ? 1.07 : light ? 0.91 : 1.04);
+      const color = shadow ? activeColors.cloudShadow : light ? activeColors.cloudHighlight : activeColors.cloudMid;
+      const opacity = alpha * (shadow ? 0.26 : light ? 0.52 : 0.76);
+      const grad = ctx.createRadialGradient(gx, gy, radius * 0.12, gx, gy, radius);
+      grad.addColorStop(0, rgbStr(color, opacity));
+      grad.addColorStop(0.56, rgbStr(color, opacity * 0.82));
+      grad.addColorStop(0.80, rgbStr(color, opacity * 0.29));
+      grad.addColorStop(1, rgbStr(color, 0));
+      ctx.fillStyle = grad;
+      ctx.fillRect(gx - radius, gy - radius, radius * 2, radius * 2);
+      ctx.restore();
+    }
+
     function updateAndDrawClouds(dt, sunVecX, sunVecY) {
       const windPush = state.breezeSpeed + Math.sin(performance.now() * 0.0005) * 0.18;
 
@@ -647,10 +682,11 @@
         }
 
         // Update each puff with organic billowing + tactile cursor breeze repulsion
+        const bank = [];
         cloud.puffs.forEach(puff => {
           puff.phase += puff.breatheSpeed * dt;
-          const billowX = Math.cos(puff.phase) * 3.5;
-          const billowY = Math.sin(puff.phase * 1.2) * 2.8;
+          const billowX = Math.cos(puff.phase) * 2.1 * cloud.scale;
+          const billowY = Math.sin(puff.phase * 1.2) * 1.6 * cloud.scale;
 
           const worldX = cloud.x + puff.ox + billowX;
           const worldY = cloud.y + puff.oy + billowY;
@@ -688,9 +724,15 @@
           puff.ox += puff.vx * dt;
           puff.oy += puff.vy * dt;
 
-          const layerAlpha = cloud.layer === 0 ? 0.62 : cloud.layer === 1 ? 0.84 : 0.96;
-          drawSingleVolumetricPuff(worldX, worldY, puff.r, sunVecX, sunVecY, layerAlpha * STARGAZE.veil * STARGAZE.veil);   /* a clear night thins the clouds (puffs overlap, so squared) */
+          bank.push({ x: worldX, y: worldY, r: puff.r, stretch: puff.stretch });
         });
+        const layerAlpha = cloud.layer === 0 ? 0.46 : cloud.layer === 1 ? 0.68 : 0.84;
+        const alpha = layerAlpha * STARGAZE.veil * STARGAZE.veil;
+        if (alpha > 0.005) {
+          for (let pass = 0; pass < 3; pass++) {
+            bank.forEach(puff => drawAmbientCloudPuff(puff, sunVecX, sunVecY, alpha, pass));
+          }
+        }
       });
 
       // Draw Pareidolia Daydream Cloud Formation if active
@@ -818,7 +860,7 @@
           }
         }
 
-        drawSingleVolumetricPuff(worldX, worldY, puff.r, sunVecX, sunVecY, alpha * 0.96);
+        drawSingleVolumetricPuff(worldX, worldY, puff.r, sunVecX, sunVecY, alpha * 0.96 * STARGAZE.veil * STARGAZE.veil);
       });
     }
 
