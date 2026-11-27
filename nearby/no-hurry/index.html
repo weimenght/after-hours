@@ -239,8 +239,8 @@ canvas#cv{touch-action:none}
         ["Josep on the roof. He build this cabin with his hands. I make the soup.", "Josep 在屋顶。这间屋是他亲手盖的。汤是我煮的。", "Josep 喺屋頂。間屋係佢親手起嘅，啲湯係我煲嘅。", "Josep en el tejado. Esta cabaña hizo con sus manos. La sopa, yo.", "En Josep dalt de la teulada. Va fer aquesta cabana amb les seves mans. La sopa, jo.", "roof"],
     ["1992. Olympics. Whole restaurant watch the arrow light the fire, on the little TV. Everybody cry.", "1992。奥运。整间面店挤在小电视前面，看那支箭点着圣火。个个都哭。", "1992。奧運。成間麵家擠喺部細電視前面，睇住支箭點着聖火。個個都喊。", "1992. Olimpiadas. Todo el restaurante mira la flecha encender el fuego, en tele pequeña. Todos lloran.", "1992. Els Jocs. Tot el restaurant mirant com la fletxa encenia el peveter, a la tele petita. Tothom plorava.", "olympics"],
         ["1997. Queens. My small girl send this with her first card: \"Arrived. Cold.\" Look the coat, so thin! Aiya.", "1997。皇后区。小女儿第一张明信片里夹着这张：“到了。很冷。”你看那件大衣，那么薄，哎呀。", "1997。皇后區。細女第一張明信片入面夾住呢張：「到咗。好凍。」你睇件褸，咁薄，哎吔。", "1997. Queens. Mi hija pequeña manda esta con su primera postal: \"Llegada. Frío.\" ¡Mira abrigo, tan fino! Aiya.", "1997. Queens. La petita la va enviar amb la primera postal: «Arribada. Fa fred.» Mira quin abric tan prim, aiya.", "queens"],
-        ["Mantou, first winter. Still waiting for the 7:40.", "馒头，第一个冬天。还在等七点四十。", "饅頭，第一個冬天。仲等緊七點四十。", "Mantou, primer invierno. Todavía espera las 7:40.", "En Mantou, el primer hivern. Encara esperava el de les 7:40.", "mantou"],
-        ["Wei, ten years old, two kittens in a box. I said no lor.", "阿Wei，十岁，纸箱里两只小猫。我说不要。", "阿 Wei，十歲，紙箱入面兩隻貓仔。我話唔要。", "Wei, diez años, dos gatitos en caja. Yo dije no.", "En Wei, deu anys, dues gatetes en una caixa. Jo vaig dir que no.", "kittens"],
+        ["2018. Mantou, first winter. Still waiting for the 7:40.", "2018年，馒头，第一个冬天。还在等七点四十。", "2018年，饅頭，第一個冬天。仲等緊七點四十。", "2018. Mantou, primer invierno. Todavía espera las 7:40.", "2018. En Mantou, el primer hivern. Encara esperava el de les 7:40.", "mantou"],
+        ["2014. Wei, eighteen, two kittens in a box. I said no lor.", "2014年，阿Wei，十八岁，纸箱里两只小猫。我说不要。", "2014年，阿 Wei，十八歲，紙箱入面兩隻貓仔。我話唔要。", "2014. Wei, dieciocho años, dos gatitos en una caja. Yo dije no.", "2014. En Wei, divuit anys, dues gatetes en una caixa. Jo vaig dir que no.", "kittens"],
         ["This page is empty. For you. Bring somebody up here.", "这页空的。留给你。带个人上来啦。", "呢頁吉嘅。留俾你。帶個人上嚟啦。", "Esta página vacía. Para ti. Trae a alguien aquí arriba.", "Aquesta pàgina és buida. És per a tu. Porta algú aquí dalt.", "empty"]
   ];
   var pg = 0, AL = document.getElementById("alb"), AC2 = document.getElementById("albC"), ag = AC2.getContext("2d");
@@ -265,12 +265,12 @@ canvas#cv{touch-action:none}
   /* real photographs, when the owner drops them in: no-hurry/photos/<key>.webp (or .jpg), any landscape size, shown whole at its own shape;
      arrive clock montserrat sagrada noodles girls tossa roof olympics mantou kittens, and wedding for the keepsake box.
      While one is on its way the page shows an empty frame (paper); only a photo that isn't there, or hasn't come after 5 s, falls back to the painted one below. */
-  var REAL = {}, MISS = {}, ASKED = {}, REAL_KEYS = ["kowloon", "queens", "arrive", "clock", "montserrat", "sagrada", "noodles", "girls", "tossa", "roof", "olympics", "mantou", "kittens", "wedding"], shown = "", waitT = null;
+  var REAL = {}, MISS = {}, ASKED = {}, REAL_KEYS = ["kowloon", "queens", "arrive", "clock", "montserrat", "sagrada", "noodles", "girls", "tossa", "roof", "olympics", "mantou",  "wedding"], shown = "", waitT = null;
   function fetchReal(k) { if (k in REAL) return; REAL[k] = null; ASKED[k] = Date.now(); (function tryExt(ex) { var im = new Image(); im.decoding = "async";
     im.onload = function () { if (im.naturalWidth > 200) { REAL[k] = im; if (shown === k && !AL.hidden) photo(k); } else if (ex === "webp") tryExt("jpg"); else miss(); };
     im.onerror = function () { if (ex === "webp") tryExt("jpg"); else miss(); }; im.src = "photos/" + k + "." + ex; })("webp");
     function miss() { MISS[k] = 1; if (shown === k && !AL.hidden) photo(k); } }
-  function loadReal(first) { if (first) fetchReal(first); REAL_KEYS.forEach(fetchReal); }   /* the one you're opening first, then the rest */
+  function loadReal(first) { if (first && REAL_KEYS.indexOf(first) >= 0) fetchReal(first); REAL_KEYS.forEach(fetchReal); }   /* the one you're opening first, then the rest */
   function paper() {   /* an empty photo corner on the page: the frame is there, the picture is coming */
     AC2.classList.remove("px"); AC2.width = 480; AC2.height = 270; var gr = ag.createLinearGradient(0, 0, 480, 270); gr.addColorStop(0, "#f3ead6"); gr.addColorStop(1, "#e6d9bc"); ag.fillStyle = gr; ag.fillRect(0, 0, 480, 270);
     ag.fillStyle = "rgba(120,96,60,.08)"; for (var i = 0; i < 90; i++) ag.fillRect((i * 97) % 480, (i * 53) % 270, 2, 1);
