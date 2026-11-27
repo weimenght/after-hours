@@ -343,13 +343,25 @@ function windowBox(ctx, x, y, w, h) { var s = { night: false }; var hh = new Dat
   ctx.fillStyle = "#3a2214"; ctx.fillRect(x - 2, y - 2, w + 4, 2); ctx.fillRect(x - 2, y + h, w + 4, 2); ctx.fillRect(x - 2, y, 2, h); ctx.fillRect(x + w, y, 2, h); ctx.fillRect(x + (w >> 1) - 1, y, 2, h); ctx.fillRect(x, y + (h >> 1) - 1, w, 2); return s; }
 
 /* ---------- scenes (160×96): Popo's back room, the mahjong table ---------- */
+/* A lamp is light, not a rectangular sprite backdrop. Fade to transparent in scene space. */
+function softSceneGlow(ctx, x, y, rx, ry, colour) {
+  ctx.save();
+  var prior = ctx.__fbNoTint;
+  try {
+    ctx.__fbNoTint = 1;
+    ctx.translate(x, y); ctx.scale(rx, ry);
+    var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    glow.addColorStop(0, colour); glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow; ctx.fillRect(-1, -1, 2, 2);
+  } finally { ctx.__fbNoTint = prior; ctx.restore(); }
+}
 function backRoom(ctx) {
   ctx.imageSmoothingEnabled = false; room(ctx, "#4a2e2a", "#2e1a16");
   ctx.fillStyle = "#3a221e"; for (var x = 0; x < 160; x += 8) ctx.fillRect(x, 3, 1, 50);
   windowBox(ctx, 118, 6, 26, 16);
   ctx.fillStyle = "#c8303a"; ctx.fillRect(20, 10, 14, 18); ctx.fillStyle = "#e8b84a"; ctx.fillRect(23, 14, 8, 8); ctx.fillStyle = "#c8303a"; ctx.fillRect(26, 15, 2, 6); ctx.fillRect(24, 17, 6, 2);   /* 福 paper on the wall */
   ctx.fillStyle = "#2e1a16"; ctx.fillRect(40, 24, 30, 2); if (window.FBWorld && FBWorld.decor) FBWorld.decor(ctx, [[47, 24], [62, 24]], 1, { salt: "hand" });   /* the day's things: one of the family's keepsakes, then Hong Kong and Catalan things (the kit) */
-  ctx.fillStyle = "#1a100c"; ctx.fillRect(80, 0, 1, 6); ctx.fillStyle = "#f6c060"; ctx.fillRect(76, 6, 9, 3); ctx.fillStyle = "rgba(246,192,96,.10)"; ctx.fillRect(48, 9, 64, 50);   /* the lamp over the table */
+  ctx.fillStyle = "#1a100c"; ctx.fillRect(80, 0, 1, 6); ctx.fillStyle = "#f6c060"; ctx.fillRect(76, 6, 9, 3); softSceneGlow(ctx, 80, 30, 50, 38, "rgba(246,192,96,.15)");   /* the lamp over the table */
   ctx.fillStyle = "#2e1a16"; ctx.fillRect(0, 58, 160, 38); ctx.fillStyle = "#3a221e"; for (var y = 62; y < 96; y += 6) ctx.fillRect(0, y, 160, 1);
 }
 function table(ctx, scatter) {
