@@ -470,7 +470,19 @@ function path(ctx, y) {
   ctx.fillStyle = "#6e5c4c"; for (var i = 0; i < 40; i++) { var px = (i * 37) % 160, py = y + 3 + ((i * 13) % (93 - y)); ctx.fillRect(px, py, 5, 2); }
   ctx.fillStyle = "#3a6a3a"; ctx.fillRect(0, y, 160, 2);
 }
-function lamp(ctx, x, lit) { ctx.fillStyle = "#1a1418"; ctx.fillRect(x, 34, 2, 42); ctx.fillRect(x - 3, 30, 8, 5); ctx.fillStyle = lit ? "#ffd27a" : "#8a8070"; ctx.fillRect(x - 2, 31, 6, 3); if (lit) { ctx.fillStyle = "rgba(255,210,122,.12)"; ctx.fillRect(x - 12, 34, 26, 42); } }
+/* A lamp is light, not a rectangular sprite backdrop. Fade to transparent in scene space. */
+function softSceneGlow(ctx, x, y, rx, ry, colour) {
+  ctx.save();
+  var prior = ctx.__fbNoTint;
+  try {
+    ctx.__fbNoTint = 1;
+    ctx.translate(x, y); ctx.scale(rx, ry);
+    var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    glow.addColorStop(0, colour); glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow; ctx.fillRect(-1, -1, 2, 2);
+  } finally { ctx.__fbNoTint = prior; ctx.restore(); }
+}
+function lamp(ctx, x, lit) { ctx.fillStyle = "#1a1418"; ctx.fillRect(x, 34, 2, 42); ctx.fillRect(x - 3, 30, 8, 5); ctx.fillStyle = lit ? "#ffd27a" : "#8a8070"; ctx.fillRect(x - 2, 31, 6, 3); if (lit) { softSceneGlow(ctx, x + 1, 48, 23, 32, "rgba(255,210,122,.17)"); } }
 function counter(ctx, y, top, front) { ctx.fillStyle = top; ctx.fillRect(0, y, 160, 4); ctx.fillStyle = front; ctx.fillRect(0, y + 4, 160, 96 - y - 4); ctx.fillStyle = "#000"; ctx.fillRect(0, y + 4, 160, 1); ctx.fillStyle = "rgba(0,0,0,.18)"; for (var x = 8; x < 160; x += 22) ctx.fillRect(x, y + 8, 1, 96 - y); }
 function room(ctx, wallc, trim) { ctx.fillStyle = wallc; ctx.fillRect(0, 0, 160, 96); ctx.fillStyle = trim; ctx.fillRect(0, 0, 160, 3); }
 function windowBox(ctx, x, y, w, h) { var s = { night: false }; var hh = Math.floor(hr()), night = hh < 6 || hh >= 20, dusk = hh >= 17 && hh < 20;
@@ -515,7 +527,7 @@ function sceneThanks(c) {
   ctx.fillStyle = "#4a2e1a"; ctx.fillRect(8, 16, 44, 3); ctx.fillRect(108, 16, 44, 3);
   [["#c8303a",12],["#4aa07a",20],["#e8a838",28],["#7ad0f0",38]].forEach(function (b) { ctx.fillStyle = b[0]; ctx.fillRect(b[1], 8, 4, 8); });
   [["#f6e05a",112],["#b8a4e0",122],["#e8913a",134],["#fbf6ea",144]].forEach(function (b) { ctx.fillStyle = b[0]; ctx.fillRect(b[1], 9, 5, 7); });
-  ctx.fillStyle = "#f6b73c"; ctx.fillRect(74, 4, 12, 2); ctx.fillStyle = "rgba(246,183,60,.12)"; ctx.fillRect(60, 6, 40, 30);
+  ctx.fillStyle = "#f6b73c"; ctx.fillRect(74, 4, 12, 2); softSceneGlow(ctx, 80, 17, 36, 30, "rgba(246,183,60,.17)");
   drawWei(ctx, 60, 30, 1.25, sleeps("wei"));
   counter(ctx, 70, "#8a5a32", "#3a2214");
   ctx.fillStyle = "#e8dcc2"; ctx.fillRect(92, 68, 10, 2); ctx.fillStyle = "rgba(220,240,255,.7)"; ctx.fillRect(94, 58, 6, 10); ctx.fillStyle = "#f6b73c"; ctx.fillRect(95, 62, 4, 5);
