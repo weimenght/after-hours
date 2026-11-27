@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=2856b7e71a"></script>
+<meta charset="utf-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=81e07c19cd"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>after-hours</title>
 <meta name="description" content="Everything Wei makes after hours, in one place on your phone. Small, free things that end off the screen, next to someone.">
@@ -1635,7 +1635,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
   var UP = ["wei", "mei", "popo", "miso", "yuzu", "mantou"];
   function wUp() {
     var b = $("wUp"); b.innerHTML = "<h2>" + esc(w("wUpT")) + "</h2>"; var f = el("div", "faces"), any = false;
-    UP.forEach(function (k) { var z = asleep(k); if (!z) any = true; var x = el("button", z ? "z" : ""); x.type = "button"; x.setAttribute("aria-label", nm(k) + " · " + w(z ? "pAsleep" : "pAwake")); x.appendChild(avatar(k)); x.appendChild(el("span", "", esc(nm(k)))); x.onclick = function () { open("phone"); card(k); call(k); }; f.appendChild(x); });
+    UP.filter(function(k) { return k !== 'mei' || !window.FBCanon || FBCanon.meiPresent(); }).forEach(function (k) { var z = asleep(k); if (!z) any = true; var x = el("button", z ? "z" : ""); x.type = "button"; x.setAttribute("aria-label", nm(k) + " · " + w(z ? "pAsleep" : "pAwake")); x.appendChild(avatar(k)); x.appendChild(el("span", "", esc(nm(k)))); x.onclick = function () { open("phone"); card(k); call(k); }; f.appendChild(x); });
     b.appendChild(f); b.appendChild(el("p", "wl", esc(w(any ? "wUpSome" : "wUpNone"))));
     /* the window on the town (the owner, Nov 12: the phone holds the tools, the town is where they live): where the animals are right now,
        from the town's own clock and their own hours (FBWorld.cats() / dog(), nothing fetched); a tap walks there, straight in (from=app) */
@@ -2195,7 +2195,7 @@ html.light .ntl a,html.light .ntl button{background:rgba(0,0,0,.035)}
      apps keep (nothing sent) or one of their data files, fetched only while the widget is out, and ends in a way off the
      screen. Today's card (fb_paw), Popo's paper (Little Things' jar), tonight's pot (the hosts' recipes), a walk, a question
      for someone older (Ask Popo), today's tape (Window Radio's key for the weekday), and the week's skies (Along the Way). */
-  var LZV = {"/little-things/things.js": "d283db45", "/cook-for-someone/words.js": "56ad2604", "/ask-popo/words.js": "99a5c1a6"}, LZ = {};
+  var LZV = {"/little-things/things.js": "d283db45", "/cook-for-someone/words.js": "56ad2604", "/ask-popo/words.js": "05e5d126"}, LZ = {};
   function need(src, ok, cb) {   // a data file from one of the apps, once
     if (ok()) return cb(); if (LZ[src]) { LZ[src].push(cb); return; } LZ[src] = [cb];
     var sc = document.createElement("script"); sc.async = true; sc.src = src + (LZV[src] ? "?v=" + LZV[src] : "");
