@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="referrer" content="same-origin" data-fbr><script data-fbl data-mode="game" src="/fbkit/fb.js?v=81e07c19cd"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>After Hours Casino</title>
-<meta name="description" content="A tiny casino for one table and one night, played with sunflower seeds, never money: a slot machine that deals real plans, a little wheel of small dares, and true stories or tall tales. One phone in the middle; Popo runs it, and her staff cheat in your favour.">
+<meta name="description" content="A tiny casino for one table and one night, played with sunflower seeds, never money: a slot machine that deals real plans, a little wheel of small dares, true stories or tall tales, and questions to share around the table. One phone in the middle; Popo runs it, and her staff cheat in your favour.">
 <meta name="theme-color" content="#e9dcc0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14101e" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="./manifest.webmanifest">
@@ -250,8 +250,8 @@ input::placeholder { color: #a08a70; }
       <button class="tbl" type="button" data-table="slot"><canvas width="56" height="32" data-mini="slot"></canvas><span><span class="num">#1</span><span class="nm" style="display:block" data-t="slotName"></span><span class="ds" style="display:block" data-t="slotSub"></span></span></button>
       <button class="tbl" type="button" data-table="wheel"><canvas width="56" height="32" data-mini="wheel"></canvas><span><span class="num">#2</span><span class="nm" style="display:block" data-t="wheelName"></span><span class="ds" style="display:block" data-t="wheelSub"></span></span></button>
       <button class="tbl" type="button" data-table="truth"><canvas width="56" height="32" data-mini="truth"></canvas><span><span class="num">#3</span><span class="nm" style="display:block" data-t="truthName"></span><span class="ds" style="display:block" data-t="truthSub"></span></span></button>
-    </div>
-    <button class="btn wide" id="talkTable" type="button" data-t="talkName"></button><p class="sub" data-t="talkSub"></p><div class="say" id="sayFloor"></div><div class="row"><button class="btn small" id="editGuests" type="button" data-t="editGuests"></button><button class="btn small" id="partyBreak" type="button" data-t="partyBreak"></button></div>
+      <button class="tbl" id="talkTable" type="button"><canvas width="56" height="32" data-mini="talk" aria-hidden="true"></canvas><span><span class="num">#4</span><span class="nm" style="display:block" data-t="talkName"></span><span class="ds" style="display:block" data-t="talkSub"></span></span></button>
+    </div><div class="say" id="sayFloor"></div><div class="row"><button class="btn small" id="editGuests" type="button" data-t="editGuests"></button><button class="btn small" id="partyBreak" type="button" data-t="partyBreak"></button></div>
     <button class="btn wide" id="lastCall" type="button" data-t="lastCall"></button>
   </section>
 
@@ -397,7 +397,7 @@ if(!Array.isArray(S.toldNames)) S.toldNames = S.names.slice(0,S.told || 0);
 if(!Array.isArray(S.wheelNames)) S.wheelNames = [];
 if(!Array.isArray(S.talkSeen)) S.talkSeen = [];
 function remainingTellers(){return S.names.filter(function(n){return S.toldNames.indexOf(n)<0;});}
-function wheelMax(){return Math.max(WHEEL_MAX,S.names.length);}
+function wheelMax(){var unseen=S.names.filter(function(n){return S.wheelNames.indexOf(n)<0;}).length;return Math.max(WHEEL_MAX,S.names.length,S.spins+unseen);}
 function wheelGuest(){var min=Infinity, choices=[]; S.names.forEach(function(n,i){var count=S.wheelNames.filter(function(w){return w===n;}).length; if(count<min){min=count; choices=[i];}else if(count===min)choices.push(i);});return pick(choices);}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 function home() { return /(^|\.)after-hours\.work$/.test(location.hostname) ? "https://www.after-hours.work/casino/" : location.href.split("#")[0]; }
@@ -554,6 +554,7 @@ function mini(c, kind) {
   ctx.fillStyle = "#2e6a4a"; ctx.fillRect(0, 0, 56, 32); ctx.fillStyle = "#3a7d58"; for (var y = 0; y < 32; y += 4) for (var x = (y / 4) % 2 * 2; x < 56; x += 4) ctx.fillRect(x, y, 1, 1);
   if (kind === "slot") { FACE.wei(ctx, -2, 0, 1); slotMachine(ctx, 30, 4, true); drawPet(ctx, "dog", 44, 32, 1, { asleep: dogAsleep(), flip: true }); }
   if (kind === "wheel") { FACE.popo(ctx, -2, 0, 1); wallWheel(ctx, 40, 13, 10); drawPet(ctx, "miso", 44, 32, 1, { asleep: catsAsleep(), flip: true }); }
+  if (kind === "talk") { var f = R(ctx,0,0,1); [[8,19,40,9,"#000"],[9,18,38,8,"#8a5a32"],[10,19,36,2,"#bd884e"],[12,25,3,6,"#422618"],[41,25,3,6,"#422618"],[17,11,9,8,"#000"],[18,12,7,6,"#f3ead8"],[25,13,3,4,"#f3ead8"],[32,11,9,8,"#000"],[33,12,7,6,"#f3ead8"],[30,13,3,4,"#f3ead8"],[19,12,5,2,"#a4693b"],[34,12,5,2,"#a4693b"],[22,5,1,4,"#d8c6a0"],[36,4,1,5,"#d8c6a0"]].forEach(f); }
   if (kind === "truth") { FACE.mei(ctx, -2, 0, 1); ctx.fillStyle = "#000"; ctx.fillRect(31, 6, 11, 15); ctx.fillRect(38, 4, 11, 15); ctx.fillStyle = "#c8303a"; ctx.fillRect(32, 7, 9, 13); ctx.fillStyle = "#fbf6e9"; ctx.fillRect(39, 5, 9, 13); ctx.fillStyle = "#c8303a"; ctx.fillRect(42, 9, 3, 1); ctx.fillRect(44, 10, 1, 2); ctx.fillRect(43, 12, 1, 1); ctx.fillRect(43, 14, 1, 1); drawPet(ctx, "yuzu", 44, 32, 1, { asleep: catsAsleep(), flip: true }); }
 }
 
@@ -593,6 +594,7 @@ var cur = "home", homeLine = null;
 var KEEP = { home: 1, door: 1, floor: 1, closing: 1 };   /* where a reload comes back to */
 var TABLE = { slot: 1, jackpot: 1, sealed: 1, wheel: 1, wheelres: 1, tpass: 1, tpeek: 1, tcall: 1, treveal: 1, talk: 1 };
 function show(s) {
+  if ((slot && slot.spinning) || wheelSpinning) return;
   var from = cur; cur = s; if (KEEP[s]) { S.screen = s; save(); }
   document.querySelectorAll("[data-s]").forEach(function (el) { el.hidden = el.getAttribute("data-s") !== s; });
   window.scrollTo(0, 0); render(TABLE[from] && s === "floor");
@@ -624,6 +626,7 @@ function rDoor() {
     b.type = "button"; b.textContent = "×"; b.setAttribute("aria-label", t("remove", { n: n })); b.onclick = function () { S.names.splice(i, 1); save(); rDoor(); };
     c.appendChild(b); box.appendChild(c);
   });
+  $("doorNew").hidden = !S.names.length && !S.plans.length;
   $("addForm").hidden = S.names.length >= GUEST_MAX; $("toFloor").disabled = S.names.length < 2;
 }
 $("addForm").onsubmit = function (e) {
