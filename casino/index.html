@@ -258,6 +258,8 @@ html.ahp-town #app :is(.btn,.chip,.pill):hover { background-color:var(--ahp-bg2)
 html.ahp-town #app .btn.pri { background:#a34725!important; color:#fff!important; border-color:#a34725!important; }
 html.ahp-town #app .btn.pri:hover,html.ahp-town #app .btn.pri:active { background:#86381e!important; color:#fff!important; }
 html.ahp-town #app .btn.quiet { background:transparent!important; color:var(--ahp-ink)!important; border-color:transparent!important; }
+/* All four games share one top-start navigation target, including their result screens. */
+html.ahp-town #app .screen > .floor-back { align-self:flex-start; justify-content:flex-start; min-height:44px; margin:0; padding:0 12px 0 2px; width:auto; font-size:18px; line-height:1.3; text-align:start; box-shadow:none!important; }
 html.ahp-town #app .chip button { color:var(--ahp-ink)!important; background:transparent; min-width:32px; min-height:32px; border-radius:50%; }
 html.ahp-town #app .chip button:focus-visible { outline:2px solid var(--ahp-acc); outline-offset:1px; }
 html.ahp-town #app .tbl { background:var(--ahp-card); color:var(--ahp-ink); border-color:var(--ahp-line2); }
@@ -328,10 +330,13 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
     <button class="btn wide" id="lastCall" type="button" data-t="lastCall"></button>
   </section>
 
-  <section class="screen" data-s="talk" hidden><button class="btn quiet" type="button" data-floor data-t="toFloor"></button><h2 data-t="talkName"></h2><div class="card"><p class="act" id="talkPrompt"></p><p class="hint" data-t="talkHint"></p></div><button class="btn pri lg wide" id="nextTalk" type="button" data-t="nextTalk"></button><button class="btn wide" id="talkBreak" type="button" data-t="partyBreak"></button></section>
+  <section class="screen" data-s="talk" hidden>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
+    <h2 data-t="talkName"></h2><div class="card"><p class="act" id="talkPrompt"></p><p class="hint" data-t="talkHint"></p></div><button class="btn pri lg wide" id="nextTalk" type="button" data-t="nextTalk"></button><button class="btn wide" id="talkBreak" type="button" data-t="partyBreak"></button>
+  </section>
 <!-- #1 slot of plans -->
   <section class="screen" data-s="slot" hidden>
-    <button class="btn quiet back" type="button" data-floor data-t="toFloor"></button>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="saySlot"></div>
     <div class="machine">
       <div class="bulbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -346,6 +351,7 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
   </section>
 
   <section class="screen" data-s="jackpot" hidden>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="sayJack"></div>
     <div class="card plan">
       <span class="stamp" data-t="stamp"></span>
@@ -359,15 +365,16 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
   </section>
 
   <section class="screen" data-s="sealed" hidden>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="saySealed"></div>
     <h1 data-t="dealt"></h1>
     <div class="card"><h2 data-t="tonightPlans"></h2><ul class="plans" id="plansA"></ul></div>
-    <button class="btn pri lg wide" id="sealedNext" type="button"></button><button class="btn quiet" type="button" data-floor data-t="toFloor"></button>
+    <button class="btn pri lg wide" id="sealedNext" type="button"></button>
   </section>
 
   <!-- #2 little wheel -->
   <section class="screen" data-s="wheel" hidden>
-    <button class="btn quiet back" type="button" data-floor data-t="toFloor"></button>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="sayWheel"></div>
     <div class="wheelbox"><canvas class="pointer" id="pointer" width="10" height="12" aria-hidden="true"></canvas><canvas id="wheel" width="96" height="96" role="img" aria-label="A little roulette wheel with eight pockets"></canvas></div>
     <button class="btn pri lg wide" id="spin" type="button" data-t="spin"></button>
@@ -375,16 +382,17 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
   </section>
 
   <section class="screen" data-s="wheelres" hidden>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="sayWres"></div>
     <p class="kick" data-t="ballLands"></p>
     <div class="big" id="wWho"></div>
     <div class="card"><div class="hint" data-t="yourMove"></div><p class="act" id="wAct"></p></div>
-    <button class="btn pri lg wide" id="didIt" type="button" data-t="didIt"></button><button class="btn wide" id="passWheel" type="button" data-t="passTurn"></button><button class="btn quiet" type="button" data-floor data-t="toFloor"></button>
+    <button class="btn pri lg wide" id="didIt" type="button" data-t="didIt"></button><button class="btn wide" id="passWheel" type="button" data-t="passTurn"></button>
   </section>
 
   <!-- #3 say it true -->
   <section class="screen" data-s="tpass" hidden>
-    <button class="btn quiet back" type="button" data-floor data-t="toFloor"></button>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="sayPass"></div>
     <p class="kick center" data-t="passTo"></p>
     <div class="big center" id="tTeller"></div>
@@ -393,6 +401,7 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
   </section>
 
   <section class="screen" data-s="tpeek" hidden>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="theme"><div class="k" data-t="themeK"></div><div class="v" id="tTheme"></div></div>
     <div class="peek" id="peek" role="button" tabindex="0"><div class="f bk"><span data-t="holdPeek"></span></div><div class="f fr" id="tSecret"></div></div>
     <div class="say" id="sayPeek"></div>
@@ -400,6 +409,7 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
   </section>
 
   <section class="screen" data-s="tcall" hidden>
+    <button class="btn quiet back floor-back" type="button" data-floor data-t="toFloor"></button>
     <div class="say" id="sayCall"></div>
     <h2 data-t="callT"></h2>
     <div class="sides"><div data-t="believe"></div><div class="ph" data-t="phone"></div><div data-t="doubt"></div></div>
@@ -407,10 +417,11 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
   </section>
 
   <section class="screen" data-s="treveal" hidden>
+    <button class="btn quiet back floor-back" id="finishStory" type="button" data-t="toFloor"></button>
     <p class="kick center" id="tWas"></p>
     <div class="verdict" id="tVerdict"></div>
     <div class="say" id="sayReveal"></div>
-    <button class="btn pri lg wide" id="nextTeller" type="button"></button><button class="btn quiet" id="finishStory" type="button" data-t="toFloor"></button>
+    <button class="btn pri lg wide" id="nextTeller" type="button"></button>
   </section>
 
   <!-- last call -->
