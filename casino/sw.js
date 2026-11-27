@@ -1,6 +1,6 @@
 /* After Hours Casino: works offline once opened. Keeps only what this app needs to draw itself (its own folder, the kit, the fonts),
    always asks the network first and falls back to the copy it kept. Never touches anything off the site; sends nothing. */
-var V = "ac-3";
+var V = "ac-4";
 var OWN = /^\/(casino|fbkit|fonts)\//;
 self.addEventListener("install", function (e) {
   self.skipWaiting();
