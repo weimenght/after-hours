@@ -368,7 +368,7 @@
       g.globalAlpha = 1; late = function () { g.globalAlpha = k2; txt("POPO!!", 70, 40, "#e8508a"); txt("HOLIDAYS", 70, 52, "#e8508a"); txt("SHH WEI", 70, 64, "#e8508a"); heart(74, 78, "#e8508a"); heart(86, 80, "#f48fb8"); g.globalAlpha = 1; }; }
     return { tone: .32 };
   }
-  function sMantou(t, p) {   /* the winter Josep died: a dog on platform two under the clock Josep wound, waiting for the 7:40 */
+  function sMantou(t, p) {   /* winter 2018, twelve years after Josep died: a dog on platform two under the clock Josep wound, waiting for the 7:40 */
     var i, x, day = Math.floor(seg(p, .1, .62) * 3), dp = (seg(p, .1, .62) * 3) % 1, go = seg(p, .74, 1);
     band(0, 70, "#b8bcc4", "#d8d8dc", 3);
     for (i = 0; i < 6; i++) { var ax = i * 48; for (var a = 0; a < 48; a += 2) R(ax + a, 6 + Math.pow((a - 24) / 24, 2) * 12, 2, 2, "#4a4a50"); }
@@ -387,7 +387,7 @@
     snow(t, 70, 9);
     return { tone: .28 };
   }
-  function sKittens(t, p) {   /* a box at the shop door: MISO / YUZU, two kittens; Wei, ten, names them; Popo says no cats, for an afternoon */
+  function sKittens(t, p) {   /* a box at the shop door: MISO / YUZU, two kittens; Wei, eighteen, names them; Popo says no cats, for an afternoon */
     var i, x;
     if (p < .62) {
       R(0, 0, W, H, "#d8cfb8"); R(0, 0, W, 12, "#c8bca4");
@@ -401,7 +401,7 @@
       pet("miso", 173, 119 - kh, { px: 1 }); pet("yuzu", 191, 119 - kh, { px: 1, flip: true });   /* inside the box: only their heads and backs show over its rim */
       R(162, 106, 40, 18, "#c8a070"); R(162, 106, 40, 2, "#a88050"); R(162 + Math.sin(t * 8) * (pop < 1 ? 1 : 0), 102, 14, 4, "#b8905e"); R(188, 102, 14, 4, "#b8905e");
       R(163, 111, 38, 9, "#f4ecd6"); txt("MISO/YUZU", 165, 113, "#3a2a1a");
-      who(150, 128, mix(WEI, { sz: .55, vest: null, top: "#3a6aa0", gl: null, f: 1, armR: p > .25 ? "out" : "down", smile: 1 }));
+      who(150, 128, mix(WEI, { sz: .93, vest: null, top: "#3a6aa0", gl: null, f: 1, armR: p > .25 ? "out" : "down", smile: 1 }));
       who(96, 128, mix(OPOPO, { f: 1, arm: "fold", card: "#8a2a3a" }));
       if (p > .3 && p < .58) { g.fillStyle = "rgba(255,255,255,.9)"; g.fillRect(70, 70, 34, 12); txt("NO CATS", 72, 73, "#a8322a"); }
     } else {   /* after that, they took her chair */
