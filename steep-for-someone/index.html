@@ -646,9 +646,21 @@ function scenePick(c) {
   [0, 3, 4, 5, 7].forEach(function (k, i) { stand(house(k), 2 + i * 31); });
   drawPet(ctx, "yuzu", 140, 92, 1, { asleep: catsAsleep(), flip: true });
 }
+/* A lamp is light, not a rectangular sprite backdrop. Fade to transparent in scene space. */
+function softSceneGlow(ctx, x, y, rx, ry, colour) {
+  ctx.save();
+  var prior = ctx.__fbNoTint;
+  try {
+    ctx.__fbNoTint = 1;
+    ctx.translate(x, y); ctx.scale(rx, ry);
+    var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    glow.addColorStop(0, colour); glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow; ctx.fillRect(-1, -1, 2, 2);
+  } finally { ctx.__fbNoTint = prior; ctx.restore(); }
+}
 function sceneDone(c) {
   var ctx = c.getContext("2d"); ctx.imageSmoothingEnabled = false; room(ctx, "#2a1c14", "#1a100a"); windowBox(ctx, 16, 12, 34, 26);
-  ctx.fillStyle = "#1a1418"; ctx.fillRect(99, 0, 2, 16); ctx.fillStyle = "#f2a33a"; ctx.fillRect(92, 16, 16, 5); ctx.fillStyle = "rgba(242,163,58,.14)"; ctx.fillRect(66, 21, 68, 50);
+  ctx.fillStyle = "#1a1418"; ctx.fillRect(99, 0, 2, 16); ctx.fillStyle = "#f2a33a"; ctx.fillRect(92, 16, 16, 5); softSceneGlow(ctx, 100, 43, 53, 40, "rgba(242,163,58,.20)");
   table(ctx); var col = tea ? tea.col || "#a0602a" : "#5a2a14";
   clayPot(ctx, 94, 70); [78, 116].forEach(function (x) { ctx.fillStyle = "#efe8d8"; ctx.fillRect(x, 62, 10, 8); ctx.fillStyle = col; ctx.fillRect(x + 1, 62, 8, 2); ctx.fillStyle = "#c8c0b0"; ctx.fillRect(x - 2, 70, 14, 1); var s = (Date.now() / 450 | 0) % 2; ctx.fillStyle = "rgba(255,255,255,.45)"; ctx.fillRect(x + 3 + s, 54, 1, 5); ctx.fillRect(x + 6 - s, 52, 1, 5); });
   drawPet(ctx, "dog", 36, 92, 1, { asleep: dogAsleep() });

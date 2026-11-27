@@ -466,7 +466,19 @@ function path(ctx, y) {
   ctx.fillStyle = "#6e5c4c"; for (var i = 0; i < 40; i++) { var px = (i * 37) % 160, py = y + 3 + ((i * 13) % (93 - y)); ctx.fillRect(px, py, 5, 2); }
   ctx.fillStyle = "#3a6a3a"; ctx.fillRect(0, y, 160, 2);
 }
-function lamp(ctx, x, lit) { ctx.fillStyle = "#1a1418"; ctx.fillRect(x, 34, 2, 42); ctx.fillRect(x - 3, 30, 8, 5); ctx.fillStyle = lit ? "#ffd27a" : "#8a8070"; ctx.fillRect(x - 2, 31, 6, 3); if (lit) { ctx.fillStyle = "rgba(255,210,122,.12)"; ctx.fillRect(x - 12, 34, 26, 42); } }
+/* A lamp is light, not a rectangular sprite backdrop. Fade to transparent in scene space. */
+function softSceneGlow(ctx, x, y, rx, ry, colour) {
+  ctx.save();
+  var prior = ctx.__fbNoTint;
+  try {
+    ctx.__fbNoTint = 1;
+    ctx.translate(x, y); ctx.scale(rx, ry);
+    var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    glow.addColorStop(0, colour); glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow; ctx.fillRect(-1, -1, 2, 2);
+  } finally { ctx.__fbNoTint = prior; ctx.restore(); }
+}
+function lamp(ctx, x, lit) { ctx.fillStyle = "#1a1418"; ctx.fillRect(x, 34, 2, 42); ctx.fillRect(x - 3, 30, 8, 5); ctx.fillStyle = lit ? "#ffd27a" : "#8a8070"; ctx.fillRect(x - 2, 31, 6, 3); if (lit) { softSceneGlow(ctx, x + 1, 48, 23, 32, "rgba(255,210,122,.17)"); } }
 function counter(ctx, y, top, front) { ctx.fillStyle = top; ctx.fillRect(0, y, 160, 4); ctx.fillStyle = front; ctx.fillRect(0, y + 4, 160, 96 - y - 4); ctx.fillStyle = "#000"; ctx.fillRect(0, y + 4, 160, 1); ctx.fillStyle = "rgba(0,0,0,.18)"; for (var x = 8; x < 160; x += 22) ctx.fillRect(x, y + 8, 1, 96 - y); }
 function room(ctx, wallc, trim) { ctx.fillStyle = wallc; ctx.fillRect(0, 0, 160, 96); ctx.fillStyle = trim; ctx.fillRect(0, 0, 160, 3); }
 function windowBox(ctx, x, y, w, h) { var s = { night: false }; var hh = hr(), night = hh < 6 || hh >= 20, dusk = hh >= 17 && hh < 20;
@@ -512,7 +524,7 @@ function sceneHome(c) {
 }
 function sceneTable(c, two) {
   var ctx = c.getContext("2d"); ctx.imageSmoothingEnabled = false; room(ctx, "#5a3a2a", "#3a2418"); windowBox(ctx, 112, 12, 32, 24);
-  ctx.fillStyle = "#1a1418"; ctx.fillRect(79, 0, 2, 16); ctx.fillStyle = "#f2a33a"; ctx.fillRect(72, 16, 16, 5); ctx.fillStyle = "rgba(242,163,58,.14)"; ctx.fillRect(48, 21, 64, 50);
+  ctx.fillStyle = "#1a1418"; ctx.fillRect(79, 0, 2, 16); ctx.fillStyle = "#f2a33a"; ctx.fillRect(72, 16, 16, 5); softSceneGlow(ctx, 80, 43, 50, 40, "rgba(242,163,58,.20)");
   ctx.fillStyle = "#4a2a18"; ctx.fillRect(28, 46, 10, 30); ctx.fillRect(122, 46, 10, 30); ctx.fillStyle = "#6a4428"; ctx.fillRect(26, 44, 14, 4); ctx.fillRect(120, 44, 14, 4);
   ctx.fillStyle = "#c8303a"; ctx.fillRect(36, 58, 88, 4); ctx.fillStyle = "#8a5a32"; ctx.fillRect(36, 62, 88, 3); ctx.fillRect(40, 65, 3, 24); ctx.fillRect(117, 65, 3, 24);
   ctx.fillStyle = "#fbf6ea"; ctx.fillRect(48, 55, 16, 3); ctx.fillRect(96, 55, 16, 3);
