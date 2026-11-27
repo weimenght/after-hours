@@ -1,10 +1,10 @@
 /* Pour for Someone: works offline once opened. Keeps only what this app needs to draw itself (its own folder, the kit, the fonts),
    always asks the network first and falls back to the copy it kept. Never touches anything off the site; sends nothing itself: the brew book goes straight to the network. */
-var V = "pf-1";
+var V = "pf-2";
 var OWN = /^\/(pour-for-someone|fbkit|fonts)\//;
 self.addEventListener("install", function (e) {
   self.skipWaiting();
-  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"]); }).catch(function () {}));
+  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(["./", "./words.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png"].map(function (u) { return new Request(u, { cache: "reload" }); })); }).catch(function () {}));
 });
 self.addEventListener("activate", function (e) {
   e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("pf-") === 0 && k !== V; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); }));
