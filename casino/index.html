@@ -227,12 +227,18 @@ html.ahp-town #app .tbl .num { color:var(--ahp-accd); }
 html.ahp-town #app .tbl.off { opacity:1; }
 html.ahp-town #app .tbl.off .nm { color:var(--ahp-ink2); }
 html.ahp-town #app .stamp { background:#f6b73c; color:#1d130d; }
-html.ahp-town #app .reel .cell.q { background:#fffaf0; color:#6a5240; }
-html.ahp-town #app .reel .lab { color:#6a5240; }
-html.ahp-town #app .reel .hold { background:#2e6a4a; color:#fff; }
+/* Reels are cream paper in both themes. Never inherit the dark-theme page ink. */
+html.ahp-town #app .reel { --ink:#241b14; --ink-soft:#6a5240; background:#fffaf0!important; color:#241b14!important; color-scheme:light; }
+html.ahp-town #app .reel .strip { color:#241b14!important; }
+html.ahp-town #app .reel .cell { background:#fffaf0!important; color:#241b14!important; -webkit-text-fill-color:currentColor; opacity:1; font-weight:600; }
+html.ahp-town #app .reel .cell.q { color:#6a5240!important; }
+html.ahp-town #app .reel .lab { color:#6a5240!important; }
+html.ahp-town #app .reel .hold { background:#2e6a4a!important; color:#fff!important; }
+html.ahp-town #app .reel.on { outline:2px solid #2e6a4a; outline-offset:-3px; }
 html.ahp-town #app .theme .k { color:#fff5e5; }
 html.ahp-town #app .peek .bk span { background:#f3ead8; color:#1d130d; }
-html.ahp-town #app .peek .fr small { color:#6a5240; }
+html.ahp-town #app .peek .fr { --ink:#241b14; --ink-soft:#6a5240; background:#fffaf0!important; color:#241b14!important; color-scheme:light; }
+html.ahp-town #app .peek .fr small { color:#6a5240!important; }
 html.ahp-town #app .plans b { color:var(--ahp-accd); }
 html.ahp-town #app .sides div { border-color:var(--ahp-line2); }
 html.ahp-town #app .sides .ph { color:#efe5d4; }
