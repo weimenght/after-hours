@@ -331,7 +331,7 @@ html.ahp-town #dark small { color:#e4d4bd; opacity:1; }
     <div class="say" id="sayWheel"></div>
     <div class="wheelbox"><canvas class="pointer" id="pointer" width="10" height="12" aria-hidden="true"></canvas><canvas id="wheel" width="96" height="96" role="img" aria-label="A little roulette wheel with eight pockets"></canvas></div>
     <button class="btn pri lg wide" id="spin" type="button" data-t="spin"></button>
-    <div class="dots" id="wheelDots"></div>
+    <div class="dots" id="wheelDots" aria-hidden="true"></div>
   </section>
 
   <section class="screen" data-s="wheelres" hidden>
@@ -436,7 +436,8 @@ if(!Array.isArray(S.themeSeen)) S.themeSeen = [];
 /* Draw without replacement for each deck; avoid the last card at cycle boundaries. */
 function drawCard(key, deck, last) { var seen=S[key]; var a=deck.map(function(_,i){return i;}).filter(function(i){return seen.indexOf(i)<0;}); if(!a.length){last=seen[seen.length-1];seen=S[key]=[];a=deck.map(function(_,i){return i;});} if(a.length>1 && last!=null) a=a.filter(function(i){return i!==last;}); var next=pick(a);seen.push(next);save();return next; }
 function remainingTellers(){return S.names.filter(function(n){return S.toldNames.indexOf(n)<0;});}
-function wheelMax(){var unseen=S.names.filter(function(n){return S.wheelNames.indexOf(n)<0;}).length;return Math.max(WHEEL_MAX,S.names.length,S.spins+unseen);}
+/* The wheel never closes automatically; dots simply mark groups of eight turns. */
+function wheelProgress(){return (Number(S.spins)||0)%WHEEL_MAX;}
 function wheelGuest(){var min=Infinity, choices=[]; S.names.forEach(function(n,i){var count=S.wheelNames.filter(function(w){return w===n;}).length; if(count<min){min=count; choices=[i];}else if(count===min)choices.push(i);});return pick(choices);}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 function home() { return /(^|\.)after-hours\.work$/.test(location.hostname) ? "https://www.after-hours.work/casino/" : location.href.split("#")[0]; }
@@ -679,7 +680,7 @@ $("toFloor").onclick = function () { if (S.names.length >= 2) { save(); show("fl
 function rFloor(back) {
   scene($("scFloor")); tapScene($("scFloor"), "", $("sayFloor"));
   $("tonight").textContent = t("tonight", { n: S.names.join(li() === 0 || li() > 2 ? ", " : "、") });
-  var off = { slot: S.plans.length >= SLOT_MAX, wheel: S.spins >= wheelMax(), truth: remainingTellers().length === 0 };
+  var off = { slot: S.plans.length >= SLOT_MAX, wheel: false, truth: remainingTellers().length === 0 };
   document.querySelectorAll("[data-table]").forEach(function (b) { var k = b.getAttribute("data-table"); b.classList.toggle("off", off[k]); b.disabled = !!off[k]; b.querySelector(".num").setAttribute("data-off", t("closed")); });
   document.querySelectorAll("[data-mini]").forEach(function (c) { mini(c, c.getAttribute("data-mini")); });
   if (back) { S.visits = (S.visits || 0) + 1; save(); }
@@ -777,12 +778,12 @@ function drawWheel() {
 var wheelRot = 0, wheelSpinning = false, wRes = { who: 0, act: 0, swat: false };
 function rWheel() {
   drawWheel(); $("wheel").style.transition = "none"; $("wheel").style.transform = "rotate(" + wheelRot + "deg)";
-  dots($("wheelDots"), wheelMax(), S.spins);
-  var done = S.spins >= wheelMax(); $("spin").textContent = done ? t("wheelRest") : t("spin"); $("spin").disabled = done;
+  dots($("wheelDots"), WHEEL_MAX, wheelProgress());
+  $("spin").textContent = t("spin"); $("spin").disabled = wheelSpinning;
   say($("sayWheel"), "popo", t("sayWheel"));
 }
 $("spin").onclick = function () {
-  if (wheelSpinning || S.spins >= wheelMax()) return;
+  if (wheelSpinning || S.names.length < 2) return;
   wheelSpinning = true; $("spin").disabled = true; sfx("spin");
   var w = $("wheel"); w.classList.remove("nudge"); w.style.transition = "";
   var k = rnd(8), target = (360 - (k * 45 + 22.5)) % 360, now = ((wheelRot % 360) + 360) % 360;
@@ -801,7 +802,7 @@ function rWres() {
   $("wWho").textContent = S.names[wRes.who] || ""; $("wAct").textContent = T(W.ACTS[wRes.act]);
   if (wRes.swat) say($("sayWres"), "miso", t("mSwat"), true); else say($("sayWres"), "popo", t("sayPay"));
 }
-function finishWheel(){S.wheelNames.push(S.names[wRes.who]); S.spins++; save(); sfx("tap"); show(S.spins >= wheelMax() ? "floor" : "wheel");}
+function finishWheel(){if(cur!=="wheelres")return; S.wheelNames.push(S.names[wRes.who]); S.spins=(Number(S.spins)||0)+1; save(); sfx("tap"); show("wheel");}
 $("didIt").onclick = $("passWheel").onclick = finishWheel;
 
 /* ---------- #3 say it true ---------- */
