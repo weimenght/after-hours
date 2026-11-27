@@ -173,12 +173,13 @@ html.ahp-town #app .lever .pivot {
   background:linear-gradient(135deg,#f7e5bd 0 35%,#a98857 36% 70%,#765b3e 71%); z-index:4;
 }
 html.ahp-town #app .lever.down .rod { transform:translateX(-50%) scaleY(.58); transition-timing-function:cubic-bezier(.3,.1,.65,1); }
-html.ahp-town #app .lever.down .knob { box-shadow:0 1px 0 #6c2225,inset 0 -3px 0 #8c262b; }
+html.ahp-town #app .lever .knob { transition:transform .16s cubic-bezier(.2,.75,.3,1.25); }
+html.ahp-town #app .lever.down .knob { transform:translateX(-50%) scaleY(1.72414); box-shadow:0 1px 0 #6c2225,inset 0 -3px 0 #8c262b; }
 html.ahp-town #app .lever:not(:disabled):hover .knob { filter:brightness(1.12); }
 html.ahp-town #app .lever:focus-visible { outline:3px solid #fff4d7; outline-offset:1px; }
 html.ahp-town #app .lever:disabled { cursor:default; }
 @media (max-width:360px) { html.ahp-town #app .machine {padding-right:60px;} html.ahp-town #app .machine .lever {right:5px;width:48px;} }
-@media (prefers-reduced-motion:reduce) {html.ahp-town #app .lever .rod {transition:none;} }
+@media (prefers-reduced-motion:reduce) {html.ahp-town #app .lever .rod,html.ahp-town #app .lever .knob {transition:none;} }
 .stamp { position: absolute; right: 10px; top: -14px; transform: rotate(8deg); background: var(--amber); border: 3px solid #000; padding: 8px 8px 6px; font-family: var(--px); font-size: 11px; box-shadow: 2px 2px 0 #000; }
 :lang(zh) .stamp, :lang(zh-Hant) .stamp { font-family: var(--vt); font-size: 22px; }
 .plan .k { font-family: var(--px); font-size: 8px; color: var(--ink-soft); text-transform: uppercase; }
