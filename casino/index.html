@@ -579,11 +579,23 @@ FACE.miso = catFace("miso"); FACE.yuzu = catFace("yuzu"); FACE.mantou = drawDogF
 
 /* ---------- scenes (160×96): Popo's back room, a casino for the night ---------- */
 var HOP = {};   /* who hops when tapped: a two-pixel jump on the next draw */
+/* A lamp is light, not a rectangular sprite backdrop. Fade to transparent in scene space. */
+function softSceneGlow(ctx, x, y, rx, ry, colour) {
+  ctx.save();
+  var prior = ctx.__fbNoTint;
+  try {
+    ctx.__fbNoTint = 1;
+    ctx.translate(x, y); ctx.scale(rx, ry);
+    var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    glow.addColorStop(0, colour); glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow; ctx.fillRect(-1, -1, 2, 2);
+  } finally { ctx.__fbNoTint = prior; ctx.restore(); }
+}
 function bulbs(ctx, on) {
   ctx.fillStyle = "#1a100c"; for (var x = 0; x < 160; x++) ctx.fillRect(x, 5 + Math.round(Math.sin(x / 160 * Math.PI * 3) * 2 + 2), 1, 1);
   for (var i = 0; i < 16; i++) { var bx = 4 + i * 10, by = 7 + Math.round(Math.sin(bx / 160 * Math.PI * 3) * 2 + 2);
     ctx.fillStyle = "#000"; ctx.fillRect(bx - 1, by - 1, 4, 5); ctx.fillStyle = !on ? "#3a3030" : i % 2 ? "#f6b73c" : "#e04a52"; ctx.fillRect(bx, by, 2, 3);
-    if (on) { ctx.fillStyle = i % 2 ? "rgba(246,183,60,.10)" : "rgba(224,74,82,.10)"; ctx.fillRect(bx - 3, by + 3, 8, 6); } }
+    if (on) { softSceneGlow(ctx, bx + 1, by + 5, 7, 7, i % 2 ? "rgba(246,183,60,.13)" : "rgba(224,74,82,.13)"); } }
 }
 function slotMachine(ctx, x, y, lit) {
   ctx.fillStyle = "#000"; ctx.fillRect(x - 1, y - 1, 24, 40);
@@ -626,7 +638,7 @@ function scene(c, mode) {
   drawPet(ctx, "yuzu", 14, 19 + h("yuzu"), 1, { asleep: ca });
   drawPet(ctx, "miso", 60, 57 + h("miso"), 1, { asleep: ca, flip: true });
   drawPet(ctx, "dog", mode === "close" ? 80 : 40, 92 + h("mantou"), 1, { asleep: da });
-  if (!lit) { ctx.fillStyle = "rgba(10,6,24,.42)"; ctx.fillRect(0, 0, 160, 96); ctx.fillStyle = "rgba(246,192,96,.16)"; ctx.fillRect(56, 18, 48, 50); }
+  if (!lit) { ctx.fillStyle = "rgba(10,6,24,.42)"; ctx.fillRect(0, 0, 160, 96); softSceneGlow(ctx, 80, 40, 44, 42, "rgba(246,192,96,.22)"); }
 }
 var SPOTS = [["yuzu", 14, 14], ["wei", 50, 36], ["popo", 80, 34], ["mei", 112, 36], ["miso", 58, 52], ["mantou", 42, 86], ["mantou", 80, 86]];
 function tapScene(c, mode, sayEl) {
