@@ -275,6 +275,12 @@ html.fbsh-in header.sign .board { display: none !important; }
 html.fbsh-in.bp-one body > header.sign { position: fixed; }
 </style>
 <link rel="stylesheet" href="/fonts/g/fonts.css"><link rel="stylesheet" href="/nearby/townskin.css?v=f6369e0e9f">
+<style id="bp-artefact-controls">
+html.nb-skin .sheet > button.x,html .sheet > button.x{box-sizing:border-box;position:sticky;top:0;float:right;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0!important;margin:0 0 4px 8px;color:#f4e6cc!important;background:transparent!important;border:0!important;border-radius:6px;box-shadow:none!important;cursor:pointer;z-index:4}
+html .sheet > button.x svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+html .sheet > button.x:hover{background:#ffffff12!important}
+html .sheet > button.x:focus-visible{outline:2px solid #f6b73c!important;outline-offset:0}
+</style>
 <style id="bp-town-contrast">
 /* The town skin changes dialog ink to cream. Give every nested surface
    its own matching foreground, including private shelf and request rows. */
@@ -510,16 +516,20 @@ html.nb-skin .sheet .item>div { overflow-wrap:anywhere; }
   function sheet(html, cls, redo) {
     var s0 = $(".scrim"); if (s0) s0.remove(); else lastFocus = document.activeElement;
     var s = document.createElement("div"); s.className = "scrim"; s._redo = redo;
-    /* a form keeps its × ; a page to look at (a book, the ledger) closes with a tap outside or Esc. The tap that opened it never closes it. */
-    var form = /<form/.test(html), at0 = Date.now();
-    s.innerHTML = '<div class="sheet ' + (cls || "") + '" role="dialog" aria-modal="true">' + (form ? '<button class="x" type="button" aria-label="' + esc(t("close")) + '">×</button>' : "") + html + "</div>";
+    /* All sheets use the same close icon; outside taps and Escape also dismiss. */
+    var at0 = Date.now();
+    s.innerHTML = '<div class="sheet ' + (cls || "") + '" role="dialog" aria-modal="true">' + ('<button class="x nb-plain" type="button" aria-label="' + esc(t("close")) + '" title="' + esc(t("close")) + '"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>') + html + "</div>";
     document.body.appendChild(s); document.body.style.overflow = "hidden";
-    s.addEventListener("click", function (e) { if (Date.now() - at0 < 450) return; if (e.target === s || e.target.closest(".x")) close(); });
+    var outsideDown=null;
+    s.addEventListener("pointerdown",function(e){outsideDown=e.target===s&&e.button===0?{id:e.pointerId,x:e.clientX,y:e.clientY}:null;});
+    s.addEventListener("pointercancel",function(){outsideDown=null;});
+    s.addEventListener("pointerup",function(e){var a=outsideDown;outsideDown=null;if(a&&a.id===e.pointerId&&e.target===s&&Math.hypot(e.clientX-a.x,e.clientY-a.y)<12&&Date.now()-at0>=150){e.preventDefault();close();}});
+    s.addEventListener("click",function(e){if(e.target.closest(".x"))close();});
     var f = s.querySelector("input:not([type=hidden]),textarea,.btn.pri,.btn"); if (f && matchMedia("(pointer:fine)").matches) setTimeout(function () { f.focus(); }, 60);
     return s.querySelector(".sheet");
   }
   function close() { var s = $(".scrim"); if (s) s.remove(); document.body.style.overflow = ""; if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {} }
-  addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  addEventListener("keydown", function (e) { if (e.key === "Escape" && $(".scrim") && !document.querySelector("dialog[open],.fbbk.on")) close(); });
   /* covers come from Open Library, another site: shown only once the visitor says so (kept on this device), drawn spines until then */
   function coversOk() { try { return localStorage.getItem("fb_bp_covers") === "1"; } catch (e) { return false; } }
   function coverStyle(b) { var c = shape(b).color; return b.cover && coversOk() ? "background-image:url(" + esc(b.cover) + ");background-color:" + c : "background:linear-gradient(90deg," + c + "," + shade(c, -18) + ")"; }
@@ -531,7 +541,7 @@ html.nb-skin .sheet .item>div { overflow-wrap:anywhere; }
   function openBook(id) {
     touched = true;
     var b = books.filter(function (x) { return String(x.id) === String(id); })[0]; if (!b) return;
-    if (b.read) { var go = function () { window.FBBook.open({ lang: lang() }); }; if (window.FBBook) go(); else { var sc = document.createElement("script"); sc.src = "./book/book.js"; sc.onload = go; document.head.appendChild(sc); } return; }
+    if (b.read) { var go = function () { window.FBBook.open({ lang: lang() }); }; if (window.FBBook) go(); else { var sc = document.createElement("script"); sc.src = "./book/book.js?v=unified-controls-20261128"; sc.onload = go; document.head.appendChild(sc); } return; }
     try { navigator.vibrate && navigator.vibrate(8); } catch (e) {}
     var s = sheet('<div class="open"><div class="pg"><div class="cover" style="' + coverStyle(b) + '">' + (b.cover && coversOk() ? "" : esc(b.title)) + (b.house ? '<span class="hc" aria-hidden="true"></span>' : "") + "</div><h3>" + esc(b.title) + '</h3><div class="meta">' + esc([b.author, b.year].filter(Boolean).join(" · ")) + '</div><div class="meta">' + ICON[b.room] + " " + esc(t(b.room)) + "</div>" +
       (b.wear ? '<div class="wear">' + esc(wear(b.wear)) + "</div>" : "") +
@@ -887,7 +897,7 @@ html.bp-one .room.cur.up { animation-name: bpUp; }
     try { if (window.FBG && FBG.note) FBG.note({ icon: "🌹", text: L[li] }); } catch (e) {} }, 2500);
 })();
 </script>
-<script src="./book/book.js?v=0cc705edb0" defer></script>
-<script defer src="/nearby/canon_scene.js?v=bookstore-illustrated-keepsakes-20261128"></script>
+<script src="./book/book.js?v=unified-controls-20261128" defer></script>
+<script defer src="/nearby/canon_scene.js?v=unified-controls-20261128"></script>
 </body>
 </html>

@@ -177,7 +177,8 @@
     ".fbbk-hint{position:absolute;left:0;right:0;bottom:max(10px,env(safe-area-inset-bottom));text-align:center;color:rgba(243,230,204,.75);font:14px/1.4 Fraunces,Georgia,var(--zhf);pointer-events:none;opacity:0;transition:opacity .6s}" +
     ".fbbk-hint.on{opacity:1}" +
     ".fbbk-load{color:#f3e6cc;font:16px Fraunces,Georgia,serif;opacity:.7}" +
-    "@media (hover:none),(pointer:coarse){.fbbk-kb{display:none}}";
+    "@media (hover:none),(pointer:coarse){.fbbk-kb{display:none}}" +
+    "html .fbbk .fbbk-b[data-a=x]{order:20;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;padding:0!important;color:#f4e6cc!important;background:transparent!important;border:0!important;border-radius:6px;box-shadow:none!important}html .fbbk .fbbk-b[data-a=x] svg{width:22px;height:22px;stroke-width:1.8;pointer-events:none}html .fbbk .fbbk-b[data-a=x]:hover{background:#ffffff12!important}html .fbbk .fbbk-b[data-a=x]:focus-visible{outline:2px solid #f6b73c!important;outline-offset:0}";
 
   /* ---------------- words on the page ---------------- */
   function ruby(e, word) {
@@ -410,6 +411,7 @@
     var from = L.p, t0 = performance.now(), dur = reduced() ? 1 : Math.max(140, (ms || 560) * Math.abs(to - from));
     L.anim = true; if (to === 1) rustle();
     (function step(now) {
+      if(!st||st.leaf!==L)return;
       var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
       turn(from + (to - from) * e);
       if (k < 1) return requestAnimationFrame(step);
@@ -442,15 +444,22 @@
   }
 
   /* ---------------- touch, mouse, keys ---------------- */
+  function onPaper(e) {
+    if(!st||!st.bk)return false;
+    return Array.from(st.bk.querySelectorAll('.fbbk-slot .fbbk-pg:not(.blank)')).some(function(p){
+      if(!p.getClientRects().length)return false;var r=p.getBoundingClientRect();return e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
+    });
+  }
   function bindStage() {
     var S = st.stage, drag = null;
     S.addEventListener("pointerdown", function (e) {
       if (e.button > 0 || st.leaf) return;
-      drag = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId, dir: 0, moved: false };
+      drag = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId, dir: 0, moved: false, outside: !onPaper(e) };
     });
     S.addEventListener("pointermove", function (e) {
       if (!drag || e.pointerId !== drag.id) return;
       var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      if(drag.outside){if(Math.hypot(dx,dy)>12)drag.moved=true;return;}
       if (!drag.dir) {
         if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.1) { if (Math.abs(dy) > 14) drag = null; return; }
         drag.dir = dx < 0 ? 1 : -1; drag.moved = true;
@@ -472,7 +481,8 @@
         return;
       }
       if (d.moved) return;
-      tap(e);
+      if(d.outside){if(!onPaper(e))close();return;}
+      if(onPaper(e))tap(e);
     }
     S.addEventListener("pointerup", up); S.addEventListener("pointercancel", function (e) { if (drag && drag.dir && st.leaf) finish(0); drag = null; });
     S.addEventListener("click", function (e) { if (e.target.closest("a[href]")) return; e.preventDefault(); });
@@ -525,7 +535,7 @@
 
   /* ---------------- the bar ---------------- */
   var I = {
-    x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+    x: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg>',
     toc: '<svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>',
     aa: '<svg viewBox="0 0 24 24"><path d="M3 18 8 6l5 12M4.8 14h6.4M14.5 18l3-7 3 7M15.6 16h3.8"/></svg>',
     l: '<svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg>',
@@ -533,7 +543,7 @@
   };
   function bar() {
     var b = st.root.querySelector(".fbbk-bar");
-    b.innerHTML = '<button class="fbbk-b" data-a="x" aria-label="' + esc(w("close")) + '" title="' + esc(w("close")) + '">' + I.x + '</button><span class="sp"></span>' +
+    b.innerHTML = '<button class="fbbk-b nb-plain" data-a="x" aria-label="' + esc(w("close")) + '" title="' + esc(w("close")) + '">' + I.x + '</button><span class="sp"></span>' +
       '<button class="fbbk-b fbbk-kb" data-a="l" aria-label="' + esc(w("prev")) + '">' + I.l + "</button>" +
       '<button class="fbbk-b fbbk-kb" data-a="r" aria-label="' + esc(w("next")) + '">' + I.r + "</button>" +
       '<button class="fbbk-b" data-a="toc" aria-label="' + esc(w("contents")) + '" title="' + esc(w("contents")) + '">' + I.toc + "</button>" +
@@ -542,9 +552,9 @@
       '<button class="fbbk-b" data-a="z" aria-label="' + esc(w("size")) + '" title="' + esc(w("size")) + '">' + I.aa + "</button>";
   }
   function act(a) {
+    if (a === "x") return close();
     if (st.leaf) return;
     hideSlip();
-    if (a === "x") return close();
     if (a === "l") return go(-1);
     if (a === "r") return go(1);
     if (a === "toc") return jump(st.tocAt);
