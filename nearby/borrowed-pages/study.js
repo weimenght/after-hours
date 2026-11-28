@@ -112,7 +112,7 @@
   try { var h = window.FBWorld && FBWorld.hour ? FBWorld.hour() : new Date().getHours(); H.classList.toggle("bp-day", h >= 7 && h < 19); } catch (e) {}
 
   function famEl(f) {
-    var b = document.createElement("button"); b.type = "button"; b.className = "sd-it"; b.id = "sd-" + f.id;
+    var b = document.createElement("button"); b.type = "button"; b.className = "sd-it nb-plain"; b.id = "sd-" + f.id;
     if (f.art) { b.innerHTML = f.art; b.style.width = f.w + "px"; }
     else {
       var sp = '<span class="sd-sp" style="width:' + f.w + "px;background:" + f.c + '">' + (f.tape ? '<span class="tp" style="top:22%"></span><span class="tp" style="top:64%"></span>' : "") + "<b>" + esc(f.lab || "") + "</b></span>";
@@ -130,6 +130,7 @@
     FAM.forEach(function (f) { var el = famEl(f); sh.appendChild(el); if (f.art) el.style.width = Math.round(f.w * k) + "px"; else [].forEach.call(el.querySelectorAll(".sd-sp"), function (s) { s.style.width = Math.round(f.w * k) + "px"; }); [].forEach.call(el.querySelectorAll(".sd-sp"), function (s, i) { s.style.height = Math.max(40, Math.round(hh * (f.h + (i ? .08 : 0)))) + "px"; }); el.setAttribute("aria-label", L(f.t)); });
   }
   function open(f) {
+    if(window.FBArtefacts&&FBArtefacts.openFamily(f,document.getElementById('sd-'+f.id),L,{label:'＋ '+L(W.lend),run:function(){BP.bring();}}))return;
     try { if (window.FBChapter) FBChapter.hide(); } catch (e) {}
     var sp = f.art ? f.art : '<span class="sd-sp" style="width:' + (f.w * 1.6) + "px;background:" + f.c + '">' + (f.tape ? '<span class="tp" style="top:22%"></span><span class="tp" style="top:64%"></span>' : "") + "<b>" + esc(f.lab || "") + "</b></span>";
     var html = '<div class="open"><div class="pg"><div class="sd-obj">' + sp + "</div><h3>" + esc(L(f.t)) + '</h3><div class="meta">' + esc(f.m || "") + "</div>" +
