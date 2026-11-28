@@ -29,16 +29,76 @@
     d.addEventListener('close',function(){d.remove();d=null;if(opener&&opener.isConnected)opener.focus();});
     document.body.appendChild(d);d.showModal();x.focus();
   }
+  // The house canvas uses object-fit: contain, so position against the actual
+  // 160x110 drawing, not the surrounding (sometimes letterboxed) scene.
+  var houseCanvas, houseObserver;
+  function positionSketchbook() {
+    var cv=houseCanvas, b=document.querySelector('.canon-house-object');
+    if(!cv || !b)return;
+    var a=cv.getBoundingClientRect(), h=b.parentNode.getBoundingClientRect();
+    var k=Math.min(a.width/160,a.height/110);
+    if(!k)return;
+    // Upstairs table for two: tabletop x34..60, y48; right of its candles.
+    b.style.left=(a.left-h.left+(a.width-160*k)/2+56*k)+'px';
+    b.style.top=(a.top-h.top+(a.height-110*k)/2+48*k)+'px';
+    b.style.setProperty('--art-w',10*k+'px');
+    b.style.setProperty('--art-h',10*k*30/28+'px');
+  }
+  // Put the art itself on the counter; the invisible 44px hit area is independent.
+  // Prefer clear positions around the host/menu/cats rather than a floating row.
+  function positionCard(top) {
+    var stage=top.closest('#stage-counter-box'),r=top.getBoundingClientRect();
+    if(!stage||!r.width)return;
+    var props=Array.from(top.querySelectorAll('.canon-card-object,.canon-bar-moment'));
+    var obstacles=Array.from(stage.querySelectorAll('#nd-stand,#nd-tin,.nd-thing,.cat,#wei-anchor,#friend-seat,#served-item-plate')).filter(function(o){return o.getClientRects().length&&getComputedStyle(o).visibility!=='hidden';}).map(function(o){return o.getBoundingClientRect();});
+    var candidates=[.28,.84,.16,.70,.36,.92,.08,.62,.44,.76,.54,.22,.96];
+    props.forEach(function(b){
+      var w=Math.max(44,b.offsetWidth),h=Math.max(44,b.offsetHeight),y=r.top-30;
+      var slots=candidates.filter(function(f){return r.width*f>=w/2+2&&r.width*(1-f)>=w/2+2;});
+      function cost(f){var x=r.left+r.width*f;return obstacles.reduce(function(n,o){return n+Math.max(0,Math.min(x+w/2,o.right)-Math.max(x-w/2,o.left))*Math.max(0,Math.min(y+h,o.bottom)-Math.max(y,o.top));},0);}
+      var f=slots.reduce(function(best,f){return best==null||cost(f)<cost(best)?f:best;},null);
+      if(f==null)f=.5;
+      b.style.left=(f*100)+'%';b.dataset.counterFraction=String(f);
+      var x=r.left+r.width*f;obstacles.push({left:x-w/2,right:x+w/2,top:y,bottom:y+h});
+    });
+  }
   function mount() {
     var host=document.querySelector(key==='bar'?'#stage-counter-box':key==='books'?'#study .sd-fam':'.tk-scene');
-    if(!host)return;var old=host.querySelector('.canon-shelf');
-    var shelf=el('div','canon-shelf'+(key==='books'?' canon-book-shelf':''));shelf.setAttribute('data-fbt-skip','');
-    C.objects.filter(function(o){return o.ui&&o.ui.place===key;}).forEach(function(o){var b=el('button','canon-object');b.type='button';b.title=tr(o.ui.title);b.setAttribute('aria-label',b.title);b.appendChild(icon(o.id));b.onclick=function(e){e.stopPropagation();open(o,o.id==='physics-notebook'?moment('notebook'):null,b);};shelf.appendChild(b);});
-    C.moments.filter(function(m){return m.place===key && m.id!=='notebook' && awake(m);}).forEach(function(m){var b=el('button','canon-object');b.type='button';b.title=tr(m.title);b.setAttribute('aria-label',b.title);b.appendChild(icon(m.id));b.onclick=function(e){e.stopPropagation();if(awake(m))open(null,m,b);};shelf.appendChild(b);});
-    var signature=Array.from(shelf.children).map(function(b){return b.title;}).join('|');if(old && old.dataset.signature===signature)return;if(old)old.remove();shelf.dataset.signature=signature;if(shelf.childNodes.length){if(getComputedStyle(host).position==='static')host.style.position='relative';host.appendChild(shelf);}
+    if(!host)return;
+    var itemHost=key==='bar'?host.querySelector('.counter-top'):host;
+    if(!itemHost)return;
+    C.objects.filter(function(o){return o.ui&&o.ui.place===key;}).forEach(function(o){
+      var b=itemHost.querySelector('[data-canon-id="'+o.id+'"]');
+      if(!b){
+        b=el('button','canon-object canon-personal '+({bar:'canon-card-object',books:'canon-book-object','popos-house':'canon-house-object'}[key]));
+        b.type='button';b.dataset.canonId=o.id;b.setAttribute('data-fbt-skip','');
+        b.appendChild(icon(o.id));b.onclick=function(e){e.stopPropagation();open(o,o.id==='physics-notebook'?moment('notebook'):null,b);};
+        // Keep the notebook in view even on a narrow family shelf. Its
+        // siblings are repainted independently by the study.
+        if(key==='books')itemHost.insertBefore(b,itemHost.querySelector('.sd-it'));
+        else itemHost.appendChild(b);
+      }
+      b.title=tr(o.ui.title);b.setAttribute('aria-label',b.title);
+    });
+    if(key==='popos-house'){
+      var cv=host.querySelector('canvas');
+      if(cv && cv!==houseCanvas){
+        if(houseObserver)houseObserver.disconnect();
+        houseCanvas=cv;
+        if(window.ResizeObserver){houseObserver=new ResizeObserver(positionSketchbook);houseObserver.observe(cv);}
+        window.addEventListener('resize',positionSketchbook);
+      }
+      positionSketchbook();
+    }
+    // Ordinary Moments keep their own controls; they no longer determine
+    // the location or spacing of the personal belongings.
+    var old=host.querySelector('.canon-shelf');
+    var shelf=el('div','canon-shelf'+(key==='bar'?' canon-bar-moments':''));shelf.setAttribute('data-fbt-skip','');
+    C.moments.filter(function(m){return m.place===key && m.id!=='notebook' && awake(m);}).forEach(function(m){var b=el('button','canon-object'+(key==='bar'?' canon-bar-moment':''));b.type='button';b.dataset.canonMoment=m.id;b.title=tr(m.title);b.setAttribute('aria-label',b.title);b.appendChild(icon(m.id));b.onclick=function(e){e.stopPropagation();if(awake(m))open(null,m,b);};shelf.appendChild(b);});
+    var signature=Array.from(shelf.children).map(function(b){return b.title;}).join('|');if(old && old.dataset.signature===signature){if(key==='bar')positionCard(itemHost);return;}if(old)old.remove();shelf.dataset.signature=signature;if(shelf.childNodes.length){if(getComputedStyle(host).position==='static')host.style.position='relative';(key==='bar'?itemHost:host).appendChild(shelf);}if(key==='bar')positionCard(itemHost);
   }
-  var css=el('style');css.textContent='.canon-shelf{position:absolute;bottom:4px;right:5px;z-index:5;display:flex;gap:4px;align-items:center}#study .canon-book-shelf{position:relative;bottom:auto;right:auto;flex:none;align-self:flex-end;margin:0 0 2px 4px}.canon-object{background:#3a2414;border:1px solid #b79a64;padding:2px;width:44px;height:44px;cursor:pointer;box-shadow:2px 2px #000}.canon-object svg{width:100%;height:100%;display:block}.canon-object:focus-visible,.canon-close:focus-visible{outline:2px solid #f6b73c}.canon-dialog{box-sizing:border-box;width:min(340px,92vw);max-height:86vh;overflow:auto;color:#f4e6c4;background:#2d2019;border:2px solid #b79a64;box-shadow:4px 4px #080605;padding:16px;font:inherit;line-height:1.5}.canon-dialog::backdrop{background:rgba(10,8,14,.7)}.canon-dialog svg{display:block;width:78px;height:84px;margin:12px auto}.canon-dialog h3{font-size:1.1em;color:#f6b73c}.canon-dialog p{margin:12px 0}.canon-close{float:right;color:inherit;background:#493221;border:1px solid #b79a64;padding:4px 8px;cursor:pointer}';document.head.appendChild(css);
-  function init(){mount();setTimeout(mount,300);setTimeout(mount,1000);setInterval(function(){if(!d)mount();},60000);}
+  var css=el('style');css.textContent='.canon-shelf{position:absolute;bottom:4px;right:5px;z-index:5;display:flex;gap:4px;align-items:center}.canon-bar-moments{display:contents}.canon-object{appearance:none!important;background:transparent!important;border:0!important;outline:none;padding:0!important;width:44px;height:44px;min-width:44px;min-height:44px;cursor:pointer;box-shadow:none!important;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}.canon-object svg{width:28px;height:30px;display:block;pointer-events:none;image-rendering:pixelated}.canon-personal{background:none!important;border:0!important;padding:0!important;box-shadow:none!important;min-width:44px;min-height:44px;display:flex;justify-content:center;align-items:center;-webkit-tap-highlight-color:transparent}.canon-personal svg{pointer-events:none;image-rendering:pixelated;filter:drop-shadow(1px 1px 0 rgba(0,0,0,.45))}#study .canon-book-object{position:relative;flex:none;align-self:flex-end;margin:0;width:44px;height:44px;align-items:flex-end}#study .canon-book-object svg{width:35px;height:38px}.canon-card-object,.canon-bar-moment{position:absolute;left:28%;top:-30px;transform:translateX(-50%);z-index:10}.canon-card-object svg,.canon-bar-moment svg{width:28px;height:30px;filter:none;transform:none}.canon-house-object{position:absolute;z-index:5;width:max(44px,var(--art-w,0px));height:max(44px,var(--art-h,0px));transform:translate(-50%,-100%);align-items:flex-end}.canon-house-object svg{width:var(--art-w,0px);height:var(--art-h,0px);flex:none}.canon-object:focus-visible,.canon-close:focus-visible{outline:2px solid #f6b73c!important;outline-offset:2px}.canon-dialog{box-sizing:border-box;width:min(340px,92vw);max-height:86vh;overflow:auto;color:#f4e6c4;background:#2d2019;border:2px solid #b79a64;box-shadow:4px 4px #080605;padding:16px;font:inherit;line-height:1.5}.canon-dialog::backdrop{background:rgba(10,8,14,.7)}.canon-dialog svg{display:block;width:78px;height:84px;margin:12px auto}.canon-dialog h3{font-size:1.1em;color:#f6b73c}.canon-dialog p{margin:12px 0}.canon-close{float:right;color:inherit;background:#493221;border:1px solid #b79a64;padding:4px 8px;cursor:pointer}';document.head.appendChild(css);
+  function init(){mount();window.addEventListener('resize',mount);setTimeout(mount,300);setTimeout(mount,1000);setInterval(function(){if(!d)mount();},60000);}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
   window.addEventListener('fbl:lang',function(){if(d&&d.open)d.close();mount();});
 })();
