@@ -275,6 +275,28 @@ html.fbsh-in header.sign .board { display: none !important; }
 html.fbsh-in.bp-one body > header.sign { position: fixed; }
 </style>
 <link rel="stylesheet" href="/fonts/g/fonts.css"><link rel="stylesheet" href="/nearby/townskin.css?v=f6369e0e9f">
+<style id="bp-town-contrast">
+/* The town skin changes dialog ink to cream. Give every nested surface
+   its own matching foreground, including private shelf and request rows. */
+html.nb-skin .sheet { --bp-surface:#4b3020; --bp-border:#816040; --bp-ink:#fbeedd; --bp-muted:#d5bd9e; --bp-paper:#fffaf0; --bp-paper-ink:#302117; color:var(--bp-ink); }
+html.nb-skin .sheet .ledger h4 { color:var(--bp-muted); font-size:17px; }
+html.nb-skin .sheet .item { background:var(--bp-surface); border:1px solid var(--bp-border); color:var(--bp-ink); align-items:flex-start; }
+html.nb-skin .sheet .item b { color:inherit; overflow-wrap:anywhere; }
+html.nb-skin .sheet .note,html.nb-skin .sheet .meta,html.nb-skin .sheet .wear,html.nb-skin .sheet .head span,html.nb-skin .sheet .fld>span,html.nb-skin .sheet .fld>span i,html.nb-skin .sheet summary,html.nb-skin .sheet .ps li { color:var(--bp-muted); }
+html.nb-skin .sheet .ask,html.nb-skin .sheet .keybox { background:#302017; border:1px solid var(--bp-border); color:var(--bp-ink); }
+html.nb-skin .sheet .ask .c,html.nb-skin .sheet .ask q,html.nb-skin .sheet .keybox code { color:#f3c784; }
+html.nb-skin .sheet .chip,html.nb-skin .sheet .lock { background:#e8d6b4; color:#3c2719; }
+html.nb-skin .sheet .lcard,html.nb-skin .sheet .card { color:var(--bp-paper-ink); }
+html.nb-skin .sheet .lcard li { color:#2c3e6b; }
+html.nb-skin .sheet .lcard li small,html.nb-skin .sheet .card .by,html.nb-skin .sheet .card.blank { color:#684e36; }
+html.nb-skin .sheet .lcard .lh,html.nb-skin .sheet .lcard li.cur small { color:#923323; }
+html.nb-skin .sheet .stamp,html.nb-skin .sheet .ribbon,html.nb-skin .sheet .warn:not(button) { color:#ffbd9c; }
+html.nb-skin .sheet .open>.pg+.pg { border-color:var(--bp-border); }
+html.nb-skin .sheet a:not(.btn) { color:#f6c77c; }
+html.nb-skin .sheet { max-height:calc(100dvh - 18px); overscroll-behavior:contain; }
+html.nb-skin .sheet .item .mini { flex:none; }
+html.nb-skin .sheet .item>div { overflow-wrap:anywhere; }
+</style>
 <link rel="manifest" href="/nearby/manifest.webmanifest" data-fbapp><meta name="apple-mobile-web-app-capable" content="yes" data-fbapp><meta name="mobile-web-app-capable" content="yes" data-fbapp><meta name="apple-mobile-web-app-title" content="Nearby" data-fbapp></head>
 <body>
 <header class="sign">
