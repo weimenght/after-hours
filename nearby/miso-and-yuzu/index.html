@@ -147,6 +147,19 @@ h2{font:400 12px/1.4 var(--px);color:var(--a);margin:26px 0 12px;letter-spacing:
   /* ---------- pixels ---------- */
   var cv = $("cv"), g = cv.getContext("2d"), WD = 160, HT = 110, FLOOR = 92;
   function R(x, y, w, h, c, ctx) { (ctx || g).fillStyle = c; (ctx || g).fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); }
+  /* Scene lighting stays in room/world coordinates, never in a sprite rectangle. */
+  function softNearbyLight(ctx, x, y, rx, ry, colour) {
+    ctx.save();
+    var previous = ctx.__fbNoTint;
+    try {
+      ctx.__fbNoTint = 1;
+      ctx.translate(x, y); ctx.scale(rx, ry);
+      var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      glow.addColorStop(0, colour);
+      glow.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = glow; ctx.fillRect(-1, -1, 2, 2);
+    } finally { ctx.__fbNoTint = previous; ctx.restore(); }
+  }
   function hash(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967295; }
   /* a cat, 18 wide, standing on (x, y) = left foot, floor; dir 1 faces right */
   function drawCat(ctx, k, x, y, pose, dir, f, extra) {
@@ -319,7 +332,12 @@ h2{font:400 12px/1.4 var(--px);color:var(--a);margin:26px 0 12px;letter-spacing:
     g.setTransform(cv.width / WD, 0, 0, cv.height / HT, 0, 0); g.imageSmoothingEnabled = false;
     ["miso", "yuzu"].forEach(function (k) { think(k, now); });
     room(f);
-    if (sunny() && lamp) { g.fillStyle = "rgba(255,236,170,.16)"; g.beginPath(); g.moveTo(18, 50); g.lineTo(58, 50); g.lineTo(SUN.x + SUN.w + 6, FLOOR + 12); g.lineTo(SUN.x - 6, FLOOR + 12); g.closePath(); g.fill(); g.fillStyle = "rgba(255,236,170,.22)"; g.fillRect(SUN.x - 6, FLOOR, SUN.w + 12, 12); }
+    if (sunny() && lamp) {
+      /* A soft beam between the window and the cats’ favourite warm spot. */
+      var sunX = SUN.x + SUN.w / 2;
+      softNearbyLight(g, (38 + sunX) / 2, (50 + FLOOR) / 2, 30, Math.max(8, (FLOOR - 50) * .66), "rgba(255,236,170,.19)");
+      softNearbyLight(g, sunX, FLOOR + 5, SUN.w / 2 + 12, 13, "rgba(255,236,170,.27)");
+    }
     var bell = bellDone();
     /* a sparrow on the outside sill now and then: by day, not in rain or snow */
     var wxx = World.weather(), dayish = World.phase() !== "night" && wxx !== "rain" && wxx !== "storm" && wxx !== "snow";

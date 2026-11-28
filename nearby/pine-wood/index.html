@@ -63,6 +63,19 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   function step() { if (!A) return; var n = A.currentTime, len = Math.floor(A.sampleRate * .045), b = A.createBuffer(1, len, A.sampleRate), d = b.getChannelData(0); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * .35)); var s = A.createBufferSource(), f = A.createBiquadFilter(), g = A.createGain(); s.buffer = b; f.type = "lowpass"; f.frequency.value = 600 + Math.random() * 250; g.gain.setValueAtTime(.04, n); g.gain.exponentialRampToValueAtTime(.001, n + .045); s.connect(f); f.connect(g); g.connect(A.destination); s.start(n); }
   function note() { if (!A) return; var n = A.currentTime, o = A.createOscillator(), g = A.createGain(); o.frequency.value = NOTES[(Math.random() * NOTES.length) | 0]; g.gain.setValueAtTime(.0001, n); g.gain.linearRampToValueAtTime(.02, n + .4); g.gain.exponentialRampToValueAtTime(.0001, n + 4.5); o.connect(g); g.connect(A.destination); o.start(n); o.stop(n + 4.6); }
 
+  /* Scene lighting stays in room/world coordinates, never in a sprite rectangle. */
+  function softNearbyLight(ctx, x, y, rx, ry, colour) {
+    ctx.save();
+    var previous = ctx.__fbNoTint;
+    try {
+      ctx.__fbNoTint = 1;
+      ctx.translate(x, y); ctx.scale(rx, ry);
+      var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      glow.addColorStop(0, colour);
+      glow.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = glow; ctx.fillRect(-1, -1, 2, 2);
+    } finally { ctx.__fbNoTint = previous; ctx.restore(); }
+  }
   function hash(n) { var x = Math.sin(n * 127.1 + 311.7) * 43758.5453123; return x - Math.floor(x); }
   var camX = 0, time = 0, me = { face: 1, frame: 0, moving: false, sp: 38, stepT: 0 }, mate = null, lit = {};
   var stars = []; for (var i = 0; i < 45; i++) stars.push({ x: hash(i * 10), y: hash(i * 10 + 1), ph: hash(i * 10 + 2) * 6.3, sp: .8 + hash(i * 10 + 3) * 1.5 });
@@ -135,7 +148,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
       var t = hash(c * 3.17 + 9), x0 = Math.round(c * 13 + hash(c * 5.1) * 10 - camX), y0 = GY + 7 + Math.floor(hash(c * 8.3) * Math.max(1, depth - 12));
       if (t < .3) { var fc = night ? "#1e3a32" : dusk ? "#2e4a3e" : "#4a8a4a"; ctx.fillStyle = fc; for (var fr = -3; fr <= 3; fr++) { var len = 5 - Math.abs(fr); for (var q = 0; q < len; q++) ctx.fillRect(x0 + fr * q / 2 + Math.round(Math.sin(time + c) * (q > 2 ? .6 : 0)), y0 - q, 1, 1); } }
       else if (t < .42) { ctx.fillStyle = night ? "#c8c0b0" : "#efe6d4"; ctx.fillRect(x0, y0 - 2, 1, 2); ctx.fillStyle = night ? "#5a2a2a" : "#c8402a"; ctx.fillRect(x0 - 1, y0 - 4, 3, 2); ctx.fillStyle = "#f4e8d8"; ctx.fillRect(x0, y0 - 4, 1, 1); if (hash(c * 2.2) < .5) { ctx.fillStyle = night ? "#c8c0b0" : "#efe6d4"; ctx.fillRect(x0 + 3, y0 - 1, 1, 1); ctx.fillStyle = night ? "#6a5a3a" : "#b8864a"; ctx.fillRect(x0 + 2, y0 - 2, 3, 1); }
-        if (night && hash(c * 4.4) < .5) { var gl = (Math.sin(time * 1.3 + c) + 1) / 2; ctx.fillStyle = "rgba(140,255,200," + (.25 + gl * .4).toFixed(2) + ")"; ctx.fillRect(x0 - 1, y0 - 4, 3, 2); ctx.fillStyle = "rgba(140,255,200," + (.08 + gl * .1).toFixed(2) + ")"; ctx.fillRect(x0 - 3, y0 - 6, 7, 6); } }
+        if (night && hash(c * 4.4) < .5) { var gl = (Math.sin(time * 1.3 + c) + 1) / 2; ctx.fillStyle = "rgba(140,255,200," + (.25 + gl * .4).toFixed(2) + ")"; ctx.fillRect(x0 - 1, y0 - 4, 3, 2); softNearbyLight(ctx, x0 + .5, y0 - 3, 5, 5, "rgba(140,255,200," + (.12 + gl * .13).toFixed(2) + ")"); } }
       else if (t < .52) { ctx.fillStyle = night ? "#2a3036" : "#7a7e80"; ctx.fillRect(x0 - 3, y0 - 3, 7, 3); ctx.fillRect(x0 - 2, y0 - 4, 5, 1); ctx.fillStyle = night ? "#22402e" : "#5a8a3a"; ctx.fillRect(x0 - 2, y0 - 4, 4, 1); ctx.fillRect(x0 - 3, y0 - 3, 2, 1); if (snow) { ctx.fillStyle = "#eef2f6"; ctx.fillRect(x0 - 2, y0 - 5, 5, 1); } }
       else if (t < .58) { var bark = night ? "#2a2420" : dusk ? "#4a3428" : "#6a4a30"; ctx.fillStyle = bark; ctx.fillRect(x0 - 10, y0 - 4, 20, 4); ctx.fillStyle = shade(bark.length === 7 ? bark : "#6a4a30", .25); ctx.fillRect(x0 - 10, y0 - 4, 20, 1); ctx.fillStyle = night ? "#4a3e32" : "#c8a070"; ctx.fillRect(x0 + 9, y0 - 4, 2, 4); ctx.fillStyle = night ? "#22402e" : "#5a8a3a"; ctx.fillRect(x0 - 6, y0 - 5, 6, 1); if (snow) { ctx.fillStyle = "#eef2f6"; ctx.fillRect(x0 - 9, y0 - 5, 18, 1); } }
       else if (t > .993) { /* a brook comes down through the trees and runs under the path; a plank takes you over */
@@ -169,7 +182,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
       if (r < .3) {
         if (Math.abs(sx - W / 2) < 10) lit[c] = 1;   /* you pass it: it stays lit for the rest of your walk */
         ctx.fillStyle = "#26333d"; ctx.fillRect(sx - 2, GY - 3, 5, 3); ctx.fillRect(sx - 1, GY - 9, 3, 6); ctx.fillRect(sx - 3, GY - 10, 7, 1); ctx.fillRect(sx - 2, GY - 14, 5, 4); ctx.fillRect(sx - 4, GY - 15, 9, 1); ctx.fillRect(sx - 2, GY - 16, 5, 1); ctx.fillRect(sx, GY - 17, 1, 1);
-        if (lit[c] && P.lit) { ctx.fillStyle = Math.sin(time * 7 + c) > -.8 ? "#ffcf6b" : "#e6a845"; ctx.fillRect(sx - 1, GY - 13, 3, 2); ctx.fillStyle = "rgba(255,207,107," + (.14 * P.lit + .06) + ")"; ctx.fillRect(sx - 6, GY - 18, 13, 12); }
+        if (lit[c] && P.lit) { ctx.fillStyle = Math.sin(time * 7 + c) > -.8 ? "#ffcf6b" : "#e6a845"; ctx.fillRect(sx - 1, GY - 13, 3, 2); softNearbyLight(ctx, sx + .5, GY - 12, 10, 9, "rgba(255,207,107," + (.19 * P.lit + .08) + ")"); }
         else { ctx.fillStyle = "#1a242c"; ctx.fillRect(sx - 1, GY - 13, 3, 2); }
       } else if (r > .65) { ctx.fillStyle = "#1b2630"; ctx.fillRect(sx - 4, GY - 4, 8, 4); ctx.fillRect(sx - 3, GY - 5, 6, 1); ctx.fillStyle = "#2d4742"; ctx.fillRect(sx - 3, GY - 5, 5, 1); ctx.fillRect(sx - 2, GY - 4, 3, 1); }
     }
@@ -292,7 +305,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
   function drawFind(k, x, y, night) {
     var R = function (c, a, b, w, h) { ctx.fillStyle = c; ctx.fillRect(x + a, y + b, w, h); };
     if (k === "chestnut") { R("#3e5a22", -4, -2, 3, 2); R("#5a7a2a", -4, -3, 1, 1); R("#5a7a2a", -2, -3, 1, 1); R("#6a3a1a", 0, -3, 3, 3); R("#8a5228", 0, -3, 2, 1); R("#e8c890", 1, -1, 1, 1); }
-    else if (k === "mushroom") { R("#efe2c4", 0, -2, 2, 2); R("#8a4e22", -1, -4, 4, 2); R("#a86a34", 0, -4, 2, 1); if (night) { ctx.fillStyle = "rgba(200,255,220,.35)"; ctx.fillRect(x - 2, y - 5, 6, 5); } }
+    else if (k === "mushroom") { R("#efe2c4", 0, -2, 2, 2); R("#8a4e22", -1, -4, 4, 2); R("#a86a34", 0, -4, 2, 1); if (night) { softNearbyLight(ctx, x + 1, y - 2.5, 5, 4, "rgba(200,255,220,.40)"); } }
     else if (k === "acorn") { R("#5a3a1a", 0, -3, 3, 1); R("#b8862a", 0, -2, 3, 2); }
     else if (k === "cone") { R("#6a4224", 0, -4, 3, 4); R("#8a5a30", 0, -4, 1, 1); R("#8a5a30", 2, -3, 1, 1); R("#8a5a30", 0, -2, 1, 1); if (WD.weather() === "snow") R("#eef2f6", 0, -5, 3, 1); }
     else if (k === "holly") { R("#2a5a2a", -1, -3, 2, 1); R("#2a5a2a", 1, -2, 2, 1); R("#c8202a", 0, -2, 1, 1); R("#c8202a", 1, -1, 1, 1); }
@@ -357,7 +370,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;im
       else if (m.k === "hollow") { R2(wood, -5, -24, 10, 24); R2(shade(wood, .2), -5, -24, 2, 24); R2("#0a0c0e", -2, -12, 4, 6); R2(night ? "#1e3a32" : "#3a6a3a", -8, -26, 16, 4); if (an) { if (night) { var bl = Math.sin(an.t * 3) > -.7; if (bl) { R2("#f6d84a", -1, -10, 1, 1); R2("#f6d84a", 1, -10, 1, 1); } } else { R2("#a8582a", -1, -10, 2, 2); R2("#111", 0, -10, 1, 1); if (an.t > 2.5) R2("#6a3a1a", -1, -8, 2, 1); } } }
       else if (m.k === "hut") { R2(wood, -11, -12, 22, 12); R2(shade(wood, .25), -11, -12, 22, 1); R2(night ? "#3a3028" : "#8a6a44", -13, -16, 26, 4); R2(night ? "#2a221c" : "#5e4a36", -12, -13, 24, 1); R2("#1a1410", -2, -8, 4, 8); R2(night ? "#f6b73c" : "#6a8aa8", 4, -9, 3, 3); R2(stone, 6, -21, 2, 5); R2("#f4e8d8", -1, -7, 2, 2); if (an) { var k2 = (an.t * 2) | 0; for (var q = 0; q < 3; q++) { ctx.fillStyle = "rgba(220,220,230," + (.5 - q * .14).toFixed(2) + ")"; ctx.fillRect(x + 6 + q + ((k2 + q) % 2), y - 23 - q * 3 - ((an.t * 4) | 0) % 2, 2, 2); } } }
       else if (m.k === "bench") { R2(wood, -7, -5, 14, 1); R2(wood, -7, -8, 14, 1); R2(wood, -6, -4, 1, 4); R2(wood, 5, -4, 1, 4); R2(wood, -6, -7, 1, 2); R2(wood, 5, -7, 1, 2); if (an) { var hop = an.t < 1 ? Math.round((1 - an.t) * 8) : 0; R2("#6a4a30", 2, -10 - hop, 3, 2); R2("#d84a3a", 2, -9 - hop, 2, 1); R2("#111", 4, -10 - hop, 1, 1); } }
-      else if (m.k === "shrine") { R2(stone, -3, -4, 7, 4); R2(stone, -2, -10, 5, 6); R2(night ? "#1a2026" : "#5a5e60", -4, -11, 9, 1); R2(stone, -3, -12, 7, 1); R2("#0e1216", -1, -8, 3, 3); R2("#f08a2a", 5, -1, 2, 2); R2(night ? "#22402e" : "#5a8a3a", -4, -5, 3, 1); if (an) { R2(Math.sin(an.t * 9) > 0 ? "#ffcf6b" : "#e6a845", 0, -7, 1, 1); ctx.fillStyle = "rgba(255,207,107,.12)"; ctx.fillRect(x - 3, y - 10, 7, 6); } }
+      else if (m.k === "shrine") { R2(stone, -3, -4, 7, 4); R2(stone, -2, -10, 5, 6); R2(night ? "#1a2026" : "#5a5e60", -4, -11, 9, 1); R2(stone, -3, -12, 7, 1); R2("#0e1216", -1, -8, 3, 3); R2("#f08a2a", 5, -1, 2, 2); R2(night ? "#22402e" : "#5a8a3a", -4, -5, 3, 1); if (an) { R2(Math.sin(an.t * 9) > 0 ? "#ffcf6b" : "#e6a845", 0, -7, 1, 1); softNearbyLight(ctx, x + .5, y - 7, 6, 5, "rgba(255,207,107,.18)"); } }
       else if (m.k === "stones") { var wc = night ? "#1e3448" : "#5a9ac0"; for (var yy = GY; yy < H; yy++) { var bx = x + Math.round(Math.sin(yy * .3 + c) * 2); ctx.fillStyle = wc; ctx.fillRect(bx - 9, yy, 19, 1); if ((yy + ((time * 8) | 0)) % 5 === 0) { ctx.fillStyle = night ? "#3a5a78" : "#cfe8f4"; ctx.fillRect(bx - 4 + (yy % 3) * 3, yy, 2, 1); } } [-6, -2, 2, 6].forEach(function (o) { R2(stone, o - 1, -1, 3, 2); }); if (an) { if (an.t < .5) { R2("#4a8a3a", 7, -3 - Math.round(Math.sin(an.t * 6) * 4), 2, 2); } else if (an.t < 1.6) { ctx.fillStyle = "rgba(220,240,250," + (1.6 - an.t).toFixed(2) + ")"; var rr = Math.round((an.t - .5) * 6); ctx.fillRect(x + 8 - rr, y + 1, rr * 2 + 1, 1); } } }
       else if (m.k === "log") { R2(wood, -10, -4, 20, 4); R2(shade(wood, .25), -10, -4, 20, 1); R2(night ? "#4a3e32" : "#c8a070", 9, -4, 2, 4); R2(night ? "#22402e" : "#5a8a3a", -6, -5, 6, 1); if (an) { var out = Math.min(4, an.t * 4); R2("#5a4a3a", -4 - Math.round(out), 0 - 2, 4, 2); R2("#2a2420", -3 - Math.round(out), -3, 3, 1); R2("#e8c8a8", -5 - Math.round(out), -1, 1, 1); R2("#111", -5 - Math.round(out), -2, 1, 1); } }
       else if (m.k === "clearing") { if (an) { var dk = seenKey(m) === "fox", dx = dk ? x + 14 : x - 30 + Math.round(an.t * 12), dy = y - (dk ? 3 : 0); ctx.fillStyle = dk ? (night ? "#8a4a2a" : "#c86a32") : (night ? "#3a3028" : "#7a5a3a"); ctx.fillRect(dx - 4, dy - 6, 8, 3); ctx.fillRect(dx - 4, dy - 3, 1, 3); ctx.fillRect(dx + 3, dy - 3, 1, 3); if (dk) { ctx.fillRect(dx + 4, dy - 8, 3, 3); ctx.fillRect(dx - 8, dy - 5, 4, 2); ctx.fillStyle = "#f6d84a"; if (an.t < 3) ctx.fillRect(dx + 5, dy - 7, 1, 1); } else { ctx.fillRect(dx + 4, dy - 9, 2, 3); ctx.fillRect(dx + 5, dy - 11, 1, 2); ctx.fillRect(dx + 3, dy - 11, 1, 1); } } }
